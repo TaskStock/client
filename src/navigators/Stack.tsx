@@ -22,7 +22,7 @@ const ScreenTwo = ({ navigation: { navigate } }) => (
 const ScreenThree = ({ navigation: { navigate } }) => (
   <TouchableOpacity onPress={() => {}}>
     <Text size="lg" weight="bold">
-      go to two
+      hello
     </Text>
   </TouchableOpacity>
 );
