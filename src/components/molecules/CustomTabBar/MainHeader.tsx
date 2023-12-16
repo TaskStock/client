@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import { MaterialTopTabBarProps } from "@react-navigation/material-top-tabs";
 import HeaderTop from "./HeaderTop";
 import { grayTheme } from "../../../constants/colors";
 import { spacing } from "../../../constants/spacing";
+import { Animated } from "react-native";
+import Tab from "./Tab";
 
 type Route = {
   key: string;
@@ -22,19 +24,10 @@ const TabWrapper = styled.View`
   gap: ${spacing.offset}px;
   padding: 0 ${spacing.gutter}px;
 `;
-
-const TabButton = styled.TouchableOpacity<{ isFocused: boolean }>`
-  align-items: center;
-  justify-content: center;
-  padding: 12px 5px 7px;
-  border-bottom-width: 3px;
-  border-bottom-color: ${(props) => (props.isFocused ? "#000" : "transparent")};
-`;
-
-const TabText = styled.Text<{ isFocused: boolean }>`
-  font-size: 20px;
-  font-family: "bold";
-  color: ${(props) => (props.isFocused ? "#000" : "#949496")};
+const BottomLine = styled.View`
+  background-color: #000;
+  height: 3px;
+  width: 100%;
 `;
 
 export default function MainHeader({
@@ -42,6 +35,22 @@ export default function MainHeader({
   descriptors,
   navigation,
 }: MaterialTopTabBarProps) {
+  const [translateValue] = useState(new Animated.Value(0));
+  const [width, setWidth] = useState(0);
+  const [toValue, setToValue] = useState(0);
+
+  useEffect(() => {
+    Animated.spring(translateValue, {
+      toValue,
+      damping: 10,
+      mass: 1,
+      stiffness: 100,
+      overshootClamping: true,
+      restDisplacementThreshold: 0.001,
+      restSpeedThreshold: 0.001,
+      useNativeDriver: true,
+    }).start();
+  }, [state, translateValue, toValue]);
   return (
     <Container>
       <HeaderTop navigation={navigation} />
@@ -62,16 +71,24 @@ export default function MainHeader({
             }
           };
           return (
-            <TabButton
+            <Tab
               isFocused={isFocused}
-              onPress={onPress}
               key={`tab_${index}`}
-            >
-              <TabText isFocused={isFocused}>{label}</TabText>
-            </TabButton>
+              label={label}
+              onPress={onPress}
+              setToValue={setToValue}
+              setWidth={setWidth}
+            />
           );
         })}
       </TabWrapper>
+      <BottomLine
+        as={Animated.View}
+        style={{
+          transform: [{ translateX: translateValue }],
+          width,
+        }}
+      />
     </Container>
   );
 }
