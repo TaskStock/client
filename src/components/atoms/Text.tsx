@@ -34,7 +34,7 @@ const TextStyling = styled.Text<{ size: SizeStyles; weight: WeightStyles }>`
 `;
 
 interface TextProps {
-  children: string | string[];
+  children: string | string[] | number;
   size: SizeStyles;
   weight?: WeightStyles;
   color?: string;

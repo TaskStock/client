@@ -1,11 +1,23 @@
-import { View, Text } from "react-native";
-import React from "react";
+import React, { useState } from "react";
+import { data } from "../../public/home";
+import styled from "styled-components/native";
+import { spacing } from "../constants/spacing";
+import { grayTheme } from "../constants/colors";
+import MyInfo from "../components/molecules/Home/MyInfo";
+
+const Container = styled.View`
+  padding: ${spacing.offset}px ${spacing.gutter}px;
+  background-color: ${grayTheme.background};
+  flex: 1;
+`;
 
 const HomeScreen = () => {
+  const [myData, setMyData] = useState(data);
+
   return (
-    <View>
-      <Text>HomeScreen</Text>
-    </View>
+    <Container>
+      <MyInfo data={myData} />
+    </Container>
   );
 };
 
