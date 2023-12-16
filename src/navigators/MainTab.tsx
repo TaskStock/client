@@ -3,15 +3,16 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 import HomeScreen from "../screens/HomeScreen";
 import ProjectScreen from "../screens/ProjectScreen";
 import FriendScreen from "../screens/FriendScreen";
-import { View } from "react-native";
-import useHeight from "../utils/useHeight";
 import MainHeader from "../components/molecules/CustomTabBar/MainHeader";
 
 const Tab = createMaterialTopTabNavigator();
 
 function MainTab() {
   return (
-    <Tab.Navigator tabBar={(props) => <MainHeader {...props} />}>
+    <Tab.Navigator
+      tabBar={(props) => <MainHeader {...props} />}
+      screenOptions={{ swipeEnabled: false }}
+    >
       <Tab.Screen
         name="Home"
         component={HomeScreen}

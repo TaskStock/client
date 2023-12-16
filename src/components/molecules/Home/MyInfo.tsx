@@ -7,8 +7,11 @@ import { grayTheme } from "../../../constants/colors";
 
 const MyInfo = ({ data }) => {
   const diff = data.cumulative_value - data.value_month_ago;
-  //   계산법 수정 필요
-  const diff_rate = (data.cumulative_value - data.value_month_ago) / 1000;
+  const diff_rate =
+    ((data.cumulative_value - data.value_month_ago) * 100) /
+    data.cumulative_value;
+
+  const renderDiffRate = diff_rate.toFixed(2);
 
   return (
     <View>
@@ -27,7 +30,7 @@ const MyInfo = ({ data }) => {
           weight="regular"
           color={diff > 0 ? grayTheme.high : grayTheme.low}
         >
-          {numberWithCommas(diff)}원 ({diff_rate.toString()}%)
+          {numberWithCommas(diff)}원 ({renderDiffRate.toString()}%)
         </Text>
       </FlexBox>
     </View>
