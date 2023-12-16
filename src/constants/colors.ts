@@ -16,8 +16,8 @@ const palette: Record<string, string> = {
   neutral700_dark: "#212121",
 
   red: "#D0191C",
-  blue: "0038FF",
-  green: "4DDE48",
+  blue: "#0038FF",
+  green: "#4DDE48",
 } as const;
 
 export const grayTheme = {
