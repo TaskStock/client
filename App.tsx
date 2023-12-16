@@ -1,9 +1,7 @@
-import React, { useCallback, useEffect, useState } from "react";
-import * as SplashScreen from "expo-splash-screen";
+import React from "react";
 import * as Font from "expo-font";
-import { Image, useColorScheme, ActivityIndicator, Text } from "react-native";
-import { Asset, useAssets } from "expo-asset";
-import { NavigationContainer, ThemeProvider } from "@react-navigation/native";
+import { useAssets } from "expo-asset";
+import { NavigationContainer } from "@react-navigation/native";
 import Root from "./src/navigators/Root";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import Loader from "./src/components/atoms/Loader";
