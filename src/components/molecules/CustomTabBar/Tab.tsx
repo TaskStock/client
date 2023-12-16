@@ -3,7 +3,13 @@ import styled from "styled-components/native";
 
 interface ITab {
   isFocused: boolean;
-  label: string;
+  label:
+    | string
+    | ((props: {
+        focused: boolean;
+        color: string;
+        children: string;
+      }) => React.ReactNode);
   onPress: () => void;
   setToValue: (params: number) => void;
   setWidth: (params: number) => void;
@@ -43,7 +49,9 @@ const Tab: React.FC<ITab> = ({
 
   return (
     <TabButton isFocused={isFocused} onPress={onPress} onLayout={onLayout}>
-      <TabText isFocused={isFocused}>{label}</TabText>
+      <TabText isFocused={isFocused}>
+        {typeof label === "string" && label}
+      </TabText>
     </TabButton>
   );
 };
