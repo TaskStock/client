@@ -1,5 +1,5 @@
 import { MaterialCommunityIcons, Ionicons, Feather } from "@expo/vector-icons";
-import { Image, TouchableOpacity } from "react-native";
+import { Image } from "react-native";
 
 type IconProps = {
   type: "material" | "ionicons" | "feather";

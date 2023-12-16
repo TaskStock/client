@@ -2,6 +2,8 @@ import React from "react";
 import styled from "styled-components/native";
 import { MaterialTopTabBarProps } from "@react-navigation/material-top-tabs";
 import HeaderTop from "./HeaderTop";
+import { grayTheme } from "../../../constants/colors";
+import { spacing } from "../../../constants/spacing";
 
 type Route = {
   key: string;
@@ -9,29 +11,30 @@ type Route = {
   params?: object | undefined;
 };
 
-const Container = styled.View``;
+const Container = styled.View`
+  background-color: ${grayTheme.background};
+`;
 
 const TabWrapper = styled.View`
   flex-direction: row;
   display: flex;
   align-items: center;
-  margin-top: 16px;
-  padding-left: 4px;
+  gap: ${spacing.offset}px;
+  padding: 0 ${spacing.gutter}px;
 `;
 
 const TabButton = styled.TouchableOpacity<{ isFocused: boolean }>`
   align-items: center;
   justify-content: center;
-  height: 40px;
-  margin: 0px 16px;
-  border-bottom-width: 2px;
-  border-bottom-color: ${(props) =>
-    props.isFocused ? "#5d004a" : "transparent"};
+  padding: 12px 5px 7px;
+  border-bottom-width: 3px;
+  border-bottom-color: ${(props) => (props.isFocused ? "#000" : "transparent")};
 `;
 
 const TabText = styled.Text<{ isFocused: boolean }>`
-  font-weight: 800;
-  color: ${(props) => (props.isFocused ? "#5d004a" : "#000000")};
+  font-size: 20px;
+  font-family: "bold";
+  color: ${(props) => (props.isFocused ? "#000" : "#949496")};
 `;
 
 export default function MainHeader({
@@ -41,12 +44,11 @@ export default function MainHeader({
 }: MaterialTopTabBarProps) {
   return (
     <Container>
-      <HeaderTop />
+      <HeaderTop navigation={navigation} />
       <TabWrapper>
         {state.routes.map((route: Route, index: number) => {
-          // const {options} = descriptors[route.key];
-          // const label = options.tabBarLabel;
-          const label = route.name;
+          const { options } = descriptors[route.key];
+          const label = options.tabBarLabel;
           const isFocused = state.index === index;
 
           const onPress = () => {
