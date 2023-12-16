@@ -1,4 +1,5 @@
 import { MaterialCommunityIcons, Ionicons, Feather } from "@expo/vector-icons";
+import { Image, TouchableOpacity } from "react-native";
 
 type IconProps = {
   type: "material" | "ionicons" | "feather";
@@ -13,13 +14,26 @@ const Icons: React.FC<IconProps> = ({
   size = 20,
   color = "black",
 }) => {
-  if (type === "material")
-    return <MaterialCommunityIcons name={name} size={size} color={color} />;
-  else if (type === "ionicons")
-    return <Ionicons name={name} size={size} color={color} />;
-  else if (type === "feather")
-    return <Feather name={name} size={size} color={color} />;
+  let IconComponent: any;
+  if (type === "material") IconComponent = MaterialCommunityIcons;
+  else if (type === "ionicons") IconComponent = Ionicons;
+  else if (type === "feather") IconComponent = Feather;
   else return null;
+
+  return <IconComponent name={name} size={size} color={color} />;
 };
 
 export default Icons;
+
+export const IconsPic = ({ source, size }) => {
+  return (
+    <Image
+      source={source}
+      style={{
+        width: size,
+        height: size,
+        resizeMode: "contain",
+      }}
+    />
+  );
+};
