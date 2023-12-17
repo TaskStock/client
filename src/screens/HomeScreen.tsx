@@ -10,7 +10,7 @@ const { width } = Dimensions.get("window");
 
 const Container = styled.View`
   padding-top: ${spacing.offset}px;
-  background-color: ${grayTheme.background};
+  background-color: ${({ theme }) => theme.background};
   flex: 1;
 `;
 const GraphContainer = styled.View`
@@ -19,7 +19,7 @@ const GraphContainer = styled.View`
   margin-left: ${spacing.gutter}px;
   margin-right: 15px;
   height: 320px;
-  background-color: white;
+  background-color: ${({ theme }) => theme.box};
   border-radius: 20px;
 `;
 const CalendarContainer = styled(GraphContainer)`
