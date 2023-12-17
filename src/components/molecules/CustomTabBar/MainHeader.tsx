@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
 import { MaterialTopTabBarProps } from "@react-navigation/material-top-tabs";
 import HeaderTop from "./HeaderTop";
-import { grayTheme } from "../../../constants/colors";
+import { darkTheme, grayTheme } from "../../../constants/colors";
 import { spacing } from "../../../constants/spacing";
 import { Animated } from "react-native";
 import Tab from "./Tab";
@@ -14,7 +14,7 @@ type Route = {
 };
 
 const Container = styled.View`
-  background-color: ${grayTheme.background};
+  background-color: ${({ theme }) => theme.background};
 `;
 
 const TabWrapper = styled.View`
@@ -25,7 +25,7 @@ const TabWrapper = styled.View`
   padding: 0 ${spacing.gutter}px;
 `;
 const BottomLine = styled.View`
-  background-color: #000;
+  background-color: ${({ theme }) => theme.text};
   height: 3px;
   width: 100%;
 `;
@@ -53,7 +53,7 @@ export default function MainHeader({
   }, [state, translateValue, toValue]);
   return (
     <Container>
-      <HeaderTop navigation={navigation} />
+      <HeaderTop />
       <TabWrapper>
         {state.routes.map((route: Route, index: number) => {
           const { options } = descriptors[route.key];

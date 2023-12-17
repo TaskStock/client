@@ -24,7 +24,8 @@ const TabButton = styled.TouchableOpacity<{ isFocused: boolean }>`
 const TabText = styled.Text<{ isFocused: boolean }>`
   font-size: 20px;
   font-family: "bold";
-  color: ${(props) => (props.isFocused ? "#000" : "#949496")};
+  color: ${(props) =>
+    props.isFocused ? props.theme.text : props.theme.textDim};
 `;
 
 const Tab: React.FC<ITab> = ({

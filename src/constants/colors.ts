@@ -26,6 +26,7 @@ export const grayTheme = {
   textDim: palette.neutral600_gray,
   textDimmer: palette.neutral500_gray,
   background: palette.neutral300_gray,
+  box: palette.neutral100_gray,
   high: palette.red,
   low: palette.blue,
 };
@@ -33,9 +34,10 @@ export const grayTheme = {
 export const darkTheme = {
   palette,
   text: palette.neutral100_dark,
-  textDim: palette.neutral200_dark,
+  textDim: palette.neutral300_dark,
   textDimmer: palette.neutral200_dark,
   background: palette.neutral500_dark,
+  box: palette.neutral700_dark,
   high: palette.red,
   low: palette.green,
 };

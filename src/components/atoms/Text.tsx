@@ -29,7 +29,8 @@ const $weightStyles = {
 const TextStyling = styled.Text<{ size: SizeStyles; weight: WeightStyles }>`
   font-size: ${({ size }) => $sizeStyles[size].fontSize}px;
   font-family: ${({ weight }) => $weightStyles[weight].fontFamily};
-  color: ${(props) => props.color};
+  color: ${(props) =>
+    props.color === "#000" ? props.theme.text : props.color};
   font-weight: 400;
 `;
 
@@ -45,7 +46,7 @@ const Text: React.FC<TextProps> = ({
   children,
   size,
   weight = "regular",
-  color = "black",
+  color = "#000",
   styles,
 }) => {
   return (
