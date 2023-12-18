@@ -5,6 +5,7 @@ import {
   PanResponderGestureState,
   PanResponder,
   Platform,
+  View,
 } from "react-native";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useRecoilValue } from "recoil";
@@ -13,6 +14,7 @@ import { darkMode } from "../../../atom/theme";
 import { darkTheme, grayTheme } from "../../../constants/colors";
 import { HeaderHeightContext } from "../../../utils/HeaderHeightContext";
 import getNextState from "./getNextState";
+import Loader from "../../atoms/Loader";
 
 const { height: screenHeight } = Dimensions.get("window");
 
@@ -42,66 +44,6 @@ export const animateMove = (
     finished && callback && callback();
   });
 };
-const onPanResponderRelease = (
-  _: GestureResponderEvent,
-  { moveY }: PanResponderGestureState,
-  defaultHeight: number,
-  openState: number,
-  movementValue: (moveY: number) => number,
-  state: Animated.Value,
-  y: Animated.Value,
-  onDrawerStateChange: (nextState) => void,
-  CLOSED_STATE: number
-) => {
-  console.log("onPanResponderRelease", defaultHeight, openState);
-  const valueToMove = movementValue(moveY);
-  const nextState = getNextState(
-    state._value,
-    valueToMove,
-    defaultHeight,
-    openState,
-    CLOSED_STATE
-  );
-  state.setValue(nextState);
-  animateMove(y, nextState, onDrawerStateChange(nextState));
-};
-const handlePanResponder = (
-  onMoveShouldSetPanResponder,
-  onPanResponderMove,
-  onPanResponderRelease,
-  DEFAULT_HEIGHT,
-  OPEN_STATE,
-  CLOSED_STATE,
-  movementValue,
-  state,
-  y,
-  onDrawerStateChange
-) => {
-  console.log(Platform.OS, "handlePanResponder", DEFAULT_HEIGHT, OPEN_STATE);
-  if (DEFAULT_HEIGHT && OPEN_STATE) {
-    const panResponder = useRef(
-      PanResponder.create({
-        onMoveShouldSetPanResponder,
-        onStartShouldSetPanResponderCapture: onMoveShouldSetPanResponder,
-        onPanResponderMove,
-        onPanResponderRelease: (e, gs) =>
-          onPanResponderRelease(
-            e,
-            gs,
-            DEFAULT_HEIGHT,
-            OPEN_STATE,
-            movementValue,
-            state,
-            y,
-            onDrawerStateChange,
-            CLOSED_STATE
-          ),
-      })
-    ).current;
-
-    return panResponder;
-  }
-};
 
 const BottomDrawer: React.FunctionComponent<BottomDrawerProps> = ({
   children,
@@ -116,12 +58,19 @@ const BottomDrawer: React.FunctionComponent<BottomDrawerProps> = ({
     CLOSED_STATE, // 0
   } = useContext(HeaderHeightContext);
 
-  let defaultValue;
-  let openState;
-  if (DEFAULT_HEIGHT !== 0 && OPEN_STATE !== 0) {
-    defaultValue = DEFAULT_HEIGHT;
-    openState = OPEN_STATE;
-  }
+  // final value
+  const [defaultValue, setDefaultValue] = useState(0);
+  const [openState, setOpenState] = useState(0);
+
+  useEffect(() => {
+    if (DEFAULT_HEIGHT !== defaultValue || OPEN_STATE !== openState) {
+      setDefaultValue(DEFAULT_HEIGHT);
+      setOpenState(OPEN_STATE);
+    }
+    handlePanResponder();
+  }, [defaultValue, openState, DEFAULT_HEIGHT, OPEN_STATE]);
+
+  const [panResponder, setPanResponder] = useState(null);
 
   const y = React.useRef(new Animated.Value(CLOSED_STATE)).current;
   const state = React.useRef(new Animated.Value(CLOSED_STATE)).current;
@@ -140,21 +89,43 @@ const BottomDrawer: React.FunctionComponent<BottomDrawerProps> = ({
     { dy }: PanResponderGestureState
   ) => Math.abs(dy) >= 10;
 
-  const panResponder = handlePanResponder(
-    onMoveShouldSetPanResponder,
-    onPanResponderMove,
-    onPanResponderRelease,
-    DEFAULT_HEIGHT,
-    OPEN_STATE,
-    CLOSED_STATE,
-    movementValue,
-    state,
-    y,
-    onDrawerStateChange
-  );
-  console.log(panResponder);
+  const onPanResponderRelease = (
+    _: GestureResponderEvent,
+    { moveY }: PanResponderGestureState
+  ) => {
+    const valueToMove = movementValue(moveY);
+    const nextState = getNextState(
+      state._value,
+      valueToMove,
+      defaultValue,
+      openState,
+      CLOSED_STATE
+    );
+    state.setValue(nextState);
+    animateMove(y, nextState, onDrawerStateChange(nextState));
+  };
+
+  const handlePanResponder = () => {
+    if (defaultValue !== 0 && openState !== 0) {
+      const _panResponder = PanResponder.create({
+        onMoveShouldSetPanResponder,
+        onStartShouldSetPanResponderCapture: onMoveShouldSetPanResponder,
+        onPanResponderMove,
+        onPanResponderRelease,
+      });
+      if (_panResponder !== panResponder) {
+        setPanResponder(_panResponder);
+      }
+    }
+  };
+  useEffect(() => {
+    handlePanResponder();
+  }, [defaultValue, openState]);
 
   const isDark = useRecoilValue(darkMode);
+  if (!panResponder) {
+    return <Loader />;
+  }
 
   return (
     <Animated.View
@@ -165,7 +136,7 @@ const BottomDrawer: React.FunctionComponent<BottomDrawerProps> = ({
           backgroundColor: isDark ? darkTheme.box : grayTheme.box,
           borderRadius: 20,
           position: "absolute",
-          bottom: -screenHeight + DEFAULT_HEIGHT,
+          bottom: -screenHeight + defaultValue,
           transform: [{ translateY: y }],
           shadowColor: "rgba(0, 0, 0, 0.15)",
           shadowOffset: {

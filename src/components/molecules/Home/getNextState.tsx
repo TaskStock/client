@@ -11,7 +11,6 @@ const getNextState = (
       return val >= currentState + margin ? currentState : CLOSED_STATE;
 
     case CLOSED_STATE:
-      console.log("---", OPEN_STATE);
       return val >= currentState + margin ? OPEN_STATE : currentState;
     default:
       return currentState;
