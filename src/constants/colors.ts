@@ -1,4 +1,4 @@
-const palette: Record<string, string> = {
+export const palette = {
   neutral100_gray: "#FFFFFF",
   neutral200_gray: "#F2F2F2",
   neutral300_gray: "#EDEEF0",
@@ -18,6 +18,7 @@ const palette: Record<string, string> = {
   red: "#D0191C",
   blue: "#0038FF",
   green: "#4DDE48",
+  candle_black: "#535358",
 } as const;
 
 export const grayTheme = {

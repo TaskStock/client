@@ -5,6 +5,7 @@ import { spacing } from "../constants/spacing";
 import { grayTheme } from "../constants/colors";
 import MyInfo from "../components/molecules/Home/MyInfo";
 import { Dimensions, ScrollView, View } from "react-native";
+import CandleStickChart from "../components/organisms/CandleStickChart";
 
 const { width } = Dimensions.get("window");
 
@@ -49,7 +50,9 @@ const HomeScreen = () => {
           right: 0,
         }}
       >
-        <GraphContainer />
+        <GraphContainer>
+          <CandleStickChart />
+        </GraphContainer>
         <CalendarContainer />
       </ScrollView>
 
