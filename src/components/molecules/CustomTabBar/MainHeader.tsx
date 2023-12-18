@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components/native";
 import { MaterialTopTabBarProps } from "@react-navigation/material-top-tabs";
 import HeaderTop from "./HeaderTop";
@@ -6,6 +6,7 @@ import { darkTheme, grayTheme } from "../../../constants/colors";
 import { spacing } from "../../../constants/spacing";
 import { Animated } from "react-native";
 import Tab from "./Tab";
+import { HeaderHeightContext } from "../../../utils/HeaderHeightContext";
 
 type Route = {
   key: string;
@@ -30,14 +31,16 @@ const BottomLine = styled.View`
   width: 100%;
 `;
 
-export default function MainHeader({
+const MainHeader: React.FC<MaterialTopTabBarProps> = ({
   state,
   descriptors,
   navigation,
-}: MaterialTopTabBarProps) {
+}) => {
   const [translateValue] = useState(new Animated.Value(0));
   const [width, setWidth] = useState(0);
   const [toValue, setToValue] = useState(0);
+
+  const { setHeaderHeight } = useContext(HeaderHeightContext);
 
   useEffect(() => {
     Animated.spring(translateValue, {
@@ -51,8 +54,14 @@ export default function MainHeader({
       useNativeDriver: true,
     }).start();
   }, [state, translateValue, toValue]);
+
   return (
-    <Container>
+    <Container
+      onLayout={(event) => {
+        const { x, y, width, height } = event.nativeEvent.layout;
+        setHeaderHeight(height);
+      }}
+    >
       <HeaderTop />
       <TabWrapper>
         {state.routes.map((route: Route, index: number) => {
@@ -91,4 +100,5 @@ export default function MainHeader({
       />
     </Container>
   );
-}
+};
+export default MainHeader;
