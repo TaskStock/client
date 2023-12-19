@@ -18,8 +18,8 @@ export default function App() {
   const [assets] = useAssets([require("./assets/splash.png")]);
   const [fontsLoaded] = Font.useFonts(customFontsToLoad);
   if (!assets || !fontsLoaded) return <Loader />;
-  console.log(assets);
-  console.log(fontsLoaded);
+  // console.log(assets);
+  // console.log(fontsLoaded);
 
   return (
     <ThemeProvider theme={darkmode ? darkTheme : grayTheme}>

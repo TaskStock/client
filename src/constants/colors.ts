@@ -19,10 +19,13 @@ export const palette = {
   blue: "#0038FF",
   green: "#4DDE48",
   candle_black: "#535358",
+  candle_tick_line: "rgba(83, 83, 88, 0.30)",
+  candle_bottom_graph_bar: "#9C9C9C",
 } as const;
 
 export const grayTheme = {
   palette,
+
   text: palette.neutral700_gray,
   textDim: palette.neutral600_gray,
   textDimmer: palette.neutral500_gray,
