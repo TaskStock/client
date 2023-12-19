@@ -28,9 +28,9 @@ const BottomDrawerContainer = () => {
     setProjects(_projects);
   }, []);
 
-  useEffect(() => {
-    console.log(selectedProject);
-  }, [selectedProject]);
+  //   useEffect(() => {
+  //     console.log(selectedProject);
+  //   }, [selectedProject]);
 
   return (
     <BottomDrawer onDrawerStateChange={() => {}}>
