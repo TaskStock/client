@@ -8,8 +8,7 @@ import { darkMode } from "../../atom/theme";
 
 const Container = styled.TouchableOpacity`
   /* flex: 1; */
-  background-color: ${(props) =>
-    props.type === "main" ? props.theme.mainBtnGray : props.theme.subBtnGray};
+  background-color: ${(props) => props.theme.mainBtnGray};
   padding: 14px 0;
   border-radius: 8px;
   align-items: center;
@@ -27,7 +26,6 @@ interface ButtonProps {
 
 const Button = ({
   text,
-  type = "main",
   color,
   disabled = false,
   onPress,
@@ -36,7 +34,6 @@ const Button = ({
   const isDark = useRecoilValue(darkMode);
   return (
     <Container
-      type={type}
       onPress={!disabled && onPress}
       style={styles}
       disabled={disabled}

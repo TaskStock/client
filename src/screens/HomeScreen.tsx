@@ -38,6 +38,12 @@ const HomeScreen = () => {
     ComponentHeightContext
   );
 
+  const [editEnabled, setEditEnabled] = useState(false);
+  const handleEdit = {
+    editEnabled,
+    setEditEnabled,
+  };
+
   return (
     <Container>
       <View
@@ -76,7 +82,7 @@ const HomeScreen = () => {
       <BottomDrawer onDrawerStateChange={() => {}}>
         <Text size="lg">BottomDrawer</Text>
       </BottomDrawer>
-      <HandleTodoContainer />
+      <HandleTodoContainer {...handleEdit} />
     </Container>
   );
 };
