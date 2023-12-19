@@ -5,21 +5,13 @@ import ProjectScreen from "../screens/ProjectScreen";
 import FriendScreen from "../screens/FriendScreen";
 import MainHeader from "../components/molecules/CustomTabBar/MainHeader";
 import { Platform } from "react-native";
-import { HeaderHeightProvider } from "../utils/HeaderHeightContext";
+import { ComponentHeightProvider } from "../utils/ComponentHeightContext";
 
 const Tab = createMaterialTopTabNavigator();
 
 function MainTab() {
-  //   const [headerHeight, setHeaderHeight] = useState(0);
-  //   console.log(Platform.OS, "headerHeight: ", headerHeight);
-
-  //   useEffect(() => {
-  //     // Update the initialParams whenever headerHeight changes
-  //     Tab.setParams({ headerHeight: headerHeight });
-  //   }, [headerHeight]);
-
   return (
-    <HeaderHeightProvider>
+    <ComponentHeightProvider>
       <Tab.Navigator
         tabBar={(props) => <MainHeader {...props} />}
         screenOptions={{ swipeEnabled: false }}
@@ -40,7 +32,7 @@ function MainTab() {
           options={{ tabBarLabel: "친구" }}
         />
       </Tab.Navigator>
-    </HeaderHeightProvider>
+    </ComponentHeightProvider>
   );
 }
 

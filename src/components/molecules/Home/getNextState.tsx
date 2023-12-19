@@ -5,7 +5,6 @@ const getNextState = (
   OPEN_STATE: number,
   CLOSED_STATE: number
 ) => {
-  console.log("getNextState", OPEN_STATE, CLOSED_STATE);
   switch (currentState) {
     case OPEN_STATE:
       return val >= currentState + margin ? currentState : CLOSED_STATE;

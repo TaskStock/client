@@ -14,7 +14,7 @@ import MyInfo from "../components/molecules/Home/MyInfo";
 import { Dimensions, ScrollView, View } from "react-native";
 import BottomDrawer from "../components/molecules/Home/BottomDrawer";
 import Text from "../components/atoms/Text";
-import { HeaderHeightContext } from "../utils/HeaderHeightContext";
+import { ComponentHeightContext } from "../utils/ComponentHeightContext";
 
 const { width } = Dimensions.get("window");
 
@@ -42,7 +42,7 @@ const CalendarContainer = styled(GraphContainer)`
 const HomeScreen = () => {
   const [myData, setMyData] = useState(data);
   const { myInfoHeight, setMyInfoHeight, graphHeight, setGraphHeight } =
-    useContext(HeaderHeightContext);
+    useContext(ComponentHeightContext);
 
   return (
     <Container>

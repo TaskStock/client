@@ -4,15 +4,13 @@ import {
   GestureResponderEvent,
   PanResponderGestureState,
   PanResponder,
-  Platform,
-  View,
 } from "react-native";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useRecoilValue } from "recoil";
 import styled from "styled-components/native";
 import { darkMode } from "../../../atom/theme";
 import { darkTheme, grayTheme } from "../../../constants/colors";
-import { HeaderHeightContext } from "../../../utils/HeaderHeightContext";
+import { ComponentHeightContext } from "../../../utils/ComponentHeightContext";
 import getNextState from "./getNextState";
 import Loader from "../../atoms/Loader";
 
@@ -25,10 +23,10 @@ interface BottomDrawerProps {
 
 export const HorizontalLine = styled.View`
   background-color: ${({ theme }) => theme.background};
-  width: 48px;
-  height: 5px;
+  width: 46px;
+  height: 4px;
   margin: 4px auto;
-  border-radius: 7px;
+  border-radius: 4px;
 `;
 
 export const animateMove = (
@@ -50,13 +48,10 @@ const BottomDrawer: React.FunctionComponent<BottomDrawerProps> = ({
   onDrawerStateChange,
 }) => {
   const {
-    headerHeight,
-    myInfoHeight,
-    graphHeight,
     DEFAULT_HEIGHT,
     OPEN_STATE,
     CLOSED_STATE, // 0
-  } = useContext(HeaderHeightContext);
+  } = useContext(ComponentHeightContext);
 
   // final value
   const [defaultValue, setDefaultValue] = useState(0);
@@ -72,8 +67,8 @@ const BottomDrawer: React.FunctionComponent<BottomDrawerProps> = ({
 
   const [panResponder, setPanResponder] = useState(null);
 
-  const y = React.useRef(new Animated.Value(CLOSED_STATE)).current;
-  const state = React.useRef(new Animated.Value(CLOSED_STATE)).current;
+  const y = useRef(new Animated.Value(CLOSED_STATE)).current;
+  const state = useRef(new Animated.Value(CLOSED_STATE)).current;
   const movementValue = (moveY: number) => screenHeight - moveY;
 
   const onPanResponderMove = (
