@@ -4,7 +4,7 @@ import { Dimensions } from "react-native";
 
 const { height: screenHeight } = Dimensions.get("window");
 
-type HeaderHeightContextType = {
+type ComponentHeightContextType = {
   headerHeight: number;
   setHeaderHeight: React.Dispatch<React.SetStateAction<number>>;
   myInfoHeight: number;
@@ -16,21 +16,23 @@ type HeaderHeightContextType = {
   CLOSED_STATE: number;
 };
 
-export const HeaderHeightContext = createContext<HeaderHeightContextType>({
-  headerHeight: 0,
-  setHeaderHeight: () => {},
-  myInfoHeight: 0,
-  setMyInfoHeight: () => {},
-  graphHeight: 0,
-  setGraphHeight: () => {},
-  DEFAULT_HEIGHT: 0,
-  OPEN_STATE: 0,
-  CLOSED_STATE: 0,
-});
+export const ComponentHeightContext = createContext<ComponentHeightContextType>(
+  {
+    headerHeight: 0,
+    setHeaderHeight: () => {},
+    myInfoHeight: 0,
+    setMyInfoHeight: () => {},
+    graphHeight: 0,
+    setGraphHeight: () => {},
+    DEFAULT_HEIGHT: 0,
+    OPEN_STATE: 0,
+    CLOSED_STATE: 0,
+  }
+);
 
-export const HeaderHeightProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
+export const ComponentHeightProvider: React.FC<{
+  children: React.ReactNode;
+}> = ({ children }) => {
   const [headerHeight, setHeaderHeight] = useState(0);
   const [myInfoHeight, setMyInfoHeight] = useState(0);
   const [graphHeight, setGraphHeight] = useState(0);
@@ -51,7 +53,7 @@ export const HeaderHeightProvider: React.FC<{ children: React.ReactNode }> = ({
   const CLOSED_STATE = 0;
 
   return (
-    <HeaderHeightContext.Provider
+    <ComponentHeightContext.Provider
       value={{
         headerHeight,
         setHeaderHeight,
@@ -65,6 +67,6 @@ export const HeaderHeightProvider: React.FC<{ children: React.ReactNode }> = ({
       }}
     >
       {children}
-    </HeaderHeightContext.Provider>
+    </ComponentHeightContext.Provider>
   );
 };

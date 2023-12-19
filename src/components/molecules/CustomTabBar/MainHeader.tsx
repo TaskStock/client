@@ -6,7 +6,7 @@ import { darkTheme, grayTheme } from "../../../constants/colors";
 import { spacing } from "../../../constants/spacing";
 import { Animated } from "react-native";
 import Tab from "./Tab";
-import { HeaderHeightContext } from "../../../utils/HeaderHeightContext";
+import { ComponentHeightContext } from "../../../utils/ComponentHeightContext";
 
 type Route = {
   key: string;
@@ -40,7 +40,7 @@ const MainHeader: React.FC<MaterialTopTabBarProps> = ({
   const [width, setWidth] = useState(0);
   const [toValue, setToValue] = useState(0);
 
-  const { setHeaderHeight } = useContext(HeaderHeightContext);
+  const { setHeaderHeight } = useContext(ComponentHeightContext);
 
   useEffect(() => {
     Animated.spring(translateValue, {
