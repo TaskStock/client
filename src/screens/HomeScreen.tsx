@@ -12,6 +12,8 @@ import { spacing } from "../constants/spacing";
 import { grayTheme } from "../constants/colors";
 import MyInfo from "../components/molecules/Home/MyInfo";
 import { Dimensions, ScrollView, View } from "react-native";
+import { useSelector } from "react-redux";
+import { RootState } from "../store/configureStore";
 import BottomDrawer from "../components/molecules/Home/BottomDrawer";
 import Text from "../components/atoms/Text";
 import { HeaderHeightContext } from "../utils/HeaderHeightContext";
