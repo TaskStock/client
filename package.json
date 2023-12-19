@@ -13,6 +13,7 @@
     "@react-navigation/native": "^6.1.9",
     "@react-navigation/native-stack": "^6.9.17",
     "@reduxjs/toolkit": "^2.0.1",
+    "@types/react-redux": "^7.1.33",
     "@types/styled-components": "^5.1.32",
     "@types/styled-components-react-native": "^5.2.5",
     "expo": "~49.0.15",
@@ -29,6 +30,7 @@
     "react-native-tab-view": "^3.5.2",
     "react-redux": "^9.0.4",
     "recoil": "^0.7.7",
+    "redux": "^5.0.0",
     "styled-components": "^6.1.1"
   },
   "devDependencies": {
