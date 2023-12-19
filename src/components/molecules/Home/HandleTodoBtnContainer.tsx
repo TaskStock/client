@@ -17,7 +17,7 @@ const Container = styled.View`
   background-color: ${({ theme }) => theme.box};
 `;
 
-const HandleTodoContainer = ({ editEnabled, setEditEnabled }) => {
+const HandleTodoBtnContainer = ({ editEnabled, setEditEnabled }) => {
   const { NOTCH_BOTTOM } = useHeight();
   const isDark = useRecoilValue(darkMode);
 
@@ -59,4 +59,4 @@ const HandleTodoContainer = ({ editEnabled, setEditEnabled }) => {
   );
 };
 
-export default HandleTodoContainer;
+export default HandleTodoBtnContainer;
