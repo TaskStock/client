@@ -4,12 +4,9 @@ import styled from "styled-components/native";
 import { spacing } from "../constants/spacing";
 import MyInfo from "../components/molecules/Home/MyInfo";
 import { Dimensions, ScrollView, View } from "react-native";
-import { useSelector } from "react-redux";
-import { RootState } from "../store/configureStore";
-import BottomDrawer from "../components/molecules/Home/BottomDrawer";
-import Text from "../components/atoms/Text";
 import { ComponentHeightContext } from "../utils/ComponentHeightContext";
-import HandleTodoContainer from "../components/molecules/Home/HandleTodoContainer";
+import HandleTodoBtnContainer from "../components/molecules/Home/HandleTodoBtnContainer";
+import BottomDrawerContainer from "../components/molecules/Home/BottomDrawerContainer";
 
 const { width } = Dimensions.get("window");
 
@@ -81,10 +78,8 @@ const HomeScreen = () => {
         />
         <CalendarContainer style={boxShadow} />
       </ScrollView>
-      <BottomDrawer onDrawerStateChange={() => {}}>
-        <Text size="lg">BottomDrawer</Text>
-      </BottomDrawer>
-      <HandleTodoContainer {...handleEdit} />
+      <BottomDrawerContainer />
+      <HandleTodoBtnContainer {...handleEdit} />
     </Container>
   );
 };
