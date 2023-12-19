@@ -100,7 +100,7 @@ const BottomDrawer: React.FunctionComponent<BottomDrawerProps> = ({
     { dy }: PanResponderGestureState
   ) => {
     dy < 0 ? setDraggedUp(true) : setDraggedUp(false);
-    return Math.abs(dy) >= 50;
+    return Math.abs(dy) >= 70;
   };
 
   const onPanResponderRelease = (
