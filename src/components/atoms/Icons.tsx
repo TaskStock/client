@@ -1,11 +1,12 @@
-import { MaterialCommunityIcons, Ionicons, Feather } from "@expo/vector-icons";
-import { Image } from "react-native";
+import { Feather, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { Image, TouchableOpacity } from "react-native";
 
 type IconProps = {
   type: "material" | "ionicons" | "feather";
   name: string;
   size?: number;
   color?: string;
+  onPress?: () => void;
 };
 
 const Icons: React.FC<IconProps> = ({
@@ -13,6 +14,7 @@ const Icons: React.FC<IconProps> = ({
   name,
   size = 20,
   color = "black",
+  onPress,
 }) => {
   let IconComponent: any;
   if (type === "material") IconComponent = MaterialCommunityIcons;
@@ -20,20 +22,34 @@ const Icons: React.FC<IconProps> = ({
   else if (type === "feather") IconComponent = Feather;
   else return null;
 
-  return <IconComponent name={name} size={size} color={color} />;
+  return (
+    <TouchableOpacity onPress={onPress}>
+      <IconComponent name={name} size={size} color={color} />
+    </TouchableOpacity>
+  );
 };
 
 export default Icons;
 
-export const IconsPic = ({ source, size }) => {
+export const IconsPic = ({
+  source,
+  size,
+  onPress,
+}: {
+  source: any;
+  size: number;
+  onPress?: () => void;
+}) => {
   return (
-    <Image
-      source={source}
-      style={{
-        width: size,
-        height: size,
-        resizeMode: "contain",
-      }}
-    />
+    <TouchableOpacity onPress={onPress}>
+      <Image
+        source={source}
+        style={{
+          width: size,
+          height: size,
+          resizeMode: "contain",
+        }}
+      />
+    </TouchableOpacity>
   );
 };

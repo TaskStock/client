@@ -1,10 +1,10 @@
-import React, { useContext, useEffect, useState } from "react";
-import styled from "styled-components/native";
 import { MaterialTopTabBarProps } from "@react-navigation/material-top-tabs";
-import HeaderTop from "./HeaderTop";
-import { darkTheme, grayTheme } from "../../../constants/colors";
-import { spacing } from "../../../constants/spacing";
+import React, { useContext, useEffect, useState } from "react";
 import { Animated } from "react-native";
+import styled from "styled-components/native";
+import { spacing } from "../../../constants/spacing";
+import { ComponentHeightContext } from "../../../utils/ComponentHeightContext";
+import HeaderTop from "./HeaderTop";
 import Tab from "./Tab";
 import { HeaderHeightContext } from "../../../utils/HeaderHeightContext";
 
@@ -40,7 +40,7 @@ const MainHeader: React.FC<MaterialTopTabBarProps> = ({
   const [width, setWidth] = useState(0);
   const [toValue, setToValue] = useState(0);
 
-  const { setHeaderHeight } = useContext(HeaderHeightContext);
+  const { setHeaderHeight } = useContext(ComponentHeightContext);
 
   useEffect(() => {
     Animated.spring(translateValue, {

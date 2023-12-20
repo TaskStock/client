@@ -1,23 +1,13 @@
-import React, {
-  useCallback,
-  useContext,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react";
-import { data } from "../../public/home";
-import styled from "styled-components/native";
-import { spacing } from "../constants/spacing";
-import { grayTheme } from "../constants/colors";
-import MyInfo from "../components/molecules/Home/MyInfo";
-import CandleStickChart from "../components/organisms/CandleStickChart";
+import React, { useContext, useState } from "react";
 import { Dimensions, ScrollView, View } from "react-native";
-import { useSelector } from "react-redux";
-import { RootState } from "../store/configureStore";
-import BottomDrawer from "../components/molecules/Home/BottomDrawer";
-import Text from "../components/atoms/Text";
-import { HeaderHeightContext } from "../utils/HeaderHeightContext";
+import styled from "styled-components/native";
+import { data } from "../../public/home";
+import BottomDrawerContainer from "../components/molecules/Home/BottomDrawerContainer";
+import HandleTodoBtnContainer from "../components/molecules/Home/HandleTodoBtnContainer";
+import MyInfo from "../components/molecules/Home/MyInfo";
+import { spacing } from "../constants/spacing";
+import { ComponentHeightContext } from "../utils/ComponentHeightContext";
+import CandleStickChart from '../components/organisms/CandleStickChart';
 
 const { width } = Dimensions.get("window");
 
@@ -44,8 +34,15 @@ const CalendarContainer = styled(GraphContainer)`
 
 const HomeScreen = () => {
   const [myData, setMyData] = useState(data);
-  const { myInfoHeight, setMyInfoHeight, graphHeight, setGraphHeight } =
-    useContext(HeaderHeightContext);
+  const { setMyInfoHeight, setGraphHeight } = useContext(
+    ComponentHeightContext
+  );
+
+  const [editEnabled, setEditEnabled] = useState(false);
+  const handleEdit = {
+    editEnabled,
+    setEditEnabled,
+  };
 
   return (
     <Container>
@@ -85,9 +82,8 @@ const HomeScreen = () => {
         </GraphContainer>
         <CalendarContainer style={boxShadow} />
       </ScrollView>
-      <BottomDrawer onDrawerStateChange={() => {}}>
-        <Text size="lg">BottomDrawer</Text>
-      </BottomDrawer>
+      <BottomDrawerContainer {...handleEdit} />
+      <HandleTodoBtnContainer {...handleEdit} />
     </Container>
   );
 };

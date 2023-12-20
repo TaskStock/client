@@ -1,13 +1,27 @@
+import React from "react";
 import { View } from "react-native";
-import React, { useState } from "react";
-import Text from "../../atoms/Text";
+import { useSelector } from "react-redux";
+import { darkTheme, grayTheme } from "../../../constants/colors";
 import numberWithCommas from "../../../utils/useNumberWithCommas";
 import FlexBox from "../../atoms/FlexBox";
-import { darkTheme, grayTheme } from "../../../constants/colors";
-import { useRecoilValue } from "recoil";
-import { darkMode } from "../../../atom/theme";
+import Text from "../../atoms/Text";
+import { RootState } from "../../../store/configureStore";
+
+const THEME_CONSTANTS = {
+  dark: {
+    textDim: darkTheme.textDim,
+    high: darkTheme.high,
+    low: darkTheme.low,
+  },
+  gray: {
+    textDim: grayTheme.textDim,
+    high: grayTheme.high,
+    low: grayTheme.low,
+  },
+};
+
 const MyInfo = ({ data }) => {
-  const isDark = useRecoilValue(darkMode);
+  const theme = useSelector((state: RootState) => state.theme.value);
   const diff = data.cumulative_value - data.value_month_ago;
   const diff_rate =
     ((data.cumulative_value - data.value_month_ago) * 100) /
@@ -27,7 +41,7 @@ const MyInfo = ({ data }) => {
         <Text
           size="sm"
           weight="regular"
-          color={isDark ? darkTheme.textDim : grayTheme.textDim}
+          color={THEME_CONSTANTS[theme]?.textDim}
         >
           1개월 전보다
         </Text>
@@ -36,12 +50,8 @@ const MyInfo = ({ data }) => {
           weight="regular"
           color={
             diff > 0
-              ? isDark
-                ? darkTheme.high
-                : grayTheme.high
-              : isDark
-              ? darkTheme.low
-              : grayTheme.low
+              ? THEME_CONSTANTS[theme]?.high
+              : THEME_CONSTANTS[theme]?.low
           }
         >
           {numberWithCommas(diff)}원 ({renderDiffRate.toString()}%)

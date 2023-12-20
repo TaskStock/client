@@ -1,20 +1,17 @@
-import {
-  Dimensions,
-  Animated,
-  GestureResponderEvent,
-  PanResponderGestureState,
-  PanResponder,
-  Platform,
-  View,
-} from "react-native";
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { useRecoilValue } from "recoil";
+import {
+  Animated,
+  Dimensions,
+  GestureResponderEvent,
+  PanResponder,
+  PanResponderGestureState,
+} from "react-native";
+import { useSelector } from "react-redux";
 import styled from "styled-components/native";
-import { darkMode } from "../../../atom/theme";
 import { darkTheme, grayTheme } from "../../../constants/colors";
-import { HeaderHeightContext } from "../../../utils/HeaderHeightContext";
-import getNextState from "./getNextState";
+import { ComponentHeightContext } from "../../../utils/ComponentHeightContext";
 import Loader from "../../atoms/Loader";
+import { RootState } from "../../../store/configureStore";
 
 const { height: screenHeight } = Dimensions.get("window");
 
@@ -25,10 +22,10 @@ interface BottomDrawerProps {
 
 export const HorizontalLine = styled.View`
   background-color: ${({ theme }) => theme.background};
-  width: 48px;
-  height: 5px;
+  width: 46px;
+  height: 4px;
   margin: 4px auto;
-  border-radius: 7px;
+  border-radius: 4px;
 `;
 
 export const animateMove = (
@@ -45,18 +42,31 @@ export const animateMove = (
   });
 };
 
+const getNextState = (
+  currentState,
+  OPEN_STATE: number,
+  CLOSED_STATE: number,
+  draggedUp: boolean
+) => {
+  switch (currentState) {
+    case OPEN_STATE:
+      return draggedUp ? OPEN_STATE : CLOSED_STATE;
+    case CLOSED_STATE:
+      return draggedUp ? OPEN_STATE : CLOSED_STATE;
+    default:
+      return currentState;
+  }
+};
+
 const BottomDrawer: React.FunctionComponent<BottomDrawerProps> = ({
   children,
   onDrawerStateChange,
 }) => {
   const {
-    headerHeight,
-    myInfoHeight,
-    graphHeight,
     DEFAULT_HEIGHT,
     OPEN_STATE,
     CLOSED_STATE, // 0
-  } = useContext(HeaderHeightContext);
+  } = useContext(ComponentHeightContext);
 
   // final value
   const [defaultValue, setDefaultValue] = useState(0);
@@ -71,9 +81,10 @@ const BottomDrawer: React.FunctionComponent<BottomDrawerProps> = ({
   }, [defaultValue, openState, DEFAULT_HEIGHT, OPEN_STATE]);
 
   const [panResponder, setPanResponder] = useState(null);
+  const [draggedUp, setDraggedUp] = useState(false);
 
-  const y = React.useRef(new Animated.Value(CLOSED_STATE)).current;
-  const state = React.useRef(new Animated.Value(CLOSED_STATE)).current;
+  const y = useRef(new Animated.Value(CLOSED_STATE)).current;
+  const state = useRef(new Animated.Value(CLOSED_STATE)).current;
   const movementValue = (moveY: number) => screenHeight - moveY;
 
   const onPanResponderMove = (
@@ -87,19 +98,20 @@ const BottomDrawer: React.FunctionComponent<BottomDrawerProps> = ({
   const onMoveShouldSetPanResponder = (
     _: GestureResponderEvent,
     { dy }: PanResponderGestureState
-  ) => Math.abs(dy) >= 10;
+  ) => {
+    dy < 0 ? setDraggedUp(true) : setDraggedUp(false);
+    return Math.abs(dy) >= 70;
+  };
 
   const onPanResponderRelease = (
     _: GestureResponderEvent,
     { moveY }: PanResponderGestureState
   ) => {
-    const valueToMove = movementValue(moveY);
     const nextState = getNextState(
       state._value,
-      valueToMove,
-      defaultValue,
       openState,
-      CLOSED_STATE
+      CLOSED_STATE,
+      draggedUp
     );
     state.setValue(nextState);
     animateMove(y, nextState, onDrawerStateChange(nextState));
@@ -120,12 +132,17 @@ const BottomDrawer: React.FunctionComponent<BottomDrawerProps> = ({
   };
   useEffect(() => {
     handlePanResponder();
-  }, [defaultValue, openState]);
+  }, [defaultValue, openState, draggedUp]);
 
-  const isDark = useRecoilValue(darkMode);
+  const theme = useSelector((state: RootState) => state.theme.value);
   if (!panResponder) {
     return <Loader />;
   }
+
+  const THEME_CONSTANTS = {
+    dark: darkTheme.box,
+    gray: grayTheme.box,
+  };
 
   return (
     <Animated.View
@@ -133,7 +150,7 @@ const BottomDrawer: React.FunctionComponent<BottomDrawerProps> = ({
         {
           width: "100%",
           height: screenHeight,
-          backgroundColor: isDark ? darkTheme.box : grayTheme.box,
+          backgroundColor: THEME_CONSTANTS[theme],
           borderRadius: 20,
           position: "absolute",
           bottom: -screenHeight + defaultValue,
