@@ -1,15 +1,25 @@
-import React, { useContext } from "react";
-import {
-  VictoryAxis,
-  VictoryCandlestick,
-  VictoryChart,
-  VictoryContainer,
-} from "victory-native";
+import React, { useContext, useEffect } from "react";
+
 import styled, { ThemeContext } from "styled-components/native";
-import { Pressable, View } from "react-native";
+import { Pressable } from "react-native";
 import { Animated } from "react-native";
 import { palette } from "../../constants/colors";
 import Text from "../atoms/Text";
+import { View } from "react-native";
+import { WithLocalSvg } from "react-native-svg";
+import LineChartIcon from "../../../assets/icons/lineChartIcon.svg";
+import CandleStickIcon from "../../../assets/icons/CandleStickIcon.svg";
+import { useGetValueByTypeQuery } from "../../store/modules/value";
+import CandleStickValueChart from "./CandleStickValueChart";
+import LineValueChart from "./LineValueChart";
+
+export interface Value {
+  x: string;
+  open: string;
+  close: string;
+  high: string;
+  low: string;
+}
 
 const BottomControllerPaddingHorizontal = 26;
 const BottomControllerPaddingVertical = 15;
@@ -189,11 +199,11 @@ const dataArray = [
   },
 ];
 
-const createMockData = () => {
+const createMockData = (length: number): Value[] => {
   const data_12 = [];
   let initialValue = 10;
 
-  for (let i = 1; i <= 30; i++) {
+  for (let i = 1; i <= length; i++) {
     const date = new Date(2016, 5, i); // Months start from 0, so June is 5
 
     // Simulate stock-like movement with slight variations
@@ -222,18 +232,41 @@ const createMockData = () => {
   return data_12;
 };
 
-// FIXME: value 개수가 30개를 넘어갈때의 최적화 문제.
+const chartDateType = [
+  {
+    name: "1주",
+    counts: 7,
+  },
+  {
+    name: "1달",
+    counts: 30,
+  },
+  {
+    name: "3달",
+    counts: 90,
+  },
+  {
+    name: "1년",
+    counts: 365,
+  },
+];
 
-function CandleStickChart() {
+function HomeChart() {
   const themeContext = useContext(ThemeContext);
+
+  // absolute하게 움직이는 뒷 버튼을 위함.
   const bottomControllerWidth = React.useRef(0);
   const bottomControllerItemWidth =
     (bottomControllerWidth.current - BottomControllerPaddingHorizontal * 2) / 5;
+  const ContainerSize = React.useRef({
+    width: 0,
+    height: 0,
+  });
+  const leftValue = React.useRef(
+    new Animated.Value(BottomControllerPaddingHorizontal)
+  );
 
-  const [data, setData] = React.useState(dataArray);
-  const [isGraphReady, setIsGraphReady] = React.useState(false);
-
-  const changeChartView = (index: number) => {
+  const moveBtnBackground = (index: number) => {
     const newLeftValue =
       index * bottomControllerItemWidth + BottomControllerPaddingHorizontal;
 
@@ -244,20 +277,56 @@ function CandleStickChart() {
     }).start();
   };
 
-  const ContainerSize = React.useRef({
-    width: 0,
-    height: 0,
-  });
+  const [data, setData] = React.useState(dataArray);
+  const [isCandleStick, setIsCandleStick] = React.useState(true);
+  const [isGraphReady, setIsGraphReady] = React.useState(false);
 
-  const leftValue = React.useRef(
-    new Animated.Value(BottomControllerPaddingHorizontal)
-  );
-  const ControllerHeight = React.useRef(0);
+  // 원래 redux 안에 넣는게 좋지만, 나중에 RTK Query로 바꿀거라 그냥 여기에 넣음.
+  const [loading, setLoading] = React.useState(false);
+  const [index, setIndex] = React.useState(0);
 
-  const maxY = Math.max(...data.map((item) => parseInt(item.high)));
-  const minY = Math.min(...data.map((item) => parseInt(item.low)));
-  const twoThirds = minY + ((maxY - minY) * 2) / 3;
-  const oneThird = minY + ((maxY - minY) * 1) / 3;
+  useEffect(() => {
+    mockApiCall(chartDateType[index].name);
+  }, [index]);
+
+  // 일단 임시로 넣었음. 1주, 1달, 3달, 1년 각각의 데이터를 일단 mock data로 생성하되,
+  // 각 주별 데이터는 끝까지 채워진게 아니라, 좀 비워져있음.
+  const mockApiCall = async (type) => {
+    setLoading(true);
+    const length = chartDateType.find((item) => item.name === type)?.counts;
+
+    const randomFluctuation = Math.floor(Math.random() * length);
+
+    const response = await new Promise<Value[]>((resolve, reject) => {
+      setTimeout(() => {
+        resolve(createMockData(length - randomFluctuation));
+      }, 500);
+    });
+
+    if (length > response.length) {
+      const newArray = [];
+
+      const lastDate = new Date(response[response.length - 1].x);
+
+      for (let i = 0; i < length - response.length; i++) {
+        newArray.push({
+          close: "0",
+          high: "0",
+          low: "0",
+          open: "0",
+          x: new Date(
+            lastDate.getFullYear(),
+            lastDate.getMonth(),
+            lastDate.getDate() + i
+          ),
+        });
+      }
+
+      setData([...response, ...newArray]);
+      setLoading(false);
+    } else {
+    }
+  };
 
   return (
     <Container>
@@ -271,62 +340,27 @@ function CandleStickChart() {
           setIsGraphReady(true);
         }}
       >
-        {isGraphReady && (
-          <VictoryChart
-            width={ContainerSize.current.width}
-            height={ContainerSize.current.height}
-            padding={{
-              left: 30,
-              right: 30,
-              top: 10,
-              bottom: 10,
-            }}
-          >
-            <VictoryCandlestick
-              domain={{ y: [minY, maxY + 1.5] }}
+        {isGraphReady && !loading ? (
+          isCandleStick ? (
+            <CandleStickValueChart
+              height={ContainerSize.current.height}
+              width={ContainerSize.current.width}
               data={data}
-              animate={{
-                duration: 1000,
-                onLoad: { duration: 1000 },
-              }}
-              candleWidth={5}
-              containerComponent={<VictoryContainer responsive={false} />}
-              candleColors={{
-                positive: themeContext.high,
-                negative: themeContext.low,
-              }}
-              style={{
-                data: {
-                  stroke: themeContext.palette.neutral600_gray,
-                  strokeWidth: 0,
-                },
-              }}
-              wickStrokeWidth={1}
-            ></VictoryCandlestick>
-            <VictoryAxis
-              dependentAxis
-              tickValues={[twoThirds, oneThird]}
-              tickFormat={() => ""}
-              style={{
-                axis: {
-                  stroke: "transparent",
-                },
-                grid: {
-                  // stroke: "transparent",
-                  stroke: themeContext.palette.neutral500_gray,
-                  // strokeDasharray: [5, 5],
-                },
-              }}
-            />
-          </VictoryChart>
+              theme={themeContext}
+            ></CandleStickValueChart>
+          ) : (
+            <LineValueChart></LineValueChart>
+          )
+        ) : (
+          <View>
+            <Text size="sm">loading...</Text>
+          </View>
         )}
       </GraphContainer>
       <BottomController
         onLayout={(event) => {
           const { width, height } = event.nativeEvent.layout;
-
           bottomControllerWidth.current = width;
-          ControllerHeight.current = height;
         }}
       >
         <Animated.View
@@ -340,12 +374,13 @@ function CandleStickChart() {
             top: BottomControllerPaddingVertical,
           }}
         ></Animated.View>
-        {["일", "주", "월", "년"].map((item, index) => (
+        {chartDateType.map((item, index) => (
           <BottomControllerItem>
             <Pressable
               onPress={() => {
-                changeChartView(index);
-                setData(createMockData());
+                setIndex(index);
+                moveBtnBackground(index);
+                // mockApiCall(item.name, index);
               }}
               style={{
                 width: "100%",
@@ -355,16 +390,26 @@ function CandleStickChart() {
                 alignItems: "center",
               }}
             >
-              <Text size="xs">{item}</Text>
+              <Text size="xs">{item.name}</Text>
             </Pressable>
           </BottomControllerItem>
         ))}
         <BottomControllerItem>
-          <Text size="xs">그래프</Text>
+          <Pressable
+            onPress={() => {
+              setIsCandleStick(!isCandleStick);
+            }}
+          >
+            {isCandleStick ? (
+              <WithLocalSvg width={18} height={18} asset={LineChartIcon} />
+            ) : (
+              <WithLocalSvg width={18} height={18} asset={CandleStickIcon} />
+            )}
+          </Pressable>
         </BottomControllerItem>
       </BottomController>
     </Container>
   );
 }
 
-export default CandleStickChart;
+export default HomeChart;
