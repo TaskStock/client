@@ -1,10 +1,21 @@
 import React from "react";
-import { useRecoilValue } from "recoil";
+import { useSelector } from "react-redux";
 import styled from "styled-components/native";
-import { darkMode } from "../../../atom/theme";
 import { darkTheme, grayTheme } from "../../../constants/colors";
 import { spacing } from "../../../constants/spacing";
 import Text from "../../atoms/Text";
+import { RootState } from "../../../store/configureStore";
+
+const THEME_CONSTANTS = {
+  dark: {
+    text: darkTheme.text,
+    textDimmer: darkTheme.textDimmer,
+  },
+  gray: {
+    text: grayTheme.text,
+    textDimmer: grayTheme.textDimmer,
+  },
+};
 
 const Container = styled.TouchableOpacity`
   padding: ${spacing.offset}px 7px ${spacing.offset - 3}px;
@@ -22,7 +33,8 @@ const ProjectSelectBtn = ({
   selected: boolean;
   onPress: () => void;
 }) => {
-  const isDark = useRecoilValue(darkMode);
+  const theme = useSelector((state: RootState) => state.theme.value);
+
   return (
     <Container onPress={onPress} selected={selected}>
       <Text
@@ -30,12 +42,8 @@ const ProjectSelectBtn = ({
         weight={selected ? "bold" : "regular"}
         color={
           selected
-            ? isDark
-              ? darkTheme.text
-              : grayTheme.text
-            : isDark
-            ? darkTheme.textDimmer
-            : grayTheme.textDimmer
+            ? THEME_CONSTANTS[theme]?.text
+            : THEME_CONSTANTS[theme]?.textDimmer
         }
       >
         {projectName}

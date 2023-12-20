@@ -6,12 +6,12 @@ import {
   PanResponder,
   PanResponderGestureState,
 } from "react-native";
-import { useRecoilValue } from "recoil";
+import { useSelector } from "react-redux";
 import styled from "styled-components/native";
-import { darkMode } from "../../../atom/theme";
 import { darkTheme, grayTheme } from "../../../constants/colors";
 import { ComponentHeightContext } from "../../../utils/ComponentHeightContext";
 import Loader from "../../atoms/Loader";
+import { RootState } from "../../../store/configureStore";
 
 const { height: screenHeight } = Dimensions.get("window");
 
@@ -134,10 +134,15 @@ const BottomDrawer: React.FunctionComponent<BottomDrawerProps> = ({
     handlePanResponder();
   }, [defaultValue, openState, draggedUp]);
 
-  const isDark = useRecoilValue(darkMode);
+  const theme = useSelector((state: RootState) => state.theme.value);
   if (!panResponder) {
     return <Loader />;
   }
+
+  const THEME_CONSTANTS = {
+    dark: darkTheme.box,
+    gray: grayTheme.box,
+  };
 
   return (
     <Animated.View
@@ -145,7 +150,7 @@ const BottomDrawer: React.FunctionComponent<BottomDrawerProps> = ({
         {
           width: "100%",
           height: screenHeight,
-          backgroundColor: isDark ? darkTheme.box : grayTheme.box,
+          backgroundColor: THEME_CONSTANTS[theme],
           borderRadius: 20,
           position: "absolute",
           bottom: -screenHeight + defaultValue,

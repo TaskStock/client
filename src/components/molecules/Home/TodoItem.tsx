@@ -1,22 +1,28 @@
 import React, { useState } from "react";
-import { useRecoilValue } from "recoil";
-import { darkMode } from "../../../atom/theme";
-import { darkTheme } from "../../../constants/colors";
+import { useSelector } from "react-redux";
+import { darkTheme, grayTheme } from "../../../constants/colors";
+import { RootState } from "../../../store/configureStore";
 import numberWithCommas from "../../../utils/useNumberWithCommas";
 import CheckBox from "../../atoms/CheckBox";
 import FlexBox from "../../atoms/FlexBox";
 import Text from "../../atoms/Text";
 
+const THEME_CONSTANTS = {
+  dark: {
+    checkedBoxSrc: require("../../../../assets/icons/checked-dark.png"),
+    unCheckedBoxSrc: require("../../../../assets/icons/unchecked-dark.png"),
+    high: darkTheme.high,
+  },
+  gray: {
+    checkedBoxSrc: require("../../../../assets/icons/checked-light.png"),
+    unCheckedBoxSrc: require("../../../../assets/icons/unchecked-light.png"),
+    high: grayTheme.high,
+  },
+};
+
 const TodoItem = ({ todo }) => {
   const [checked, setChecked] = useState(todo.check);
-  const isDark = useRecoilValue(darkMode);
-
-  const checkedBoxSrc = isDark
-    ? require("../../../../assets/icons/checked-dark.png")
-    : require("../../../../assets/icons/checked-light.png");
-  const uncheckedBoxSrc = isDark
-    ? require("../../../../assets/icons/unchecked-dark.png")
-    : require("../../../../assets/icons/unchecked-light.png");
+  const theme = useSelector((state: RootState) => state.theme.value);
 
   return (
     <FlexBox
@@ -27,14 +33,14 @@ const TodoItem = ({ todo }) => {
       <FlexBox gap={10} alignItems="center">
         {checked ? (
           <CheckBox
-            src={checkedBoxSrc}
+            src={THEME_CONSTANTS[theme]?.checkedBoxSrc}
             onPress={() => {
               setChecked(!checked);
             }}
           />
         ) : (
           <CheckBox
-            src={uncheckedBoxSrc}
+            src={THEME_CONSTANTS[theme]?.unCheckedBoxSrc}
             onPress={() => {
               setChecked(!checked);
             }}
@@ -44,7 +50,7 @@ const TodoItem = ({ todo }) => {
         <Text size="md">{todo.text}</Text>
       </FlexBox>
       {checked ? (
-        <Text size="md" color={darkTheme.high}>
+        <Text size="md" color={THEME_CONSTANTS[theme]?.high}>
           +{numberWithCommas(todo.level * 1000)}원
         </Text>
       ) : (

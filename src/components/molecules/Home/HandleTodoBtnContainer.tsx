@@ -1,12 +1,25 @@
 import React from "react";
-import { useRecoilValue } from "recoil";
+import { useSelector } from "react-redux";
 import styled from "styled-components/native";
-import { darkMode } from "../../../atom/theme";
 import { darkTheme, grayTheme } from "../../../constants/colors";
 import { spacing } from "../../../constants/spacing";
 import useHeight from "../../../utils/useHeight";
 import Button from "../../atoms/Button";
 import FlexBox from "../../atoms/FlexBox";
+import { RootState } from "../../../store/configureStore";
+
+const THEME_CONSTANTS = {
+  dark: {
+    text: darkTheme.text,
+    textReverse: darkTheme.textReverse,
+    subBtnGray: darkTheme.subBtnGray,
+  },
+  gray: {
+    text: grayTheme.text,
+    textReverse: grayTheme.textReverse,
+    subBtnGray: grayTheme.subBtnGray,
+  },
+};
 
 const Container = styled.View`
   position: fixed;
@@ -19,7 +32,7 @@ const Container = styled.View`
 
 const HandleTodoBtnContainer = ({ editEnabled, setEditEnabled }) => {
   const { NOTCH_BOTTOM } = useHeight();
-  const isDark = useRecoilValue(darkMode);
+  const theme = useSelector((state: RootState) => state.theme.value);
 
   return (
     <Container paddingBottom={NOTCH_BOTTOM}>
@@ -36,22 +49,12 @@ const HandleTodoBtnContainer = ({ editEnabled, setEditEnabled }) => {
           onPress={() => {
             setEditEnabled(!editEnabled);
           }}
-          color={
-            editEnabled
-              ? isDark
-                ? darkTheme.textReverse
-                : grayTheme.textReverse
-              : undefined
-          }
+          color={editEnabled ? THEME_CONSTANTS[theme]?.textReverse : undefined}
           styles={{
             width: "35%",
             backgroundColor: editEnabled
-              ? isDark
-                ? darkTheme.text
-                : grayTheme.text
-              : isDark
-              ? darkTheme.subBtnGray
-              : grayTheme.subBtnGray,
+              ? THEME_CONSTANTS[theme]?.text
+              : THEME_CONSTANTS[theme]?.subBtnGray,
           }}
         />
       </FlexBox>
