@@ -10,6 +10,7 @@ import Loader from "./src/components/atoms/Loader";
 import { darkTheme, grayTheme } from "./src/constants/colors";
 import { customFontsToLoad } from "./src/constants/typography";
 import Root from "./src/navigators/Root";
+import { StatusBar } from "react-native";
 
 export default function App() {
   const [darkmode, setDarkmode] = useRecoilState(darkMode);
@@ -26,6 +27,7 @@ export default function App() {
         <NavigationContainer>
           <Root />
         </NavigationContainer>
+        <StatusBar barStyle={darkmode ? "light-content" : "dark-content"} />
       </SafeAreaProvider>
     </ThemeProvider>
   );
