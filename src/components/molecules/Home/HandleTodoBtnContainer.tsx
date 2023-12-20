@@ -6,6 +6,20 @@ import { spacing } from "../../../constants/spacing";
 import useHeight from "../../../utils/useHeight";
 import Button from "../../atoms/Button";
 import FlexBox from "../../atoms/FlexBox";
+import { RootState } from "../../../store/configureStore";
+
+const THEME_CONSTANTS = {
+  dark: {
+    text: darkTheme.text,
+    textReverse: darkTheme.textReverse,
+    subBtnGray: darkTheme.subBtnGray,
+  },
+  gray: {
+    text: grayTheme.text,
+    textReverse: grayTheme.textReverse,
+    subBtnGray: grayTheme.subBtnGray,
+  },
+};
 
 const Container = styled.View`
   position: fixed;
@@ -18,7 +32,7 @@ const Container = styled.View`
 
 const HandleTodoBtnContainer = ({ editEnabled, setEditEnabled }) => {
   const { NOTCH_BOTTOM } = useHeight();
-  const theme = useSelector((state) => state.theme.value);
+  const theme = useSelector((state: RootState) => state.theme.value);
 
   return (
     <Container paddingBottom={NOTCH_BOTTOM}>
@@ -35,22 +49,12 @@ const HandleTodoBtnContainer = ({ editEnabled, setEditEnabled }) => {
           onPress={() => {
             setEditEnabled(!editEnabled);
           }}
-          color={
-            editEnabled
-              ? theme === "dark"
-                ? darkTheme.textReverse
-                : grayTheme.textReverse
-              : undefined
-          }
+          color={editEnabled ? THEME_CONSTANTS[theme]?.textReverse : undefined}
           styles={{
             width: "35%",
             backgroundColor: editEnabled
-              ? theme === "dark"
-                ? darkTheme.text
-                : grayTheme.text
-              : theme === "dark"
-              ? darkTheme.subBtnGray
-              : grayTheme.subBtnGray,
+              ? THEME_CONSTANTS[theme]?.text
+              : THEME_CONSTANTS[theme]?.subBtnGray,
           }}
         />
       </FlexBox>

@@ -3,6 +3,16 @@ import { useSelector } from "react-redux";
 import styled from "styled-components/native";
 import { darkTheme, grayTheme } from "../../constants/colors";
 import Text from "./Text";
+import { RootState } from "../../store/configureStore";
+
+const THEME_CONSTANTS = {
+  dark: {
+    box: darkTheme.box,
+  },
+  gray: {
+    box: grayTheme.box,
+  },
+};
 
 const Container = styled.TouchableOpacity`
   /* flex: 1; */
@@ -29,7 +39,7 @@ const Button = ({
   onPress,
   styles,
 }: ButtonProps) => {
-  const theme = useSelector((state) => state.theme.value);
+  const theme = useSelector((state: RootState) => state.theme.value);
 
   return (
     <Container
@@ -37,12 +47,7 @@ const Button = ({
       style={styles}
       disabled={disabled}
     >
-      <Text
-        color={
-          disabled ? (theme === "dark" ? darkTheme.box : grayTheme.box) : color
-        }
-        size="md"
-      >
+      <Text color={disabled ? THEME_CONSTANTS[theme]?.box : color} size="md">
         {text}
       </Text>
     </Container>

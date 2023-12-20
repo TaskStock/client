@@ -10,9 +10,21 @@ import Loader from "./src/components/atoms/Loader";
 import { darkTheme, grayTheme } from "./src/constants/colors";
 import { customFontsToLoad } from "./src/constants/typography";
 import Root from "./src/navigators/Root";
+import { RootState } from "./src/store/configureStore";
+
+const THEME = {
+  dark: {
+    theme: darkTheme,
+    barStyle: "light-content",
+  },
+  gray: {
+    theme: grayTheme,
+    barStyle: "dark-content",
+  },
+};
 
 export default function App() {
-  const theme = useSelector((state) => state.theme.value);
+  const theme = useSelector((state: RootState) => state.theme.value);
 
   const [assets] = useAssets([require("./assets/splash.png")]);
   const [fontsLoaded] = Font.useFonts(customFontsToLoad);
@@ -21,14 +33,12 @@ export default function App() {
   // console.log(fontsLoaded);
 
   return (
-    <ThemeProvider theme={theme === "dark" ? darkTheme : grayTheme}>
+    <ThemeProvider theme={THEME[theme].theme}>
       <SafeAreaProvider>
         <NavigationContainer>
           <Root />
         </NavigationContainer>
-        <StatusBar
-          barStyle={theme === "dark" ? "light-content" : "dark-content"}
-        />
+        <StatusBar barStyle={THEME[theme].barStyle} />
       </SafeAreaProvider>
     </ThemeProvider>
   );

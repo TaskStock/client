@@ -11,6 +11,7 @@ import styled from "styled-components/native";
 import { darkTheme, grayTheme } from "../../../constants/colors";
 import { ComponentHeightContext } from "../../../utils/ComponentHeightContext";
 import Loader from "../../atoms/Loader";
+import { RootState } from "../../../store/configureStore";
 
 const { height: screenHeight } = Dimensions.get("window");
 
@@ -133,10 +134,15 @@ const BottomDrawer: React.FunctionComponent<BottomDrawerProps> = ({
     handlePanResponder();
   }, [defaultValue, openState, draggedUp]);
 
-  const theme = useSelector((state) => state.theme.value);
+  const theme = useSelector((state: RootState) => state.theme.value);
   if (!panResponder) {
     return <Loader />;
   }
+
+  const THEME_CONSTANTS = {
+    dark: darkTheme.box,
+    gray: grayTheme.box,
+  };
 
   return (
     <Animated.View
@@ -144,7 +150,7 @@ const BottomDrawer: React.FunctionComponent<BottomDrawerProps> = ({
         {
           width: "100%",
           height: screenHeight,
-          backgroundColor: theme === "dark" ? darkTheme.box : grayTheme.box,
+          backgroundColor: THEME_CONSTANTS[theme],
           borderRadius: 20,
           position: "absolute",
           bottom: -screenHeight + defaultValue,
