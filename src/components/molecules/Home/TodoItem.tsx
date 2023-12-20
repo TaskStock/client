@@ -1,15 +1,11 @@
-import { View } from "react-native";
 import React, { useState } from "react";
-import Text from "../../atoms/Text";
-import styled from "styled-components/native";
-import Icons, { IconsPic } from "../../atoms/Icons";
-import FlexBox from "../../atoms/FlexBox";
-import { spacing } from "../../../constants/spacing";
 import { useRecoilValue } from "recoil";
 import { darkMode } from "../../../atom/theme";
 import { darkTheme } from "../../../constants/colors";
 import numberWithCommas from "../../../utils/useNumberWithCommas";
 import CheckBox from "../../atoms/CheckBox";
+import FlexBox from "../../atoms/FlexBox";
+import Text from "../../atoms/Text";
 
 const TodoItem = ({ todo }) => {
   const [checked, setChecked] = useState(todo.check);

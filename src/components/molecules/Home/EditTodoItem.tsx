@@ -1,12 +1,11 @@
-import { View } from "react-native";
 import React from "react";
-import { darkMode } from "../../../atom/theme";
 import { useRecoilValue } from "recoil";
+import { darkMode } from "../../../atom/theme";
+import { darkTheme, grayTheme } from "../../../constants/colors";
+import numberWithCommas from "../../../utils/useNumberWithCommas";
 import FlexBox from "../../atoms/FlexBox";
 import Icons, { IconsPic } from "../../atoms/Icons";
 import Text from "../../atoms/Text";
-import numberWithCommas from "../../../utils/useNumberWithCommas";
-import { darkTheme, grayTheme } from "../../../constants/colors";
 
 const EditTodoItem = ({ todo }) => {
   const isDark = useRecoilValue(darkMode);
@@ -44,6 +43,7 @@ const EditTodoItem = ({ todo }) => {
           name="dots-horizontal"
           size={24}
           color={isDark ? darkTheme.textDimmer : grayTheme.textDimmer}
+          onPress={() => {}}
         />
       </FlexBox>
     </FlexBox>

@@ -1,13 +1,12 @@
 import React from "react";
-import styled from "styled-components/native";
-import { spacing } from "../../../constants/spacing";
-import FlexBox from "../../atoms/FlexBox";
-import Button from "../../atoms/Button";
-import useHeight from "../../../utils/useHeight";
 import { useRecoilValue } from "recoil";
+import styled from "styled-components/native";
 import { darkMode } from "../../../atom/theme";
 import { darkTheme, grayTheme } from "../../../constants/colors";
-import { Platform } from "react-native";
+import { spacing } from "../../../constants/spacing";
+import useHeight from "../../../utils/useHeight";
+import Button from "../../atoms/Button";
+import FlexBox from "../../atoms/FlexBox";
 
 const Container = styled.View`
   position: fixed;

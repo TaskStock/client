@@ -1,5 +1,5 @@
-import { View, TextStyle } from "react-native";
 import React from "react";
+import { TextStyle } from "react-native";
 import styled from "styled-components/native";
 
 export type SizeStyles = "xl" | "lg" | "md" | "sm" | "xs";

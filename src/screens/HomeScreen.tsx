@@ -1,12 +1,12 @@
 import React, { useContext, useState } from "react";
-import { data } from "../../public/home";
-import styled from "styled-components/native";
-import { spacing } from "../constants/spacing";
-import MyInfo from "../components/molecules/Home/MyInfo";
 import { Dimensions, ScrollView, View } from "react-native";
-import { ComponentHeightContext } from "../utils/ComponentHeightContext";
-import HandleTodoBtnContainer from "../components/molecules/Home/HandleTodoBtnContainer";
+import styled from "styled-components/native";
+import { data } from "../../public/home";
 import BottomDrawerContainer from "../components/molecules/Home/BottomDrawerContainer";
+import HandleTodoBtnContainer from "../components/molecules/Home/HandleTodoBtnContainer";
+import MyInfo from "../components/molecules/Home/MyInfo";
+import { spacing } from "../constants/spacing";
+import { ComponentHeightContext } from "../utils/ComponentHeightContext";
 
 const { width } = Dimensions.get("window");
 

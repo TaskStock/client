@@ -1,15 +1,15 @@
 import React, { useContext, useEffect, useState } from "react";
-import BottomDrawer from "./BottomDrawer";
-import Text from "../../atoms/Text";
-import styled from "styled-components/native";
-import { spacing } from "../../../constants/spacing";
-import { todosData } from "../../../../public/todos";
-import ProjectSelectBtn from "./ProjectSelectBtn";
 import { ScrollView, View } from "react-native";
+import styled from "styled-components/native";
+import { todosData } from "../../../../public/todos";
+import { spacing } from "../../../constants/spacing";
 import { ComponentHeightContext } from "../../../utils/ComponentHeightContext";
 import useHeight from "../../../utils/useHeight";
-import TodoItem from "./TodoItem";
+import Text from "../../atoms/Text";
+import BottomDrawer from "./BottomDrawer";
 import EditTodoItem from "./EditTodoItem";
+import ProjectSelectBtn from "./ProjectSelectBtn";
+import TodoItem from "./TodoItem";
 
 const DateContainer = styled.View`
   padding: 4px ${spacing.gutter}px 0;

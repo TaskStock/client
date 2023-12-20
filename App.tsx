@@ -1,16 +1,15 @@
-import React from "react";
-import * as Font from "expo-font";
-import { useAssets } from "expo-asset";
 import { NavigationContainer } from "@react-navigation/native";
-import { RecoilRoot, useRecoilState } from "recoil";
-import Root from "./src/navigators/Root";
+import { useAssets } from "expo-asset";
+import * as Font from "expo-font";
+import React from "react";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import Loader from "./src/components/atoms/Loader";
-import { customFontsToLoad } from "./src/constants/typography";
-import { StatusBar } from "expo-status-bar";
+import { useRecoilState } from "recoil";
 import { ThemeProvider } from "styled-components";
-import { darkTheme, grayTheme } from "./src/constants/colors";
 import { darkMode } from "./src/atom/theme";
+import Loader from "./src/components/atoms/Loader";
+import { darkTheme, grayTheme } from "./src/constants/colors";
+import { customFontsToLoad } from "./src/constants/typography";
+import Root from "./src/navigators/Root";
 
 export default function App() {
   const [darkmode, setDarkmode] = useRecoilState(darkMode);
