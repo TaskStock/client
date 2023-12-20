@@ -1,10 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import BottomDrawer from "./BottomDrawer";
 import Text from "../../atoms/Text";
 import styled from "styled-components/native";
 import { spacing } from "../../../constants/spacing";
 import { todosData } from "../../../../public/todos";
 import ProjectSelectBtn from "./ProjectSelectBtn";
+import { ScrollView, View } from "react-native";
+import { ComponentHeightContext } from "../../../utils/ComponentHeightContext";
+import useHeight from "../../../utils/useHeight";
+import TodoItem from "./TodoItem";
 
 const DateContainer = styled.View`
   padding: 4px ${spacing.gutter}px 0;
@@ -18,9 +22,11 @@ const ProjectsContainer = styled.View`
 `;
 
 const BottomDrawerContainer = () => {
+  const [data, setData] = useState(todosData);
   const [projects, setProjects] = useState([]);
   const [selectedProject, setSelectedProject] = useState(0);
 
+  const { headerHeight } = useContext(ComponentHeightContext);
   useEffect(() => {
     const _projects = Object.values(todosData).map((project) => {
       return { name: project.name, id: project.project_id };
@@ -28,10 +34,11 @@ const BottomDrawerContainer = () => {
     setProjects(_projects);
   }, []);
 
-  //   useEffect(() => {
-  //     console.log(selectedProject);
-  //   }, [selectedProject]);
-
+  useEffect(() => {
+    console.log(selectedProject);
+    console.log(data[selectedProject].todos);
+  }, [selectedProject]);
+  const { NOTCH_BOTTOM } = useHeight();
   return (
     <BottomDrawer onDrawerStateChange={() => {}}>
       <DateContainer>
@@ -49,6 +56,19 @@ const BottomDrawerContainer = () => {
           />
         ))}
       </ProjectsContainer>
+      <ScrollView
+        style={{
+          flex: 1,
+          paddingHorizontal: spacing.gutter,
+          paddingTop: 15,
+        }}
+      >
+        {data[selectedProject].todos.map((todo) => (
+          <TodoItem key={todo.todo_id} todo={todo} />
+        ))}
+      </ScrollView>
+
+      <View style={{ height: headerHeight + 93 + NOTCH_BOTTOM }} />
     </BottomDrawer>
   );
 };

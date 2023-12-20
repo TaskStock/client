@@ -7,6 +7,7 @@ import useHeight from "../../../utils/useHeight";
 import { useRecoilValue } from "recoil";
 import { darkMode } from "../../../atom/theme";
 import { darkTheme, grayTheme } from "../../../constants/colors";
+import { Platform } from "react-native";
 
 const Container = styled.View`
   position: fixed;

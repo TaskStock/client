@@ -12,10 +12,10 @@ export const todosData = {
         level: 1,
       },
       {
-        todo_id: 2,
-        text: "청해 연습하기",
-        check: false,
-        level: 3,
+        todo_id: 10,
+        text: "세션 준비",
+        check: true,
+        level: 4,
       },
     ],
   },
@@ -38,7 +38,7 @@ export const todosData = {
       {
         todo_id: 10,
         text: "세션 준비",
-        check: false,
+        check: true,
         level: 4,
       },
     ],
