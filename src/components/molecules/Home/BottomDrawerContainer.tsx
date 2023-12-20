@@ -9,6 +9,7 @@ import { ScrollView, View } from "react-native";
 import { ComponentHeightContext } from "../../../utils/ComponentHeightContext";
 import useHeight from "../../../utils/useHeight";
 import TodoItem from "./TodoItem";
+import EditTodoItem from "./EditTodoItem";
 
 const DateContainer = styled.View`
   padding: 4px ${spacing.gutter}px 0;
@@ -21,7 +22,7 @@ const ProjectsContainer = styled.View`
   gap: ${spacing.offset}px;
 `;
 
-const BottomDrawerContainer = () => {
+const BottomDrawerContainer = ({ editEnabled, setEditEnabled }) => {
   const [data, setData] = useState(todosData);
   const [projects, setProjects] = useState([]);
   const [selectedProject, setSelectedProject] = useState(0);
@@ -63,9 +64,13 @@ const BottomDrawerContainer = () => {
           paddingTop: 15,
         }}
       >
-        {data[selectedProject].todos.map((todo) => (
-          <TodoItem key={todo.todo_id} todo={todo} />
-        ))}
+        {data[selectedProject].todos.map((todo) =>
+          editEnabled ? (
+            <EditTodoItem key={todo.todo_id} todo={todo} />
+          ) : (
+            <TodoItem key={todo.todo_id} todo={todo} />
+          )
+        )}
       </ScrollView>
 
       <View style={{ height: headerHeight + 93 + NOTCH_BOTTOM }} />

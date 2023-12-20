@@ -78,7 +78,7 @@ const HomeScreen = () => {
         />
         <CalendarContainer style={boxShadow} />
       </ScrollView>
-      <BottomDrawerContainer />
+      <BottomDrawerContainer {...handleEdit} />
       <HandleTodoBtnContainer {...handleEdit} />
     </Container>
   );
