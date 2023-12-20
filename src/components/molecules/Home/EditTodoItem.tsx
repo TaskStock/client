@@ -6,6 +6,7 @@ import FlexBox from "../../atoms/FlexBox";
 import Icons, { IconsPic } from "../../atoms/Icons";
 import Text from "../../atoms/Text";
 import { RootState } from "../../../store/configureStore";
+import { spacing } from "../../../constants/spacing";
 
 const THEME_CONSTANTS = {
   dark: {
@@ -27,7 +28,7 @@ const EditTodoItem = ({ todo }) => {
     <FlexBox
       justifyContent="space-between"
       alignItems="center"
-      styles={{ paddingBottom: 10 }}
+      styles={{ paddingBottom: spacing.padding }}
     >
       <FlexBox gap={10} alignItems="center">
         <IconsPic source={THEME_CONSTANTS[theme]?.ordering} size={30} />

@@ -6,6 +6,7 @@ import numberWithCommas from "../../../utils/useNumberWithCommas";
 import FlexBox from "../../atoms/FlexBox";
 import Text from "../../atoms/Text";
 import { RootState } from "../../../store/configureStore";
+import { spacing } from "../../../constants/spacing";
 
 const THEME_CONSTANTS = {
   dark: {
@@ -37,7 +38,7 @@ const MyInfo = ({ data }) => {
       <Text size="xl" weight="bold">
         {numberWithCommas(data.cumulative_value)}원
       </Text>
-      <FlexBox gap={5} styles={{ paddingTop: 4 }}>
+      <FlexBox gap={spacing.padding / 2} styles={{ paddingTop: spacing.small }}>
         <Text
           size="sm"
           weight="regular"

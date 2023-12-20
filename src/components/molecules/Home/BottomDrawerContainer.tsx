@@ -10,9 +10,10 @@ import BottomDrawer from "./BottomDrawer";
 import EditTodoItem from "./EditTodoItem";
 import ProjectSelectBtn from "./ProjectSelectBtn";
 import TodoItem from "./TodoItem";
+import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 
 const DateContainer = styled.View`
-  padding: 4px ${spacing.gutter}px 0;
+  padding: ${spacing.small}px ${spacing.gutter}px 0;
 `;
 const ProjectsContainer = styled.View`
   padding-left: ${spacing.gutter}px;
@@ -35,10 +36,6 @@ const BottomDrawerContainer = ({ editEnabled, setEditEnabled }) => {
     setProjects(_projects);
   }, []);
 
-  useEffect(() => {
-    console.log(selectedProject);
-    console.log(data[selectedProject].todos);
-  }, [selectedProject]);
   const { NOTCH_BOTTOM } = useHeight();
   return (
     <BottomDrawer onDrawerStateChange={() => {}}>
@@ -61,7 +58,7 @@ const BottomDrawerContainer = ({ editEnabled, setEditEnabled }) => {
         style={{
           flex: 1,
           paddingHorizontal: spacing.gutter,
-          paddingTop: 15,
+          paddingTop: useResponsiveFontSize(15),
         }}
       >
         {data[selectedProject].todos.map((todo) =>

@@ -1,14 +1,14 @@
 import React from "react";
-import { Image, View } from "react-native";
+import { Image } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components/native";
-import { darkTheme, grayTheme } from "../../../constants/colors";
 import { spacing } from "../../../constants/spacing";
 import { RootState } from "../../../store/configureStore";
 import { themeSlice } from "../../../store/modules/theme";
 import useHeight from "../../../utils/useHeight";
 import FlexBox from "../../atoms/FlexBox";
 import { IconsPic } from "../../atoms/Icons";
+import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 
 const Container = styled.View`
   background-color: ${({ theme }) => theme.background};
@@ -47,14 +47,15 @@ function HeaderTop() {
         alignItems="center"
         styles={{
           paddingHorizontal: spacing.gutter,
-          paddingVertical: spacing.offset,
+          paddingTop: spacing.offset,
+          paddingBottom: spacing.padding,
         }}
       >
         <Image
           source={THEME_SOURCES[theme]?.logo}
           style={{
-            width: 134,
-            height: 18,
+            width: useResponsiveFontSize(134),
+            height: useResponsiveFontSize(18),
             resizeMode: "contain",
           }}
         />

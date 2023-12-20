@@ -6,7 +6,7 @@ import { spacing } from "../../../constants/spacing";
 import { ComponentHeightContext } from "../../../utils/ComponentHeightContext";
 import HeaderTop from "./HeaderTop";
 import Tab from "./Tab";
-import { HeaderHeightContext } from "../../../utils/HeaderHeightContext";
+import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 
 type Route = {
   key: string;
@@ -25,9 +25,10 @@ const TabWrapper = styled.View`
   gap: ${spacing.offset}px;
   padding: 0 ${spacing.gutter}px;
 `;
+
 const BottomLine = styled.View`
   background-color: ${({ theme }) => theme.text};
-  height: 3px;
+  height: ${useResponsiveFontSize(3)}px;
   width: 100%;
 `;
 

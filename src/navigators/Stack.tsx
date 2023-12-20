@@ -1,6 +1,6 @@
-import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { View, TouchableOpacity } from "react-native";
+import React from "react";
+import { TouchableOpacity } from "react-native";
 import Text from "../components/atoms/Text";
 
 const ScreenOne = ({ navigation: { navigate } }) => (

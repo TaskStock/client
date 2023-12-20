@@ -6,6 +6,7 @@ import numberWithCommas from "../../../utils/useNumberWithCommas";
 import CheckBox from "../../atoms/CheckBox";
 import FlexBox from "../../atoms/FlexBox";
 import Text from "../../atoms/Text";
+import { spacing } from "../../../constants/spacing";
 
 const THEME_CONSTANTS = {
   dark: {
@@ -28,7 +29,7 @@ const TodoItem = ({ todo }) => {
     <FlexBox
       justifyContent="space-between"
       alignItems="center"
-      styles={{ paddingBottom: 10 }}
+      styles={{ paddingBottom: spacing.padding }}
     >
       <FlexBox gap={10} alignItems="center">
         {checked ? (
