@@ -5,6 +5,7 @@ import { darkTheme, grayTheme } from "../../../constants/colors";
 import { spacing } from "../../../constants/spacing";
 import Text from "../../atoms/Text";
 import { RootState } from "../../../store/configureStore";
+import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 
 const THEME_CONSTANTS = {
   dark: {
@@ -18,8 +19,9 @@ const THEME_CONSTANTS = {
 };
 
 const Container = styled.TouchableOpacity`
-  padding: ${spacing.offset}px 7px ${spacing.offset - 3}px;
-  border-bottom-width: 3px;
+  padding: ${spacing.offset}px ${useResponsiveFontSize(7)}px
+    ${spacing.offset - 3}px;
+  border-bottom-width: ${useResponsiveFontSize(3)}px;
   border-bottom-color: ${({ theme, selected }) =>
     selected ? theme.text : "transparent"};
 `;

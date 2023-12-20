@@ -1,5 +1,6 @@
 import React from "react";
 import { View } from "react-native";
+import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
 
 const FlexBox = ({
   direction = "row",
@@ -23,7 +24,7 @@ const FlexBox = ({
         flexDirection: direction,
         justifyContent: justifyContent,
         alignItems: alignItems,
-        ...(gap ? { gap: gap } : {}),
+        ...(gap ? { gap: useResponsiveFontSize(gap) } : {}),
         ...styles,
       }}
     >

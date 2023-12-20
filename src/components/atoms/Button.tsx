@@ -4,6 +4,7 @@ import styled from "styled-components/native";
 import { darkTheme, grayTheme } from "../../constants/colors";
 import Text from "./Text";
 import { RootState } from "../../store/configureStore";
+import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
 
 const THEME_CONSTANTS = {
   dark: {
@@ -17,8 +18,8 @@ const THEME_CONSTANTS = {
 const Container = styled.TouchableOpacity`
   /* flex: 1; */
   background-color: ${(props) => props.theme.mainBtnGray};
-  padding: 14px 0;
-  border-radius: 8px;
+  padding: ${useResponsiveFontSize(14)}px 0;
+  border-radius: ${useResponsiveFontSize(8)}px;
   align-items: center;
   opacity: ${(props) => (props.disabled ? 0.8 : 1)};
 `;

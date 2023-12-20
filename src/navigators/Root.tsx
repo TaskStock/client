@@ -1,8 +1,7 @@
-import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Stack from "./Stack";
+import React from "react";
 import MainTab from "./MainTab";
-import { useColorScheme } from "react-native";
+import Stack from "./Stack";
 
 const Nav = createNativeStackNavigator();
 

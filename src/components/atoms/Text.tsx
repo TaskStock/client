@@ -1,6 +1,7 @@
 import React from "react";
 import { TextStyle } from "react-native";
 import styled from "styled-components/native";
+import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
 
 export type SizeStyles = "xl" | "lg" | "md" | "sm" | "xs";
 export type WeightStyles =
@@ -11,11 +12,11 @@ export type WeightStyles =
   | "extraBold";
 
 const $sizeStyles = {
-  xl: { fontSize: 24 },
-  lg: { fontSize: 20 },
-  md: { fontSize: 18 },
-  sm: { fontSize: 16 },
-  xs: { fontSize: 12 },
+  xl: { fontSize: useResponsiveFontSize(24) },
+  lg: { fontSize: useResponsiveFontSize(20) },
+  md: { fontSize: useResponsiveFontSize(18) },
+  sm: { fontSize: useResponsiveFontSize(16) },
+  xs: { fontSize: useResponsiveFontSize(12) },
 };
 
 const $weightStyles = {

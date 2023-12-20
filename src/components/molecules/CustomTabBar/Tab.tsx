@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
+import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 
 interface ITab {
   isFocused: boolean;
@@ -18,11 +19,12 @@ interface ITab {
 const TabButton = styled.TouchableOpacity<{ isFocused: boolean }>`
   align-items: center;
   justify-content: center;
-  padding: 12px 5px 7px;
+  padding: ${useResponsiveFontSize(12)}px ${useResponsiveFontSize(5)}px
+    ${useResponsiveFontSize(7)}px;
 `;
 
 const TabText = styled.Text<{ isFocused: boolean }>`
-  font-size: 20px;
+  font-size: ${useResponsiveFontSize(20)}px;
   font-family: "bold";
   color: ${(props) =>
     props.isFocused ? props.theme.text : props.theme.textDim};

@@ -9,9 +9,11 @@ import {
 import { useSelector } from "react-redux";
 import styled from "styled-components/native";
 import { darkTheme, grayTheme } from "../../../constants/colors";
+import { RootState } from "../../../store/configureStore";
 import { ComponentHeightContext } from "../../../utils/ComponentHeightContext";
 import Loader from "../../atoms/Loader";
-import { RootState } from "../../../store/configureStore";
+import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
+import { spacing } from "../../../constants/spacing";
 
 const { height: screenHeight } = Dimensions.get("window");
 
@@ -22,10 +24,10 @@ interface BottomDrawerProps {
 
 export const HorizontalLine = styled.View`
   background-color: ${({ theme }) => theme.background};
-  width: 46px;
-  height: 4px;
-  margin: 4px auto;
-  border-radius: 4px;
+  width: ${useResponsiveFontSize(46)}px;
+  height: ${spacing.small}px;
+  margin: ${spacing.small}px auto;
+  border-radius: ${spacing.small}px;
 `;
 
 export const animateMove = (
@@ -151,7 +153,7 @@ const BottomDrawer: React.FunctionComponent<BottomDrawerProps> = ({
           width: "100%",
           height: screenHeight,
           backgroundColor: THEME_CONSTANTS[theme],
-          borderRadius: 20,
+          borderRadius: useResponsiveFontSize(20),
           position: "absolute",
           bottom: -screenHeight + defaultValue,
           transform: [{ translateY: y }],

@@ -1,4 +1,8 @@
+import useResponsiveFontSize from "../utils/useResponsiveFontSize";
+
 export const spacing = {
-  gutter: 30,
-  offset: 20,
+  gutter: useResponsiveFontSize(30),
+  offset: useResponsiveFontSize(20),
+  padding: useResponsiveFontSize(10),
+  small: useResponsiveFontSize(4),
 };

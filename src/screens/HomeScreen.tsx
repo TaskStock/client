@@ -8,7 +8,7 @@ import MyInfo from "../components/molecules/Home/MyInfo";
 import { spacing } from "../constants/spacing";
 import { ComponentHeightContext } from "../utils/ComponentHeightContext";
 
-const { width } = Dimensions.get("window");
+const { width, height: windowHeight } = Dimensions.get("window");
 
 const Container = styled.View`
   padding-top: ${spacing.offset}px;
@@ -21,7 +21,7 @@ const GraphContainer = styled.View`
   margin: ${spacing.offset}px 0;
   margin-left: ${spacing.gutter}px;
   margin-right: 15px;
-  height: 320px;
+  height: ${Math.round((300 * windowHeight) / 932)}px;
   background-color: ${({ theme }) => theme.box};
   border-radius: 20px;
 `;
