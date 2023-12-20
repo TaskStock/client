@@ -1,13 +1,12 @@
 import React from "react";
 import { View } from "react-native";
-import { useRecoilValue } from "recoil";
-import { darkMode } from "../../../atom/theme";
+import { useSelector } from "react-redux";
 import { darkTheme, grayTheme } from "../../../constants/colors";
 import numberWithCommas from "../../../utils/useNumberWithCommas";
 import FlexBox from "../../atoms/FlexBox";
 import Text from "../../atoms/Text";
 const MyInfo = ({ data }) => {
-  const isDark = useRecoilValue(darkMode);
+  const theme = useSelector((state) => state.theme.value);
   const diff = data.cumulative_value - data.value_month_ago;
   const diff_rate =
     ((data.cumulative_value - data.value_month_ago) * 100) /
@@ -27,7 +26,7 @@ const MyInfo = ({ data }) => {
         <Text
           size="sm"
           weight="regular"
-          color={isDark ? darkTheme.textDim : grayTheme.textDim}
+          color={theme === "dark" ? darkTheme.textDim : grayTheme.textDim}
         >
           1개월 전보다
         </Text>
@@ -36,10 +35,10 @@ const MyInfo = ({ data }) => {
           weight="regular"
           color={
             diff > 0
-              ? isDark
+              ? theme === "dark"
                 ? darkTheme.high
                 : grayTheme.high
-              : isDark
+              : theme === "dark"
               ? darkTheme.low
               : grayTheme.low
           }

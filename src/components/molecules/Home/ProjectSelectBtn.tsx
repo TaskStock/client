@@ -1,7 +1,6 @@
 import React from "react";
-import { useRecoilValue } from "recoil";
+import { useSelector } from "react-redux";
 import styled from "styled-components/native";
-import { darkMode } from "../../../atom/theme";
 import { darkTheme, grayTheme } from "../../../constants/colors";
 import { spacing } from "../../../constants/spacing";
 import Text from "../../atoms/Text";
@@ -22,7 +21,7 @@ const ProjectSelectBtn = ({
   selected: boolean;
   onPress: () => void;
 }) => {
-  const isDark = useRecoilValue(darkMode);
+  const theme = useSelector((state) => state.theme.value);
   return (
     <Container onPress={onPress} selected={selected}>
       <Text
@@ -30,10 +29,10 @@ const ProjectSelectBtn = ({
         weight={selected ? "bold" : "regular"}
         color={
           selected
-            ? isDark
+            ? theme === "dark"
               ? darkTheme.text
               : grayTheme.text
-            : isDark
+            : theme === "dark"
             ? darkTheme.textDimmer
             : grayTheme.textDimmer
         }

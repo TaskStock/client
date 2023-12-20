@@ -1,7 +1,6 @@
 import React from "react";
-import { useRecoilValue } from "recoil";
+import { useSelector } from "react-redux";
 import styled from "styled-components/native";
-import { darkMode } from "../../../atom/theme";
 import { darkTheme, grayTheme } from "../../../constants/colors";
 import { spacing } from "../../../constants/spacing";
 import useHeight from "../../../utils/useHeight";
@@ -19,7 +18,7 @@ const Container = styled.View`
 
 const HandleTodoBtnContainer = ({ editEnabled, setEditEnabled }) => {
   const { NOTCH_BOTTOM } = useHeight();
-  const isDark = useRecoilValue(darkMode);
+  const theme = useSelector((state) => state.theme.value);
 
   return (
     <Container paddingBottom={NOTCH_BOTTOM}>
@@ -38,7 +37,7 @@ const HandleTodoBtnContainer = ({ editEnabled, setEditEnabled }) => {
           }}
           color={
             editEnabled
-              ? isDark
+              ? theme === "dark"
                 ? darkTheme.textReverse
                 : grayTheme.textReverse
               : undefined
@@ -46,10 +45,10 @@ const HandleTodoBtnContainer = ({ editEnabled, setEditEnabled }) => {
           styles={{
             width: "35%",
             backgroundColor: editEnabled
-              ? isDark
+              ? theme === "dark"
                 ? darkTheme.text
                 : grayTheme.text
-              : isDark
+              : theme === "dark"
               ? darkTheme.subBtnGray
               : grayTheme.subBtnGray,
           }}

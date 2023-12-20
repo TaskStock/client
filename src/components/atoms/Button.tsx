@@ -1,7 +1,6 @@
 import React from "react";
-import { useRecoilValue } from "recoil";
+import { useSelector } from "react-redux";
 import styled from "styled-components/native";
-import { darkMode } from "../../atom/theme";
 import { darkTheme, grayTheme } from "../../constants/colors";
 import Text from "./Text";
 
@@ -30,7 +29,8 @@ const Button = ({
   onPress,
   styles,
 }: ButtonProps) => {
-  const isDark = useRecoilValue(darkMode);
+  const theme = useSelector((state) => state.theme.value);
+
   return (
     <Container
       onPress={!disabled && onPress}
@@ -38,7 +38,9 @@ const Button = ({
       disabled={disabled}
     >
       <Text
-        color={disabled ? (isDark ? darkTheme.box : grayTheme.box) : color}
+        color={
+          disabled ? (theme === "dark" ? darkTheme.box : grayTheme.box) : color
+        }
         size="md"
       >
         {text}

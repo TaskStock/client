@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { useRecoilValue } from "recoil";
-import { darkMode } from "../../../atom/theme";
+import { useSelector } from "react-redux";
 import { darkTheme } from "../../../constants/colors";
 import numberWithCommas from "../../../utils/useNumberWithCommas";
 import CheckBox from "../../atoms/CheckBox";
@@ -9,14 +8,16 @@ import Text from "../../atoms/Text";
 
 const TodoItem = ({ todo }) => {
   const [checked, setChecked] = useState(todo.check);
-  const isDark = useRecoilValue(darkMode);
+  const theme = useSelector((state) => state.theme.value);
 
-  const checkedBoxSrc = isDark
-    ? require("../../../../assets/icons/checked-dark.png")
-    : require("../../../../assets/icons/checked-light.png");
-  const uncheckedBoxSrc = isDark
-    ? require("../../../../assets/icons/unchecked-dark.png")
-    : require("../../../../assets/icons/unchecked-light.png");
+  const checkedBoxSrc =
+    theme === "dark"
+      ? require("../../../../assets/icons/checked-dark.png")
+      : require("../../../../assets/icons/checked-light.png");
+  const uncheckedBoxSrc =
+    theme === "dark"
+      ? require("../../../../assets/icons/unchecked-dark.png")
+      : require("../../../../assets/icons/unchecked-light.png");
 
   return (
     <FlexBox
