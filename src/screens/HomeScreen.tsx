@@ -7,7 +7,7 @@ import HandleTodoBtnContainer from "../components/molecules/Home/HandleTodoBtnCo
 import MyInfo from "../components/molecules/Home/MyInfo";
 import { spacing } from "../constants/spacing";
 import { ComponentHeightContext } from "../utils/ComponentHeightContext";
-import CandleStickChart from '../components/organisms/CandleStickChart';
+import CandleStickChart from "../components/organisms/CandleStickChart";
 
 const { width } = Dimensions.get("window");
 
