@@ -7,6 +7,7 @@ import HandleTodoBtnContainer from "../components/molecules/Home/HandleTodoBtnCo
 import MyInfo from "../components/molecules/Home/MyInfo";
 import { spacing } from "../constants/spacing";
 import { ComponentHeightContext } from "../utils/ComponentHeightContext";
+import HomeChart from "../components/organisms/HomeChart";
 
 const { width, height: windowHeight } = Dimensions.get("window");
 
@@ -54,6 +55,7 @@ const HomeScreen = () => {
       >
         <MyInfo data={myData} />
       </View>
+
       <ScrollView
         style={{}}
         pagingEnabled={true}
@@ -75,7 +77,9 @@ const HomeScreen = () => {
             const { x, y, width, height } = event.nativeEvent.layout;
             setGraphHeight(height);
           }}
-        />
+        >
+          <HomeChart />
+        </GraphContainer>
         <CalendarContainer style={boxShadow} />
       </ScrollView>
       <BottomDrawerContainer {...handleEdit} />

@@ -9,6 +9,14 @@ import { ComponentHeightProvider } from "../utils/ComponentHeightContext";
 const Tab = createMaterialTopTabNavigator();
 
 function MainTab() {
+  //   const [headerHeight, setHeaderHeight] = useState(0);
+  //   console.log(Platform.OS, "headerHeight: ", headerHeight);
+
+  //   useEffect(() => {
+  //     // Update the initialParams whenever headerHeight changes
+  //     Tab.setParams({ headerHeight: headerHeight });
+  //   }, [headerHeight]);
+
   return (
     <ComponentHeightProvider>
       <Tab.Navigator
