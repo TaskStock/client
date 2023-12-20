@@ -1,10 +1,9 @@
-import { View } from "react-native";
 import React from "react";
-import styled from "styled-components/native";
-import Text from "./Text";
 import { useRecoilValue } from "recoil";
-import { darkTheme, grayTheme } from "../../constants/colors";
+import styled from "styled-components/native";
 import { darkMode } from "../../atom/theme";
+import { darkTheme, grayTheme } from "../../constants/colors";
+import Text from "./Text";
 
 const Container = styled.TouchableOpacity`
   /* flex: 1; */

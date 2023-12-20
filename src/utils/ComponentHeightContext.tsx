@@ -1,6 +1,6 @@
 import React, { createContext, useEffect, useState } from "react";
-import { spacing } from "../constants/spacing";
 import { Dimensions } from "react-native";
+import { spacing } from "../constants/spacing";
 
 const { height: screenHeight } = Dimensions.get("window");
 

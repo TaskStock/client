@@ -1,11 +1,11 @@
-import {
-  Dimensions,
-  Animated,
-  GestureResponderEvent,
-  PanResponderGestureState,
-  PanResponder,
-} from "react-native";
 import React, { useContext, useEffect, useRef, useState } from "react";
+import {
+  Animated,
+  Dimensions,
+  GestureResponderEvent,
+  PanResponder,
+  PanResponderGestureState,
+} from "react-native";
 import { useRecoilValue } from "recoil";
 import styled from "styled-components/native";
 import { darkMode } from "../../../atom/theme";

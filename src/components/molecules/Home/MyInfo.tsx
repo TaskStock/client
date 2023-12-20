@@ -1,11 +1,11 @@
+import React from "react";
 import { View } from "react-native";
-import React, { useState } from "react";
-import Text from "../../atoms/Text";
-import numberWithCommas from "../../../utils/useNumberWithCommas";
-import FlexBox from "../../atoms/FlexBox";
-import { darkTheme, grayTheme } from "../../../constants/colors";
 import { useRecoilValue } from "recoil";
 import { darkMode } from "../../../atom/theme";
+import { darkTheme, grayTheme } from "../../../constants/colors";
+import numberWithCommas from "../../../utils/useNumberWithCommas";
+import FlexBox from "../../atoms/FlexBox";
+import Text from "../../atoms/Text";
 const MyInfo = ({ data }) => {
   const isDark = useRecoilValue(darkMode);
   const diff = data.cumulative_value - data.value_month_ago;

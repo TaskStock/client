@@ -1,14 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { Image, TouchableOpacity } from "react-native";
-import { View } from "react-native";
-import styled from "styled-components/native";
-import useHeight from "../../../utils/useHeight";
-import { darkTheme, grayTheme } from "../../../constants/colors";
-import FlexBox from "../../atoms/FlexBox";
-import { IconsPic } from "../../atoms/Icons";
-import { spacing } from "../../../constants/spacing";
+import React from "react";
+import { Image, View } from "react-native";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { darkMode } from "../../../atom/theme";
+import { darkTheme, grayTheme } from "../../../constants/colors";
+import { spacing } from "../../../constants/spacing";
+import useHeight from "../../../utils/useHeight";
+import FlexBox from "../../atoms/FlexBox";
+import { IconsPic } from "../../atoms/Icons";
 
 function HeaderTop() {
   const { NOTCH_TOP, HEADER_HEIGHT } = useHeight();
@@ -55,12 +53,8 @@ function HeaderTop() {
           }}
         />
         <FlexBox gap={spacing.offset} alignItems="center">
-          <TouchableOpacity onPress={toggleTheme}>
-            <IconsPic source={BELL_SRC} size={30} />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <IconsPic source={PERSON_SRC} size={30} />
-          </TouchableOpacity>
+          <IconsPic source={BELL_SRC} size={30} onPress={toggleTheme} />
+          <IconsPic source={PERSON_SRC} size={30} />
         </FlexBox>
       </FlexBox>
     </View>
