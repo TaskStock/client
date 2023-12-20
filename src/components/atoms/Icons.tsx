@@ -1,5 +1,6 @@
 import { Feather, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { Image, TouchableOpacity } from "react-native";
+import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
 
 type IconProps = {
   type: "material" | "ionicons" | "feather";
@@ -12,7 +13,7 @@ type IconProps = {
 const Icons: React.FC<IconProps> = ({
   type = "material",
   name,
-  size = 20,
+  size = useResponsiveFontSize(20),
   color = "black",
   onPress,
 }) => {
@@ -24,7 +25,11 @@ const Icons: React.FC<IconProps> = ({
 
   return (
     <TouchableOpacity onPress={onPress}>
-      <IconComponent name={name} size={size} color={color} />
+      <IconComponent
+        name={name}
+        size={useResponsiveFontSize(size)}
+        color={color}
+      />
     </TouchableOpacity>
   );
 };
@@ -45,8 +50,8 @@ export const IconsPic = ({
       <Image
         source={source}
         style={{
-          width: size,
-          height: size,
+          width: useResponsiveFontSize(size),
+          height: useResponsiveFontSize(size),
           resizeMode: "contain",
         }}
       />

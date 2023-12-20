@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useState } from "react";
-import { Dimensions } from "react-native";
+import { Dimensions, Platform } from "react-native";
 import { spacing } from "../constants/spacing";
 
 const { height: screenHeight } = Dimensions.get("window");
@@ -44,9 +44,16 @@ export const ComponentHeightProvider: React.FC<{
   useEffect(() => {
     if (headerHeight !== 0 && myInfoHeight !== 0 && graphHeight !== 0) {
       const _heightWithoutDrawer =
-        headerHeight + 3 * spacing.offset + myInfoHeight + graphHeight;
+        Platform.OS === "ios"
+          ? headerHeight + 3 * spacing.offset + myInfoHeight + graphHeight
+          : headerHeight + 4 * spacing.offset + myInfoHeight + graphHeight;
       setDEFAULT_HEIGHT(screenHeight - _heightWithoutDrawer);
-      setOPEN_STATE(_heightWithoutDrawer - headerHeight - 20);
+
+      const _openState =
+        Platform.OS === "ios"
+          ? _heightWithoutDrawer - headerHeight - 20
+          : _heightWithoutDrawer - headerHeight - 40;
+      setOPEN_STATE(_openState);
     }
   }, [headerHeight, myInfoHeight, graphHeight]);
 

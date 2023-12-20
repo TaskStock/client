@@ -2,7 +2,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { useAssets } from "expo-asset";
 import * as Font from "expo-font";
 import React from "react";
-import { StatusBar } from "react-native";
+import { Dimensions, StatusBar } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { useSelector } from "react-redux";
 import { ThemeProvider } from "styled-components";
@@ -25,6 +25,8 @@ const THEME = {
 
 export default function App() {
   const theme = useSelector((state: RootState) => state.theme.value);
+  const { width, height } = Dimensions.get("window");
+  console.log(width, height);
 
   const [assets] = useAssets([require("./assets/splash.png")]);
   const [fontsLoaded] = Font.useFonts(customFontsToLoad);
