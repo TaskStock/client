@@ -1,4 +1,4 @@
-const palette: Record<string, string> = {
+export const palette = {
   neutral100_gray: "#FFFFFF",
   neutral200_gray: "#F2F2F2",
   neutral300_gray: "#EDEEF0",

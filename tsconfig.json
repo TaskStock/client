@@ -1,4 +1,6 @@
 {
-  "compilerOptions": {},
+  "compilerOptions": {
+    "types": ["@types/styled-components"]
+  },
   "extends": "expo/tsconfig.base"
 }
