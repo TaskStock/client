@@ -368,7 +368,7 @@ function HomeChart() {
             position: "absolute",
             width: "20%",
             height: "100%",
-            backgroundColor: palette.neutral300_gray,
+            backgroundColor: themeContext.background,
             borderRadius: 8,
             left: leftValue.current,
             top: BottomControllerPaddingVertical,
