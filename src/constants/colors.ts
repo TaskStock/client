@@ -25,7 +25,6 @@ export const palette = {
 
 export const grayTheme = {
   palette,
-
   text: palette.neutral700_gray,
   textDim: palette.neutral600_gray,
   textReverse: palette.neutral100_gray,
