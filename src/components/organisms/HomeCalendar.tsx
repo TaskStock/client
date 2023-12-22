@@ -1,5 +1,5 @@
 import { FlatList, Pressable, View } from "react-native";
-import React, { memo, useContext, useEffect, useMemo } from "react";
+import React, { memo, useMemo } from "react";
 import Text from "../atoms/Text";
 import styled, { useTheme } from "styled-components/native";
 import { spacing } from "../../constants/spacing";
@@ -13,6 +13,7 @@ import {
   setItemHeight,
 } from "../../store/modules/calendar";
 import { RootState } from "../../store/configureStore";
+import DatePicker from "react-native-date-picker";
 
 const CalendarContainer = styled.View`
   border-radius: 20px;
@@ -90,50 +91,54 @@ const ListHeaderComponent = () => {
   );
 };
 
-const CalendarItem = ({
-  item,
-  currentDate,
-  onPress,
-}: {
-  item: dayjs.Dayjs;
-  currentDate: dayjs.Dayjs;
-  onPress: (item: dayjs.Dayjs) => void;
-}) => {
-  const height = useSelector((state: RootState) => state.calendar.itemHeight);
-  const weeksOfMonth = useSelector(
-    (state: RootState) => state.calendar.weeksOfMonth
-  );
-  const themeContext = useTheme();
-  const date = item.date();
+const CalendarItem = memo(
+  ({
+    item,
+    currentDate,
+    onPress,
+  }: {
+    item: dayjs.Dayjs;
+    currentDate: dayjs.Dayjs;
+    onPress: (item: dayjs.Dayjs) => void;
+  }) => {
+    const height = useSelector((state: RootState) => state.calendar.itemHeight);
+    const weeksOfMonth = useSelector(
+      (state: RootState) => state.calendar.weeksOfMonth
+    );
+    const themeContext = useTheme();
+    const date = item.date();
 
-  const itemHeight = weeksOfMonth > 0 ? height / (weeksOfMonth + 1) : 0;
+    const itemHeight = weeksOfMonth > 0 ? height / (weeksOfMonth + 1) : 0;
 
-  const notThisMonth = useMemo(() => {
-    return item.month() !== currentDate.month();
-  }, [currentDate, item]);
+    const notThisMonth = useMemo(() => {
+      return item.month() !== currentDate.month();
+    }, [currentDate, item]);
 
-  const isSelected = useMemo(() => {
-    return item.isSame(currentDate, "day");
-  }, [currentDate, item]);
+    const isSelected = useMemo(() => {
+      return item.isSame(currentDate, "day");
+    }, [currentDate, item]);
 
-  return (
-    <CalendarItemContainer>
-      <Pressable onPress={() => onPress(item)}>
-        <CalendarItemInner
-          size={itemHeight}
-          bgColor={isSelected ? themeContext.background : "transparent"}
-        >
-          <CalendarItemText
-            color={!notThisMonth ? themeContext.text : themeContext.textDimmer}
-            size={13}
+    return (
+      <CalendarItemContainer>
+        <Pressable onPress={() => onPress(item)}>
+          <CalendarItemInner
+            size={itemHeight}
+            bgColor={isSelected ? themeContext.background : "transparent"}
           >
-            {date}
-          </CalendarItemText>
-        </CalendarItemInner>
-      </Pressable>
-    </CalendarItemContainer>
-  );
-};
+            <CalendarItemText
+              color={
+                !notThisMonth ? themeContext.text : themeContext.textDimmer
+              }
+              size={13}
+            >
+              {date}
+            </CalendarItemText>
+          </CalendarItemInner>
+        </Pressable>
+      </CalendarItemContainer>
+    );
+  }
+);
 
 export default function HomeCalendar() {
   const themeContext = useTheme();
@@ -165,7 +170,7 @@ export default function HomeCalendar() {
   return (
     <CalendarContainer>
       <CalendarHeader>
-        <Pressable
+        <Icons
           onPress={() => {
             dispatch(
               setCurrentDateString(
@@ -173,31 +178,32 @@ export default function HomeCalendar() {
               )
             );
           }}
-        >
-          <Icons
-            type="entypo"
-            name="chevron-thin-left"
-            color={themeContext.text}
-            size={useResponsiveFontSize(22)}
-          />
-        </Pressable>
-        <Text size="lg" weight="bold">
-          {headerText}
-        </Text>
+          type="entypo"
+          name="chevron-thin-left"
+          color={themeContext.text}
+          size={useResponsiveFontSize(22)}
+        />
         <Pressable
+          onPress={() => {
+            // setOpen(true);
+          }}
+        >
+          <Text size="lg" weight="bold">
+            {headerText}
+          </Text>
+        </Pressable>
+
+        <Icons
           onPress={() => {
             dispatch(
               setCurrentDateString(currentDate.add(1, "month").toISOString())
             );
           }}
-        >
-          <Icons
-            type="entypo"
-            name="chevron-thin-right"
-            color={themeContext.text}
-            size={useResponsiveFontSize(22)}
-          />
-        </Pressable>
+          type="entypo"
+          name="chevron-thin-right"
+          color={themeContext.text}
+          size={useResponsiveFontSize(22)}
+        />
       </CalendarHeader>
       <CalendarContent>
         <View
