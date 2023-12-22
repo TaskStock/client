@@ -1,9 +1,14 @@
-import { Feather, Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import {
+  Feather,
+  Ionicons,
+  MaterialCommunityIcons,
+  Entypo,
+} from "@expo/vector-icons";
 import { Image, TouchableOpacity } from "react-native";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
 
 type IconProps = {
-  type: "material" | "ionicons" | "feather";
+  type: "material" | "ionicons" | "feather" | "entypo";
   name: string;
   size?: number;
   color?: string;
@@ -21,6 +26,7 @@ const Icons: React.FC<IconProps> = ({
   if (type === "material") IconComponent = MaterialCommunityIcons;
   else if (type === "ionicons") IconComponent = Ionicons;
   else if (type === "feather") IconComponent = Feather;
+  else if (type === "entypo") IconComponent = Entypo;
   else return null;
 
   return (

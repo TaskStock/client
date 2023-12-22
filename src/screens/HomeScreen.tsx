@@ -8,6 +8,7 @@ import MyInfo from "../components/molecules/Home/MyInfo";
 import { spacing } from "../constants/spacing";
 import { ComponentHeightContext } from "../utils/ComponentHeightContext";
 import HomeChart from "../components/organisms/HomeChart";
+import HomeCalendar from "../components/organisms/HomeCalendar";
 
 const { width, height: windowHeight } = Dimensions.get("window");
 
@@ -80,7 +81,9 @@ const HomeScreen = () => {
         >
           <HomeChart />
         </GraphContainer>
-        <CalendarContainer style={boxShadow} />
+        <CalendarContainer style={boxShadow}>
+          <HomeCalendar></HomeCalendar>
+        </CalendarContainer>
       </ScrollView>
       <BottomDrawerContainer {...handleEdit} />
       <HandleTodoBtnContainer {...handleEdit} />
