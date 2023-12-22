@@ -7,15 +7,16 @@ import dayjs from "dayjs";
 import Icons from "../atoms/Icons";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
 import FlexBox from "../atoms/FlexBox";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setItemHeight } from "../../store/modules/calendar";
+import { RootState } from "../../store/configureStore";
 
 const CalendarContainer = styled.View`
   border-radius: 20px;
   height: 100%;
   display: flex;
   flex-direction: column;
-  padding: 0px ${spacing.offset}px ${spacing.offset}px ${spacing.offset}px;
+  padding: 0px ${spacing.offset}px;
 `;
 const CalendarHeader = styled.View`
   width: 100%;
@@ -50,6 +51,16 @@ const CalendarItemInner = styled.View<{
   align-items: center;
 `;
 
+const CalendarItemText = styled.Text<{
+  color: string;
+  size: number;
+  weight?: number;
+}>`
+  font-size: ${({ size }) => useResponsiveFontSize(size)}px;
+  color: ${({ color }) => color};
+  font-weight: ${({ weight }) => (weight ? weight : 400)};
+`;
+
 const ListHeaderComponent = () => {
   const DateType = ["일", "월", "화", "수", "목", "금", "토"];
   const themeContext = useTheme();
@@ -63,9 +74,9 @@ const ListHeaderComponent = () => {
         return (
           <CalendarItemContainer key={index}>
             <CalendarItemInner>
-              <Text key={index} weight="regular" size="sm" color={color}>
+              <CalendarItemText weight={500} color={color} size={15}>
                 {item}
-              </Text>
+              </CalendarItemText>
             </CalendarItemInner>
           </CalendarItemContainer>
         );
@@ -83,18 +94,14 @@ const CalendarItem = ({
   currentDate: dayjs.Dayjs;
   onPress: (item: dayjs.Dayjs) => void;
 }) => {
+  const height = useSelector((state: RootState) => state.calendar.itemHeight);
   const themeContext = useTheme();
   const date = item.date();
   const notThisMonth = item.month() !== currentDate.month();
-  const isSelected = item.isSame(currentDate, "day");
 
-  // const isSelected = useMemo(() => {
-  //   return item.isSame(currentDate, "day");
-  // }, [currentDate, item]);
-
-  if (isSelected) {
-    console.log("isSelected", isSelected);
-  }
+  const isSelected = useMemo(() => {
+    return item.isSame(currentDate, "day");
+  }, [currentDate, item]);
 
   return (
     <CalendarItemContainer>
@@ -102,13 +109,12 @@ const CalendarItem = ({
         <CalendarItemInner
           bgColor={isSelected ? themeContext.background : "transparent"}
         >
-          <Text
-            weight="regular"
-            size="xs"
-            color={notThisMonth ? themeContext.textDimmer : undefined}
+          <CalendarItemText
+            color={!notThisMonth ? themeContext.text : themeContext.textDimmer}
+            size={13}
           >
             {date}
-          </Text>
+          </CalendarItemText>
         </CalendarItemInner>
       </Pressable>
     </CalendarItemContainer>
@@ -135,7 +141,6 @@ export default function HomeCalendar() {
     );
   };
   const [currentDate, setCurrentDate] = React.useState(dayjs());
-  const [height, setHeight] = React.useState(0);
 
   const calculateCalendar = () => {
     const startOfMonth = currentDate.startOf("month");
@@ -153,17 +158,6 @@ export default function HomeCalendar() {
       day = day.add(1, "day");
     }
     return calendar;
-  };
-
-  const calculateWeek = () => {
-    const month = 1; // Replace with the month number (January is 0, February is 1, and so on)
-
-    const startDate = currentDate.set("month", month).startOf("month");
-    const endDate = currentDate.set("month", month).endOf("month");
-
-    const weeksInMonth = endDate.diff(startDate, "week") + 1;
-
-    return weeksInMonth;
   };
 
   // const itemHeight = height / calculateWeek();

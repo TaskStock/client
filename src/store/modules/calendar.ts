@@ -3,6 +3,7 @@ import dayjs from "dayjs";
 
 const initialState = {
   itemHeight: 0,
+  weeksOfMonth: 0,
   datesOfMonth: [],
   currentDateString: dayjs().toISOString(),
 };
@@ -16,7 +17,7 @@ const calendarSlice = createSlice({
         return;
       }
 
-      state.itemHeight = action.payload;
+      state.itemHeight = action.payload / state.weeksOfMonth;
     },
     setCurrentDateString: (state, action) => {
       state.currentDateString = action.payload;
