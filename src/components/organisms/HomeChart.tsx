@@ -308,12 +308,18 @@ function HomeChart() {
 
       const lastDate = new Date(response[response.length - 1].x);
 
+      const sumValue = response.reduce((acc, cur) => {
+        return acc + parseFloat(cur.close);
+      }, 0);
+
+      const avgValue = (sumValue / response.length).toFixed(2);
+
       for (let i = 0; i < length - response.length; i++) {
         newArray.push({
-          close: "0",
-          high: "0",
-          low: "0",
-          open: "0",
+          close: avgValue,
+          high: avgValue,
+          low: avgValue,
+          open: avgValue,
           x: new Date(
             lastDate.getFullYear(),
             lastDate.getMonth(),
