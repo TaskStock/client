@@ -1,10 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 import dayjs from "dayjs";
+import { calculateDatesOfMonth } from "../../utils/calculateDatesOfMonth";
+import { calculateWeeksOfMonth } from "../../utils/calculateWeeksOfMonth";
 
 const initialState = {
   itemHeight: 0,
   weeksOfMonth: 0,
-  datesOfMonth: [],
+  datesOfMonth: calculateDatesOfMonth(dayjs().toISOString()),
   currentDateString: dayjs().toISOString(),
 };
 
@@ -17,31 +19,23 @@ const calendarSlice = createSlice({
         return;
       }
 
-      state.itemHeight = action.payload / state.weeksOfMonth;
+      state.itemHeight = action.payload;
+
+      // if (state.weeksOfMonth === 0) {
+      //   return;
+      // }
+
+      // state.itemHeight = action.payload / state.weeksOfMonth;
     },
     setCurrentDateString: (state, action) => {
       state.currentDateString = action.payload;
-      const currentDate = dayjs(action.payload);
 
-      const startOfMonth = currentDate.startOf("month");
-      const startDay = startOfMonth.startOf("week");
-
-      const endOfMonth = currentDate.endOf("month");
-      const endDay = endOfMonth.endOf("week");
-
-      const calendar = [];
-
-      let day = startDay;
-      while (day.isBefore(endDay)) {
-        calendar.push(day);
-        day = day.add(1, "day");
-      }
-
-      state.datesOfMonth = calendar;
+      state.weeksOfMonth = calculateWeeksOfMonth(state.currentDateString);
+      state.datesOfMonth = calculateDatesOfMonth(state.currentDateString);
     },
   },
 });
 
 export default calendarSlice.reducer;
 
-export const { setItemHeight } = calendarSlice.actions;
+export const { setItemHeight, setCurrentDateString } = calendarSlice.actions;

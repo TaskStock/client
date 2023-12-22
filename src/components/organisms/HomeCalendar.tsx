@@ -8,7 +8,10 @@ import Icons from "../atoms/Icons";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
 import FlexBox from "../atoms/FlexBox";
 import { useDispatch, useSelector } from "react-redux";
-import { setItemHeight } from "../../store/modules/calendar";
+import {
+  setCurrentDateString,
+  setItemHeight,
+} from "../../store/modules/calendar";
 import { RootState } from "../../store/configureStore";
 
 const CalendarContainer = styled.View`
@@ -30,6 +33,7 @@ const CalendarHeader = styled.View`
 
 const CalendarContent = styled.View`
   flex: 1;
+  margin-bottom: ${spacing.offset}px;
 `;
 
 const CalendarItemContainer = styled.View`
@@ -41,10 +45,11 @@ const CalendarItemContainer = styled.View`
 
 const CalendarItemInner = styled.View<{
   bgColor?: string;
+  size?: number;
 }>`
-  width: 30px;
-  height: 30px;
-  border-radius: 30px;
+  width: ${({ size }) => (size ? size : 30)}px;
+  height: ${({ size }) => (size ? size : 30)}px;
+  border-radius: ${({ size }) => (size ? size : 30) / 2}px;
   display: flex;
   background-color: ${({ bgColor }) => (bgColor ? bgColor : "none")};
   justify-content: center;
@@ -95,9 +100,17 @@ const CalendarItem = ({
   onPress: (item: dayjs.Dayjs) => void;
 }) => {
   const height = useSelector((state: RootState) => state.calendar.itemHeight);
+  const weeksOfMonth = useSelector(
+    (state: RootState) => state.calendar.weeksOfMonth
+  );
   const themeContext = useTheme();
   const date = item.date();
-  const notThisMonth = item.month() !== currentDate.month();
+
+  const itemHeight = weeksOfMonth > 0 ? height / (weeksOfMonth + 1) : 0;
+
+  const notThisMonth = useMemo(() => {
+    return item.month() !== currentDate.month();
+  }, [currentDate, item]);
 
   const isSelected = useMemo(() => {
     return item.isSame(currentDate, "day");
@@ -107,6 +120,7 @@ const CalendarItem = ({
     <CalendarItemContainer>
       <Pressable onPress={() => onPress(item)}>
         <CalendarItemInner
+          size={itemHeight}
           bgColor={isSelected ? themeContext.background : "transparent"}
         >
           <CalendarItemText
@@ -135,35 +149,17 @@ export default function HomeCalendar() {
         item={item}
         currentDate={currentDate}
         onPress={(item: dayjs.Dayjs) => {
-          setCurrentDate(item);
+          // setCurrentDate(item);
+          dispatch(setCurrentDateString(item.toISOString()));
         }}
       />
     );
   };
-  const [currentDate, setCurrentDate] = React.useState(dayjs());
-
-  const calculateCalendar = () => {
-    const startOfMonth = currentDate.startOf("month");
-    // const startDay = now.set("date", 1);
-    const startDay = startOfMonth.startOf("week");
-
-    const endOfMonth = currentDate.endOf("month");
-    const endDay = endOfMonth.endOf("week");
-
-    const calendar = [];
-
-    let day = startDay;
-    while (day.isBefore(endDay)) {
-      calendar.push(day);
-      day = day.add(1, "day");
-    }
-    return calendar;
-  };
-
-  // const itemHeight = height / calculateWeek();
-  const data = calculateCalendar();
+  const currentDate = dayjs(
+    useSelector((state: RootState) => state.calendar.currentDateString)
+  );
+  const data = useSelector((state: RootState) => state.calendar.datesOfMonth);
   const headerText = currentDate.format("YYYY.MM");
-
   const dispatch = useDispatch();
 
   return (
@@ -171,7 +167,11 @@ export default function HomeCalendar() {
       <CalendarHeader>
         <Pressable
           onPress={() => {
-            setCurrentDate(currentDate.subtract(1, "month"));
+            dispatch(
+              setCurrentDateString(
+                currentDate.subtract(1, "month").toISOString()
+              )
+            );
           }}
         >
           <Icons
@@ -186,7 +186,9 @@ export default function HomeCalendar() {
         </Text>
         <Pressable
           onPress={() => {
-            setCurrentDate(currentDate.add(1, "month"));
+            dispatch(
+              setCurrentDateString(currentDate.add(1, "month").toISOString())
+            );
           }}
         >
           <Icons
@@ -197,19 +199,25 @@ export default function HomeCalendar() {
           />
         </Pressable>
       </CalendarHeader>
-      <CalendarContent
-        onLayout={(event) => {
-          const { height } = event.nativeEvent.layout;
-          dispatch(setItemHeight(height));
-        }}
-      >
-        <FlatList
-          numColumns={7}
-          data={data}
-          keyExtractor={(item, index) => index.toString()}
-          renderItem={renderItem}
-          ListHeaderComponent={<ListHeaderComponent></ListHeaderComponent>}
-        ></FlatList>
+      <CalendarContent>
+        <View
+          style={{
+            flex: 1,
+          }}
+          onLayout={(event) => {
+            const { height } = event.nativeEvent.layout;
+
+            dispatch(setItemHeight(height));
+          }}
+        >
+          <FlatList
+            numColumns={7}
+            data={data}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={renderItem}
+            ListHeaderComponent={<ListHeaderComponent></ListHeaderComponent>}
+          ></FlatList>
+        </View>
       </CalendarContent>
     </CalendarContainer>
   );
