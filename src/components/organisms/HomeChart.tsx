@@ -383,7 +383,7 @@ function HomeChart() {
           }}
         ></Animated.View>
         {chartDateType.map((item, index) => (
-          <BottomControllerItem>
+          <BottomControllerItem key={item.name}>
             <Pressable
               onPress={() => {
                 setIndex(index);
