@@ -258,6 +258,7 @@ function HomeChart() {
   const bottomControllerWidth = React.useRef(0);
   const bottomControllerItemWidth =
     (bottomControllerWidth.current - BottomControllerPaddingHorizontal * 2) / 5;
+
   const ContainerSize = React.useRef({
     width: 0,
     height: 0,
@@ -353,6 +354,7 @@ function HomeChart() {
               width={ContainerSize.current.width}
               data={data}
               theme={themeContext}
+              typeIndex={index}
             ></CandleStickValueChart>
           ) : (
             <LineValueChart></LineValueChart>
@@ -381,7 +383,7 @@ function HomeChart() {
           }}
         ></Animated.View>
         {chartDateType.map((item, index) => (
-          <BottomControllerItem>
+          <BottomControllerItem key={item.name}>
             <Pressable
               onPress={() => {
                 setIndex(index);

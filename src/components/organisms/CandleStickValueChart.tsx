@@ -1,4 +1,3 @@
-import { View, Text } from "react-native";
 import React, { memo } from "react";
 import {
   VictoryAxis,
@@ -9,21 +8,28 @@ import {
 import { Value } from "./HomeChart";
 import { DefaultTheme } from "styled-components/native";
 
+const candleWideWidth = 6.368;
+const candleNarrowWidth = 3.684;
+
 function CandleStickValueChart({
   width,
   height,
   data,
   theme,
+  typeIndex,
 }: {
   width: number;
   height: number;
   data: Value[];
   theme: DefaultTheme;
+  typeIndex: number;
 }) {
   const maxY = Math.max(...data.map((item) => parseInt(item.high)));
   const minY = Math.min(...data.map((item) => parseInt(item.low)));
   const twoThirds = minY + ((maxY - minY) * 2) / 3;
   const oneThird = minY + ((maxY - minY) * 1) / 3;
+
+  const candleWidth = typeIndex < 2 ? candleWideWidth : candleNarrowWidth;
 
   return (
     <VictoryChart
@@ -39,7 +45,7 @@ function CandleStickValueChart({
       <VictoryCandlestick
         domain={{ y: [minY, maxY + 1.5] }}
         data={data}
-        candleWidth={5.368}
+        candleWidth={candleWidth}
         containerComponent={<VictoryContainer responsive={false} />}
         candleColors={{
           positive: theme.high,
