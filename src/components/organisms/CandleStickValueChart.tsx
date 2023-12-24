@@ -8,9 +8,6 @@ import {
 import { Value } from "./HomeChart";
 import { DefaultTheme } from "styled-components/native";
 
-const candleWideWidth = 6.368;
-const candleNarrowWidth = 3.684;
-
 function CandleStickValueChart({
   width,
   height,
@@ -29,7 +26,28 @@ function CandleStickValueChart({
   const twoThirds = minY + ((maxY - minY) * 2) / 3;
   const oneThird = minY + ((maxY - minY) * 1) / 3;
 
-  const candleWidth = typeIndex < 2 ? candleWideWidth : candleNarrowWidth;
+  // 1주일 때 candleWidth는 width/7이지만 gap을 고려하여 넉넉히 20으로 설정. 나머지 typeIndex도 마찬가지로 설정
+  // 꼬리 너비는 데이터 양이 많아질수록 줄어들게 설정
+  let candleWidth;
+  let wickStrokeWidth;
+  switch (typeIndex) {
+    case 0:
+      candleWidth = width / 20;
+      wickStrokeWidth = 1;
+      break;
+    case 1:
+      candleWidth = width / 50;
+      wickStrokeWidth = 1;
+      break;
+    case 2:
+      candleWidth = width / 130;
+      wickStrokeWidth = 0.8;
+      break;
+    default:
+      candleWidth = width / 365;
+      wickStrokeWidth = 0.5;
+      break;
+  }
 
   return (
     <VictoryChart
@@ -57,7 +75,7 @@ function CandleStickValueChart({
             strokeWidth: 0,
           },
         }}
-        wickStrokeWidth={1}
+        wickStrokeWidth={wickStrokeWidth}
       ></VictoryCandlestick>
       <VictoryAxis
         dependentAxis
