@@ -1,15 +1,12 @@
-import React, { useContext, useEffect } from "react";
-
+import React, { useContext, useEffect, useState } from "react";
 import styled, { ThemeContext } from "styled-components/native";
 import { Pressable } from "react-native";
 import { Animated } from "react-native";
-import { palette } from "../../constants/colors";
 import Text from "../atoms/Text";
 import { View } from "react-native";
 import { WithLocalSvg } from "react-native-svg";
 import LineChartIcon from "../../../assets/icons/lineChartIcon.svg";
 import CandleStickIcon from "../../../assets/icons/CandleStickIcon.svg";
-import { useGetValueByTypeQuery } from "../../store/modules/value";
 import CandleStickValueChart from "./CandleStickValueChart";
 import LineValueChart from "./LineValueChart";
 
@@ -259,10 +256,11 @@ function HomeChart() {
   const bottomControllerItemWidth =
     (bottomControllerWidth.current - BottomControllerPaddingHorizontal * 2) / 5;
 
-  const ContainerSize = React.useRef({
-    width: 0,
-    height: 0,
-  });
+  const [containerSize, setContainerSize] = useState<{
+    width: number;
+    height: number;
+  } | null>(null);
+
   const leftValue = React.useRef(
     new Animated.Value(BottomControllerPaddingHorizontal)
   );
@@ -280,7 +278,6 @@ function HomeChart() {
 
   const [data, setData] = React.useState(dataArray);
   const [isCandleStick, setIsCandleStick] = React.useState(true);
-  const [isGraphReady, setIsGraphReady] = React.useState(false);
 
   // 원래 redux 안에 넣는게 좋지만, 나중에 RTK Query로 바꿀거라 그냥 여기에 넣음.
   const [loading, setLoading] = React.useState(false);
@@ -340,18 +337,17 @@ function HomeChart() {
       <GraphContainer
         onLayout={(event) => {
           const { width, height } = event.nativeEvent.layout;
-          ContainerSize.current = {
+          setContainerSize({
             width,
             height,
-          };
-          setIsGraphReady(true);
+          });
         }}
       >
-        {isGraphReady && !loading ? (
+        {containerSize && !loading ? (
           isCandleStick ? (
             <CandleStickValueChart
-              height={ContainerSize.current.height}
-              width={ContainerSize.current.width}
+              height={containerSize.height}
+              width={containerSize.width}
               data={data}
               theme={themeContext}
               typeIndex={index}
