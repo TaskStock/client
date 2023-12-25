@@ -315,7 +315,7 @@ function HomeChart() {
 
       const avgValue = (sumValue / response.length).toFixed(2);
 
-      for (let i = 0; i < length - response.length; i++) {
+      for (let i = 1; i <= length - response.length; i++) {
         newArray.push({
           close: avgValue,
           high: avgValue,
