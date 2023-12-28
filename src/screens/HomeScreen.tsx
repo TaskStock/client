@@ -12,6 +12,7 @@ import HomeCalendar from "../components/organisms/HomeCalendar";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/configureStore";
 import AddTodoModal from "../components/organisms/AddTodoModal";
+import { toggleAddModal } from "../store/modules/todo";
 
 const { width, height: windowHeight } = Dimensions.get("window");
 
