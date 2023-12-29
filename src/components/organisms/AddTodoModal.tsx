@@ -1,5 +1,5 @@
 import { Pressable, ScrollView, TextInput, View } from "react-native";
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import styled, { useTheme } from "styled-components/native";
 import { spacing } from "../../constants/spacing";
 import Margin from "../atoms/Margin";
@@ -10,6 +10,7 @@ import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
 import { useDispatch } from "react-redux";
 import { toggleAddModal } from "../../store/modules/todo";
 import SliderThumb from "../../../assets/images/slider-thumb.png";
+import { useProject } from "../../hooks/useProject";
 
 const AddTodoOverlay = styled.Pressable`
   position: absolute;
@@ -124,72 +125,33 @@ const Section = ({
 
 const ProjectItemComponent = ({
   isSelected,
-  isAddProject,
   onPress,
-  name,
+  children,
 }: {
-  isSelected: boolean;
-  isAddProject: boolean;
-  onPress: () => void;
-  name: string;
+  isSelected?: boolean;
+  onPress?: () => void;
+  children: React.ReactNode;
 }) => {
   const theme = useTheme();
 
   return (
     <Pressable onPress={onPress}>
-      <ProjectItem isSelected={isSelected}>
-        {isAddProject ? (
-          <Icons type="ionicons" name="add" size={20} />
-        ) : (
-          <Text size="md" color={isSelected ? theme.textReverse : theme.text}>
-            {name}
-          </Text>
-        )}
-      </ProjectItem>
+      <ProjectItem isSelected={isSelected}>{children}</ProjectItem>
     </Pressable>
   );
 };
 
-const tempProjectList = [
-  {
-    id: 1,
-    name: "프로젝트1",
-    isSelected: true,
-  },
-  {
-    id: 2,
-    name: "토익",
-    isSelected: false,
-  },
-  {
-    id: 3,
-    name: "프로그래밍",
-    isSelected: false,
-  },
-  {
-    id: 4,
-    name: "태스크스탁",
-    isSelected: false,
-  },
-  {
-    id: 5,
-    name: "프로그래밍",
-    isSelected: false,
-  },
-  {
-    id: 6,
-    name: "태스크스탁",
-    isSelected: false,
-  },
-];
-
-// TODO: 프로젝트 불러오기
-// TODO: 백으로 API 콜.
-// TODO: 프로젝트 추가하기
+const ProjectItemText = styled.Text<{ isSelected?: boolean }>`
+  font-size: ${useResponsiveFontSize(18)}px;
+  color: ${({ theme, isSelected }) =>
+    isSelected ? theme.textReverse : theme.text};
+`;
 
 export default function AddTodoModal() {
   const theme = useTheme();
   const dispatch = useDispatch();
+
+  const scrollViewRef = React.useRef<ScrollView>(null);
 
   const [addTodoForm, setAddTodoForm] = React.useState({
     title: "",
@@ -197,14 +159,14 @@ export default function AddTodoModal() {
     selectedProjectId: null,
   });
 
-  const projectList = [
-    ...tempProjectList,
-    {
-      id: null,
-      name: "+",
-      isSelected: false,
-    },
-  ];
+  const {
+    projectList,
+    isAddProject,
+    newProjectInput,
+    setIsAddProject,
+    onChangeNewProjectName,
+    fetchAddProject,
+  } = useProject();
 
   const onPressProjectItem = useCallback(
     (project) => () => {
@@ -215,6 +177,20 @@ export default function AddTodoModal() {
     },
     [addTodoForm]
   );
+
+  const onPressAddTodoBtn = useCallback(() => {
+    // TODO: 백으로 todo 추가 API 콜.
+
+    dispatch(toggleAddModal());
+  }, []);
+
+  const onPressAddProjectBtn = () => {
+    setIsAddProject((prev) => !prev);
+
+    setTimeout(() => {
+      scrollViewRef.current?.scrollToEnd();
+    }, 100);
+  };
 
   return (
     <AddTodoOverlay
@@ -238,6 +214,7 @@ export default function AddTodoModal() {
             style={{
               marginBottom: spacing.offset,
             }}
+            ref={(ref) => (scrollViewRef.current = ref)}
           >
             <AddTodoContents>
               <Section
@@ -292,36 +269,55 @@ export default function AddTodoModal() {
                     const isSelected =
                       project.id === addTodoForm.selectedProjectId;
 
-                    const isAddProject = project.id === null;
-
                     const onPress = () => {
-                      if (isAddProject) {
-                        console.log("add project");
-                      } else {
-                        onPressProjectItem(project)();
-                      }
+                      onPressProjectItem(project)();
                     };
 
                     return (
                       <ProjectItemComponent
                         key={index + project.name}
                         isSelected={isSelected}
-                        name={project.name}
                         onPress={onPress}
-                        isAddProject={isAddProject}
-                      />
+                      >
+                        <ProjectItemText isSelected={isSelected}>
+                          {project.name}
+                        </ProjectItemText>
+                      </ProjectItemComponent>
                     );
                   })}
+                  {isAddProject && (
+                    <ProjectItemComponent>
+                      <TextInput
+                        placeholder="프로젝트 이름을 입력해주세요."
+                        style={{
+                          width: 180,
+                        }}
+                        value={newProjectInput}
+                        onChange={onChangeNewProjectName}
+                        onSubmitEditing={fetchAddProject}
+                      ></TextInput>
+                    </ProjectItemComponent>
+                  )}
+                  <ProjectItemComponent isSelected={false}>
+                    <Icons
+                      type="feather"
+                      name="plus"
+                      size={20}
+                      onPress={onPressAddProjectBtn}
+                      hitSlop={{
+                        top: 20,
+                        bottom: 20,
+                        left: 20,
+                        right: 20,
+                      }}
+                    />
+                  </ProjectItemComponent>
                 </ProjectItemContainer>
               </Section>
             </AddTodoContents>
           </ScrollView>
 
-          <AddTodoBtn
-            onPress={() => {
-              dispatch(toggleAddModal());
-            }}
-          >
+          <AddTodoBtn onPress={onPressAddTodoBtn}>
             <Text size="md">할 일 추가하기</Text>
           </AddTodoBtn>
         </AddTodoBox>

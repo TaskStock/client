@@ -13,6 +13,12 @@ type IconProps = {
   size?: number;
   color?: string;
   onPress?: () => void;
+  hitSlop?: {
+    top?: number;
+    bottom?: number;
+    left?: number;
+    right?: number;
+  };
 };
 
 const Icons: React.FC<IconProps> = ({
@@ -21,6 +27,7 @@ const Icons: React.FC<IconProps> = ({
   size = useResponsiveFontSize(20),
   color = "black",
   onPress,
+  hitSlop,
 }) => {
   let IconComponent: any;
   if (type === "material") IconComponent = MaterialCommunityIcons;
@@ -30,7 +37,7 @@ const Icons: React.FC<IconProps> = ({
   else return null;
 
   return (
-    <TouchableOpacity onPress={onPress}>
+    <TouchableOpacity onPress={onPress} hitSlop={hitSlop}>
       <IconComponent
         name={name}
         size={useResponsiveFontSize(size)}
