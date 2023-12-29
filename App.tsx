@@ -27,7 +27,7 @@ const THEME = {
 export default function App() {
   const theme = useSelector((state: RootState) => state.theme.value);
   const { width, height } = Dimensions.get("window");
-  console.log(width, height);
+  // console.log(width, height);
 
   const [assets] = useAssets([require("./assets/splash.png")]);
   const [fontsLoaded] = Font.useFonts(customFontsToLoad);

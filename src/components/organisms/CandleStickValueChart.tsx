@@ -5,8 +5,37 @@ import {
   VictoryChart,
   VictoryContainer,
 } from "victory-native";
-import { Value } from "./HomeChart";
+import { chartDateType } from "./HomeChart";
 import { DefaultTheme } from "styled-components/native";
+import { Value } from "../../@types/chart";
+
+const createDummyData = (arr: Value[], createLength: number): Value[] => {
+  const newArray = [];
+
+  const lastDate = new Date(arr[arr.length - 1].x);
+
+  const sumValue = arr.reduce((acc, cur) => {
+    return acc + parseFloat(cur.close);
+  }, 0);
+
+  const avgValue = (sumValue / arr.length).toFixed(2);
+
+  for (let i = 1; i <= createLength; i++) {
+    newArray.push({
+      close: avgValue,
+      high: avgValue,
+      low: avgValue,
+      open: avgValue,
+      x: new Date(
+        lastDate.getFullYear(),
+        lastDate.getMonth(),
+        lastDate.getDate() + i
+      ),
+    });
+  }
+
+  return [...arr, ...newArray];
+};
 
 function CandleStickValueChart({
   width,
@@ -14,12 +43,14 @@ function CandleStickValueChart({
   data,
   theme,
   typeIndex,
+  maxLength,
 }: {
   width: number;
   height: number;
   data: Value[];
   theme: DefaultTheme;
   typeIndex: number;
+  maxLength: number;
 }) {
   const maxY = Math.max(...data.map((item) => parseInt(item.high)));
   const minY = Math.min(...data.map((item) => parseInt(item.low)));
@@ -30,6 +61,8 @@ function CandleStickValueChart({
   // 꼬리 너비는 데이터 양이 많아질수록 줄어들게 설정
   let candleWidth;
   let wickStrokeWidth;
+  let candleData = data;
+
   switch (typeIndex) {
     case 0:
       candleWidth = width / 20;
@@ -49,6 +82,15 @@ function CandleStickValueChart({
       break;
   }
 
+  if (data.length < chartDateType[typeIndex].counts) {
+    candleData = createDummyData(
+      data,
+      chartDateType[typeIndex].counts - data.length
+    );
+  } else {
+    candleData = data;
+  }
+
   return (
     <VictoryChart
       width={width}
@@ -62,7 +104,7 @@ function CandleStickValueChart({
     >
       <VictoryCandlestick
         domain={{ y: [minY, maxY + 1.5] }}
-        data={data}
+        data={candleData}
         candleWidth={candleWidth}
         containerComponent={<VictoryContainer responsive={false} />}
         candleColors={{

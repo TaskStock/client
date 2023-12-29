@@ -9,14 +9,7 @@ import LineChartIcon from "../../../assets/icons/lineChartIcon.svg";
 import CandleStickIcon from "../../../assets/icons/CandleStickIcon.svg";
 import CandleStickValueChart from "./CandleStickValueChart";
 import LineValueChart from "./LineValueChart";
-
-export interface Value {
-  x: string;
-  open: string;
-  close: string;
-  high: string;
-  low: string;
-}
+import { Value } from "../../@types/chart";
 
 const BottomControllerPaddingHorizontal = 26;
 const BottomControllerPaddingVertical = 15;
@@ -229,7 +222,7 @@ const createMockData = (length: number): Value[] => {
   return data_12;
 };
 
-const chartDateType = [
+export const chartDateType = [
   {
     name: "1주",
     counts: 7,
@@ -289,8 +282,10 @@ function HomeChart() {
 
   // 일단 임시로 넣었음. 1주, 1달, 3달, 1년 각각의 데이터를 일단 mock data로 생성하되,
   // 각 주별 데이터는 끝까지 채워진게 아니라, 좀 비워져있음.
+
   const mockApiCall = async (type) => {
     setLoading(true);
+
     const length = chartDateType.find((item) => item.name === type)?.counts;
 
     const randomFluctuation = Math.floor(Math.random() * length);
@@ -301,35 +296,8 @@ function HomeChart() {
       }, 500);
     });
 
-    if (length > response.length) {
-      const newArray = [];
-
-      const lastDate = new Date(response[response.length - 1].x);
-
-      const sumValue = response.reduce((acc, cur) => {
-        return acc + parseFloat(cur.close);
-      }, 0);
-
-      const avgValue = (sumValue / response.length).toFixed(2);
-
-      for (let i = 1; i <= length - response.length; i++) {
-        newArray.push({
-          close: avgValue,
-          high: avgValue,
-          low: avgValue,
-          open: avgValue,
-          x: new Date(
-            lastDate.getFullYear(),
-            lastDate.getMonth(),
-            lastDate.getDate() + i
-          ),
-        });
-      }
-
-      setData([...response, ...newArray]);
-      setLoading(false);
-    } else {
-    }
+    setLoading(false);
+    setData(response);
   };
 
   return (
@@ -351,9 +319,15 @@ function HomeChart() {
               data={data}
               theme={themeContext}
               typeIndex={index}
+              maxLength={chartDateType[index].counts}
             ></CandleStickValueChart>
           ) : (
-            <LineValueChart></LineValueChart>
+            <LineValueChart
+              height={containerSize.height}
+              width={containerSize.width}
+              data={data}
+              maxLength={chartDateType[index].counts}
+            ></LineValueChart>
           )
         ) : (
           <View>
