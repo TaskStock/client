@@ -3,10 +3,36 @@ import {
   VictoryAxis,
   VictoryChart,
   VictoryLine,
+  VictoryScatter,
   VictoryTheme,
 } from "victory-native";
 import { useTheme } from "styled-components/native";
 import { Value } from "../../@types/chart";
+import { View } from "react-native";
+import { Circle, Svg } from "react-native-svg";
+import { palette } from "../../constants/colors";
+
+const DotDataComponent = (props: any) => {
+  const { x, y, datum } = props;
+
+  return (
+    <Svg>
+      {/* Outer transparent circle */}
+      <Circle
+        cx={x}
+        cy={y}
+        r={15} // Set the radius to be slightly larger than the inner circle
+        fill="rgba(255, 0, 0, 0.2)" // Slightly transparent red fill
+      />
+      <Circle
+        cx={x}
+        cy={y}
+        r={5} // Set the radius to be slightly larger than the inner circle
+        fill={palette.red} // Slightly transparent red fill
+      />
+    </Svg>
+  );
+};
 
 export default function LineValueChart({
   width,
@@ -54,11 +80,20 @@ export default function LineValueChart({
         style={{
           data: {
             stroke: theme.palette.red,
-            strokeWidth: 3,
+            strokeWidth: 4,
           },
         }}
         data={lineData}
       ></VictoryLine>
+      <VictoryScatter
+        dataComponent={<DotDataComponent />}
+        data={[lineData[lineData.length - 1]]}
+        style={{
+          data: {
+            fill: theme.palette.red,
+          },
+        }}
+      ></VictoryScatter>
       <VictoryAxis
         dependentAxis
         tickValues={[twoThirds, oneThird]}

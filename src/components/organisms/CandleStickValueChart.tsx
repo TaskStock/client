@@ -119,6 +119,7 @@ function CandleStickValueChart({
         }}
         wickStrokeWidth={wickStrokeWidth}
       ></VictoryCandlestick>
+
       <VictoryAxis
         dependentAxis
         tickValues={[twoThirds, oneThird]}
