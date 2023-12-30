@@ -1,18 +1,10 @@
 ---
-name: 이슈 템플릿
-about: 개발 전 이슈에 대한 상세한 사전 조사
-title: ''
-labels: ''
-assignees: ''
-
----
-
----
 name: Custom issue template
-about: Describe this issue template's purpose here.
-title: "[FEATURE/FIX/STYLE] 기능"
+about: 개발 전 이슈에 대한 정보 작성
+title: "[FEATURE/FIX/STYLE] 할 일"
 labels: ''
 assignees: ''
+
 ---
 
 ## 📢 이슈 내용
