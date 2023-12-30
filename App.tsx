@@ -1,16 +1,14 @@
 import { NavigationContainer } from "@react-navigation/native";
-import { useAssets } from "expo-asset";
 import * as Font from "expo-font";
-import React from "react";
-import { Dimensions, StatusBar } from "react-native";
+import React, { useEffect, useState } from "react";
+import { StatusBar } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { useSelector } from "react-redux";
-// import { ThemeProvider } from "styled-components";
-import { ThemeProvider, DefaultTheme } from "styled-components/native";
-import Loader from "./src/components/atoms/Loader";
+import { ThemeProvider } from "styled-components/native";
 import { darkTheme, grayTheme } from "./src/constants/colors";
 import { customFontsToLoad } from "./src/constants/typography";
 import Root from "./src/navigators/Root";
+import SplashScreen from "./src/screens/Login/SplashScreen";
 import { RootState } from "./src/store/configureStore";
 
 const THEME = {
@@ -25,15 +23,17 @@ const THEME = {
 };
 
 export default function App() {
+  const [isReady, setIsReady] = useState(false);
   const theme = useSelector((state: RootState) => state.theme.value);
-  const { width, height } = Dimensions.get("window");
-  // console.log(width, height);
-
-  const [assets] = useAssets([require("./assets/splash.png")]);
+  // const [assets] = useAssets([require("./assets/splash.png")]);
   const [fontsLoaded] = Font.useFonts(customFontsToLoad);
-  if (!assets || !fontsLoaded) return <Loader />;
-  // console.log(assets);
-  // console.log(fontsLoaded);
+  useEffect(() => {
+    setTimeout(() => {
+      setIsReady(true);
+    }, 3000);
+  }, []);
+
+  if (!isReady || !fontsLoaded) return <SplashScreen />;
 
   return (
     <ThemeProvider theme={THEME[theme].theme}>

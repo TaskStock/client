@@ -116,7 +116,7 @@ const BottomDrawer: React.FunctionComponent<BottomDrawerProps> = ({
       draggedUp
     );
     state.setValue(nextState);
-    animateMove(y, nextState, onDrawerStateChange(nextState));
+    animateMove(y, nextState, onDrawerStateChange(nextState)); 
   };
 
   const handlePanResponder = () => {

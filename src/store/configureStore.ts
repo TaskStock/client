@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import valueReducer, { valueApi } from "./modules/value";
 import { themeReducer } from "./modules/theme";
 import calendarReducer from "./modules/calendar";
+import todoReducer from "./modules/todo";
 
 const store = configureStore({
   reducer: {
@@ -9,6 +10,7 @@ const store = configureStore({
     value: valueReducer,
     theme: themeReducer,
     calendar: calendarReducer,
+    todo: todoReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

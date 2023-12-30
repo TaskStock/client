@@ -10,7 +10,7 @@ import FlexBox from "../../atoms/FlexBox";
 import { IconsPic } from "../../atoms/Icons";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 
-const Container = styled.View`
+const Container = styled.View<{ notchTop: number }>`
   background-color: ${({ theme }) => theme.background};
   padding-top: ${(props) => props.notchTop}px;
 `;
