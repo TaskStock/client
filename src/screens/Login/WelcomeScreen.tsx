@@ -1,7 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components/native";
-import Button from "../../components/atoms/Button";
 import Text from "../../components/atoms/Text";
 import { RootState } from "../../store/configureStore";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
@@ -22,11 +21,26 @@ const Container = styled.View`
   align-items: center;
   gap: ${useResponsiveFontSize(60)}px;
 `;
+const ButtonStyle = styled.TouchableOpacity`
+  background-color: ${(props) => props.theme.subBtnGray};
+  padding: ${useResponsiveFontSize(14)}px;
+`;
+const Button = ({ text, onPress }) => {
+  return (
+    <ButtonStyle onPress={onPress}>
+      <Text size="md">{text}</Text>
+    </ButtonStyle>
+  );
+};
+
 const WelcomeScreen = ({ navigation }) => {
   const theme = useSelector((state: RootState) => state.theme.value);
   return (
     <Container>
-      <Text size="lg"> Welcome to the app </Text>
+      <Button text={"카카오로 계속하기"} onPress={() => {}} />
+      <Button text={"구글로 계속하기"} onPress={() => {}} />
+      <Button text={"애플로 계속하기"} onPress={() => {}} />
+      <Button text={"이메일로 계속하기"} onPress={() => {}} />
       <Button
         onPress={() => navigation.navigate("MainTab", { screen: "Home" })}
         text={"Login"}

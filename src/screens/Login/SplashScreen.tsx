@@ -5,7 +5,6 @@ import styled from "styled-components/native";
 import LoadingSpinner from "../../components/atoms/LoadingSpinner";
 import { RootState } from "../../store/configureStore";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
-import { darkTheme } from "../../constants/colors";
 
 const THEME_SOURCES = {
   dark: {
