@@ -6,11 +6,16 @@ import Margin from "../atoms/Margin";
 import Icons from "../atoms/Icons";
 import Text from "../atoms/Text";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
-import { useDispatch } from "react-redux";
-import { toggleAddModal } from "../../store/modules/todo";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setAddTodoForm,
+  submitTodo,
+  toggleAddModal,
+} from "../../store/modules/todo";
 import FlexBox from "../atoms/FlexBox";
 import ProjectItemList from "./TodoModal/ProjectItemList";
 import ValueSlider from "./TodoModal/ValueSlider";
+import { AppDispatch, RootState } from "../../store/configureStore";
 
 const AddTodoOverlay = styled.Pressable`
   position: absolute;
@@ -116,37 +121,22 @@ const Section = ({
   );
 };
 
-export interface AddTodoForm {
-  title: string;
-  level: number;
-  project_id: number | null;
-  repeat_day: string[];
-}
-
 const dayList = ["월", "화", "수", "목", "금", "토", "일"];
 
-export default function AddTodoModal({}) {
+export default function AddTodoModal() {
   const theme = useTheme();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
 
   const scrollViewRef = React.useRef<ScrollView>(null);
 
-  const [addTodoForm, setAddTodoForm] = React.useState<AddTodoForm>({
-    title: "",
-    level: 0,
-    project_id: null,
-    repeat_day: [],
-  });
+  const addTodoForm = useSelector((state: RootState) => state.todo.addTodoForm);
+
   const [dayItemWidth, setDayItemWidth] = React.useState(0);
 
   const value = addTodoForm.level * 1000;
 
   const onPressAddTodoBtn = useCallback(() => {
-    // TODO: 백으로 todo 추가 API 콜.
-
-    console.log(addTodoForm);
-
-    dispatch(toggleAddModal());
+    dispatch(submitTodo());
   }, [addTodoForm]);
 
   return (
@@ -189,10 +179,12 @@ export default function AddTodoModal({}) {
                   <TodoInput
                     placeholder="할 일을 입력해주세요."
                     onChange={(e) => {
-                      setAddTodoForm({
-                        ...addTodoForm,
-                        title: e.nativeEvent.text,
-                      });
+                      dispatch(
+                        setAddTodoForm({
+                          name: "text",
+                          value: e.nativeEvent.text,
+                        })
+                      );
                     }}
                   ></TodoInput>
                 </Section>
@@ -204,10 +196,7 @@ export default function AddTodoModal({}) {
                     </SectionHeader>
                   }
                 >
-                  <ValueSlider
-                    addTodoForm={addTodoForm}
-                    setAddTodoForm={setAddTodoForm}
-                  ></ValueSlider>
+                  <ValueSlider></ValueSlider>
                 </Section>
                 <Section
                   header={
@@ -227,14 +216,16 @@ export default function AddTodoModal({}) {
                   <FlexBox gap={10}>
                     {dayList.map((item, index) => {
                       const onPress = () => {
-                        setAddTodoForm({
-                          ...addTodoForm,
-                          repeat_day: addTodoForm.repeat_day.includes(item)
-                            ? addTodoForm.repeat_day.filter(
-                                (day) => day !== item
-                              )
-                            : [...addTodoForm.repeat_day, item],
-                        });
+                        dispatch(
+                          setAddTodoForm({
+                            name: "repeat_day",
+                            value: addTodoForm.repeat_day.includes(item)
+                              ? addTodoForm.repeat_day.filter(
+                                  (day) => day !== item
+                                )
+                              : [...addTodoForm.repeat_day, item],
+                          })
+                        );
                       };
 
                       const isSelected = addTodoForm.repeat_day.includes(item);
@@ -272,8 +263,6 @@ export default function AddTodoModal({}) {
                   }
                 >
                   <ProjectItemList
-                    addTodoForm={addTodoForm}
-                    setAddTodoForm={setAddTodoForm}
                     scrollViewRef={scrollViewRef}
                   ></ProjectItemList>
                 </Section>
