@@ -40,7 +40,12 @@ const WelcomeScreen = ({ navigation }) => {
       <Button text={"카카오로 계속하기"} onPress={() => {}} />
       <Button text={"구글로 계속하기"} onPress={() => {}} />
       <Button text={"애플로 계속하기"} onPress={() => {}} />
-      <Button text={"이메일로 계속하기"} onPress={() => {}} />
+      <Button
+        text={"이메일로 계속하기"}
+        onPress={() => {
+          navigation.navigate("EmailRegister");
+        }}
+      />
       <Button
         onPress={() => navigation.navigate("MainTab", { screen: "Home" })}
         text={"Login"}
