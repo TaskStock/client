@@ -3,7 +3,8 @@ import Slider from "@react-native-community/slider";
 import SliderThumb from "../../../../assets/images/slider-thumb.png";
 import styled, { useTheme } from "styled-components/native";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
-import { AddTodoForm } from "../AddTodoModal";
+import { useDispatch } from "react-redux";
+import { setAddTodoForm } from "../../../store/modules/todo";
 
 const SliderLabel = styled.View`
   position: absolute;
@@ -29,20 +30,13 @@ const SliderGrid = styled.View`
   z-index: -1;
 `;
 
-export default function ValueSlider({
-  addTodoForm,
-  setAddTodoForm,
-}: {
-  addTodoForm: AddTodoForm;
-  setAddTodoForm: React.Dispatch<React.SetStateAction<AddTodoForm>>;
-}) {
+export default function ValueSlider() {
+  const dispatch = useDispatch();
+
   const onChangeSliderValue = (value: number) => {
     const level = value > 0 ? Math.floor(value / 1000) : 0;
 
-    setAddTodoForm({
-      ...addTodoForm,
-      level: level,
-    });
+    dispatch(setAddTodoForm({ name: "level", value: level }));
   };
 
   const theme = useTheme();

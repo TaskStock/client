@@ -2,9 +2,11 @@ import { View, Text, Pressable, TextInput, ScrollView } from "react-native";
 import React, { useCallback, useEffect } from "react";
 import styled, { useTheme } from "styled-components/native";
 import { useProject } from "../../../hooks/useProject";
-import { AddTodoForm } from "../AddTodoModal";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import Icons from "../../atoms/Icons";
+import { useDispatch, useSelector } from "react-redux";
+import { setAddTodoForm } from "../../../store/modules/todo";
+import { RootState } from "../../../store/configureStore";
 
 const ProjectItemContainer = styled.View<{ height?: number }>`
   flex: 1;
@@ -55,12 +57,8 @@ const ProjectItemText = styled.Text<{ isSelected?: boolean }>`
 `;
 
 export default function ProjectItemList({
-  addTodoForm,
-  setAddTodoForm,
   scrollViewRef,
 }: {
-  addTodoForm: AddTodoForm;
-  setAddTodoForm: React.Dispatch<React.SetStateAction<AddTodoForm>>;
   scrollViewRef: React.RefObject<ScrollView>;
 }) {
   const {
@@ -72,12 +70,13 @@ export default function ProjectItemList({
     fetchAddProject,
   } = useProject();
 
+  const dispatch = useDispatch();
+
+  const addTodoForm = useSelector((state: RootState) => state.todo.addTodoForm);
+
   const onPressProjectItem = useCallback(
     (project) => () => {
-      setAddTodoForm({
-        ...addTodoForm,
-        project_id: project.id,
-      });
+      dispatch(setAddTodoForm({ name: "project_id", value: project.id }));
     },
     [addTodoForm]
   );
