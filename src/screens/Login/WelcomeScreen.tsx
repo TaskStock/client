@@ -43,7 +43,7 @@ const WelcomeScreen = ({ navigation }) => {
       <Button
         text={"이메일로 계속하기"}
         onPress={() => {
-          navigation.navigate("EmailRegister");
+          navigation.navigate("EmailSend");
         }}
       />
       <Button
