@@ -9,6 +9,8 @@ import LineChartIcon from "../../../assets/icons/lineChartIcon.svg";
 import CandleStickIcon from "../../../assets/icons/CandleStickIcon.svg";
 import CandleStickValueChart from "./CandleStickValueChart";
 import LineValueChart from "./LineValueChart";
+import LoadingSpinner from "../atoms/LoadingSpinner";
+import FlexBox from "../atoms/FlexBox";
 
 export interface Value {
   x: string;
@@ -356,9 +358,13 @@ function HomeChart() {
             <LineValueChart></LineValueChart>
           )
         ) : (
-          <View>
-            <Text size="sm">loading...</Text>
-          </View>
+          <FlexBox
+            justifyContent="center"
+            alignItems="center"
+            styles={{ flex: 1 }}
+          >
+            <LoadingSpinner />
+          </FlexBox>
         )}
       </GraphContainer>
       <BottomController
