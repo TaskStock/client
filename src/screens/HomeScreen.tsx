@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Dimensions, ScrollView, View } from "react-native";
+import { Dimensions, Modal, Pressable, ScrollView, View } from "react-native";
 import styled from "styled-components/native";
 import { data } from "../../public/home";
 import BottomDrawerContainer from "../components/molecules/Home/BottomDrawerContainer";
@@ -9,6 +9,10 @@ import { spacing } from "../constants/spacing";
 import { ComponentHeightContext } from "../utils/ComponentHeightContext";
 import HomeChart from "../components/organisms/HomeChart";
 import HomeCalendar from "../components/organisms/HomeCalendar";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../store/configureStore";
+import AddTodoModal from "../components/organisms/AddTodoModal";
+import { toggleAddModal } from "../store/modules/todo";
 
 const { width, height: windowHeight } = Dimensions.get("window");
 
@@ -44,6 +48,12 @@ const HomeScreen = () => {
     editEnabled,
     setEditEnabled,
   };
+
+  const isAddModalOpen = useSelector(
+    (state: RootState) => state.todo.isAddModalOpen
+  );
+
+  const dispatch = useDispatch();
 
   return (
     <Container>
@@ -87,6 +97,11 @@ const HomeScreen = () => {
       </ScrollView>
       <BottomDrawerContainer {...handleEdit} />
       <HandleTodoBtnContainer {...handleEdit} />
+      {isAddModalOpen && (
+        <Modal visible={isAddModalOpen} transparent={true}>
+          <AddTodoModal></AddTodoModal>
+        </Modal>
+      )}
     </Container>
   );
 };

@@ -10,6 +10,7 @@ declare module "styled-components/native" {
     textDimmer: string;
     background: string;
     mainBtnGray: string;
+    mainBtnReversed: string;
     subBtnGray: string;
     box: string;
     high: string;
