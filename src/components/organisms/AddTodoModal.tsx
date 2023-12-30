@@ -11,6 +11,7 @@ import { useDispatch } from "react-redux";
 import { toggleAddModal } from "../../store/modules/todo";
 import SliderThumb from "../../../assets/images/slider-thumb.png";
 import { useProject } from "../../hooks/useProject";
+import FlexBox from "../atoms/FlexBox";
 
 const AddTodoOverlay = styled.Pressable`
   position: absolute;
@@ -129,6 +130,18 @@ const SliderGrid = styled.View`
   z-index: -1;
 `;
 
+const RepeatDayItem = styled.Pressable<{ isSelected?: boolean; size: number }>`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  width: ${({ size }) => size}px;
+  height: ${({ size }) => size}px;
+  border-radius: 50px;
+  background-color: ${({ theme, isSelected }) =>
+    isSelected ? theme.mainBtnReversed : theme.mainBtnGray};
+`;
+
 const Section = ({
   header,
   children,
@@ -171,9 +184,42 @@ const ProjectItemText = styled.Text<{ isSelected?: boolean }>`
     isSelected ? theme.textReverse : theme.text};
 `;
 
+const dayList = ["월", "화", "수", "목", "금", "토", "일"];
+
 export default function AddTodoModal({}) {
   const theme = useTheme();
   const dispatch = useDispatch();
+
+  // const [day, setDay] = React.useState([
+  //   {
+  //     name: "월",
+  //     isSelected: false,
+  //   },
+  //   {
+  //     name: "화",
+  //     isSelected: false,
+  //   },
+  //   {
+  //     name: "수",
+  //     isSelected: false,
+  //   },
+  //   {
+  //     name: "목",
+  //     isSelected: false,
+  //   },
+  //   {
+  //     name: "금",
+  //     isSelected: false,
+  //   },
+  //   {
+  //     name: "토",
+  //     isSelected: false,
+  //   },
+  //   {
+  //     name: "일",
+  //     isSelected: false,
+  //   },
+  // ]);
 
   const scrollViewRef = React.useRef<ScrollView>(null);
 
@@ -181,7 +227,10 @@ export default function AddTodoModal({}) {
     title: "",
     level: 0,
     project_id: null,
+    repeat_day: [],
   });
+
+  const [dayItemWidth, setDayItemWidth] = React.useState(0);
 
   const value = addTodoForm.level * 1000;
 
@@ -307,7 +356,55 @@ export default function AddTodoModal({}) {
                   </SliderLabel>
                 </Slider>
               </Section>
+              <Section
+                header={
+                  <SectionHeader>
+                    <SectionHeaderText>반복</SectionHeaderText>
+                    {dayList.map((item) => {
+                      const isSelected = addTodoForm.repeat_day.includes(item);
 
+                      if (isSelected)
+                        return <ValueText key={item}>{item}</ValueText>;
+                    })}
+                  </SectionHeader>
+                }
+                margin={10}
+              >
+                <FlexBox gap={10}>
+                  {dayList.map((item, index) => {
+                    const onPress = () => {
+                      setAddTodoForm({
+                        ...addTodoForm,
+                        repeat_day: addTodoForm.repeat_day.includes(item)
+                          ? addTodoForm.repeat_day.filter((day) => day !== item)
+                          : [...addTodoForm.repeat_day, item],
+                      });
+                    };
+
+                    const isSelected = addTodoForm.repeat_day.includes(item);
+
+                    return (
+                      <RepeatDayItem
+                        onLayout={(e) => {
+                          if (dayItemWidth === 0)
+                            setDayItemWidth(e.nativeEvent.layout.width);
+                        }}
+                        key={index + item}
+                        isSelected={isSelected}
+                        onPress={onPress}
+                        size={dayItemWidth}
+                      >
+                        <Text
+                          size="md"
+                          color={isSelected ? theme.textReverse : theme.textDim}
+                        >
+                          {item}
+                        </Text>
+                      </RepeatDayItem>
+                    );
+                  })}
+                </FlexBox>
+              </Section>
               <Section
                 margin={10}
                 header={
