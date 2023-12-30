@@ -105,6 +105,30 @@ const TodoInput = styled.TextInput`
   padding: 6px 1px;
 `;
 
+const SliderLabel = styled.View`
+  position: absolute;
+  width: 100%;
+  bottom: -10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
+const SliderLabelText = styled.Text`
+  position: relative;
+  top: -5px;
+  font-size: ${useResponsiveFontSize(12)}px;
+  color: ${({ theme }) => theme.textDim};
+`;
+
+const SliderGrid = styled.View`
+  width: 3px;
+  height: 10px;
+  background-color: ${({ theme }) => theme.mainBtnGray};
+  pointer-events: none;
+  z-index: -1;
+`;
+
 const Section = ({
   header,
   children,
@@ -147,7 +171,7 @@ const ProjectItemText = styled.Text<{ isSelected?: boolean }>`
     isSelected ? theme.textReverse : theme.text};
 `;
 
-export default function AddTodoModal() {
+export default function AddTodoModal({}) {
   const theme = useTheme();
   const dispatch = useDispatch();
 
@@ -155,9 +179,11 @@ export default function AddTodoModal() {
 
   const [addTodoForm, setAddTodoForm] = React.useState({
     title: "",
-    value: 0,
-    selectedProjectId: null,
+    level: 0,
+    project_id: null,
   });
+
+  const value = addTodoForm.level * 1000;
 
   const {
     projectList,
@@ -172,7 +198,7 @@ export default function AddTodoModal() {
     (project) => () => {
       setAddTodoForm({
         ...addTodoForm,
-        selectedProjectId: project.id,
+        project_id: project.id,
       });
     },
     [addTodoForm]
@@ -190,6 +216,15 @@ export default function AddTodoModal() {
     setTimeout(() => {
       scrollViewRef.current?.scrollToEnd();
     }, 100);
+  };
+
+  const onChangeSliderValue = (value: number) => {
+    const level = value > 0 ? Math.floor(value / 1000) : 0;
+
+    setAddTodoForm({
+      ...addTodoForm,
+      level: level,
+    });
   };
 
   return (
@@ -238,24 +273,41 @@ export default function AddTodoModal() {
                 header={
                   <SectionHeader>
                     <SectionHeaderText>가치</SectionHeaderText>
-                    <ValueText>{addTodoForm.value}원</ValueText>
+                    <ValueText>{value}원</ValueText>
                   </SectionHeader>
                 }
               >
                 <Slider
-                  minimumValue={1000}
+                  minimumValue={0}
                   maximumValue={5000}
-                  onValueChange={(value) => {
-                    setAddTodoForm({
-                      ...addTodoForm,
-                      value,
-                    });
-                  }}
+                  onValueChange={onChangeSliderValue}
                   minimumTrackTintColor={theme.text}
+                  maximumTrackTintColor={theme.mainBtnGray}
                   step={1000}
+                  tapToSeek={true}
                   thumbImage={SliderThumb}
-                />
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    // paddingHorizontal: 5,
+                    // zIndex: -2,
+                  }}
+                >
+                  <SliderGrid />
+                  <SliderGrid />
+                  <SliderGrid />
+                  <SliderGrid />
+                  <SliderGrid />
+                  <SliderGrid />
+                  <SliderLabel>
+                    <SliderLabelText>0</SliderLabelText>
+                    <SliderLabelText>5000</SliderLabelText>
+                  </SliderLabel>
+                </Slider>
               </Section>
+
               <Section
                 margin={10}
                 header={
@@ -266,8 +318,7 @@ export default function AddTodoModal() {
               >
                 <ProjectItemContainer>
                   {projectList.map((project, index) => {
-                    const isSelected =
-                      project.id === addTodoForm.selectedProjectId;
+                    const isSelected = project.id === addTodoForm.project_id;
 
                     const onPress = () => {
                       onPressProjectItem(project)();
@@ -316,7 +367,6 @@ export default function AddTodoModal() {
               </Section>
             </AddTodoContents>
           </ScrollView>
-
           <AddTodoBtn onPress={onPressAddTodoBtn}>
             <Text size="md">할 일 추가하기</Text>
           </AddTodoBtn>
