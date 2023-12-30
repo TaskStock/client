@@ -5,13 +5,12 @@ import { spacing } from "../../constants/spacing";
 import Margin from "../atoms/Margin";
 import Icons from "../atoms/Icons";
 import Text from "../atoms/Text";
-import Slider from "@react-native-community/slider";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
 import { useDispatch } from "react-redux";
 import { toggleAddModal } from "../../store/modules/todo";
-import SliderThumb from "../../../assets/images/slider-thumb.png";
-import { useProject } from "../../hooks/useProject";
 import FlexBox from "../atoms/FlexBox";
+import ProjectItemList from "./TodoModal/ProjectItemList";
+import ValueSlider from "./TodoModal/ValueSlider";
 
 const AddTodoOverlay = styled.Pressable`
   position: absolute;
@@ -64,31 +63,12 @@ const CloseBox = styled.View`
   align-items: flex-end;
 `;
 
-const ProjectItemContainer = styled.View`
-  flex: 1;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  width: 100%;
-  gap: 10px;
-`;
-
-const ProjectItem = styled.View<{ isSelected?: boolean }>`
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: row;
-  padding: 9px 20px;
-  background-color: ${({ theme, isSelected }) =>
-    isSelected ? theme.mainBtnReversed : theme.mainBtnGray};
-  border-radius: 20px;
-`;
-
 const SectionHeader = styled.View`
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 7px;
+  z-index: 2;
 `;
 
 const SectionHeaderText = styled.Text`
@@ -104,30 +84,6 @@ const TodoInput = styled.TextInput`
   border-color: ${({ theme }) => theme.textDimmer};
   border-bottom-width: 1px;
   padding: 6px 1px;
-`;
-
-const SliderLabel = styled.View`
-  position: absolute;
-  width: 100%;
-  bottom: -10px;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-`;
-
-const SliderLabelText = styled.Text`
-  position: relative;
-  top: -5px;
-  font-size: ${useResponsiveFontSize(12)}px;
-  color: ${({ theme }) => theme.textDim};
-`;
-
-const SliderGrid = styled.View`
-  width: 3px;
-  height: 10px;
-  background-color: ${({ theme }) => theme.mainBtnGray};
-  pointer-events: none;
-  z-index: -1;
 `;
 
 const RepeatDayItem = styled.Pressable<{ isSelected?: boolean; size: number }>`
@@ -160,29 +116,12 @@ const Section = ({
   );
 };
 
-const ProjectItemComponent = ({
-  isSelected,
-  onPress,
-  children,
-}: {
-  isSelected?: boolean;
-  onPress?: () => void;
-  children: React.ReactNode;
-}) => {
-  const theme = useTheme();
-
-  return (
-    <Pressable onPress={onPress}>
-      <ProjectItem isSelected={isSelected}>{children}</ProjectItem>
-    </Pressable>
-  );
-};
-
-const ProjectItemText = styled.Text<{ isSelected?: boolean }>`
-  font-size: ${useResponsiveFontSize(18)}px;
-  color: ${({ theme, isSelected }) =>
-    isSelected ? theme.textReverse : theme.text};
-`;
+export interface AddTodoForm {
+  title: string;
+  level: number;
+  project_id: number | null;
+  repeat_day: string[];
+}
 
 const dayList = ["월", "화", "수", "목", "금", "토", "일"];
 
@@ -190,91 +129,25 @@ export default function AddTodoModal({}) {
   const theme = useTheme();
   const dispatch = useDispatch();
 
-  // const [day, setDay] = React.useState([
-  //   {
-  //     name: "월",
-  //     isSelected: false,
-  //   },
-  //   {
-  //     name: "화",
-  //     isSelected: false,
-  //   },
-  //   {
-  //     name: "수",
-  //     isSelected: false,
-  //   },
-  //   {
-  //     name: "목",
-  //     isSelected: false,
-  //   },
-  //   {
-  //     name: "금",
-  //     isSelected: false,
-  //   },
-  //   {
-  //     name: "토",
-  //     isSelected: false,
-  //   },
-  //   {
-  //     name: "일",
-  //     isSelected: false,
-  //   },
-  // ]);
-
   const scrollViewRef = React.useRef<ScrollView>(null);
 
-  const [addTodoForm, setAddTodoForm] = React.useState({
+  const [addTodoForm, setAddTodoForm] = React.useState<AddTodoForm>({
     title: "",
     level: 0,
     project_id: null,
     repeat_day: [],
   });
-
   const [dayItemWidth, setDayItemWidth] = React.useState(0);
 
   const value = addTodoForm.level * 1000;
 
-  const {
-    projectList,
-    isAddProject,
-    newProjectInput,
-    setIsAddProject,
-    onChangeNewProjectName,
-    fetchAddProject,
-  } = useProject();
-
-  const onPressProjectItem = useCallback(
-    (project) => () => {
-      setAddTodoForm({
-        ...addTodoForm,
-        project_id: project.id,
-      });
-    },
-    [addTodoForm]
-  );
-
   const onPressAddTodoBtn = useCallback(() => {
     // TODO: 백으로 todo 추가 API 콜.
 
+    console.log(addTodoForm);
+
     dispatch(toggleAddModal());
-  }, []);
-
-  const onPressAddProjectBtn = () => {
-    setIsAddProject((prev) => !prev);
-
-    setTimeout(() => {
-      scrollViewRef.current?.scrollToEnd();
-    }, 100);
-  };
-
-  const onChangeSliderValue = (value: number) => {
-    const level = value > 0 ? Math.floor(value / 1000) : 0;
-
-    setAddTodoForm({
-      ...addTodoForm,
-      level: level,
-    });
-  };
+  }, [addTodoForm]);
 
   return (
     <AddTodoOverlay
@@ -300,169 +173,112 @@ export default function AddTodoModal({}) {
             }}
             ref={(ref) => (scrollViewRef.current = ref)}
           >
-            <AddTodoContents>
-              <Section
-                header={
-                  <SectionHeader>
-                    <SectionHeaderText>할 일</SectionHeaderText>
-                  </SectionHeader>
-                }
-              >
-                <TodoInput
-                  placeholder="할 일을 입력해주세요."
-                  onChange={(e) => {
-                    setAddTodoForm({
-                      ...addTodoForm,
-                      title: e.nativeEvent.text,
-                    });
-                  }}
-                ></TodoInput>
-              </Section>
-              <Section
-                header={
-                  <SectionHeader>
-                    <SectionHeaderText>가치</SectionHeaderText>
-                    <ValueText>{value}원</ValueText>
-                  </SectionHeader>
-                }
-              >
-                <Slider
-                  minimumValue={0}
-                  maximumValue={5000}
-                  onValueChange={onChangeSliderValue}
-                  minimumTrackTintColor={theme.text}
-                  maximumTrackTintColor={theme.mainBtnGray}
-                  step={1000}
-                  tapToSeek={true}
-                  thumbImage={SliderThumb}
-                  style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    // paddingHorizontal: 5,
-                    // zIndex: -2,
-                  }}
+            <Pressable
+              style={{
+                flex: 1,
+              }}
+            >
+              <AddTodoContents>
+                <Section
+                  header={
+                    <SectionHeader>
+                      <SectionHeaderText>할 일</SectionHeaderText>
+                    </SectionHeader>
+                  }
                 >
-                  <SliderGrid />
-                  <SliderGrid />
-                  <SliderGrid />
-                  <SliderGrid />
-                  <SliderGrid />
-                  <SliderGrid />
-                  <SliderLabel>
-                    <SliderLabelText>0</SliderLabelText>
-                    <SliderLabelText>5000</SliderLabelText>
-                  </SliderLabel>
-                </Slider>
-              </Section>
-              <Section
-                header={
-                  <SectionHeader>
-                    <SectionHeaderText>반복</SectionHeaderText>
-                    {dayList.map((item) => {
-                      const isSelected = addTodoForm.repeat_day.includes(item);
-
-                      if (isSelected)
-                        return <ValueText key={item}>{item}</ValueText>;
-                    })}
-                  </SectionHeader>
-                }
-                margin={10}
-              >
-                <FlexBox gap={10}>
-                  {dayList.map((item, index) => {
-                    const onPress = () => {
+                  <TodoInput
+                    placeholder="할 일을 입력해주세요."
+                    onChange={(e) => {
                       setAddTodoForm({
                         ...addTodoForm,
-                        repeat_day: addTodoForm.repeat_day.includes(item)
-                          ? addTodoForm.repeat_day.filter((day) => day !== item)
-                          : [...addTodoForm.repeat_day, item],
+                        title: e.nativeEvent.text,
                       });
-                    };
+                    }}
+                  ></TodoInput>
+                </Section>
+                <Section
+                  header={
+                    <SectionHeader>
+                      <SectionHeaderText>가치</SectionHeaderText>
+                      <ValueText>{value}원</ValueText>
+                    </SectionHeader>
+                  }
+                >
+                  <ValueSlider
+                    addTodoForm={addTodoForm}
+                    setAddTodoForm={setAddTodoForm}
+                  ></ValueSlider>
+                </Section>
+                <Section
+                  header={
+                    <SectionHeader>
+                      <SectionHeaderText>반복</SectionHeaderText>
+                      {dayList.map((item) => {
+                        const isSelected =
+                          addTodoForm.repeat_day.includes(item);
 
-                    const isSelected = addTodoForm.repeat_day.includes(item);
+                        if (isSelected)
+                          return <ValueText key={item}>{item}</ValueText>;
+                      })}
+                    </SectionHeader>
+                  }
+                  margin={10}
+                >
+                  <FlexBox gap={10}>
+                    {dayList.map((item, index) => {
+                      const onPress = () => {
+                        setAddTodoForm({
+                          ...addTodoForm,
+                          repeat_day: addTodoForm.repeat_day.includes(item)
+                            ? addTodoForm.repeat_day.filter(
+                                (day) => day !== item
+                              )
+                            : [...addTodoForm.repeat_day, item],
+                        });
+                      };
 
-                    return (
-                      <RepeatDayItem
-                        onLayout={(e) => {
-                          if (dayItemWidth === 0)
-                            setDayItemWidth(e.nativeEvent.layout.width);
-                        }}
-                        key={index + item}
-                        isSelected={isSelected}
-                        onPress={onPress}
-                        size={dayItemWidth}
-                      >
-                        <Text
-                          size="md"
-                          color={isSelected ? theme.textReverse : theme.textDim}
+                      const isSelected = addTodoForm.repeat_day.includes(item);
+
+                      return (
+                        <RepeatDayItem
+                          onLayout={(e) => {
+                            if (dayItemWidth === 0)
+                              setDayItemWidth(e.nativeEvent.layout.width);
+                          }}
+                          key={index + item}
+                          isSelected={isSelected}
+                          onPress={onPress}
+                          size={dayItemWidth}
                         >
-                          {item}
-                        </Text>
-                      </RepeatDayItem>
-                    );
-                  })}
-                </FlexBox>
-              </Section>
-              <Section
-                margin={10}
-                header={
-                  <SectionHeader>
-                    <SectionHeaderText>프로젝트</SectionHeaderText>
-                  </SectionHeader>
-                }
-              >
-                <ProjectItemContainer>
-                  {projectList.map((project, index) => {
-                    const isSelected = project.id === addTodoForm.project_id;
-
-                    const onPress = () => {
-                      onPressProjectItem(project)();
-                    };
-
-                    return (
-                      <ProjectItemComponent
-                        key={index + project.name}
-                        isSelected={isSelected}
-                        onPress={onPress}
-                      >
-                        <ProjectItemText isSelected={isSelected}>
-                          {project.name}
-                        </ProjectItemText>
-                      </ProjectItemComponent>
-                    );
-                  })}
-                  {isAddProject && (
-                    <ProjectItemComponent>
-                      <TextInput
-                        placeholder="프로젝트 이름을 입력해주세요."
-                        style={{
-                          width: 180,
-                        }}
-                        value={newProjectInput}
-                        onChange={onChangeNewProjectName}
-                        onSubmitEditing={fetchAddProject}
-                      ></TextInput>
-                    </ProjectItemComponent>
-                  )}
-                  <ProjectItemComponent isSelected={false}>
-                    <Icons
-                      type="feather"
-                      name="plus"
-                      size={20}
-                      onPress={onPressAddProjectBtn}
-                      hitSlop={{
-                        top: 20,
-                        bottom: 20,
-                        left: 20,
-                        right: 20,
-                      }}
-                    />
-                  </ProjectItemComponent>
-                </ProjectItemContainer>
-              </Section>
-            </AddTodoContents>
+                          <Text
+                            size="md"
+                            color={
+                              isSelected ? theme.textReverse : theme.textDim
+                            }
+                          >
+                            {item}
+                          </Text>
+                        </RepeatDayItem>
+                      );
+                    })}
+                  </FlexBox>
+                </Section>
+                <Section
+                  margin={10}
+                  header={
+                    <SectionHeader>
+                      <SectionHeaderText>프로젝트</SectionHeaderText>
+                    </SectionHeader>
+                  }
+                >
+                  <ProjectItemList
+                    addTodoForm={addTodoForm}
+                    setAddTodoForm={setAddTodoForm}
+                    scrollViewRef={scrollViewRef}
+                  ></ProjectItemList>
+                </Section>
+              </AddTodoContents>
+            </Pressable>
           </ScrollView>
           <AddTodoBtn onPress={onPressAddTodoBtn}>
             <Text size="md">할 일 추가하기</Text>

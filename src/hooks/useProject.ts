@@ -26,22 +26,26 @@ const tempProjectList = [
 export const useProject = () => {
   const [newProjectInput, setNewProjectInput] = useState("");
   const [isAddProject, setIsAddProject] = useState(false);
-
-  const projectList = [...tempProjectList];
+  const [projectList, setProjectList] = useState(tempProjectList);
 
   // TODO: 프로젝트 불러오기
   // TODO: 프로젝트 추가하기
 
   const fetchAddProject = () => {
-    console.log(newProjectInput);
+    setProjectList([
+      ...projectList,
+      {
+        id: projectList.length + 1,
+        name: newProjectInput,
+        isSelected: false,
+      },
+    ]);
 
     setIsAddProject(false);
     setNewProjectInput("");
   };
 
   const onChangeNewProjectName = (e) => {
-    console.log(e.nativeEvent.text);
-
     setNewProjectInput(e.nativeEvent.text);
   };
 
