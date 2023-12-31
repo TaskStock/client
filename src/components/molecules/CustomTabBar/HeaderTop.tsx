@@ -5,7 +5,7 @@ import styled from "styled-components/native";
 import { spacing } from "../../../constants/spacing";
 import { RootState } from "../../../store/configureStore";
 import { themeSlice } from "../../../store/modules/theme";
-import useHeight from "../../../utils/useHeight";
+import useHeight from "../../../hooks/useHeight";
 import FlexBox from "../../atoms/FlexBox";
 import { IconsPic } from "../../atoms/Icons";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";

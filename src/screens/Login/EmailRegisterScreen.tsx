@@ -23,19 +23,19 @@ const EmailRegisterScreen = ({ route, navigation }) => {
   });
 
   useEffect(() => {
-    setUser({
-      ...user,
+    setUser((prevUser) => ({
+      ...prevUser,
       email: email,
-    });
-  }, []);
+    }));
+  }, [email]);
 
   const dispatch = useAppDispatch();
 
   const handleChange = (name: string, value: string) => {
-    setUser({
-      ...user,
+    setUser((prevUser) => ({
+      ...prevUser,
       [name]: value,
-    });
+    }));
   };
 
   const handleSignUp = () => {

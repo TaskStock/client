@@ -4,7 +4,7 @@ import styled from "styled-components/native";
 import { todosData } from "../../../../public/todos";
 import { spacing } from "../../../constants/spacing";
 import { ComponentHeightContext } from "../../../utils/ComponentHeightContext";
-import useHeight from "../../../utils/useHeight";
+import useHeight from "../../../hooks/useHeight";
 import Text from "../../atoms/Text";
 import BottomDrawer from "./BottomDrawer";
 import EditTodoItem from "./EditTodoItem";

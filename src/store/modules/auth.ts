@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { client } from "../../services/api";
 
 export interface IUser {
   email: string;
@@ -11,8 +12,6 @@ export interface IUser {
 
 export const initialUserState = {
   token: null,
-  //   access: localStorage.getItem("access"),
-  //   refresh: localStorage.getItem("refresh"),
 
   isLoggedIn: false,
   loading: false,
@@ -32,19 +31,7 @@ export const registerUser = createAsyncThunk(
   "REGISTER_USER",
   async (data, { rejectWithValue }) => {
     try {
-      const response = await fetch("http://localhost:8000/account/register/", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-      const responseData = await response.json();
-      if (!response.ok) {
-        // 네트워크 응답이 OK가 아니라면 에러 처리
-        return rejectWithValue(responseData);
-      }
-
+      const responseData = await client.post("account/register", data);
       return responseData;
     } catch (error) {
       return rejectWithValue(error.response.data);
