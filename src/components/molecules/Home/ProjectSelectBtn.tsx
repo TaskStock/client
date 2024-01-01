@@ -1,11 +1,10 @@
 import React from "react";
-import { useSelector } from "react-redux";
 import styled from "styled-components/native";
 import { darkTheme, grayTheme } from "../../../constants/colors";
 import { spacing } from "../../../constants/spacing";
-import Text from "../../atoms/Text";
-import { RootState } from "../../../store/configureStore";
+import { useAppSelect } from "../../../store/configureStore.hooks";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
+import Text from "../../atoms/Text";
 
 const THEME_CONSTANTS = {
   dark: {
@@ -35,7 +34,7 @@ const ProjectSelectBtn = ({
   selected: boolean;
   onPress: () => void;
 }) => {
-  const theme = useSelector((state: RootState) => state.theme.value);
+  const theme = useAppSelect((state) => state.theme.value);
 
   return (
     <Container onPress={onPress} selected={selected}>

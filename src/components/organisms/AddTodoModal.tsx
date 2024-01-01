@@ -1,21 +1,22 @@
-import { Pressable, ScrollView, TextInput, View } from "react-native";
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback } from "react";
+import { Pressable, ScrollView, View } from "react-native";
+import { useDispatch } from "react-redux";
 import styled, { useTheme } from "styled-components/native";
 import { spacing } from "../../constants/spacing";
-import Margin from "../atoms/Margin";
-import Icons from "../atoms/Icons";
-import Text from "../atoms/Text";
-import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
-import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "../../store/configureStore";
+import { useAppSelect } from "../../store/configureStore.hooks";
 import {
   setAddTodoForm,
   submitTodo,
   toggleAddModal,
 } from "../../store/modules/todo";
+import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
 import FlexBox from "../atoms/FlexBox";
+import Icons from "../atoms/Icons";
+import Margin from "../atoms/Margin";
+import Text from "../atoms/Text";
 import ProjectItemList from "./TodoModal/ProjectItemList";
 import ValueSlider from "./TodoModal/ValueSlider";
-import { AppDispatch, RootState } from "../../store/configureStore";
 
 const AddTodoOverlay = styled.Pressable`
   position: absolute;
@@ -129,7 +130,7 @@ export default function AddTodoModal() {
 
   const scrollViewRef = React.useRef<ScrollView>(null);
 
-  const addTodoForm = useSelector((state: RootState) => state.todo.addTodoForm);
+  const addTodoForm = useAppSelect((state) => state.todo.addTodoForm);
 
   const [dayItemWidth, setDayItemWidth] = React.useState(0);
 

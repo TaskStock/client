@@ -1,17 +1,15 @@
 import React, { useContext, useEffect, useState } from "react";
-import styled, { ThemeContext } from "styled-components/native";
-import { Pressable } from "react-native";
-import { Animated } from "react-native";
-import Text from "../atoms/Text";
-import { View } from "react-native";
+import { Animated, Pressable } from "react-native";
 import { WithLocalSvg } from "react-native-svg";
-import LineChartIcon from "../../../assets/icons/lineChartIcon.svg";
+import styled, { ThemeContext } from "styled-components/native";
 import CandleStickIcon from "../../../assets/icons/CandleStickIcon.svg";
+import LineChartIcon from "../../../assets/icons/lineChartIcon.svg";
+import { Value } from "../../@types/chart";
+import FlexBox from "../atoms/FlexBox";
+import LoadingSpinner from "../atoms/LoadingSpinner";
+import Text from "../atoms/Text";
 import CandleStickValueChart from "./CandleStickValueChart";
 import LineValueChart from "./LineValueChart";
-import { Value } from "../../@types/chart";
-import LoadingSpinner from "../atoms/LoadingSpinner";
-import FlexBox from "../atoms/FlexBox";
 
 const BottomControllerPaddingHorizontal = 26;
 const BottomControllerPaddingVertical = 15;

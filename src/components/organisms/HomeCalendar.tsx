@@ -1,19 +1,18 @@
-import { FlatList, Pressable, View } from "react-native";
+import dayjs from "dayjs";
 import React, { memo, useMemo } from "react";
-import Text from "../atoms/Text";
+import { FlatList, Pressable, View } from "react-native";
+import { useDispatch } from "react-redux";
 import styled, { useTheme } from "styled-components/native";
 import { spacing } from "../../constants/spacing";
-import dayjs from "dayjs";
-import Icons from "../atoms/Icons";
-import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
-import FlexBox from "../atoms/FlexBox";
-import { useDispatch, useSelector } from "react-redux";
+import { useAppSelect } from "../../store/configureStore.hooks";
 import {
   setCurrentDateString,
   setItemHeight,
 } from "../../store/modules/calendar";
-import { RootState } from "../../store/configureStore";
-import DatePicker from "react-native-date-picker";
+import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
+import FlexBox from "../atoms/FlexBox";
+import Icons from "../atoms/Icons";
+import Text from "../atoms/Text";
 
 const CalendarContainer = styled.View`
   border-radius: 20px;
@@ -101,10 +100,8 @@ const CalendarItem = memo(
     currentDate: dayjs.Dayjs;
     onPress: (item: dayjs.Dayjs) => void;
   }) => {
-    const height = useSelector((state: RootState) => state.calendar.itemHeight);
-    const weeksOfMonth = useSelector(
-      (state: RootState) => state.calendar.weeksOfMonth
-    );
+    const height = useAppSelect((state) => state.calendar.itemHeight);
+    const weeksOfMonth = useAppSelect((state) => state.calendar.weeksOfMonth);
     const themeContext = useTheme();
     const date = item.date();
 
@@ -161,9 +158,9 @@ export default function HomeCalendar() {
     );
   };
   const currentDate = dayjs(
-    useSelector((state: RootState) => state.calendar.currentDateString)
+    useAppSelect((state) => state.calendar.currentDateString)
   );
-  const data = useSelector((state: RootState) => state.calendar.datesOfMonth);
+  const data = useAppSelect((state) => state.calendar.datesOfMonth);
   const headerText = currentDate.format("YYYY.MM");
   const dispatch = useDispatch();
 

@@ -1,8 +1,7 @@
 import React from "react";
-import { useSelector } from "react-redux";
 import styled from "styled-components/native";
 import Text from "../../components/atoms/Text";
-import { RootState } from "../../store/configureStore";
+import { useAppSelect } from "../../store/configureStore.hooks";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
 
 const THEME_SOURCES = {
@@ -34,7 +33,7 @@ const Button = ({ text, onPress }) => {
 };
 
 const WelcomeScreen = ({ navigation }) => {
-  const theme = useSelector((state: RootState) => state.theme.value);
+  const theme = useAppSelect((state) => state.theme.value);
   return (
     <Container>
       <Button text={"카카오로 계속하기"} onPress={() => {}} />
