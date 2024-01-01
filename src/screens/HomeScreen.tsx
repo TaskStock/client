@@ -1,59 +1,28 @@
 import React, { useContext, useState } from "react";
-import { Dimensions, Modal, Pressable, ScrollView, View } from "react-native";
+import { Dimensions, Modal } from "react-native";
+import { useDispatch } from "react-redux";
 import styled from "styled-components/native";
 import { data } from "../../public/home";
-import BottomDrawerContainer from "../components/molecules/Home/BottomDrawerContainer";
-import HandleTodoBtnContainer from "../components/molecules/Home/HandleTodoBtnContainer";
-import MyInfo from "../components/molecules/Home/MyInfo";
-import { spacing } from "../constants/spacing";
-import { ComponentHeightContext } from "../utils/ComponentHeightContext";
-import HomeChart from "../components/organisms/HomeChart";
-import HomeCalendar from "../components/organisms/HomeCalendar";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../store/configureStore";
-import AddTodoModal from "../components/organisms/AddTodoModal";
-import { toggleAddModal } from "../store/modules/todo";
 import HeaderTop from "../components/molecules/Home/HeaderTop";
+import AddTodoModal from "../components/organisms/AddTodoModal";
 import GCContainer from "../components/organisms/Home/GCContainer";
-
-const { width, height: windowHeight } = Dimensions.get("window");
+import { spacing } from "../constants/spacing";
+import { useAppSelect } from "../store/configureStore.hooks";
+import { ComponentHeightContext } from "../utils/ComponentHeightContext";
+import BottomDrawerContainer from "../components/molecules/Home/BottomDrawerContainer";
 
 const Container = styled.View`
-  /* padding-top: ${spacing.offset}px; */
   background-color: ${({ theme }) => theme.background};
   flex: 1;
 `;
 
-const GraphContainer = styled.View`
-  width: ${width - 60}px;
-  margin: ${spacing.offset}px 0;
-  margin-left: ${spacing.gutter}px;
-  margin-right: 15px;
-  height: ${Math.round((300 * windowHeight) / 932)}px;
-  background-color: ${({ theme }) => theme.box};
-  border-radius: 20px;
-`;
-
-const CalendarContainer = styled(GraphContainer)`
-  margin-right: ${spacing.gutter}px;
-  margin-left: 0;
-`;
-
 const HomeScreen = ({ navigation }) => {
   const [myData, setMyData] = useState(data);
-  const { setMyInfoHeight, setGraphHeight } = useContext(
+  const { setContentsHeight, setHeaderHeight } = useContext(
     ComponentHeightContext
   );
 
-  const [editEnabled, setEditEnabled] = useState(false);
-  const handleEdit = {
-    editEnabled,
-    setEditEnabled,
-  };
-
-  const isAddModalOpen = useSelector(
-    (state: RootState) => state.todo.isAddModalOpen
-  );
+  const isAddModalOpen = useAppSelect((state) => state.todo.isAddModalOpen);
 
   const dispatch = useDispatch();
 
@@ -61,36 +30,8 @@ const HomeScreen = ({ navigation }) => {
     <Container>
       <HeaderTop navigation={navigation} />
       <GCContainer myData={data} />
+      <BottomDrawerContainer />
 
-      {/* <ScrollView
-        style={{}}
-        pagingEnabled={true}
-        showsHorizontalScrollIndicator={false}
-        horizontal={true}
-        decelerationRate={0}
-        snapToInterval={width - 60}
-        snapToAlignment={"center"}
-        contentInset={{
-          top: 0,
-          left: 0,
-          bottom: 0,
-          right: 0,
-        }}
-      >
-        <GraphContainer
-          style={boxShadow}
-          onLayout={(event) => {
-            const { x, y, width, height } = event.nativeEvent.layout;
-            setGraphHeight(height);
-          }}
-        >
-          <HomeChart />
-        </GraphContainer>
-        <CalendarContainer style={boxShadow}>
-          <HomeCalendar></HomeCalendar>
-        </CalendarContainer>
-      </ScrollView> */}
-      {/* <BottomDrawerContainer {...handleEdit} /> */}
       {/* <HandleTodoBtnContainer {...handleEdit} /> */}
       {isAddModalOpen && (
         <Modal visible={isAddModalOpen} transparent={true}>
@@ -102,14 +43,3 @@ const HomeScreen = ({ navigation }) => {
 };
 
 export default HomeScreen;
-
-const boxShadow = {
-  shadowColor: "rgba(0, 0, 0, 0.15)",
-  shadowOffset: {
-    width: 0,
-    height: 4,
-  },
-  shadowOpacity: 1,
-  shadowRadius: 15,
-  elevation: 0,
-};

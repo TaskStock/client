@@ -1,13 +1,13 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import styled from "styled-components/native";
 import { darkTheme, grayTheme } from "../../../constants/colors";
 import { spacing } from "../../../constants/spacing";
 import useHeight from "../../../hooks/useHeight";
+import { useAppSelect } from "../../../store/configureStore.hooks";
+import { toggleAddModal } from "../../../store/modules/todo";
 import Button from "../../atoms/Button";
 import FlexBox from "../../atoms/FlexBox";
-import { RootState } from "../../../store/configureStore";
-import { toggleAddModal } from "../../../store/modules/todo";
 
 const THEME_CONSTANTS = {
   dark: {
@@ -33,7 +33,7 @@ const Container = styled.View<{ paddingBottom: number }>`
 
 const HandleTodoBtnContainer = ({ editEnabled, setEditEnabled }) => {
   const { NOTCH_BOTTOM } = useHeight();
-  const theme = useSelector((state: RootState) => state.theme.value);
+  const theme = useAppSelect((state) => state.theme.value);
   const dispatch = useDispatch();
 
   return (

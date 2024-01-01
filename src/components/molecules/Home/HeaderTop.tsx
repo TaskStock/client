@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Image } from "react-native";
 import { useDispatch } from "react-redux";
 import styled from "styled-components/native";
@@ -9,10 +9,10 @@ import { themeSlice } from "../../../store/modules/theme";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import FlexBox from "../../atoms/FlexBox";
 import { IconsPic } from "../../atoms/Icons";
+import { ComponentHeightContext } from "../../../utils/ComponentHeightContext";
 
 const Container = styled.View<{ notchTop: number }>`
   background-color: ${({ theme }) => theme.background};
-
   padding-top: ${(props) => props.notchTop}px;
 `;
 
@@ -30,11 +30,18 @@ const THEME_SOURCES = {
 };
 
 function HeaderTop({ navigation }) {
+  const { setHeaderHeight } = useContext(ComponentHeightContext);
+
   const { NOTCH_TOP } = useHeight();
   const theme = useAppSelect((state) => state.theme.value);
 
   return (
-    <Container notchTop={NOTCH_TOP}>
+    <Container
+      notchTop={NOTCH_TOP}
+      onLayout={(e) => {
+        setHeaderHeight(e.nativeEvent.layout.height);
+      }}
+    >
       <FlexBox
         justifyContent="space-between"
         alignItems="center"

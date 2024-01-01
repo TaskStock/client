@@ -1,10 +1,9 @@
 import React from "react";
-import { useSelector } from "react-redux";
 import styled from "styled-components/native";
 import { darkTheme, grayTheme } from "../../constants/colors";
-import Text from "./Text";
-import { RootState } from "../../store/configureStore";
+import { useAppSelect } from "../../store/configureStore.hooks";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
+import Text from "./Text";
 
 const THEME_CONSTANTS = {
   dark: {
@@ -40,7 +39,7 @@ const Button = ({
   onPress,
   styles,
 }: ButtonProps) => {
-  const theme = useSelector((state: RootState) => state.theme.value);
+  const theme = useAppSelect((state) => state.theme.value);
 
   return (
     <Container

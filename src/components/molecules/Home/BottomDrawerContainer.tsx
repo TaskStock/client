@@ -23,7 +23,7 @@ const ProjectsContainer = styled.View`
   gap: ${spacing.offset}px;
 `;
 
-const BottomDrawerContainer = ({ editEnabled, setEditEnabled }) => {
+const BottomDrawerContainer = () => {
   const [data, setData] = useState(todosData);
   const [projects, setProjects] = useState([]);
   const [selectedProject, setSelectedProject] = useState(0);
@@ -61,16 +61,17 @@ const BottomDrawerContainer = ({ editEnabled, setEditEnabled }) => {
           paddingTop: useResponsiveFontSize(15),
         }}
       >
-        {data[selectedProject].todos.map((todo) =>
-          editEnabled ? (
-            <EditTodoItem key={todo.todo_id} todo={todo} />
-          ) : (
-            <TodoItem key={todo.todo_id} todo={todo} />
-          )
-        )}
+        {data[selectedProject].todos.map((todo) => (
+          // editEnabled ? (
+          //   <EditTodoItem key={todo.todo_id} todo={todo} />
+          // ) : (
+          //   <TodoItem key={todo.todo_id} todo={todo} />
+          // )
+          <TodoItem key={todo.todo_id} todo={todo} />
+        ))}
       </ScrollView>
 
-      <View style={{ height: headerHeight + 93 + NOTCH_BOTTOM }} />
+      {/* <View style={{ height: headerHeight + 93 + NOTCH_BOTTOM }} /> */}
     </BottomDrawer>
   );
 };

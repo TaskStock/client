@@ -10,7 +10,7 @@ const Container = styled.View`
   gap: ${spacing.gutter}px;
 `;
 
-const Tab = styled.TouchableOpacity<{ graphSelected: boolean }>`
+const Tab = styled.Pressable<{ graphSelected: boolean }>`
   border-bottom-width: ${useResponsiveFontSize(3)}px;
   border-bottom-color: ${(props) =>
     props.graphSelected ? props.theme.text : "transparent"};
