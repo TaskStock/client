@@ -1,18 +1,26 @@
 import React, { useState } from "react";
-import styled from "styled-components/native";
-import Button from "../../components/atoms/Button";
+import { TouchableOpacity, View } from "react-native";
+import { BlackBtn } from "../../components/atoms/Buttons";
+import FlexBox from "../../components/atoms/FlexBox";
+import Text from "../../components/atoms/Text";
 import TextInput from "../../components/atoms/TextInput";
+import LoginContainer from "../../components/molecules/Login/LoginContainer";
+import { darkTheme, grayTheme } from "../../constants/colors";
+import { useAppSelect } from "../../store/configureStore.hooks";
+import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
 import { spacing } from "../../constants/spacing";
 
-const Container = styled.View`
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-  padding: ${spacing.gutter}px;
-  background-color: white;
-`;
+const THEME_CONSTANTS = {
+  dark: {
+    subTextColor: darkTheme.textDim,
+  },
+  gray: {
+    subTextColor: grayTheme.textDim,
+  },
+};
 
 const EmailLoginScreen = ({ navigation }) => {
+  const theme = useAppSelect((state) => state.theme.value);
   const [user, setUser] = useState({
     email: "",
     password: "",
@@ -27,8 +35,22 @@ const EmailLoginScreen = ({ navigation }) => {
     }));
   };
 
+  const SubBtn = ({ text, onPress }) => {
+    return (
+      <TouchableOpacity
+        onPress={onPress}
+        style={{
+          paddingHorizontal: 10,
+        }}
+      >
+        <Text size="sm" color={THEME_CONSTANTS[theme].subTextColor}>
+          {text}
+        </Text>
+      </TouchableOpacity>
+    );
+  };
   return (
-    <Container>
+    <LoginContainer>
       <TextInput
         subText={"이메일"}
         placeholder="이메일을 입력해주세요"
@@ -48,15 +70,28 @@ const EmailLoginScreen = ({ navigation }) => {
         }
         secureTextEntry
       />
-      <Button text={"로그인"} onPress={() => {}} />
-      <Button
-        text={"회원가입"}
-        onPress={() => {
-          navigation.navigate("EmailSend");
-        }}
+      <BlackBtn
+        text={"로그인"}
+        onPress={() => {}}
+        style={{ marginTop: spacing.padding }}
       />
-      <Button text={"비밀번호 찾기"} onPress={() => {}} />
-    </Container>
+      <FlexBox justifyContent="center" styles={{ marginTop: spacing.gutter }}>
+        <SubBtn
+          text={"회원가입"}
+          onPress={() => {
+            navigation.navigate("EmailSend");
+          }}
+        />
+        <View
+          style={{
+            backgroundColor: THEME_CONSTANTS[theme].subTextColor,
+            width: 1,
+            height: "100%",
+          }}
+        />
+        <SubBtn text={"비밀번호 찾기"} onPress={() => {}} />
+      </FlexBox>
+    </LoginContainer>
   );
 };
 

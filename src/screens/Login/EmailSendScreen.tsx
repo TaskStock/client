@@ -1,18 +1,14 @@
 import React, { useState } from "react";
-import { TextInput } from "react-native";
-import styled from "styled-components/native";
 import Button from "../../components/atoms/Button";
-import { checkValidEmail } from "../../utils/checkValidEmail";
+import TextInput from "../../components/atoms/TextInput";
+import LoginContainer from "../../components/molecules/Login/LoginContainer";
 import { client } from "../../services/api";
-
-const Container = styled.View`
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-`;
+import { checkValidEmail } from "../../utils/checkValidEmail";
+import { BlackBtn } from "../../components/atoms/Buttons";
 
 const EmailSendScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
+  const [emailAlert, setEmailAlert] = useState(false);
 
   const sendMail = async () => {
     try {
@@ -44,14 +40,17 @@ const EmailSendScreen = ({ navigation }) => {
   };
 
   return (
-    <Container>
+    <LoginContainer>
       <TextInput
+        subText="이메일"
         placeholder="이메일을 입력해주세요"
         value={email}
         onChangeText={setEmail}
+        alert={emailAlert}
+        alertText={"가입되지 않은 이메일입니다"}
       />
-      <Button text={"인증번호 받기"} onPress={handleSendCode} />
-    </Container>
+      <BlackBtn text={"인증번호 받기"} onPress={handleSendCode} />
+    </LoginContainer>
   );
 };
 

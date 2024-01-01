@@ -1,14 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Button, TextInput } from "react-native";
-import styled from "styled-components/native";
+import { Button } from "react-native";
+import TextInput from "../../components/atoms/TextInput";
+import LoginContainer from "../../components/molecules/Login/LoginContainer";
 import { useAppDispatch } from "../../store/configureStore.hooks";
 import { registerUser } from "../../store/modules/auth";
-
-const Container = styled.View`
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-`;
 
 interface IUser {
   email: string;
@@ -58,26 +53,35 @@ const EmailRegisterScreen = ({ route, navigation }) => {
   };
 
   return (
-    <Container>
+    <LoginContainer>
       <TextInput
-        placeholder="Username"
+        subText={"사용자 이름"}
+        placeholder="사용자 이름을 입력해주세요"
         value={user.userName}
         onChangeText={(text) => handleChange("userName", text)}
       />
       <TextInput
-        placeholder="Password"
+        subText={"비밀번호"}
+        placeholder="비밀번호를 입력해주세요"
         value={user.password}
         onChangeText={(text) => handleChange("password", text)}
         secureTextEntry
+        alertText={
+          "해당 비밀번호를 사용할 수 없습니다. (영어 대소문자, 숫자, 특수문자 포함 8자 이상)"
+        }
       />
       <TextInput
-        placeholder="Confirm Password"
+        subText={"비밀번호 확인"}
+        placeholder="비밀번호를 다시 입력해주세요"
         value={confirmPassword}
         onChangeText={setConfirmPassword}
         secureTextEntry
+        alertText={
+          "비밀번호가 일치하지 않습니다. (영어 대소문자, 숫자, 특수문자 포함 8자 이상)"
+        }
       />
       <Button title="Sign Up" onPress={handleSignUp} />
-    </Container>
+    </LoginContainer>
   );
 };
 

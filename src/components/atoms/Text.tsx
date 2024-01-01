@@ -3,7 +3,7 @@ import { TextStyle } from "react-native";
 import styled from "styled-components/native";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
 
-export type SizeStyles = "xl" | "lg" | "md" | "sm" | "xs";
+export type SizeStyles = "xl" | "lg" | "md" | "sm" | "xs" | "xxs";
 export type WeightStyles =
   | "light"
   | "regular"
@@ -17,6 +17,7 @@ const $sizeStyles = {
   md: { fontSize: useResponsiveFontSize(18) },
   sm: { fontSize: useResponsiveFontSize(16) },
   xs: { fontSize: useResponsiveFontSize(12) },
+  xxs: { fontSize: useResponsiveFontSize(10) },
 };
 
 const $weightStyles = {
