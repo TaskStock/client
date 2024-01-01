@@ -29,17 +29,9 @@ const THEME_SOURCES = {
   },
 };
 
-function HeaderTop() {
+function HeaderTop({ navigation }) {
   const { NOTCH_TOP } = useHeight();
   const theme = useAppSelect((state) => state.theme.value);
-
-  const dispatch = useDispatch();
-  const switchToDarkMode = () => {
-    dispatch(themeSlice.actions.setTheme("dark"));
-  };
-  const switchToGrayMode = () => {
-    dispatch(themeSlice.actions.setTheme("gray"));
-  };
 
   return (
     <Container notchTop={NOTCH_TOP}>
@@ -64,12 +56,14 @@ function HeaderTop() {
           <IconsPic
             source={THEME_SOURCES[theme]?.bell}
             size={30}
-            onPress={switchToDarkMode}
+            onPress={() => navigation.navigate("Alarm")}
           />
           <IconsPic
             source={THEME_SOURCES[theme]?.person}
             size={30}
-            onPress={switchToGrayMode}
+            onPress={() => {
+              navigation.navigate("Friend");
+            }}
           />
         </FlexBox>
       </FlexBox>

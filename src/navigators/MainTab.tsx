@@ -1,15 +1,12 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import React from "react";
-import Icons, { IconsWithoutFeedBack } from "../components/atoms/Icons";
+import { IconsWithoutFeedBack } from "../components/atoms/Icons";
 import { darkTheme, grayTheme } from "../constants/colors";
 import useHeight from "../hooks/useHeight";
 import GroupScreen from "../screens/GroupScreen";
-import HomeScreen from "../screens/HomeScreen";
-import MyPageScreen from "../screens/MyPageScreen";
 import ProjectScreen from "../screens/ProjectScreen";
 import { useAppSelect } from "../store/configureStore.hooks";
-import { ComponentHeightProvider } from "../utils/ComponentHeightContext";
-import AlarmScreen from "../screens/AlarmScreen";
+import HomeStack from "./HomeStack";
 import MyPageStack from "./MyPageStack";
 
 const THEME_SOURCES = {
@@ -50,8 +47,8 @@ function MainTab() {
       }}
     >
       <Tab.Screen
-        name="Home"
-        component={HomeScreen}
+        name="HomeStack"
+        component={HomeStack}
         options={{
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
@@ -82,6 +79,7 @@ function MainTab() {
         name="Group"
         component={GroupScreen}
         options={{
+          // headerShown: false,
           tabBarIcon: ({ focused, color, size }) => (
             <IconsWithoutFeedBack
               type="materialIcons"
@@ -96,6 +94,7 @@ function MainTab() {
         name="MyPageStack"
         component={MyPageStack}
         options={{
+          headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <IconsWithoutFeedBack
               type="materialIcons"

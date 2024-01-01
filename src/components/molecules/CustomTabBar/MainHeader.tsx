@@ -4,7 +4,7 @@ import { Animated } from "react-native";
 import styled from "styled-components/native";
 import { spacing } from "../../../constants/spacing";
 import { ComponentHeightContext } from "../../../utils/ComponentHeightContext";
-import HeaderTop from "./HeaderTop";
+import HeaderTop from "../Home/HeaderTop";
 import Tab from "./Tab";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 

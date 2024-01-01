@@ -6,13 +6,21 @@ import SettingsScreen from "../screens/SettingsScreen";
 const NativeStack = createNativeStackNavigator();
 
 const MyPageStack = () => (
-  <NativeStack.Navigator
-    screenOptions={{
-      headerShown: false,
-    }}
-  >
-    <NativeStack.Screen name="MyPage" component={MyPageScreen} />
-    <NativeStack.Screen name="Settings" component={SettingsScreen} />
+  <NativeStack.Navigator screenOptions={{}}>
+    <NativeStack.Screen
+      name="MyPage"
+      component={MyPageScreen}
+      options={{
+        headerShown: true,
+      }}
+    />
+    <NativeStack.Screen
+      name="Settings"
+      component={SettingsScreen}
+      options={{
+        headerShown: true,
+      }}
+    />
   </NativeStack.Navigator>
 );
 

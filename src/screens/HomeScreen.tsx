@@ -13,7 +13,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/configureStore";
 import AddTodoModal from "../components/organisms/AddTodoModal";
 import { toggleAddModal } from "../store/modules/todo";
-import HeaderTop from "../components/molecules/CustomTabBar/HeaderTop";
+import HeaderTop from "../components/molecules/Home/HeaderTop";
+import GCContainer from "../components/organisms/Home/GCContainer";
 
 const { width, height: windowHeight } = Dimensions.get("window");
 
@@ -38,7 +39,7 @@ const CalendarContainer = styled(GraphContainer)`
   margin-left: 0;
 `;
 
-const HomeScreen = () => {
+const HomeScreen = ({ navigation }) => {
   const [myData, setMyData] = useState(data);
   const { setMyInfoHeight, setGraphHeight } = useContext(
     ComponentHeightContext
@@ -58,16 +59,8 @@ const HomeScreen = () => {
 
   return (
     <Container>
-      <HeaderTop />
-      <View
-        style={{ paddingHorizontal: spacing.gutter }}
-        onLayout={(event) => {
-          const { x, y, width, height } = event.nativeEvent.layout;
-          setMyInfoHeight(height);
-        }}
-      >
-        <MyInfo data={myData} />
-      </View>
+      <HeaderTop navigation={navigation} />
+      <GCContainer myData={data} />
 
       {/* <ScrollView
         style={{}}
