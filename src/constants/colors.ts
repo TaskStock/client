@@ -16,6 +16,7 @@ export const palette = {
   neutral700_dark: "#212121",
 
   red: "#D0191C",
+  alert_red: "rgba(208, 25, 28, 0.60);",
   blue: "#0038FF",
   green: "#4DDE48",
   candle_black: "#535358",
@@ -36,6 +37,7 @@ export const grayTheme = {
   box: palette.neutral100_gray,
   high: palette.red,
   low: palette.blue,
+  alert: palette.alert_red,
 };
 
 export const darkTheme = {
@@ -51,4 +53,5 @@ export const darkTheme = {
   box: palette.neutral700_dark,
   high: palette.red,
   low: palette.green,
+  alert: palette.alert_red,
 };

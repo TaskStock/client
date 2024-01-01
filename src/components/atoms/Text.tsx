@@ -3,7 +3,7 @@ import { TextStyle } from "react-native";
 import styled from "styled-components/native";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
 
-export type SizeStyles = "xl" | "lg" | "md" | "sm" | "xs";
+export type SizeStyles = "xl" | "lg" | "md" | "sm" | "xs" | "xxs";
 export type WeightStyles =
   | "light"
   | "regular"
@@ -17,6 +17,7 @@ const $sizeStyles = {
   md: { fontSize: useResponsiveFontSize(18) },
   sm: { fontSize: useResponsiveFontSize(16) },
   xs: { fontSize: useResponsiveFontSize(12) },
+  xxs: { fontSize: useResponsiveFontSize(10) },
 };
 
 const $weightStyles = {
@@ -27,7 +28,11 @@ const $weightStyles = {
   extraBold: { fontFamily: "extraBold" },
 };
 
-const TextStyling = styled.Text<{ size: SizeStyles; weight: WeightStyles }>`
+const TextStyling = styled.Text<{
+  size: SizeStyles;
+  weight: WeightStyles;
+  color: string;
+}>`
   font-size: ${({ size }) => $sizeStyles[size].fontSize}px;
   font-family: ${({ weight }) => $weightStyles[weight].fontFamily};
   color: ${(props) =>

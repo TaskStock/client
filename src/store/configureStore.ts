@@ -3,10 +3,12 @@ import valueReducer, { valueApi } from "./modules/value";
 import { themeReducer } from "./modules/theme";
 import calendarReducer from "./modules/calendar";
 import todoReducer from "./modules/todo";
+import { authReducer } from "./modules/auth";
 
 const store = configureStore({
   reducer: {
     [valueApi.reducerPath]: valueApi.reducer,
+    auth: authReducer,
     value: valueReducer,
     theme: themeReducer,
     calendar: calendarReducer,

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components/native";
 import { darkTheme, grayTheme } from "../../../constants/colors";
 import { spacing } from "../../../constants/spacing";
-import useHeight from "../../../utils/useHeight";
+import useHeight from "../../../hooks/useHeight";
 import Button from "../../atoms/Button";
 import FlexBox from "../../atoms/FlexBox";
 import { RootState } from "../../../store/configureStore";
