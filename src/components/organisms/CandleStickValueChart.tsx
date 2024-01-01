@@ -4,8 +4,8 @@ import {
   VictoryCandlestick,
   VictoryChart,
   VictoryContainer,
+  VictoryZoomContainer,
 } from "victory-native";
-import { chartDateType } from "./HomeChart";
 import { DefaultTheme } from "styled-components/native";
 import { Value } from "../../@types/chart";
 
@@ -42,68 +42,75 @@ function CandleStickValueChart({
   height,
   data,
   theme,
-  typeIndex,
-  maxLength,
 }: {
   width: number;
   height: number;
   data: Value[];
   theme: DefaultTheme;
-  typeIndex: number;
-  maxLength: number;
 }) {
-  const maxY = Math.max(...data.map((item) => parseInt(item.high)));
-  const minY = Math.min(...data.map((item) => parseInt(item.low)));
-  const twoThirds = minY + ((maxY - minY) * 2) / 3;
-  const oneThird = minY + ((maxY - minY) * 1) / 3;
-
   // 1주일 때 candleWidth는 width/7이지만 gap을 고려하여 넉넉히 20으로 설정. 나머지 typeIndex도 마찬가지로 설정
   // 꼬리 너비는 데이터 양이 많아질수록 줄어들게 설정
-  let candleWidth;
-  let wickStrokeWidth;
+  let candleWidth = width / 50;
+  let wickStrokeWidth = 1;
   let candleData = data;
 
-  switch (typeIndex) {
-    case 0:
-      candleWidth = width / 20;
-      wickStrokeWidth = 1;
-      break;
-    case 1:
-      candleWidth = width / 50;
-      wickStrokeWidth = 1;
-      break;
-    case 2:
-      candleWidth = width / 130;
-      wickStrokeWidth = 0.8;
-      break;
-    default:
-      candleWidth = width / 365;
-      wickStrokeWidth = 0.5;
-      break;
-  }
+  // switch (typeIndex) {
+  //   case 0:
+  //     candleWidth = width / 20;
+  //     wickStrokeWidth = 1;
+  //     break;
+  //   case 1:
+  //     candleWidth = width / 50;
+  //     wickStrokeWidth = 1;
+  //     break;
+  //   case 2:
+  //     candleWidth = width / 130;
+  //     wickStrokeWidth = 0.8;
+  //     break;
+  //   default:
+  //     candleWidth = width / 365;
+  //     wickStrokeWidth = 0.5;
+  //     break;
+  // }
 
-  if (data.length < chartDateType[typeIndex].counts) {
-    candleData = createDummyData(
-      data,
-      chartDateType[typeIndex].counts - data.length
-    );
+  if (data.length < 30) {
+    candleData = createDummyData(data, 30 - data.length);
   } else {
     candleData = data;
   }
+
+  const maxY = Math.max(...candleData.map((item) => parseInt(item.high)));
+  const minY = Math.min(...candleData.map((item) => parseInt(item.low)));
+  const twoThirds = minY + ((maxY - minY) * 2) / 3;
+  const oneThird = minY + ((maxY - minY) * 1) / 3;
 
   return (
     <VictoryChart
       width={width}
       height={height}
       padding={{
-        left: 30,
-        right: 30,
-        top: 10,
-        bottom: 10,
+        left: 20,
+        right: 20,
+        top: 20,
+        bottom: 20,
       }}
+      containerComponent={<VictoryZoomContainer></VictoryZoomContainer>}
     >
+      <VictoryAxis
+        dependentAxis
+        tickValues={[twoThirds, oneThird]}
+        tickFormat={() => ""}
+        style={{
+          axis: {
+            stroke: "transparent",
+          },
+          grid: {
+            stroke: theme.palette.neutral500_gray,
+          },
+        }}
+      />
       <VictoryCandlestick
-        domain={{ y: [minY, maxY + 1.5] }}
+        domain={{ y: [minY, maxY] }}
         data={candleData}
         candleWidth={candleWidth}
         containerComponent={<VictoryContainer responsive={false} />}
@@ -119,22 +126,6 @@ function CandleStickValueChart({
         }}
         wickStrokeWidth={wickStrokeWidth}
       ></VictoryCandlestick>
-
-      <VictoryAxis
-        dependentAxis
-        tickValues={[twoThirds, oneThird]}
-        tickFormat={() => ""}
-        style={{
-          axis: {
-            stroke: "transparent",
-          },
-          grid: {
-            // stroke: "transparent",
-            stroke: theme.palette.neutral500_gray,
-            // strokeDasharray: [5, 5],
-          },
-        }}
-      />
     </VictoryChart>
   );
 }

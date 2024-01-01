@@ -15,7 +15,7 @@ interface InitialState {
 }
 
 const initialState: InitialState = {
-  isAddModalOpen: true,
+  isAddModalOpen: false,
   addTodoForm: {
     text: "",
     level: 0,
