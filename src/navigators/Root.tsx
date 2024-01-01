@@ -13,8 +13,8 @@ const Root = () => {
         headerShown: false,
       }}
     >
-      <Nav.Screen name="Login" component={LoginStack} />
       <Nav.Screen name="MainTab" component={MainTab} />
+      <Nav.Screen name="Login" component={LoginStack} />
     </Nav.Navigator>
   );
 };

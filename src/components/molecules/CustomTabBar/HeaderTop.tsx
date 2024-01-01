@@ -1,17 +1,18 @@
 import React from "react";
 import { Image } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import styled from "styled-components/native";
 import { spacing } from "../../../constants/spacing";
-import { RootState } from "../../../store/configureStore";
-import { themeSlice } from "../../../store/modules/theme";
 import useHeight from "../../../hooks/useHeight";
+import { useAppSelect } from "../../../store/configureStore.hooks";
+import { themeSlice } from "../../../store/modules/theme";
+import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import FlexBox from "../../atoms/FlexBox";
 import { IconsPic } from "../../atoms/Icons";
-import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 
 const Container = styled.View<{ notchTop: number }>`
   background-color: ${({ theme }) => theme.background};
+
   padding-top: ${(props) => props.notchTop}px;
 `;
 
@@ -30,7 +31,7 @@ const THEME_SOURCES = {
 
 function HeaderTop() {
   const { NOTCH_TOP } = useHeight();
-  const theme = useSelector((state: RootState) => state.theme.value);
+  const theme = useAppSelect((state) => state.theme.value);
 
   const dispatch = useDispatch();
   const switchToDarkMode = () => {
@@ -48,7 +49,7 @@ function HeaderTop() {
         styles={{
           paddingHorizontal: spacing.gutter,
           paddingTop: spacing.offset,
-          paddingBottom: spacing.padding,
+          paddingBottom: spacing.offset,
         }}
       >
         <Image

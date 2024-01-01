@@ -21,7 +21,7 @@ export const BlackBtn = ({
   style?: any;
 }) => {
   return (
-    <BlackBtnContainer style={style}>
+    <BlackBtnContainer style={style} onPress={onPress}>
       <Text size="sm" color={"white"}>
         {text}
       </Text>

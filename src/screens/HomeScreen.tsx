@@ -13,11 +13,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/configureStore";
 import AddTodoModal from "../components/organisms/AddTodoModal";
 import { toggleAddModal } from "../store/modules/todo";
+import HeaderTop from "../components/molecules/CustomTabBar/HeaderTop";
 
 const { width, height: windowHeight } = Dimensions.get("window");
 
 const Container = styled.View`
-  padding-top: ${spacing.offset}px;
+  /* padding-top: ${spacing.offset}px; */
   background-color: ${({ theme }) => theme.background};
   flex: 1;
 `;
@@ -57,6 +58,7 @@ const HomeScreen = () => {
 
   return (
     <Container>
+      <HeaderTop />
       <View
         style={{ paddingHorizontal: spacing.gutter }}
         onLayout={(event) => {
@@ -67,7 +69,7 @@ const HomeScreen = () => {
         <MyInfo data={myData} />
       </View>
 
-      <ScrollView
+      {/* <ScrollView
         style={{}}
         pagingEnabled={true}
         showsHorizontalScrollIndicator={false}
@@ -94,9 +96,9 @@ const HomeScreen = () => {
         <CalendarContainer style={boxShadow}>
           <HomeCalendar></HomeCalendar>
         </CalendarContainer>
-      </ScrollView>
-      <BottomDrawerContainer {...handleEdit} />
-      <HandleTodoBtnContainer {...handleEdit} />
+      </ScrollView> */}
+      {/* <BottomDrawerContainer {...handleEdit} /> */}
+      {/* <HandleTodoBtnContainer {...handleEdit} /> */}
       {isAddModalOpen && (
         <Modal visible={isAddModalOpen} transparent={true}>
           <AddTodoModal></AddTodoModal>
