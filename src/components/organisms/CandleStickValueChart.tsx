@@ -50,7 +50,7 @@ function CandleStickValueChart({
 }) {
   // 1주일 때 candleWidth는 width/7이지만 gap을 고려하여 넉넉히 20으로 설정. 나머지 typeIndex도 마찬가지로 설정
   // 꼬리 너비는 데이터 양이 많아질수록 줄어들게 설정
-  let candleWidth = width / 50;
+  let candleWidth = width / 60;
   let wickStrokeWidth = 1;
   let candleData = data;
 
@@ -94,7 +94,9 @@ function CandleStickValueChart({
         top: 20,
         bottom: 20,
       }}
-      containerComponent={<VictoryZoomContainer></VictoryZoomContainer>}
+      containerComponent={
+        <VictoryZoomContainer zoomDimension="x"></VictoryZoomContainer>
+      }
     >
       <VictoryAxis
         dependentAxis

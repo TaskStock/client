@@ -5,6 +5,7 @@ import {
   VictoryLine,
   VictoryScatter,
   VictoryTheme,
+  VictoryZoomContainer,
 } from "victory-native";
 import { useTheme } from "styled-components/native";
 import { Value } from "../../@types/chart";
@@ -70,6 +71,9 @@ export default function LineValueChart({
         top: 10,
         bottom: 10,
       }}
+      containerComponent={
+        <VictoryZoomContainer zoomDimension="x"></VictoryZoomContainer>
+      }
     >
       <VictoryLine
         theme={VictoryTheme.material}

@@ -69,6 +69,7 @@ const HomeScreen = () => {
 
       <ScrollView
         style={{}}
+        scrollEnabled={false}
         pagingEnabled={true}
         showsHorizontalScrollIndicator={false}
         horizontal={true}
