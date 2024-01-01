@@ -1,30 +1,22 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { client } from "../../services/api";
 
-export interface IUser {
-  email: string;
-  userName: string;
-  password: string;
-  isAgree: number;
-  theme: string;
-  language: string;
+interface IInitialUserState {
+  accessToken: string;
+  refreshToken: string;
+
+  isLoggedIn: boolean;
+  loading: boolean;
+  error: any;
 }
 
-export const initialUserState = {
-  token: null,
+export const initialUserState: IInitialUserState = {
+  accessToken: "",
+  refreshToken: "",
 
   isLoggedIn: false,
   loading: false,
   error: null,
-
-  user: {
-    email: "",
-    userName: "",
-    password: null,
-    isAgree: 1,
-    theme: "gray",
-    language: "korean",
-  },
 };
 
 export const registerUser = createAsyncThunk(
@@ -48,7 +40,7 @@ const authSlice = createSlice({
     },
     loginSuccess: (state, action) => {
       state.isLoggedIn = true;
-      state.user = action.payload;
+      state = action.payload;
       state.loading = false;
     },
     loginFailure: (state, action) => {
@@ -65,8 +57,9 @@ const authSlice = createSlice({
         state.loading = true;
       })
       .addCase(registerUser.fulfilled, (state, action) => {
-        state.user = action.payload.user;
-        state.token = action.payload.token;
+        state.accessToken = action.payload.accessToken;
+        state.refreshToken = action.payload.refreshToken;
+
         state.isLoggedIn = true;
         state.loading = false;
       })

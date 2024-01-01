@@ -4,6 +4,7 @@ import WelcomeScreen from "../screens/Login/WelcomeScreen";
 import EmailRegisterScreen from "../screens/Login/EmailRegisterScreen";
 import EmailSendScreen from "../screens/Login/EmailSendScreen";
 import EmailCheckCodeScreen from "../screens/Login/EmailCheckCodeScreen";
+import EmailLoginScreen from "../screens/Login/EmailLoginScreen";
 
 const NativeStack = createNativeStackNavigator();
 
@@ -16,6 +17,7 @@ const LoginStack = () => (
     }
   >
     <NativeStack.Screen name="Welcome" component={WelcomeScreen} />
+    <NativeStack.Screen name="EmailLogin" component={EmailLoginScreen} />
     <NativeStack.Screen name="EmailSend" component={EmailSendScreen} />
     <NativeStack.Screen
       name="EmailCheckCode"
