@@ -35,10 +35,17 @@ const GraphContainer = ({ myData }) => {
       style={{
         paddingHorizontal: spacing.gutter,
         paddingTop: spacing.offset,
-        height: clientHeight * 0.45,
+        // height: clientHeight * 0.45,
+        flex: 1,
       }}
     >
-      <MyInfo data={myData} />
+      <MyInfo
+        data={{
+          cumulative_value: 1000000,
+          value_month_ago: 1000000,
+          nickname: "김민수",
+        }}
+      />
       <Container>
         <HomeChart />
       </Container>

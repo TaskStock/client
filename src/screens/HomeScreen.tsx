@@ -6,7 +6,6 @@ import { data } from "../../public/home";
 import HeaderTop from "../components/molecules/Home/HeaderTop";
 import AddTodoModal from "../components/organisms/AddTodoModal";
 import GCContainer from "../components/organisms/Home/GCContainer";
-import { spacing } from "../constants/spacing";
 import { useAppSelect } from "../store/configureStore.hooks";
 import { ComponentHeightContext } from "../utils/ComponentHeightContext";
 import BottomDrawerContainer from "../components/molecules/Home/BottomDrawerContainer";
@@ -31,7 +30,6 @@ const HomeScreen = ({ navigation }) => {
       <HeaderTop navigation={navigation} />
       <GCContainer myData={data} />
       <BottomDrawerContainer />
-
       {/* <HandleTodoBtnContainer {...handleEdit} /> */}
       {isAddModalOpen && (
         <Modal visible={isAddModalOpen} transparent={true}>
