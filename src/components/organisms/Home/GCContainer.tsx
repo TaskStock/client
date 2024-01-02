@@ -71,6 +71,7 @@ const GCContainer = ({ myData }) => {
         onIndexChange={setIndex}
         renderTabBar={(props) => renderTabBar(props, setIndex)}
         initialLayout={{ width: layout.width }}
+        onSwipeEnd={() => {}}
       ></TabView>
       {/* <GCTab
         graphSelected={graphSelected}
