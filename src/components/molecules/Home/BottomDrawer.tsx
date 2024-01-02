@@ -6,14 +6,14 @@ import {
   PanResponder,
   PanResponderGestureState,
 } from "react-native";
-import { useSelector } from "react-redux";
 import styled from "styled-components/native";
 import { darkTheme, grayTheme } from "../../../constants/colors";
-import { RootState } from "../../../store/configureStore";
-import { ComponentHeightContext } from "../../../utils/ComponentHeightContext";
-import Loader from "../../atoms/Loader";
-import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import { spacing } from "../../../constants/spacing";
+import { useAppSelect } from "../../../store/configureStore.hooks";
+import { ComponentHeightContext } from "../../../utils/ComponentHeightContext";
+import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
+import Loader from "../../atoms/Loader";
+import useHeight from "../../../hooks/useHeight";
 
 const { height: screenHeight } = Dimensions.get("window");
 
@@ -80,7 +80,7 @@ const BottomDrawer: React.FunctionComponent<BottomDrawerProps> = ({
       setOpenState(OPEN_STATE);
     }
     handlePanResponder();
-  }, [defaultValue, openState, DEFAULT_HEIGHT, OPEN_STATE]);
+  }, [DEFAULT_HEIGHT, OPEN_STATE]);
 
   const [panResponder, setPanResponder] = useState(null);
   const [draggedUp, setDraggedUp] = useState(false);
@@ -116,7 +116,7 @@ const BottomDrawer: React.FunctionComponent<BottomDrawerProps> = ({
       draggedUp
     );
     state.setValue(nextState);
-    animateMove(y, nextState, onDrawerStateChange(nextState)); 
+    animateMove(y, nextState, onDrawerStateChange(nextState));
   };
 
   const handlePanResponder = () => {
@@ -136,7 +136,7 @@ const BottomDrawer: React.FunctionComponent<BottomDrawerProps> = ({
     handlePanResponder();
   }, [defaultValue, openState, draggedUp]);
 
-  const theme = useSelector((state: RootState) => state.theme.value);
+  const theme = useAppSelect((state) => state.theme.value);
   if (!panResponder) {
     return <Loader />;
   }
@@ -145,7 +145,7 @@ const BottomDrawer: React.FunctionComponent<BottomDrawerProps> = ({
     dark: darkTheme.box,
     gray: grayTheme.box,
   };
-
+  const { NOTCH_BOTTOM } = useHeight();
   return (
     <Animated.View
       style={[
@@ -155,7 +155,8 @@ const BottomDrawer: React.FunctionComponent<BottomDrawerProps> = ({
           backgroundColor: THEME_CONSTANTS[theme],
           borderRadius: useResponsiveFontSize(20),
           position: "absolute",
-          bottom: -screenHeight + defaultValue,
+          bottom:
+            -screenHeight + defaultValue - NOTCH_BOTTOM - 60 - spacing.offset,
           transform: [{ translateY: y }],
           shadowColor: "rgba(0, 0, 0, 0.15)",
           shadowOffset: {

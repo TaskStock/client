@@ -1,14 +1,15 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Image } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import styled from "styled-components/native";
 import { spacing } from "../../../constants/spacing";
-import { RootState } from "../../../store/configureStore";
-import { themeSlice } from "../../../store/modules/theme";
 import useHeight from "../../../hooks/useHeight";
+import { useAppSelect } from "../../../store/configureStore.hooks";
+import { themeSlice } from "../../../store/modules/theme";
+import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import FlexBox from "../../atoms/FlexBox";
 import { IconsPic } from "../../atoms/Icons";
-import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
+import { ComponentHeightContext } from "../../../utils/ComponentHeightContext";
 
 const Container = styled.View<{ notchTop: number }>`
   background-color: ${({ theme }) => theme.background};
@@ -28,27 +29,26 @@ const THEME_SOURCES = {
   },
 };
 
-function HeaderTop() {
-  const { NOTCH_TOP } = useHeight();
-  const theme = useSelector((state: RootState) => state.theme.value);
+function HeaderTop({ navigation }) {
+  const { setHeaderHeight } = useContext(ComponentHeightContext);
 
-  const dispatch = useDispatch();
-  const switchToDarkMode = () => {
-    dispatch(themeSlice.actions.setTheme("dark"));
-  };
-  const switchToGrayMode = () => {
-    dispatch(themeSlice.actions.setTheme("gray"));
-  };
+  const { NOTCH_TOP } = useHeight();
+  const theme = useAppSelect((state) => state.theme.value);
 
   return (
-    <Container notchTop={NOTCH_TOP}>
+    <Container
+      notchTop={NOTCH_TOP}
+      onLayout={(e) => {
+        setHeaderHeight(e.nativeEvent.layout.height);
+      }}
+    >
       <FlexBox
         justifyContent="space-between"
         alignItems="center"
         styles={{
           paddingHorizontal: spacing.gutter,
           paddingTop: spacing.offset,
-          paddingBottom: spacing.padding,
+          paddingBottom: spacing.offset,
         }}
       >
         <Image
@@ -63,12 +63,14 @@ function HeaderTop() {
           <IconsPic
             source={THEME_SOURCES[theme]?.bell}
             size={30}
-            onPress={switchToDarkMode}
+            onPress={() => navigation.navigate("Alarm")}
           />
           <IconsPic
             source={THEME_SOURCES[theme]?.person}
             size={30}
-            onPress={switchToGrayMode}
+            onPress={() => {
+              navigation.navigate("Friend");
+            }}
           />
         </FlexBox>
       </FlexBox>

@@ -1,12 +1,12 @@
-import { View, Text, Pressable, TextInput, ScrollView } from "react-native";
 import React, { useCallback, useEffect } from "react";
+import { Pressable, ScrollView, TextInput, View } from "react-native";
+import { useDispatch } from "react-redux";
 import styled, { useTheme } from "styled-components/native";
 import { useProject } from "../../../hooks/useProject";
+import { useAppSelect } from "../../../store/configureStore.hooks";
+import { setAddTodoForm } from "../../../store/modules/todo";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import Icons from "../../atoms/Icons";
-import { useDispatch, useSelector } from "react-redux";
-import { setAddTodoForm } from "../../../store/modules/todo";
-import { RootState } from "../../../store/configureStore";
 
 const ProjectItemContainer = styled.View<{ height?: number }>`
   flex: 1;
@@ -72,7 +72,7 @@ export default function ProjectItemList({
 
   const dispatch = useDispatch();
 
-  const addTodoForm = useSelector((state: RootState) => state.todo.addTodoForm);
+  const addTodoForm = useAppSelect((state) => state.todo.addTodoForm);
 
   const onPressProjectItem = useCallback(
     (project) => () => {

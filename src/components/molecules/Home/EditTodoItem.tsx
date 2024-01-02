@@ -1,12 +1,11 @@
 import React from "react";
-import { useSelector } from "react-redux";
 import { darkTheme, grayTheme } from "../../../constants/colors";
+import { spacing } from "../../../constants/spacing";
+import { useAppSelect } from "../../../store/configureStore.hooks";
 import numberWithCommas from "../../../utils/useNumberWithCommas";
 import FlexBox from "../../atoms/FlexBox";
 import Icons, { IconsPic } from "../../atoms/Icons";
 import Text from "../../atoms/Text";
-import { RootState } from "../../../store/configureStore";
-import { spacing } from "../../../constants/spacing";
 
 const THEME_CONSTANTS = {
   dark: {
@@ -22,7 +21,7 @@ const THEME_CONSTANTS = {
 };
 
 const EditTodoItem = ({ todo }) => {
-  const theme = useSelector((state: RootState) => state.theme.value);
+  const theme = useAppSelect((state) => state.theme.value);
 
   return (
     <FlexBox

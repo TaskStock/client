@@ -3,12 +3,13 @@ import {
   Ionicons,
   MaterialCommunityIcons,
   Entypo,
+  MaterialIcons,
 } from "@expo/vector-icons";
 import { Image, TouchableOpacity } from "react-native";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
 
 type IconProps = {
-  type: "material" | "ionicons" | "feather" | "entypo";
+  type: "material" | "ionicons" | "feather" | "entypo" | "materialIcons";
   name: string;
   size?: number;
   color?: string;
@@ -34,6 +35,7 @@ const Icons: React.FC<IconProps> = ({
   else if (type === "ionicons") IconComponent = Ionicons;
   else if (type === "feather") IconComponent = Feather;
   else if (type === "entypo") IconComponent = Entypo;
+  else if (type === "materialIcons") IconComponent = MaterialIcons;
   else return null;
 
   return (
@@ -48,6 +50,29 @@ const Icons: React.FC<IconProps> = ({
 };
 
 export default Icons;
+
+export const IconsWithoutFeedBack: React.FC<IconProps> = ({
+  type = "material",
+  name,
+  size = useResponsiveFontSize(20),
+  color = "black",
+}) => {
+  let IconComponent: any;
+  if (type === "material") IconComponent = MaterialCommunityIcons;
+  else if (type === "ionicons") IconComponent = Ionicons;
+  else if (type === "feather") IconComponent = Feather;
+  else if (type === "entypo") IconComponent = Entypo;
+  else if (type === "materialIcons") IconComponent = MaterialIcons;
+  else return null;
+
+  return (
+    <IconComponent
+      name={name}
+      size={useResponsiveFontSize(size)}
+      color={color}
+    />
+  );
+};
 
 export const IconsPic = ({
   source,
