@@ -4,7 +4,7 @@ import TextInput from "../../components/atoms/TextInput";
 import LoginContainer from "../../components/molecules/Login/LoginContainer";
 import { spacing } from "../../constants/spacing";
 import { client } from "../../services/api";
-import { checkValidEmail } from "../../utils/checkValidEmail";
+import { checkValidEmail } from "../../utils/checkValidity";
 
 const EmailSendScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
