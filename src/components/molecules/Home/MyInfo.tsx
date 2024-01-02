@@ -20,7 +20,15 @@ const THEME_CONSTANTS = {
   },
 };
 
-const MyInfo = ({ data }) => {
+const MyInfo = ({
+  data,
+}: {
+  data: {
+    cumulative_value: number;
+    value_month_ago: number;
+    nickname: string;
+  };
+}) => {
   const theme = useAppSelect((state) => state.theme.value);
   const diff = data.cumulative_value - data.value_month_ago;
   const diff_rate =

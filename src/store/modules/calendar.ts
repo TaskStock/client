@@ -29,7 +29,6 @@ const calendarSlice = createSlice({
     },
     setCurrentDateString: (state, action) => {
       state.currentDateString = action.payload;
-
       state.weeksOfMonth = calculateWeeksOfMonth(state.currentDateString);
       state.datesOfMonth = calculateDatesOfMonth(state.currentDateString);
     },
