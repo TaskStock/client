@@ -1,23 +1,14 @@
-import React, { useContext, useState } from "react";
-import {
-  Animated,
-  Dimensions,
-  StatusBar,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-  useWindowDimensions,
-} from "react-native";
-import GCTab from "../../molecules/Home/GCTab";
-import CalendarContainer from "./CalendarContainer";
-import GraphContainer from "./GraphContainer";
-import { ComponentHeightContext } from "../../../utils/ComponentHeightContext";
+import React, { useContext } from "react";
+import { Dimensions, View, useWindowDimensions } from "react-native";
 import {
   NavigationState,
   SceneMap,
   SceneRendererProps,
   TabView,
 } from "react-native-tab-view";
+import { ComponentHeightContext } from "../../../utils/ComponentHeightContext";
+import CalendarContainer from "./CalendarContainer";
+import GraphContainer from "./GraphContainer";
 import HomeTabHeader from "./HomeTabHeader";
 
 const FirstRoute = () => <GraphContainer myData={[]} />;
@@ -54,7 +45,6 @@ const GCContainer = ({ myData }) => {
     { key: "second", title: "캘린더" },
   ]);
 
-  const [graphSelected, setGraphSelected] = useState(true);
   const { setContentsHeight } = useContext(ComponentHeightContext);
   return (
     <View
@@ -72,16 +62,8 @@ const GCContainer = ({ myData }) => {
         renderTabBar={(props) => renderTabBar(props, setIndex)}
         initialLayout={{ width: layout.width }}
         onSwipeEnd={() => {}}
+        swipeEnabled={false}
       ></TabView>
-      {/* <GCTab
-        graphSelected={graphSelected}
-        setGraphSelected={setGraphSelected}
-      />
-      {graphSelected ? (
-        <GraphContainer myData={myData} />
-      ) : (
-        <CalendarContainer />
-      )} */}
     </View>
   );
 };
