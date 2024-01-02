@@ -6,9 +6,8 @@ import Text from "../../components/atoms/Text";
 import TextInput from "../../components/atoms/TextInput";
 import LoginContainer from "../../components/molecules/Login/LoginContainer";
 import { darkTheme, grayTheme } from "../../constants/colors";
-import { useAppSelect } from "../../store/configureStore.hooks";
-import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
 import { spacing } from "../../constants/spacing";
+import { useAppSelect } from "../../store/configureStore.hooks";
 
 const THEME_CONSTANTS = {
   dark: {
@@ -89,7 +88,12 @@ const EmailLoginScreen = ({ navigation }) => {
             height: "100%",
           }}
         />
-        <SubBtn text={"비밀번호 찾기"} onPress={() => {}} />
+        <SubBtn
+          text={"비밀번호 찾기"}
+          onPress={() => {
+            navigation.navigate("FindPassword");
+          }}
+        />
       </FlexBox>
     </LoginContainer>
   );

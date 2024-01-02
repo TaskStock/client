@@ -16,6 +16,7 @@ export const customFontsToLoad = {
   light: fonts.Pretendard.weight100,
   regular: fonts.Pretendard.weight400,
   medium: fonts.Pretendard.weight500,
+  semibold: fonts.Pretendard.weight600,
   bold: fonts.Pretendard.weight700,
   extraBold: fonts.Pretendard.weight800,
 };

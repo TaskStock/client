@@ -9,6 +9,7 @@ export type WeightStyles =
   | "regular"
   | "medium"
   | "bold"
+  | "semibold"
   | "extraBold";
 
 const $sizeStyles = {
@@ -25,6 +26,7 @@ const $weightStyles = {
   regular: { fontFamily: "regular" },
   medium: { fontFamily: "medium" },
   bold: { fontFamily: "bold" },
+  semibold: { fontFamily: "semibold" },
   extraBold: { fontFamily: "extraBold" },
 };
 
