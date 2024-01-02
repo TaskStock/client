@@ -22,6 +22,7 @@ export const palette = {
   candle_black: "#535358",
   candle_tick_line: "rgba(83, 83, 88, 0.30)",
   candle_bottom_graph_bar: "#9C9C9C",
+  kakao: "#FEE500",
 } as const;
 
 export const grayTheme = {

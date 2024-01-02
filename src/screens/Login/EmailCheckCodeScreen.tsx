@@ -1,7 +1,10 @@
-import { View, Text, TextInput } from "react-native";
+import { View, Text } from "react-native";
 import React, { useEffect, useState } from "react";
 import Button from "../../components/atoms/Button";
 import styled from "styled-components/native";
+import TextInput from "../../components/atoms/TextInput";
+import LoginContainer from "../../components/molecules/Login/LoginContainer";
+import { BlackBtn } from "../../components/atoms/Buttons";
 
 const Container = styled.View`
   flex: 1;
@@ -33,20 +36,22 @@ const EmailCheckCodeScreen = ({ route, navigation }) => {
   };
 
   return (
-    <Container>
+    <LoginContainer comment={`${email}(으)로 전송된 코드를 입력해주세요.`}>
       <TextInput
+        subText="인증번호"
         placeholder="인증번호를 입력해주세요"
         value={code}
         onChangeText={setCode}
       />
-      <Button
+
+      <BlackBtn
         text={"다음"}
         onPress={() => {
           checkCode();
           navigation.navigate("EmailRegister", { email });
         }}
       />
-    </Container>
+    </LoginContainer>
   );
 };
 
