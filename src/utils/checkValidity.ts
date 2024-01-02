@@ -3,6 +3,7 @@ export const checkValidEmail = (email) => {
   return emailRegex.test(email);
 };
 
+// 수정 필요
 export const checkValidPassword = (password) => {
   const regex =
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
