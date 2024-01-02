@@ -4,13 +4,17 @@ import { Image } from "react-native";
 import { spacing } from "../../../constants/spacing";
 import { useAppSelect } from "../../../store/configureStore.hooks";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
+import Text from "../../atoms/Text";
+import { darkTheme, grayTheme } from "../../../constants/colors";
 
 const THEME_SOURCES = {
   dark: {
     logo: require("../../../../assets/images/logo-dark.png"),
+    text: darkTheme.text,
   },
   gray: {
     logo: require("../../../../assets/images/logo-light.png"),
+    text: grayTheme.text,
   },
 };
 
@@ -21,7 +25,10 @@ const Container = styled.View`
   background-color: white;
 `;
 const Logo = styled.View`
-  padding: ${useResponsiveFontSize(95)}px 0 ${useResponsiveFontSize(60)}px;
+  padding: ${useResponsiveFontSize(95)}px ${spacing.gutter}px
+    ${useResponsiveFontSize(20)}px;
+  gap: ${useResponsiveFontSize(38)}px;
+  align-items: center;
 `;
 const Children = styled.View`
   flex: 1;
@@ -30,7 +37,13 @@ const Children = styled.View`
   align-items: center;
   padding: ${spacing.gutter}px;
 `;
-const LoginContainer = ({ children }) => {
+const LoginContainer = ({
+  children,
+  comment = "none",
+}: {
+  children: React.ReactNode;
+  comment?: string;
+}) => {
   const theme = useAppSelect((state) => state.theme.value);
   return (
     <Container>
@@ -43,6 +56,16 @@ const LoginContainer = ({ children }) => {
             resizeMode: "contain",
           }}
         />
+        <Text
+          size="sm"
+          color={comment !== "none" ? THEME_SOURCES[theme].text : "transparent"}
+          styles={{
+            textAlign: "center",
+            lineHeight: spacing.lineHeight,
+          }}
+        >
+          {comment}
+        </Text>
       </Logo>
       <Children>{children}</Children>
     </Container>

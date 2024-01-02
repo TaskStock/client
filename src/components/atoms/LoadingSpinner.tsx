@@ -6,10 +6,12 @@ import { grayTheme } from "../../constants/colors";
 interface Props {
   color?: string;
   size?: "sm" | "lg";
+  background?: string;
 }
 interface SpinnerStyleProps {
   height: number;
   color?: string;
+  background?: string;
 }
 
 const Container = styled.View<SpinnerStyleProps>`
@@ -24,7 +26,8 @@ const Background = styled.View<SpinnerStyleProps>`
   border-radius: ${(props) => props.height / 2}px;
   border-width: 2px;
   opacity: 0.2;
-  border-color: ${(props) => props.theme.text};
+  border-color: ${(props) =>
+    props.background ? props.background : props.theme.text};
 `;
 const Arrow = styled.View<Props>`
   width: ${(props) => (props.size === "lg" ? 8 : 7)}px;
@@ -63,7 +66,11 @@ const startRotationAnimation = (
   ).start();
 };
 
-const LoadingSpinner = ({ size = "sm", color = grayTheme.high }: Props) => {
+const LoadingSpinner = ({
+  size = "sm",
+  color = grayTheme.high,
+  background,
+}: Props) => {
   const rotationDegree = useRef(new Animated.Value(0)).current;
   const height = size === "sm" ? 20 : 50;
   const durationMs = size === "sm" ? 1000 : 2000;
@@ -79,7 +86,7 @@ const LoadingSpinner = ({ size = "sm", color = grayTheme.high }: Props) => {
 
   return (
     <Container accessibilityRole="progressbar" height={height}>
-      <Background height={height} />
+      <Background height={height} background={background} />
       <Progress
         color={color}
         height={height}
