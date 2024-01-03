@@ -14,6 +14,7 @@ import {
 import { setCurrentDateString } from "../../../store/modules/calendar";
 import Icons from "../../atoms/Icons";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
+import { LinearGradient } from "expo-linear-gradient";
 
 const clientHeight = Dimensions.get("window").height;
 
@@ -22,7 +23,6 @@ const Container = styled.View`
   flex: 1;
   border-radius: ${spacing.offset}px;
   margin-top: ${spacing.padding}px;
-  background-color: ${(props) => props.theme.box};
 `;
 
 const DateInfo = ({
@@ -128,6 +128,21 @@ const CalendarContainer = () => {
         onPressRight={add1Month}
       />
       <Container>
+        <LinearGradient
+          colors={[
+            "rgba(255, 255, 255, 0.00)",
+            "rgba(255, 255, 255, 0.47)",
+            "#FFFFFF",
+          ]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 0, y: 1 }}
+          style={{
+            position: "absolute",
+            width: "100%",
+            height: "100%",
+            borderRadius: spacing.offset,
+          }}
+        ></LinearGradient>
         <HomeCalendar currentDate={currentDate} />
       </Container>
     </View>
