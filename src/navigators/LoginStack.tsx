@@ -31,6 +31,11 @@ const LoginStack = ({ navigation }) => {
   return (
     <NativeStack.Navigator>
       <NativeStack.Screen
+        name="EmailCheckCode"
+        component={EmailCheckCodeScreen}
+        options={optionsWithHeader}
+      />
+      <NativeStack.Screen
         name="Welcome"
         component={WelcomeScreen}
         options={{
@@ -48,11 +53,11 @@ const LoginStack = ({ navigation }) => {
         component={EmailSendScreen}
         options={optionsWithHeader}
       />
-      <NativeStack.Screen
+      {/* <NativeStack.Screen
         name="EmailCheckCode"
         component={EmailCheckCodeScreen}
         options={optionsWithHeader}
-      />
+      /> */}
       <NativeStack.Screen
         name="EmailRegister"
         component={EmailRegisterScreen}
