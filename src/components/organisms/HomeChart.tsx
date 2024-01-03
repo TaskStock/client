@@ -1,9 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
+
 import { Animated, Pressable } from "react-native";
-import { WithLocalSvg } from "react-native-svg";
 import styled, { ThemeContext } from "styled-components/native";
-import CandleStickIcon from "../../../assets/icons/CandleStickIcon.svg";
-import LineChartIcon from "../../../assets/icons/lineChartIcon.svg";
 import { Value } from "../../@types/chart";
 import FlexBox from "../atoms/FlexBox";
 import LoadingSpinner from "../atoms/LoadingSpinner";
@@ -241,7 +239,7 @@ export const chartDateType = [
   },
 ];
 
-function HomeChart() {
+function HomeChart({ isCandleStick }: { isCandleStick: boolean }) {
   const themeContext = useContext(ThemeContext);
 
   // absolute하게 움직이는 뒷 버튼을 위함.
@@ -270,11 +268,10 @@ function HomeChart() {
   };
 
   const [data, setData] = React.useState(dataArray);
-  const [isCandleStick, setIsCandleStick] = React.useState(true);
 
   // 원래 redux 안에 넣는게 좋지만, 나중에 RTK Query로 바꿀거라 그냥 여기에 넣음.
   const [loading, setLoading] = React.useState(false);
-  const [index, setIndex] = React.useState(0);
+  const [index, setIndex] = React.useState(1);
 
   useEffect(() => {
     mockApiCall(chartDateType[index].name);
@@ -318,8 +315,6 @@ function HomeChart() {
               width={containerSize.width}
               data={data}
               theme={themeContext}
-              typeIndex={index}
-              maxLength={chartDateType[index].counts}
             ></CandleStickValueChart>
           ) : (
             <LineValueChart
@@ -339,7 +334,7 @@ function HomeChart() {
           </FlexBox>
         )}
       </GraphContainer>
-      <BottomController
+      {/* <BottomController
         onLayout={(event) => {
           const { width, height } = event.nativeEvent.layout;
           bottomControllerWidth.current = width;
@@ -389,7 +384,7 @@ function HomeChart() {
             )}
           </Pressable>
         </BottomControllerItem>
-      </BottomController>
+      </BottomController> */}
     </Container>
   );
 }

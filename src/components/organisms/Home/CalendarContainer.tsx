@@ -6,6 +6,15 @@ import styled, { useTheme } from "styled-components/native";
 import Text from "../../atoms/Text";
 import FlexBox from "../../atoms/FlexBox";
 import numberWithCommas from "../../../utils/useNumberWithCommas";
+import dayjs from "dayjs";
+import {
+  useAppDispatch,
+  useAppSelect,
+} from "../../../store/configureStore.hooks";
+import { setCurrentDateString } from "../../../store/modules/calendar";
+import Icons from "../../atoms/Icons";
+import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
+import { LinearGradient } from "expo-linear-gradient";
 
 const clientHeight = Dimensions.get("window").height;
 
@@ -14,10 +23,17 @@ const Container = styled.View`
   flex: 1;
   border-radius: ${spacing.offset}px;
   margin-top: ${spacing.padding}px;
-  background-color: ${(props) => props.theme.box};
 `;
 
-const DateInfo = () => {
+const DateInfo = ({
+  currentDate,
+  onPressLeft,
+  onPressRight,
+}: {
+  currentDate: dayjs.Dayjs;
+  onPressLeft: () => void;
+  onPressRight: () => void;
+}) => {
   const theme = useTheme();
 
   const data = {
@@ -32,39 +48,102 @@ const DateInfo = () => {
 
   const renderDiffRate = diff_rate.toFixed(2);
 
+  const formattedDate = currentDate.format("YYYY년 MM월");
+
   return (
-    <View>
-      <Text size="xl" weight="bold">
-        2023년 1월
-      </Text>
-      <FlexBox gap={spacing.padding / 2} styles={{ paddingTop: spacing.small }}>
-        <Text size="sm" weight="regular" color={theme.textDim}>
-          1개월 전보다
+    <FlexBox alignItems="flex-end">
+      <View style={{ flex: 1 }}>
+        <Text size="xl" weight="bold">
+          {formattedDate}
         </Text>
-        <Text
-          size="sm"
-          weight="regular"
-          color={diff > 0 ? theme.high : theme.low}
+        <FlexBox
+          gap={spacing.padding / 2}
+          styles={{ paddingTop: spacing.small }}
         >
-          {numberWithCommas(diff)}원 ({renderDiffRate.toString()}%)
-        </Text>
+          <Text size="sm" weight="regular" color={theme.textDim}>
+            1개월 전보다
+          </Text>
+          <Text
+            size="sm"
+            weight="regular"
+            color={diff > 0 ? theme.high : theme.low}
+          >
+            {numberWithCommas(diff)}원 ({renderDiffRate.toString()}%)
+          </Text>
+        </FlexBox>
+      </View>
+      <FlexBox
+        gap={spacing.offset}
+        styles={{
+          paddingHorizontal: spacing.padding,
+        }}
+      >
+        <Icons
+          onPress={onPressLeft}
+          type="entypo"
+          name="chevron-thin-left"
+          color={theme.text}
+          size={useResponsiveFontSize(25)}
+        />
+        <Icons
+          onPress={onPressRight}
+          type="entypo"
+          name="chevron-thin-right"
+          color={theme.text}
+          size={useResponsiveFontSize(25)}
+        />
       </FlexBox>
-    </View>
+    </FlexBox>
   );
 };
+
 const CalendarContainer = () => {
+  const currentDate = dayjs(
+    useAppSelect((state) => state.calendar.currentDateString)
+  );
+
+  const dispatch = useAppDispatch();
+
+  const subtract1Month = () => {
+    dispatch(
+      setCurrentDateString(currentDate.subtract(1, "month").toISOString())
+    );
+  };
+
+  const add1Month = () => {
+    dispatch(setCurrentDateString(currentDate.add(1, "month").toISOString()));
+  };
+
   return (
     <View
       style={{
         paddingHorizontal: spacing.gutter,
         paddingTop: spacing.offset,
         flex: 1,
-        // height: clientHeight * 0.33,
       }}
     >
-      <DateInfo />
+      <DateInfo
+        currentDate={currentDate}
+        onPressLeft={subtract1Month}
+        onPressRight={add1Month}
+      />
       <Container>
-        <HomeCalendar />
+        <LinearGradient
+          colors={[
+            "rgba(255, 255, 255, 0.00)",
+            "rgba(255, 255, 255, 0.47)",
+            "#FFFFFF",
+          ]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 0, y: 1 }}
+          style={{
+            position: "absolute",
+            width: "100%",
+            height: "100%",
+            borderRadius: spacing.offset,
+          }}
+        ></LinearGradient>
+        <HomeCalendar currentDate={currentDate} />
       </Container>
     </View>
   );

@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import React, { memo, useMemo } from "react";
-import { FlatList, Pressable, View } from "react-native";
+import { FlatList, LayoutChangeEvent, Pressable, View } from "react-native";
 import { useDispatch } from "react-redux";
 import styled, { useTheme } from "styled-components/native";
 import { spacing } from "../../constants/spacing";
@@ -11,29 +11,14 @@ import {
 } from "../../store/modules/calendar";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
 import FlexBox from "../atoms/FlexBox";
-import Icons from "../atoms/Icons";
-import Text from "../atoms/Text";
 
 const CalendarContainer = styled.View`
   border-radius: 20px;
   height: 100%;
   display: flex;
   flex-direction: column;
-  padding: 0px ${spacing.offset}px;
-`;
-const CalendarHeader = styled.View`
-  width: 100%;
-  padding: ${spacing.offset}px 0px;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  gap: 12px;
-`;
-
-const CalendarContent = styled.View`
-  flex: 1;
-  margin-bottom: ${spacing.offset}px;
+  padding: ${spacing.offset}px;
+  padding-top: ${spacing.padding}px;
 `;
 
 const CalendarItemContainer = styled.View`
@@ -69,6 +54,7 @@ const CalendarItemText = styled.Text<{
 const ListHeaderComponent = () => {
   const DateType = ["일", "월", "화", "수", "목", "금", "토"];
   const themeContext = useTheme();
+  const itemHeight = useAppSelect((state) => state.calendar.itemHeight);
 
   return (
     <FlexBox>
@@ -78,8 +64,8 @@ const ListHeaderComponent = () => {
 
         return (
           <CalendarItemContainer key={index}>
-            <CalendarItemInner>
-              <CalendarItemText weight={500} color={color} size={15}>
+            <CalendarItemInner size={itemHeight}>
+              <CalendarItemText weight={500} color={color} size={16}>
                 {item}
               </CalendarItemText>
             </CalendarItemInner>
@@ -100,12 +86,10 @@ const CalendarItem = memo(
     currentDate: dayjs.Dayjs;
     onPress: (item: dayjs.Dayjs) => void;
   }) => {
-    const height = useAppSelect((state) => state.calendar.itemHeight);
-    const weeksOfMonth = useAppSelect((state) => state.calendar.weeksOfMonth);
+    const itemHeight = useAppSelect((state) => state.calendar.itemHeight);
     const themeContext = useTheme();
-    const date = item.date();
 
-    const itemHeight = weeksOfMonth > 0 ? height / (weeksOfMonth + 1) : 0;
+    const date = item.date();
 
     const notThisMonth = useMemo(() => {
       return item.month() !== currentDate.month();
@@ -126,7 +110,7 @@ const CalendarItem = memo(
               color={
                 !notThisMonth ? themeContext.text : themeContext.textDimmer
               }
-              size={13}
+              size={14}
             >
               {date}
             </CalendarItemText>
@@ -137,8 +121,11 @@ const CalendarItem = memo(
   }
 );
 
-export default function HomeCalendar() {
-  const themeContext = useTheme();
+export default function HomeCalendar({
+  currentDate,
+}: {
+  currentDate: dayjs.Dayjs;
+}) {
   const renderItem = ({
     item,
     index,
@@ -151,77 +138,35 @@ export default function HomeCalendar() {
         item={item}
         currentDate={currentDate}
         onPress={(item: dayjs.Dayjs) => {
-          // setCurrentDate(item);
           dispatch(setCurrentDateString(item.toISOString()));
         }}
       />
     );
   };
-  const currentDate = dayjs(
-    useAppSelect((state) => state.calendar.currentDateString)
-  );
   const data = useAppSelect((state) => state.calendar.datesOfMonth);
-  const headerText = currentDate.format("YYYY.MM");
   const dispatch = useDispatch();
+
+  const onLayout = (event: LayoutChangeEvent) => {
+    const { height } = event.nativeEvent.layout;
+    dispatch(setItemHeight(height));
+  };
 
   return (
     <CalendarContainer>
-      <CalendarHeader>
-        <Icons
-          onPress={() => {
-            dispatch(
-              setCurrentDateString(
-                currentDate.subtract(1, "month").toISOString()
-              )
-            );
-          }}
-          type="entypo"
-          name="chevron-thin-left"
-          color={themeContext.text}
-          size={useResponsiveFontSize(22)}
-        />
-        <Pressable
-          onPress={() => {
-            // setOpen(true);
-          }}
-        >
-          <Text size="lg" weight="bold">
-            {headerText}
-          </Text>
-        </Pressable>
-
-        <Icons
-          onPress={() => {
-            dispatch(
-              setCurrentDateString(currentDate.add(1, "month").toISOString())
-            );
-          }}
-          type="entypo"
-          name="chevron-thin-right"
-          color={themeContext.text}
-          size={useResponsiveFontSize(22)}
-        />
-      </CalendarHeader>
-      <CalendarContent>
-        <View
-          style={{
-            flex: 1,
-          }}
-          onLayout={(event) => {
-            const { height } = event.nativeEvent.layout;
-
-            dispatch(setItemHeight(height));
-          }}
-        >
-          <FlatList
-            numColumns={7}
-            data={data}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={renderItem}
-            ListHeaderComponent={<ListHeaderComponent></ListHeaderComponent>}
-          ></FlatList>
-        </View>
-      </CalendarContent>
+      <View
+        style={{
+          flex: 1,
+        }}
+        onLayout={onLayout}
+      >
+        <FlatList
+          numColumns={7}
+          data={data}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={renderItem}
+          ListHeaderComponent={<ListHeaderComponent></ListHeaderComponent>}
+        ></FlatList>
+      </View>
     </CalendarContainer>
   );
 }

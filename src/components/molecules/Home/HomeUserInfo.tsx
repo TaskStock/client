@@ -20,7 +20,7 @@ const THEME_CONSTANTS = {
   },
 };
 
-const MyInfo = ({
+const HomeUserInfo = ({
   data,
 }: {
   data: {
@@ -38,35 +38,40 @@ const MyInfo = ({
   const renderDiffRate = diff_rate.toFixed(2);
 
   return (
-    <View>
-      <Text size="xl" weight="bold">
-        {data.nickname}님
-      </Text>
-      <Text size="xl" weight="bold">
-        {numberWithCommas(data.cumulative_value)}원
-      </Text>
-      <FlexBox gap={spacing.padding / 2} styles={{ paddingTop: spacing.small }}>
-        <Text
-          size="sm"
-          weight="regular"
-          color={THEME_CONSTANTS[theme]?.textDim}
-        >
-          1개월 전보다
+    <FlexBox alignItems="flex-end">
+      <View>
+        <Text size="xl" weight="bold">
+          {data.nickname}님
         </Text>
-        <Text
-          size="sm"
-          weight="regular"
-          color={
-            diff > 0
-              ? THEME_CONSTANTS[theme]?.high
-              : THEME_CONSTANTS[theme]?.low
-          }
-        >
-          {numberWithCommas(diff)}원 ({renderDiffRate.toString()}%)
+        <Text size="xl" weight="bold">
+          {numberWithCommas(data.cumulative_value)}원
         </Text>
-      </FlexBox>
-    </View>
+        <FlexBox
+          gap={spacing.padding / 2}
+          styles={{ paddingTop: spacing.small }}
+        >
+          <Text
+            size="sm"
+            weight="regular"
+            color={THEME_CONSTANTS[theme]?.textDim}
+          >
+            1개월 전보다
+          </Text>
+          <Text
+            size="sm"
+            weight="regular"
+            color={
+              diff > 0
+                ? THEME_CONSTANTS[theme]?.high
+                : THEME_CONSTANTS[theme]?.low
+            }
+          >
+            {numberWithCommas(diff)}원 ({renderDiffRate.toString()}%)
+          </Text>
+        </FlexBox>
+      </View>
+    </FlexBox>
   );
 };
 
-export default MyInfo;
+export default HomeUserInfo;
