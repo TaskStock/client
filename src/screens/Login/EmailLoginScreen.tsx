@@ -6,9 +6,10 @@ import Text from "../../components/atoms/Text";
 import TextInput from "../../components/atoms/TextInput";
 import LoginContainer from "../../components/molecules/Login/LoginContainer";
 import { darkTheme, grayTheme } from "../../constants/colors";
-import { useAppSelect } from "../../store/configureStore.hooks";
-import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
 import { spacing } from "../../constants/spacing";
+import { useAppSelect } from "../../store/configureStore.hooks";
+import { client } from "../../services/api";
+import { checkValidPassword } from "../../utils/checkValidity";
 
 const THEME_CONSTANTS = {
   dark: {
@@ -27,6 +28,39 @@ const EmailLoginScreen = ({ navigation }) => {
   });
   const [emailAlert, setEmailAlert] = useState(false);
   const [pwAlert, setPwAlert] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const handleLogin = async () => {
+    setLoading(true);
+    try {
+      const responseData = await client.post("account/login/email", {
+        email: user.email,
+        password: user.password,
+      });
+      if (responseData.result === "success") {
+        navigation.navigate("MainTab", {
+          screen: "HomeStack",
+          params: {
+            screen: "HomeScreen",
+          },
+        });
+      } else if (responseData.result === "fail") {
+        // TODO: 비밀번호 틀려서 로그인 실패했을 때 error로 인식함
+        setPwAlert(true);
+      }
+      // else if (){
+      //   // TODO: 이메일 존재하지 않는 경우
+
+      // }
+      else {
+        alert("로그인에 실패했습니다.");
+      }
+      console.log(responseData);
+    } catch (error) {
+      console.error("[client] 로그인 오류 발생:", error);
+    }
+    setLoading(false);
+  };
 
   const handleChange = (name: string, value: string) => {
     setUser((prevUser) => ({
@@ -72,8 +106,9 @@ const EmailLoginScreen = ({ navigation }) => {
       />
       <BlackBtn
         text={"로그인"}
-        onPress={() => {}}
+        onPress={handleLogin}
         style={{ marginTop: spacing.padding }}
+        loading={loading}
       />
       <FlexBox justifyContent="center" styles={{ marginTop: spacing.gutter }}>
         <SubBtn
@@ -89,7 +124,12 @@ const EmailLoginScreen = ({ navigation }) => {
             height: "100%",
           }}
         />
-        <SubBtn text={"비밀번호 찾기"} onPress={() => {}} />
+        <SubBtn
+          text={"비밀번호 찾기"}
+          onPress={() => {
+            navigation.navigate("FindPassword");
+          }}
+        />
       </FlexBox>
     </LoginContainer>
   );

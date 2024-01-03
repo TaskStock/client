@@ -14,10 +14,12 @@ const SettingsScreen = () => {
   const switchToGrayMode = () => {
     dispatch(themeSlice.actions.setTheme("gray"));
   };
+  const handleLogout = () => {};
   return (
     <View>
       <BlackBtn text="DarkMode" onPress={switchToDarkMode} />
       <BlackBtn text="GrayMode" onPress={switchToGrayMode} />
+      <BlackBtn text="로그아웃" onPress={handleLogout} />
     </View>
   );
 };
