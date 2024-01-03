@@ -7,7 +7,7 @@ const initialState = {
 
 const BASE_URL_TEMP = "https://localhost:5001/api/";
 
-export const valueApi = createApi({
+export const graphApi = createApi({
   reducerPath: "valueApi",
   baseQuery: fetchBaseQuery({
     baseUrl: BASE_URL_TEMP,
@@ -37,5 +37,5 @@ const valueSlice = createSlice({
 
 export default valueSlice.reducer;
 
-export const {} = valueSlice.actions;
-export const { useGetValueByTypeQuery } = valueApi;
+export const { toggleGraphType } = valueSlice.actions;
+export const { useGetValueByTypeQuery } = graphApi;

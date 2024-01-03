@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import valueReducer, { valueApi } from "./modules/value";
+import graphReducer, { graphApi } from "./modules/graph";
 import { themeReducer } from "./modules/theme";
 import calendarReducer from "./modules/calendar";
 import todoReducer from "./modules/todo";
@@ -7,9 +7,9 @@ import { authReducer } from "./modules/auth";
 
 const store = configureStore({
   reducer: {
-    [valueApi.reducerPath]: valueApi.reducer,
+    [graphApi.reducerPath]: graphApi.reducer,
     auth: authReducer,
-    value: valueReducer,
+    graph: graphReducer,
     theme: themeReducer,
     calendar: calendarReducer,
     todo: todoReducer,
@@ -17,7 +17,7 @@ const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,
-    }).concat(valueApi.middleware),
+    }).concat(graphApi.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;
