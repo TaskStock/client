@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../configureStore";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { LOCAL_API_HOST } from "@env";
 
 interface AddTodoForm {
   todo_id?: number;
@@ -25,10 +26,8 @@ const initialState: InitialState = {
   },
 };
 
-const API_URL_TEMP = "http://localhost:8000";
-
 export const submitTodo = createAsyncThunk(
-  `${API_URL_TEMP}/todo/update`,
+  `${LOCAL_API_HOST}/todo/update`,
   async (_, { getState }) => {
     const {
       todo: { addTodoForm },
@@ -59,7 +58,7 @@ export const submitTodo = createAsyncThunk(
 export const todoApi = createApi({
   reducerPath: "todoApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: API_URL_TEMP,
+    baseUrl: LOCAL_API_HOST,
     prepareHeaders: (headers, { getState, endpoint, extra, type, forced }) => {
       const token = getState().auth.accessToken;
       if (token) {

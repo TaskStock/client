@@ -1,3 +1,4 @@
+import { LOCAL_API_HOST } from "@env";
 import { createSlice } from "@reduxjs/toolkit";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
@@ -5,12 +6,10 @@ const initialState = {
   data: [],
 };
 
-const BASE_URL_TEMP = "https://localhost:5001/api/";
-
 export const graphApi = createApi({
   reducerPath: "valueApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: BASE_URL_TEMP,
+    baseUrl: LOCAL_API_HOST,
     prepareHeaders: (headers, { getState, endpoint, extra, type, forced }) => {
       // const token = getState().auth.token;
       // if (token) {
