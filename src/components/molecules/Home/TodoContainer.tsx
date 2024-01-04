@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { ScrollView, View } from "react-native";
+import { Pressable, ScrollView, View } from "react-native";
 import styled from "styled-components/native";
 import { todosData } from "../../../../public/todos";
 import { spacing } from "../../../constants/spacing";
@@ -24,6 +24,7 @@ import FlexBox from "../../atoms/FlexBox";
 import Icons from "../../atoms/Icons";
 import LoadingSpinner from "../../atoms/LoadingSpinner";
 import CenterLayout from "../../atoms/CenterLayout";
+import Margin from "../../atoms/Margin";
 
 const DateContainer = styled.View`
   padding: ${spacing.small}px ${spacing.gutter}px 0;
@@ -52,6 +53,7 @@ const TodoContainer = () => {
     isLoading,
     isError,
     error,
+    refetch,
   } = useGetAllTodosQuery({
     date: currentDate.format("YYYY-MM-DD"),
   });
@@ -109,7 +111,7 @@ const TodoContainer = () => {
           paddingTop: useResponsiveFontSize(15),
         }}
       >
-        {!isLoading && (
+        {!isError && todosData ? (
           <>
             <TodoItem
               todo={{
@@ -147,6 +149,18 @@ const TodoContainer = () => {
               }}
             />
           </>
+        ) : (
+          <CenterLayout>
+            <Text size="md">할일을 불러오는 중 에러가 발생했어요..</Text>
+            <Margin margin={5} />
+            <Pressable
+              onPress={() => {
+                refetch();
+              }}
+            >
+              <Text size="md">다시 로드하기</Text>
+            </Pressable>
+          </CenterLayout>
         )}
 
         {/* {data[selectedProject].todos.map((todo) => (
@@ -158,8 +172,6 @@ const TodoContainer = () => {
           <TodoItem key={todo.todo_id} todo={todo} />
         ))} */}
       </ScrollView>
-
-      {/* <View style={{ height: headerHeight + 93 + NOTCH_BOTTOM }} /> */}
     </BottomDrawer>
   );
 };
