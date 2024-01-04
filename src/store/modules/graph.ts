@@ -14,7 +14,7 @@ export const graphApi = createApi({
     prepareHeaders: (headers, { getState, endpoint, extra, type, forced }) => {
       // const token = getState().auth.token;
       // if (token) {
-      //   headers.set("Authorization", `Bearer ${token}`);
+      // headers.set("Authorization", `Bearer ${token}`);
       // }
       // return headers;
       headers.set("Content-Type", "application/json");

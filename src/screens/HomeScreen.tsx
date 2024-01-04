@@ -8,7 +8,7 @@ import AddTodoModal from "../components/organisms/AddTodoModal";
 import GCContainer from "../components/organisms/Home/GCContainer";
 import { useAppSelect } from "../store/configureStore.hooks";
 import { ComponentHeightContext } from "../utils/ComponentHeightContext";
-import BottomDrawerContainer from "../components/molecules/Home/BottomDrawerContainer";
+import TodoContainer from "../components/molecules/Home/TodoContainer";
 
 const Container = styled.View`
   background-color: ${({ theme }) => theme.background};
@@ -22,14 +22,13 @@ const HomeScreen = ({ navigation }) => {
   );
 
   const isAddModalOpen = useAppSelect((state) => state.todo.isAddModalOpen);
-
   const dispatch = useDispatch();
 
   return (
     <Container>
       <HeaderTop navigation={navigation} />
       <GCContainer myData={data} />
-      <BottomDrawerContainer />
+      <TodoContainer />
       {/* <HandleTodoBtnContainer {...handleEdit} /> */}
       {isAddModalOpen && (
         <Modal visible={isAddModalOpen} transparent={true}>

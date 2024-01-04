@@ -29,7 +29,7 @@ export default function App() {
   useEffect(() => {
     setTimeout(() => {
       setIsReady(true);
-    }, 3000);
+    }, 100);
   }, []);
 
   if (!isReady || !fontsLoaded) return <SplashScreen />;

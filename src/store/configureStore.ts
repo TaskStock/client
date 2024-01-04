@@ -2,12 +2,13 @@ import { configureStore } from "@reduxjs/toolkit";
 import graphReducer, { graphApi } from "./modules/graph";
 import { themeReducer } from "./modules/theme";
 import calendarReducer from "./modules/calendar";
-import todoReducer from "./modules/todo";
+import todoReducer, { todoApi } from "./modules/todo";
 import { authReducer } from "./modules/auth";
 
 const store = configureStore({
   reducer: {
     [graphApi.reducerPath]: graphApi.reducer,
+    [todoApi.reducerPath]: todoApi.reducer,
     auth: authReducer,
     graph: graphReducer,
     theme: themeReducer,
@@ -17,7 +18,9 @@ const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: false,
-    }).concat(graphApi.middleware),
+    })
+      .concat(graphApi.middleware)
+      .concat(todoApi.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;
