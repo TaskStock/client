@@ -2,7 +2,6 @@ import React from "react";
 import { TextStyle } from "react-native";
 import styled from "styled-components/native";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
-import { spacing } from "../../constants/spacing";
 
 export type SizeStyles = "xl" | "lg" | "md" | "sm" | "xs" | "xxs";
 export type WeightStyles =
