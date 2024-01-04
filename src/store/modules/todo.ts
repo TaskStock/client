@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../configureStore";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { LOCAL_API_HOST } from "@env";
+import dayjs from "dayjs";
 
 interface AddTodoForm {
   todo_id?: number;
@@ -9,20 +10,24 @@ interface AddTodoForm {
   level: number;
   project_id: number | null;
   repeat_day: string[];
+  repeat_end_date?: string | null;
 }
 
 interface InitialState {
   isAddModalOpen: boolean;
+  isRepeatDateModalOpen: boolean;
   addTodoForm: AddTodoForm;
 }
 
 const initialState: InitialState = {
   isAddModalOpen: false,
+  isRepeatDateModalOpen: false,
   addTodoForm: {
     text: "",
     level: 0,
     project_id: null,
     repeat_day: [],
+    repeat_end_date: null,
   },
 };
 
@@ -32,6 +37,8 @@ export const submitTodo = createAsyncThunk(
     const {
       todo: { addTodoForm },
     } = getState() as RootState;
+
+    console.log(addTodoForm);
 
     try {
       const response = await fetch("/todo/update", {
@@ -121,6 +128,14 @@ const todoSlice = createSlice({
         repeat_day: [],
       };
     },
+    toggleRepeatEndModal(state) {
+      if (!state.isRepeatDateModalOpen) {
+        state.addTodoForm.repeat_end_date = dayjs().format("YYYY-MM-DD");
+      } else {
+        state.addTodoForm.repeat_end_date = null;
+      }
+      state.isRepeatDateModalOpen = !state.isRepeatDateModalOpen;
+    },
     setAddTodoForm(
       state,
       action: {
@@ -146,5 +161,6 @@ const todoSlice = createSlice({
 });
 
 export default todoSlice.reducer;
-export const { toggleAddModal, setAddTodoForm } = todoSlice.actions;
+export const { toggleAddModal, setAddTodoForm, toggleRepeatEndModal } =
+  todoSlice.actions;
 export const { useGetAllTodosQuery } = todoApi;

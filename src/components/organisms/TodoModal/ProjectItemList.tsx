@@ -105,32 +105,6 @@ export default function ProjectItemList({
     }
   }, [isAddProject]);
 
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     projectContainerRef.current?.measure((x, y, width, height) => {
-  //       console.log("height: ", height);
-
-  //       setProjectContainerHeight(height);
-  //     });
-  //   }, 1000);
-
-  //   // if (projectContainerHeight == 0) return;
-
-  //   // if (isAddProject) {
-  //   //   setProjectContainerHeight((prev) => {
-  //   //     return prev + 50;
-  //   //   });
-  //   // } else {
-  //   //   setProjectContainerHeight((prev) => {
-  //   //     return prev - 50;
-  //   //   });
-  //   // }
-
-  //   setTimeout(() => {
-  //     scrollViewRef.current?.scrollToEnd({ animated: true });
-  //   }, 100);
-  // }, [isAddProject]);
-
   return (
     <ProjectItemContainer
       height={projectContainerHeight}

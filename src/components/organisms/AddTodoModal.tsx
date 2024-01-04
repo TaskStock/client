@@ -1,5 +1,11 @@
 import React, { useCallback } from "react";
-import { Pressable, ScrollView, View } from "react-native";
+import {
+  Pressable,
+  ScrollView,
+  Switch,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
 import { useDispatch } from "react-redux";
 import styled, { useTheme } from "styled-components/native";
 import { spacing } from "../../constants/spacing";
@@ -9,6 +15,7 @@ import {
   setAddTodoForm,
   submitTodo,
   toggleAddModal,
+  toggleRepeatEndModal,
 } from "../../store/modules/todo";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
 import FlexBox from "../atoms/FlexBox";
@@ -17,6 +24,8 @@ import Margin from "../atoms/Margin";
 import Text from "../atoms/Text";
 import ProjectItemList from "./TodoModal/ProjectItemList";
 import ValueSlider from "./TodoModal/ValueSlider";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import dayjs from "dayjs";
 
 const AddTodoOverlay = styled.Pressable`
   position: absolute;
@@ -104,6 +113,13 @@ const RepeatDayItem = styled.Pressable<{ isSelected?: boolean; size: number }>`
     isSelected ? theme.mainBtnReversed : theme.mainBtnGray};
 `;
 
+const DatePickerBox = styled.Pressable`
+  display: flex;
+  /* border-bottom-width: 1px; */
+  border-color: ${({ theme }) => theme.text};
+  padding: 6px 4px;
+`;
+
 const Section = ({
   header,
   children,
@@ -127,10 +143,12 @@ const dayList = ["월", "화", "수", "목", "금", "토", "일"];
 export default function AddTodoModal() {
   const theme = useTheme();
   const dispatch = useDispatch<AppDispatch>();
+  const addTodoForm = useAppSelect((state) => state.todo.addTodoForm);
+  const isRepeatDateModalOpen = useAppSelect(
+    (state) => state.todo.isRepeatDateModalOpen
+  );
 
   const scrollViewRef = React.useRef<ScrollView>(null);
-
-  const addTodoForm = useAppSelect((state) => state.todo.addTodoForm);
 
   const [dayItemWidth, setDayItemWidth] = React.useState(0);
 
@@ -139,6 +157,20 @@ export default function AddTodoModal() {
   const onPressAddTodoBtn = useCallback(() => {
     dispatch(submitTodo());
   }, [addTodoForm]);
+
+  const onChangeDate = (event: any, selectedDate: any) => {
+    const currentDate = selectedDate;
+    dispatch(
+      setAddTodoForm({
+        name: "repeat_end_date",
+        value: currentDate,
+      })
+    );
+  };
+
+  const toggleIsEndRepeat = () => {
+    dispatch(toggleRepeatEndModal());
+  };
 
   return (
     <AddTodoOverlay
@@ -254,6 +286,43 @@ export default function AddTodoModal() {
                       );
                     })}
                   </FlexBox>
+                </Section>
+                <Section
+                  header={
+                    <SectionHeader>
+                      <FlexBox
+                        justifyContent="space-between"
+                        alignItems="center"
+                        styles={{
+                          flex: 1,
+                        }}
+                      >
+                        <SectionHeaderText>반복 종료</SectionHeaderText>
+                        <Switch
+                          onValueChange={toggleIsEndRepeat}
+                          value={isRepeatDateModalOpen}
+                          trackColor={{
+                            false: theme.palette.neutral600_gray,
+                            true: theme.palette.neutral500_dark,
+                          }}
+                        ></Switch>
+                      </FlexBox>
+                    </SectionHeader>
+                  }
+                >
+                  {isRepeatDateModalOpen && (
+                    <DatePickerBox>
+                      <DateTimePicker
+                        value={new Date(addTodoForm.repeat_end_date)}
+                        mode="date"
+                        display="default"
+                        onChange={onChangeDate}
+                        style={{
+                          bottom: 0,
+                        }}
+                      />
+                    </DatePickerBox>
+                  )}
                 </Section>
                 <Section
                   margin={10}
