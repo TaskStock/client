@@ -4,6 +4,7 @@ import { themeReducer } from "./modules/theme";
 import calendarReducer from "./modules/calendar";
 import todoReducer, { todoApi } from "./modules/todo";
 import { authReducer } from "./modules/auth";
+import projectReducer from "./modules/project";
 
 const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ const store = configureStore({
     theme: themeReducer,
     calendar: calendarReducer,
     todo: todoReducer,
+    project: projectReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

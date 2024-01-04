@@ -38,7 +38,6 @@ const ProjectsContainer = styled.View`
 `;
 
 const TodoContainer = () => {
-  // const [data, setData] = useState(todosData);
   const [projects, setProjects] = useState([]);
   const [selectedProject, setSelectedProject] = useState(null);
 

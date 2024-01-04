@@ -37,5 +37,5 @@ const valueSlice = createSlice({
 
 export default valueSlice.reducer;
 
-export const { toggleGraphType } = valueSlice.actions;
+export const {} = valueSlice.actions;
 export const { useGetValueByTypeQuery } = graphApi;
