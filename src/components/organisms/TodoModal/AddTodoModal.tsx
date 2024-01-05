@@ -145,7 +145,9 @@ export default function AddTodoModal() {
   const theme = useTheme();
   const dispatch = useDispatch<AppDispatch>();
   const addTodoForm = useAppSelect((state) => state.todo.addTodoForm);
-  const isEditMode = useAppSelect((state) => state.todo.isEditMode);
+  const isEditMode = Boolean(
+    useAppSelect((state) => state.todo.addTodoForm.todo_id)
+  );
   const isRepeatDateModalOpen = useAppSelect(
     (state) => state.todo.isRepeatDateModalOpen
   );

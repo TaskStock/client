@@ -11,14 +11,12 @@ import { AddTodoForm, Todo } from "../../@types/todo";
 
 interface InitialState {
   isAddModalOpen: boolean;
-  isEditMode: boolean;
   isRepeatDateModalOpen: boolean;
   addTodoForm: AddTodoForm;
 }
 
 const initialState: InitialState = {
   isAddModalOpen: false,
-  isEditMode: false,
   isRepeatDateModalOpen: false,
   addTodoForm: {
     content: "",
@@ -180,9 +178,9 @@ const todoSlice = createSlice({
   reducers: {
     closeTodoModal(state) {
       state.isAddModalOpen = false;
-      state.isEditMode = false;
       state.isRepeatDateModalOpen = false;
       state.addTodoForm = {
+        todo_id: null,
         content: "",
         level: 0,
         project_id: null,
@@ -193,6 +191,7 @@ const todoSlice = createSlice({
     openAddTodoModal(state) {
       state.isAddModalOpen = true;
       state.addTodoForm = {
+        todo_id: null,
         content: "",
         level: 0,
         project_id: null,
@@ -217,7 +216,6 @@ const todoSlice = createSlice({
       if (!todo_id) return;
 
       state.isAddModalOpen = true;
-      state.isEditMode = true;
 
       state.addTodoForm = {
         todo_id: todo_id,
