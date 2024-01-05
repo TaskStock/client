@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { darkTheme, grayTheme } from "../../../constants/colors";
 import { spacing } from "../../../constants/spacing";
 import { useAppSelect } from "../../../store/configureStore.hooks";
@@ -74,6 +74,34 @@ const TodoModalItem = styled.TouchableOpacity<{ isSelected?: boolean }>`
   padding: ${useResponsiveFontSize(13)}px ${useResponsiveFontSize(38)}px;
 `;
 
+const TodoCheckBox = memo(
+  ({
+    isChecked,
+    onPress,
+    theme,
+  }: {
+    theme: string;
+    isChecked: boolean;
+    onPress: () => void;
+  }) => {
+    return isChecked ? (
+      <CheckBox
+        src={THEME_CONSTANTS[theme]?.checkedBoxSrc}
+        onPress={() => {
+          onPress();
+        }}
+      />
+    ) : (
+      <CheckBox
+        src={THEME_CONSTANTS[theme]?.unCheckedBoxSrc}
+        onPress={() => {
+          onPress();
+        }}
+      />
+    );
+  }
+);
+
 const TodoItem = ({ todo }: { todo: Todo }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 });
@@ -133,21 +161,13 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
         styles={{ paddingBottom: spacing.padding }}
       >
         <FlexBox gap={10} alignItems="center">
-          {todo.check ? (
-            <CheckBox
-              src={THEME_CONSTANTS[theme]?.checkedBoxSrc}
-              onPress={() => {
-                toggleTodoCheck();
-              }}
-            />
-          ) : (
-            <CheckBox
-              src={THEME_CONSTANTS[theme]?.unCheckedBoxSrc}
-              onPress={() => {
-                toggleTodoCheck();
-              }}
-            />
-          )}
+          <TodoCheckBox
+            theme={theme}
+            isChecked={todo.check}
+            onPress={() => {
+              toggleTodoCheck();
+            }}
+          />
 
           <Text size="md">{todo.content}</Text>
         </FlexBox>

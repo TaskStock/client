@@ -148,33 +148,52 @@ export const todoApi = createApi({
       },
 
       async onQueryStarted(body, { dispatch, queryFulfilled }) {
+        const temp_todo_id = Math.random();
+
+        const todo_replica = {
+          content: body.content,
+          todo_id: temp_todo_id,
+          check: false,
+          date: dayjs().toISOString(),
+          index: 0,
+          project_id: null,
+          level: 0,
+          repeat_day: "0000000",
+          repeat_end_date: null,
+        };
+
+        const patchAddTodo = dispatch(
+          todoApi.util.updateQueryData(
+            "getAllTodos",
+            { date: body.queryArgs.date },
+            (draft: { todos: Todo[] }) => {
+              draft.todos.push(todo_replica);
+            }
+          )
+        );
+
         try {
           const result = await queryFulfilled;
 
-          // index랑 date의 경우.
-          const todo_replica = {
-            content: body.content,
-            todo_id: result.data.todo_id,
-            check: false,
-            date: dayjs().toISOString(),
-            index: 0,
-            project_id: null,
-            level: 0,
-            repeat_day: "0000000",
-            repeat_end_date: null,
-          };
+          const todo_id = result.data.todo_id;
 
           dispatch(
             todoApi.util.updateQueryData(
               "getAllTodos",
               { date: body.queryArgs.date },
               (draft: { todos: Todo[] }) => {
-                draft.todos.push(todo_replica);
+                const index = draft.todos.findIndex(
+                  (todo) => todo.todo_id === temp_todo_id
+                );
+                draft.todos[index].todo_id = todo_id;
               }
             )
           );
+
+          // index랑 date의 경우.
         } catch (error) {
           console.log(error);
+          patchAddTodo.undo();
         }
       },
     }),
@@ -190,10 +209,6 @@ export const todoApi = createApi({
       }
     >({
       query: (body: { form: AddTodoForm }) => {
-        // if (body.form.content === "" || body.form.content.length > 30) {
-        //   throw new Error("content is empty or too long");
-        // }
-
         return {
           url: "/todo/new",
           method: "POST",
@@ -202,26 +217,44 @@ export const todoApi = createApi({
       },
 
       async onQueryStarted(body, { dispatch, queryFulfilled }) {
+        const temp_todo_id = Math.random();
+
+        const todo_replica = {
+          ...body.form,
+          todo_id: temp_todo_id,
+          check: false,
+          date: dayjs().toISOString(),
+          index: 0,
+        };
+
+        const patchAddTodo = dispatch(
+          todoApi.util.updateQueryData(
+            "getAllTodos",
+            { date: body.queryArgs.date },
+            (draft: { todos: Todo[] }) => {
+              draft.todos.push(todo_replica);
+            }
+          )
+        );
+
         try {
           const result = await queryFulfilled;
 
-          const todo_replica = {
-            ...body.form,
-            todo_id: result.data.todo_id,
-            check: false,
-            date: dayjs().toISOString(),
-            index: 0,
-          };
+          const todo_id = result.data.todo_id;
 
           dispatch(
             todoApi.util.updateQueryData(
               "getAllTodos",
               { date: body.queryArgs.date },
               (draft: { todos: Todo[] }) => {
-                draft.todos.push(todo_replica);
+                const index = draft.todos.findIndex(
+                  (todo) => todo.todo_id === temp_todo_id
+                );
+                draft.todos[index].todo_id = todo_id;
               }
             )
           );
+
           dispatch(closeTodoModal());
         } catch (error) {
           console.log(error);
