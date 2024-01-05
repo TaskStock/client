@@ -8,22 +8,23 @@ import {
 } from "react-native";
 import { useDispatch } from "react-redux";
 import styled, { useTheme } from "styled-components/native";
-import { spacing } from "../../constants/spacing";
-import { AppDispatch } from "../../store/configureStore";
-import { useAppSelect } from "../../store/configureStore.hooks";
+import { spacing } from "../../../constants/spacing";
+import { AppDispatch } from "../../../store/configureStore";
+import { useAppSelect } from "../../../store/configureStore.hooks";
 import {
   setAddTodoForm,
-  submitTodo,
-  toggleAddModal,
+  closeTodoModal,
   toggleRepeatEndModal,
-} from "../../store/modules/todo";
-import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
-import FlexBox from "../atoms/FlexBox";
-import Icons from "../atoms/Icons";
-import Margin from "../atoms/Margin";
-import Text from "../atoms/Text";
-import ProjectItemList from "./TodoModal/ProjectItemList";
-import ValueSlider from "./TodoModal/ValueSlider";
+  useAddTodoMutation,
+  useEditTodoMutation,
+} from "../../../store/modules/todo";
+import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
+import FlexBox from "../../atoms/FlexBox";
+import Icons from "../../atoms/Icons";
+import Margin from "../../atoms/Margin";
+import Text from "../../atoms/Text";
+import ProjectItemList from "./ProjectItemList";
+import ValueSlider from "./ValueSlider";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import dayjs from "dayjs";
 
@@ -144,22 +145,35 @@ export default function AddTodoModal() {
   const theme = useTheme();
   const dispatch = useDispatch<AppDispatch>();
   const addTodoForm = useAppSelect((state) => state.todo.addTodoForm);
+  const isEditMode = useAppSelect((state) => state.todo.isEditMode);
   const isRepeatDateModalOpen = useAppSelect(
     (state) => state.todo.isRepeatDateModalOpen
   );
-
   const scrollViewRef = React.useRef<ScrollView>(null);
 
   const [dayItemWidth, setDayItemWidth] = React.useState(0);
 
   const value = addTodoForm.level * 1000;
 
-  const onPressAddTodoBtn = useCallback(() => {
-    dispatch(submitTodo());
-  }, [addTodoForm]);
+  const [addTodo, addTodoResult] = useAddTodoMutation();
+  const [editTodo, editTodoResult] = useEditTodoMutation();
+
+  const onPressSubmitBtn = () => {
+    if (isEditMode) {
+      editTodo({
+        form: addTodoForm,
+      });
+    } else {
+      addTodo({
+        form: addTodoForm,
+      });
+    }
+  };
 
   const onChangeDate = (event: any, selectedDate: any) => {
     const currentDate = selectedDate;
+    console.log(currentDate);
+
     dispatch(
       setAddTodoForm({
         name: "repeat_end_date",
@@ -175,7 +189,7 @@ export default function AddTodoModal() {
   return (
     <AddTodoOverlay
       onPress={() => {
-        dispatch(toggleAddModal());
+        dispatch(closeTodoModal());
       }}
     >
       <InnerPressable>
@@ -183,7 +197,7 @@ export default function AddTodoModal() {
           <CloseBox>
             <Icons
               onPress={() => {
-                dispatch(toggleAddModal());
+                dispatch(closeTodoModal());
               }}
               type="ionicons"
               name="close"
@@ -211,10 +225,11 @@ export default function AddTodoModal() {
                 >
                   <TodoInput
                     placeholder="할 일을 입력해주세요."
+                    value={addTodoForm.content}
                     onChange={(e) => {
                       dispatch(
                         setAddTodoForm({
-                          name: "text",
+                          name: "content",
                           value: e.nativeEvent.text,
                         })
                       );
@@ -339,8 +354,10 @@ export default function AddTodoModal() {
               </AddTodoContents>
             </Pressable>
           </ScrollView>
-          <AddTodoBtn onPress={onPressAddTodoBtn}>
-            <Text size="md">할 일 추가하기</Text>
+          <AddTodoBtn onPress={onPressSubmitBtn}>
+            <Text size="md">
+              {isEditMode ? "투두 수정하기" : "투두 추가하기"}
+            </Text>
           </AddTodoBtn>
         </AddTodoBox>
       </InnerPressable>

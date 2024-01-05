@@ -17,7 +17,7 @@ import {
 } from "../../../store/configureStore.hooks";
 import dayjs from "dayjs";
 import {
-  toggleAddModal,
+  openAddTodoModal,
   useGetAllTodosQuery,
 } from "../../../store/modules/todo";
 import FlexBox from "../../atoms/FlexBox";
@@ -57,20 +57,12 @@ const TodoContainer = () => {
     date: currentDate.format("YYYY-MM-DD"),
   });
 
-  if (error) {
-    console.log(error);
-  }
-
-  // useEffect(() => {
-  //   const _projects = Object.values(todosData).map((project) => {
-  //     return { name: project.name, id: project.project_id };
-  //   });
-  //   setProjects(_projects);
-  // }, []);
+  // if (error) {
+  //   console.log(error);
+  // }
 
   const currentDateFormat = currentDate.format("MM월 DD일");
 
-  const { NOTCH_BOTTOM } = useHeight();
   return (
     <BottomDrawer onDrawerStateChange={() => {}}>
       <DateContainer>
@@ -83,7 +75,7 @@ const TodoContainer = () => {
             name="circle-with-plus"
             size={28}
             onPress={() => {
-              dispatch(toggleAddModal());
+              dispatch(openAddTodoModal());
             }}
           />
         </FlexBox>
@@ -110,43 +102,37 @@ const TodoContainer = () => {
           paddingTop: useResponsiveFontSize(15),
         }}
       >
+        <TodoItem
+          todo={{
+            todo_id: 1,
+            content: "test",
+            level: 3,
+            check: false,
+            date: "2021-08-01",
+            project_id: 1,
+            index: 0,
+            repeat_day: ["월", "수"],
+            repeat_end_date: "2021-08-31",
+          }}
+        />
+        <TodoItem
+          todo={{
+            todo_id: 2,
+            content: "wefawefwef",
+            level: 1,
+            check: false,
+            date: "2021-08-01",
+            project_id: 3,
+            index: 0,
+            repeat_day: ["월", "수"],
+            repeat_end_date: null,
+          }}
+        />
         {!isError && todosData ? (
           <>
-            <TodoItem
-              todo={{
-                text: "test",
-                level: 1,
-                check: false,
-              }}
-            />
-            <TodoItem
-              todo={{
-                text: "test",
-                level: 1,
-                check: false,
-              }}
-            />
-            <TodoItem
-              todo={{
-                text: "test",
-                level: 1,
-                check: false,
-              }}
-            />
-            <TodoItem
-              todo={{
-                text: "test",
-                level: 1,
-                check: false,
-              }}
-            />
-            <TodoItem
-              todo={{
-                text: "test",
-                level: 1,
-                check: false,
-              }}
-            />
+            {todosData[selectedProject].todos.map((todo) => (
+              <TodoItem key={todo.todo_id} todo={todo} />
+            ))}
           </>
         ) : (
           <CenterLayout>

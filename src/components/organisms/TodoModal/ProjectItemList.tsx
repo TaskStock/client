@@ -111,6 +111,24 @@ export default function ProjectItemList({
       onLayout={onLayoutProjectContainer}
       ref={projectContainerRef}
     >
+      <ProjectItemComponent
+        isSelected={
+          addTodoForm.project_id === null ||
+          addTodoForm.project_id === undefined
+        }
+        onPress={() => {
+          dispatch(
+            setAddTodoForm({
+              name: "project_id",
+              value: null,
+            })
+          );
+        }}
+      >
+        <ProjectItemText isSelected={addTodoForm.project_id === null}>
+          없음
+        </ProjectItemText>
+      </ProjectItemComponent>
       {projectList.map((project, index) => {
         const isSelected = project.id === addTodoForm.project_id;
 

@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import styled from "styled-components/native";
 import { data } from "../../public/home";
 import HeaderTop from "../components/molecules/Home/HeaderTop";
-import AddTodoModal from "../components/organisms/AddTodoModal";
+import AddTodoModal from "../components/organisms/TodoModal/AddTodoModal";
 import GCContainer from "../components/organisms/Home/GCContainer";
 import { useAppSelect } from "../store/configureStore.hooks";
 import { ComponentHeightContext } from "../utils/ComponentHeightContext";

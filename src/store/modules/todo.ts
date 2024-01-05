@@ -1,29 +1,27 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../configureStore";
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import {
+  BaseQueryFn,
+  createApi,
+  fetchBaseQuery,
+} from "@reduxjs/toolkit/query/react";
 import { LOCAL_API_HOST } from "@env";
 import dayjs from "dayjs";
-
-interface AddTodoForm {
-  todo_id?: number;
-  text: string;
-  level: number;
-  project_id: number | null;
-  repeat_day: string[];
-  repeat_end_date?: string | null;
-}
+import { AddTodoForm, Todo } from "../../@types/todo";
 
 interface InitialState {
   isAddModalOpen: boolean;
+  isEditMode: boolean;
   isRepeatDateModalOpen: boolean;
   addTodoForm: AddTodoForm;
 }
 
 const initialState: InitialState = {
   isAddModalOpen: false,
+  isEditMode: false,
   isRepeatDateModalOpen: false,
   addTodoForm: {
-    text: "",
+    content: "",
     level: 0,
     project_id: null,
     repeat_day: [],
@@ -31,50 +29,26 @@ const initialState: InitialState = {
   },
 };
 
-export const submitTodo = createAsyncThunk(
-  `${LOCAL_API_HOST}/todo/update`,
-  async (_, { getState }) => {
-    const {
-      todo: { addTodoForm },
-    } = getState() as RootState;
-
-    console.log(addTodoForm);
-
-    try {
-      const response = await fetch("/todo/update", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(addTodoForm),
-      });
-
-      const result = await response.json();
-
-      if (!result.ok) {
-        throw new Error("서버에 문제가 있습니다.");
-      }
-
-      return result;
-    } catch (error) {
-      throw error;
+const originalBaseQuery = fetchBaseQuery({
+  baseUrl: LOCAL_API_HOST,
+  prepareHeaders: (headers, { getState, endpoint, extra, type, forced }) => {
+    const token = getState().auth.accessToken;
+    if (token) {
+      headers.set("Authorization", `Bearer ${token}`);
     }
-  }
-);
+    headers.set("Content-Type", "application/json");
+    return headers;
+  },
+});
+
+const wrappedFetchBaseQuery = (...args) => {
+  console.log("making api call", ...args);
+  return originalBaseQuery(...args);
+};
 
 export const todoApi = createApi({
   reducerPath: "todoApi",
-  baseQuery: fetchBaseQuery({
-    baseUrl: LOCAL_API_HOST,
-    prepareHeaders: (headers, { getState, endpoint, extra, type, forced }) => {
-      const token = getState().auth.accessToken;
-      if (token) {
-        headers.set("Authorization", `Bearer ${token}`);
-      }
-      headers.set("Content-Type", "application/json");
-      return headers;
-    },
-  }),
+  baseQuery: wrappedFetchBaseQuery,
   endpoints: (builder) => ({
     getAllTodos: builder.query({
       query: (body: { date: string }) => {
@@ -85,18 +59,116 @@ export const todoApi = createApi({
         };
       },
     }),
-    addTodo: builder.mutation({
-      query: (body: {
-        text: string;
-        level: number;
-        project_id: number | null;
-        repeat_day: string[];
-      }) => {
+    addTodo: builder.mutation<
+      {
+        todo_id: number;
+      },
+      { form: AddTodoForm }
+    >({
+      query: (body: { form: AddTodoForm }) => {
         return {
           url: "/todo/new",
           method: "POST",
+          body: body.form,
+        };
+      },
+
+      async onQueryStarted(body, { dispatch, queryFulfilled }) {
+        try {
+          const result = await queryFulfilled;
+
+          const todo_replica = {
+            ...body.form,
+            todo_id: result.data.todo_id,
+            check: false,
+            date: dayjs().toISOString(),
+            index: 0,
+          };
+
+          dispatch(
+            todoApi.util.updateQueryData(
+              "getAllTodos",
+              undefined,
+              (draft: Todo[]) => {
+                draft.push(todo_replica);
+              }
+            )
+          );
+          dispatch(closeTodoModal());
+        } catch (error) {
+          console.log(error);
+        }
+      },
+    }),
+    editTodo: builder.mutation<
+      {},
+      {
+        form: AddTodoForm;
+      }
+    >({
+      query: (body: { form: AddTodoForm }) => {
+        return {
+          url: "/todo/update",
+          method: "POST",
+          body: body.form,
+        };
+      },
+
+      async onQueryStarted(body, { dispatch, queryFulfilled }) {
+        try {
+          const result = await queryFulfilled;
+          dispatch(
+            todoApi.util.updateQueryData(
+              "getAllTodos",
+              undefined,
+              (draft: Todo[]) => {
+                const index = draft.findIndex(
+                  (todo) => todo.todo_id === body.form.todo_id
+                );
+                if (index === -1) return;
+                draft[index] = {
+                  ...body.form,
+                  todo_id: draft[index].todo_id,
+                  check: draft[index].check,
+                  date: draft[index].date,
+                  index: draft[index].index,
+                };
+              }
+            )
+          );
+          dispatch(closeTodoModal());
+        } catch (error) {
+          console.log(error);
+        }
+      },
+    }),
+    toggleTodo: builder.mutation({
+      query: (body: { todo_id: number }) => {
+        return {
+          url: "/todo/toggle",
+          method: "POST",
           body,
         };
+      },
+
+      async onQueryStarted(body, { dispatch, queryFulfilled }) {
+        try {
+          const result = await queryFulfilled;
+          dispatch(
+            todoApi.util.updateQueryData(
+              "getAllTodos",
+              undefined,
+              (draft: Todo[]) => {
+                const index = draft.findIndex(
+                  (todo) => todo.todo_id === body.todo_id
+                );
+                draft[index].check = !draft[index].check;
+              }
+            )
+          );
+        } catch (error) {
+          console.log(error);
+        }
       },
     }),
   }),
@@ -106,31 +178,63 @@ const todoSlice = createSlice({
   name: "todo",
   initialState,
   reducers: {
-    toggleAddModal(state) {
-      state.isAddModalOpen = !state.isAddModalOpen;
-    },
-    editTodo(state, action) {
-      state.isAddModalOpen = true;
-      // -> state에 해당하는 todo를 불러와서, addTOdoForm에 넣어준다.
+    closeTodoModal(state) {
+      state.isAddModalOpen = false;
+      state.isEditMode = false;
+      state.isRepeatDateModalOpen = false;
       state.addTodoForm = {
-        text: action.payload.text,
+        content: "",
         level: 0,
         project_id: null,
         repeat_day: [],
+        repeat_end_date: null,
       };
     },
     openAddTodoModal(state) {
       state.isAddModalOpen = true;
       state.addTodoForm = {
-        text: "",
+        content: "",
         level: 0,
         project_id: null,
         repeat_day: [],
+        repeat_end_date: null,
       };
+    },
+    openEditTodoModal(
+      state,
+      action: PayloadAction<{
+        todo_id: number;
+        text: string;
+        level: number;
+        project_id: number | null;
+        repeat_day: string[];
+        repeat_end_date: string | null;
+      }>
+    ) {
+      const { todo_id, text, level, project_id, repeat_day, repeat_end_date } =
+        action.payload;
+
+      if (!todo_id) return;
+
+      state.isAddModalOpen = true;
+      state.isEditMode = true;
+
+      state.addTodoForm = {
+        todo_id: todo_id,
+        content: text,
+        level: level,
+        project_id: project_id || null,
+        repeat_day: repeat_day || [],
+        repeat_end_date: repeat_end_date || null,
+      };
+
+      if (repeat_end_date) {
+        state.isRepeatDateModalOpen = true;
+      }
     },
     toggleRepeatEndModal(state) {
       if (!state.isRepeatDateModalOpen) {
-        state.addTodoForm.repeat_end_date = dayjs().format("YYYY-MM-DD");
+        state.addTodoForm.repeat_end_date = dayjs().toISOString();
       } else {
         state.addTodoForm.repeat_end_date = null;
       }
@@ -148,19 +252,20 @@ const todoSlice = createSlice({
       state.addTodoForm[action.payload.name] = action.payload.value;
     },
   },
-  extraReducers(builder) {
-    builder.addCase(submitTodo.fulfilled, (state, action) => {
-      // console.log(action.payload.message);
-      state.isAddModalOpen = false;
-    });
-    builder.addCase(submitTodo.rejected, (state, action) => {
-      console.log(action.error.message);
-      state.isAddModalOpen = false;
-    });
-  },
 });
 
 export default todoSlice.reducer;
-export const { toggleAddModal, setAddTodoForm, toggleRepeatEndModal } =
-  todoSlice.actions;
-export const { useGetAllTodosQuery } = todoApi;
+export const {
+  openAddTodoModal,
+  openEditTodoModal,
+  closeTodoModal,
+  setAddTodoForm,
+  toggleRepeatEndModal,
+} = todoSlice.actions;
+
+export const {
+  useGetAllTodosQuery,
+  useAddTodoMutation,
+  useEditTodoMutation,
+  useToggleTodoMutation,
+} = todoApi;

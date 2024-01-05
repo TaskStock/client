@@ -5,6 +5,7 @@ import styled, { useTheme } from "styled-components/native";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import { useDispatch } from "react-redux";
 import { setAddTodoForm } from "../../../store/modules/todo";
+import { useAppSelect } from "../../../store/configureStore.hooks";
 
 const SliderLabel = styled.View`
   position: absolute;
@@ -33,6 +34,8 @@ const SliderGrid = styled.View`
 export default function ValueSlider() {
   const dispatch = useDispatch();
 
+  const sliderValue = useAppSelect((state) => state.todo.addTodoForm.level);
+
   const onChangeSliderValue = (value: number) => {
     const level = value > 0 ? Math.floor(value / 1000) : 0;
 
@@ -50,14 +53,13 @@ export default function ValueSlider() {
       maximumTrackTintColor={theme.mainBtnGray}
       step={1000}
       tapToSeek={true}
+      value={sliderValue * 1000}
       thumbImage={SliderThumb}
       style={{
         display: "flex",
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-between",
-        // paddingHorizontal: 5,
-        // zIndex: -2,
       }}
     >
       <SliderGrid />

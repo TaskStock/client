@@ -8,6 +8,9 @@ import FlexBox from "../../atoms/FlexBox";
 import Text from "../../atoms/Text";
 import Icons from "../../atoms/Icons";
 import { useTheme } from "styled-components/native";
+import { useDispatch } from "react-redux";
+import { openEditTodoModal } from "../../../store/modules/todo";
+import { Todo } from "../../../@types/todo";
 
 const THEME_CONSTANTS = {
   dark: {
@@ -22,11 +25,13 @@ const THEME_CONSTANTS = {
   },
 };
 
-const TodoItem = ({ todo }) => {
+const TodoItem = ({ todo }: { todo: Todo }) => {
   const [checked, setChecked] = useState(todo.check);
   const theme = useAppSelect((state) => state.theme.value);
 
   const styledTheme = useTheme();
+
+  const dispatch = useDispatch();
 
   return (
     <FlexBox
@@ -51,7 +56,7 @@ const TodoItem = ({ todo }) => {
           />
         )}
 
-        <Text size="md">{todo.text}</Text>
+        <Text size="md">{todo.content}</Text>
       </FlexBox>
       <FlexBox gap={10} alignItems="center">
         {checked ? (
@@ -66,7 +71,18 @@ const TodoItem = ({ todo }) => {
           name="dots-horizontal"
           size={24}
           color={styledTheme.textDimmer}
-          onPress={() => {}}
+          onPress={() => {
+            dispatch(
+              openEditTodoModal({
+                text: todo.content,
+                level: todo.level,
+                project_id: todo.project_id,
+                repeat_day: todo.repeat_day,
+                repeat_end_date: todo.repeat_end_date,
+                todo_id: todo.todo_id,
+              })
+            );
+          }}
         />
       </FlexBox>
     </FlexBox>
