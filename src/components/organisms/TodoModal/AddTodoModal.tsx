@@ -124,16 +124,18 @@ const DatePickerBox = styled.Pressable`
 const Section = ({
   header,
   children,
-  margin,
+  gapSize = "md",
 }: {
   header: React.ReactNode;
-  children: React.ReactNode;
-  margin?: number;
+  children?: React.ReactNode;
+  gapSize?: "md" | "lg" | "xl";
 }) => {
+  const margin = gapSize === "md" ? 5 : gapSize === "lg" ? 10 : 15;
+
   return (
     <View>
       {header}
-      <Margin margin={margin ? margin : 5}></Margin>
+      <Margin margin={margin}></Margin>
       {children}
     </View>
   );
@@ -261,7 +263,7 @@ export default function AddTodoModal() {
                       })}
                     </SectionHeader>
                   }
-                  margin={10}
+                  gapSize="lg"
                 >
                   <FlexBox gap={10}>
                     {dayList.map((item, index) => {
@@ -312,37 +314,43 @@ export default function AddTodoModal() {
                         alignItems="center"
                         styles={{
                           flex: 1,
+                          minHeight: useResponsiveFontSize(50),
                         }}
                       >
-                        <SectionHeaderText>반복 종료</SectionHeaderText>
-                        <Switch
-                          onValueChange={toggleIsEndRepeat}
-                          value={isRepeatDateModalOpen}
-                          trackColor={{
-                            false: theme.palette.neutral600_gray,
-                            true: theme.palette.neutral500_dark,
-                          }}
-                        ></Switch>
+                        <FlexBox
+                          justifyContent="center"
+                          alignItems="center"
+                          gap={10}
+                        >
+                          <SectionHeaderText>반복 종료</SectionHeaderText>
+                          <Switch
+                            onValueChange={toggleIsEndRepeat}
+                            value={isRepeatDateModalOpen}
+                            trackColor={{
+                              false: theme.palette.neutral600_gray,
+                              true: theme.palette.neutral500_dark,
+                            }}
+                          ></Switch>
+                        </FlexBox>
+                        {isRepeatDateModalOpen && (
+                          <DatePickerBox>
+                            <DateTimePicker
+                              value={new Date(addTodoForm.repeat_end_date)}
+                              mode="date"
+                              display="default"
+                              onChange={onChangeDate}
+                              style={{
+                                bottom: 0,
+                              }}
+                            />
+                          </DatePickerBox>
+                        )}
                       </FlexBox>
                     </SectionHeader>
                   }
-                >
-                  {isRepeatDateModalOpen && (
-                    <DatePickerBox>
-                      <DateTimePicker
-                        value={new Date(addTodoForm.repeat_end_date)}
-                        mode="date"
-                        display="default"
-                        onChange={onChangeDate}
-                        style={{
-                          bottom: 0,
-                        }}
-                      />
-                    </DatePickerBox>
-                  )}
-                </Section>
+                ></Section>
                 <Section
-                  margin={10}
+                  gapSize="lg"
                   header={
                     <SectionHeader>
                       <SectionHeaderText>프로젝트</SectionHeaderText>
