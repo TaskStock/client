@@ -28,7 +28,7 @@ const initialState: InitialState = {
     content: "",
     level: 0,
     project_id: null,
-    repeat_day: [],
+    repeat_day: "0000000",
     repeat_end_date: null,
   },
 };
@@ -99,7 +99,16 @@ export const todoApi = createApi({
   endpoints: (builder) => ({
     getAllTodos: builder.query<
       {
-        todos: Todo[];
+        todos: {
+          todo_id: number;
+          content: string;
+          check: boolean;
+          date: string;
+          level: number;
+          index: number;
+          user_id: number;
+          project_id: number | null;
+        }[];
       },
       { date: string }
     >({
@@ -127,7 +136,7 @@ export const todoApi = createApi({
           content: body.content,
           level: 0,
           project_id: null,
-          repeat_day: [],
+          repeat_day: "0000000",
           repeat_end_date: null,
         };
 
@@ -151,7 +160,7 @@ export const todoApi = createApi({
             index: 0,
             project_id: null,
             level: 0,
-            repeat_day: [],
+            repeat_day: "0000000",
             repeat_end_date: null,
           };
 
@@ -266,12 +275,13 @@ export const todoApi = createApi({
     toggleTodo: builder.mutation({
       query: (body: {
         todo_id: number;
+        check: boolean;
         queryArgs: {
           date: string;
         };
       }) => {
         return {
-          url: "/todo/toggle",
+          url: "/todo/checktoggle",
           method: "POST",
           body,
         };
@@ -358,7 +368,7 @@ const todoSlice = createSlice({
         content: "",
         level: 0,
         project_id: null,
-        repeat_day: [],
+        repeat_day: "0000000",
         repeat_end_date: null,
       };
     },
@@ -369,7 +379,7 @@ const todoSlice = createSlice({
         content: "",
         level: 0,
         project_id: null,
-        repeat_day: [],
+        repeat_day: "0000000",
         repeat_end_date: null,
       };
     },
@@ -380,7 +390,7 @@ const todoSlice = createSlice({
         text: string;
         level: number;
         project_id: number | null;
-        repeat_day: string[];
+        repeat_day: string;
         repeat_end_date: string | null;
       }>
     ) {
@@ -396,7 +406,7 @@ const todoSlice = createSlice({
         content: text,
         level: level,
         project_id: project_id || null,
-        repeat_day: repeat_day || [],
+        repeat_day: repeat_day,
         repeat_end_date: repeat_end_date || null,
       };
 

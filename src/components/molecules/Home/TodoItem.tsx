@@ -114,6 +114,7 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
   const toggleTodoCheck = () => {
     toggleCheckTodo({
       todo_id: todo.todo_id,
+      check: !todo.check,
       queryArgs: {
         date: currentDateFormat,
       },

@@ -27,6 +27,7 @@ import ProjectItemList from "./ProjectItemList";
 import ValueSlider from "./ValueSlider";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import dayjs from "dayjs";
+import { getNewRepeatDay } from "../../../utils/getNewRepeatDay";
 
 const AddTodoOverlay = styled.Pressable`
   position: absolute;
@@ -279,20 +280,19 @@ export default function AddTodoModal() {
                 >
                   <FlexBox gap={10}>
                     {dayList.map((item, index) => {
-                      const onPress = () => {
+                      const onPressDayItem = () => {
                         dispatch(
                           setAddTodoForm({
                             name: "repeat_day",
-                            value: addTodoForm.repeat_day.includes(item)
-                              ? addTodoForm.repeat_day.filter(
-                                  (day) => day !== item
-                                )
-                              : [...addTodoForm.repeat_day, item],
+                            value: getNewRepeatDay(
+                              addTodoForm.repeat_day,
+                              index
+                            ),
                           })
                         );
                       };
 
-                      const isSelected = addTodoForm.repeat_day.includes(item);
+                      const isSelected = addTodoForm.repeat_day[index] === "1";
 
                       return (
                         <RepeatDayItem
@@ -302,7 +302,7 @@ export default function AddTodoModal() {
                           }}
                           key={index + item}
                           isSelected={isSelected}
-                          onPress={onPress}
+                          onPress={onPressDayItem}
                           size={dayItemWidth}
                         >
                           <Text

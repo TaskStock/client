@@ -49,7 +49,11 @@ const TodoContainer = () => {
     date: currentDate.format("YYYY-MM-DD"),
   });
 
-  const todosData = data ? data.todos : [];
+  const todosData = data
+    ? [...data.todos].sort(
+        (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
+      )
+    : [];
 
   if (error) {
     console.log(error);
