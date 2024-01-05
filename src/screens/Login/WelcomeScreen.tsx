@@ -1,7 +1,6 @@
 import React from "react";
 import { TouchableOpacity, View } from "react-native";
 import styled from "styled-components/native";
-import { BlackBtn } from "../../components/atoms/Buttons";
 import FlexBox from "../../components/atoms/FlexBox";
 import { IconsPic } from "../../components/atoms/Icons";
 import Text from "../../components/atoms/Text";
@@ -51,6 +50,48 @@ const Button = ({
   );
 };
 
+// 구글버튼
+const GoogleButtonContainer = styled.TouchableOpacity`
+  flex-direction: row;
+  background-color: ${palette.google};
+  border-radius: ${useResponsiveFontSize(12)}px;
+  border: 1px solid ${palette.google};
+  justify-content: center;
+`;
+const GoogleLeft = styled.View`
+  position: absolute;
+  left: 0;
+  top: 0;
+  background-color: white;
+  height: 100%;
+  padding: 0 ${useResponsiveFontSize(16)}px;
+  align-items: center;
+  justify-content: center;
+  border-top-left-radius: ${useResponsiveFontSize(12)}px;
+  border-bottom-left-radius: ${useResponsiveFontSize(12)}px;
+`;
+
+const GoogleRight = styled.View`
+  padding: ${useResponsiveFontSize(14)}px;
+`;
+const GoogleButton = ({ onPress }) => {
+  return (
+    <GoogleButtonContainer onPress={onPress}>
+      <GoogleLeft>
+        <IconsPic
+          source={require("../../../assets/icons/google.png")}
+          size={18}
+        />
+      </GoogleLeft>
+      <GoogleRight>
+        <Text size="md" weight="semibold" color="white">
+          구글로 계속하기
+        </Text>
+      </GoogleRight>
+    </GoogleButtonContainer>
+  );
+};
+
 // 이용약관
 const Policy = styled.View`
   flex: 1;
@@ -91,11 +132,8 @@ const WelcomeScreen = ({ navigation }) => {
     <LoginContainer>
       <Login>
         <Divider />
-        <Button onPress={() => {}}>
-          <Text size="md" weight="semibold">
-            구글로 계속하기
-          </Text>
-        </Button>
+
+        <GoogleButton onPress={() => {}} />
         <Button onPress={() => {}} color={palette.kakao}>
           <IconsPic
             source={require("../../../assets/icons/kakao-black.png")}
