@@ -105,9 +105,8 @@ export const todoApi = createApi({
     >({
       query: (body: { date: string }) => {
         return {
-          url: "/todo/read",
-          method: "POST",
-          body,
+          url: `/todo/read?date=${body.date}`,
+          method: "GET",
         };
       },
     }),
