@@ -119,30 +119,34 @@ export const todoApi = createApi({
       },
 
       async onQueryStarted(body, { dispatch, queryFulfilled }) {
+        const patchUpdateTodo = dispatch(
+          todoApi.util.updateQueryData(
+            "getAllTodos",
+            undefined,
+            (draft: Todo[]) => {
+              const index = draft.findIndex(
+                (todo) => todo.todo_id === body.form.todo_id
+              );
+              if (index === -1) return;
+              draft[index] = {
+                ...body.form,
+                todo_id: draft[index].todo_id,
+                check: draft[index].check,
+                date: draft[index].date,
+                index: draft[index].index,
+              };
+            }
+          )
+        );
+
+        const patchCloseModal = dispatch(closeTodoModal());
+
         try {
           const result = await queryFulfilled;
-          dispatch(
-            todoApi.util.updateQueryData(
-              "getAllTodos",
-              undefined,
-              (draft: Todo[]) => {
-                const index = draft.findIndex(
-                  (todo) => todo.todo_id === body.form.todo_id
-                );
-                if (index === -1) return;
-                draft[index] = {
-                  ...body.form,
-                  todo_id: draft[index].todo_id,
-                  check: draft[index].check,
-                  date: draft[index].date,
-                  index: draft[index].index,
-                };
-              }
-            )
-          );
-          dispatch(closeTodoModal());
         } catch (error) {
           console.log(error);
+          patchUpdateTodo.undo();
+          patchCloseModal.undo();
         }
       },
     }),
@@ -156,22 +160,24 @@ export const todoApi = createApi({
       },
 
       async onQueryStarted(body, { dispatch, queryFulfilled }) {
+        const patchResult = dispatch(
+          todoApi.util.updateQueryData(
+            "getAllTodos",
+            undefined,
+            (draft: Todo[]) => {
+              const index = draft.findIndex(
+                (todo) => todo.todo_id === body.todo_id
+              );
+              draft[index].check = !draft[index].check;
+            }
+          )
+        );
+
         try {
           const result = await queryFulfilled;
-          dispatch(
-            todoApi.util.updateQueryData(
-              "getAllTodos",
-              undefined,
-              (draft: Todo[]) => {
-                const index = draft.findIndex(
-                  (todo) => todo.todo_id === body.todo_id
-                );
-                draft[index].check = !draft[index].check;
-              }
-            )
-          );
         } catch (error) {
           console.log(error);
+          patchResult.undo();
         }
       },
     }),
