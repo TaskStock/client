@@ -8,6 +8,8 @@ import {
 import { LOCAL_API_HOST } from "@env";
 import dayjs from "dayjs";
 import { AddTodoForm, Todo } from "../../@types/todo";
+import { client } from "../../services/api";
+import { logout, setAccessToken } from "./auth";
 
 interface InitialState {
   isTodoDrawerOpen: boolean;
@@ -45,9 +47,50 @@ const originalBaseQuery = fetchBaseQuery({
   },
 });
 
+const BaseQueryWithAuth: BaseQueryFn<
+  string | { url: string; method: string; body: any },
+  unknown,
+  unknown
+> = async (args, api, extraOptions) => {
+  let result = await originalBaseQuery(args, api, extraOptions);
+
+  if (result.error && result.error.originalStatus === 401) {
+    // try to get a new token
+    const rootState = api.getState() as RootState;
+
+    const refreshToken = rootState.auth.refreshToken;
+
+    if (!refreshToken) {
+      api.dispatch(logout());
+      return;
+    }
+
+    const refreshResult = await fetch(`${LOCAL_API_HOST}/account/refresh`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ refreshToken }),
+    });
+
+    if (refreshResult.ok) {
+      const response = await refreshResult.json();
+      const newAccessToken = response.accessToken;
+
+      api.dispatch(setAccessToken(newAccessToken));
+
+      result = await originalBaseQuery(args, api, extraOptions);
+      return result;
+    } else {
+      api.dispatch(logout());
+    }
+  }
+  return result;
+};
+
 const wrappedFetchBaseQuery = (...args) => {
   console.log("making api call", ...args);
-  return originalBaseQuery(...args);
+  return BaseQueryWithAuth(...args);
 };
 
 export const todoApi = createApi({
@@ -113,14 +156,11 @@ export const todoApi = createApi({
             repeat_end_date: null,
           };
 
-          console.log("date" + body.queryArgs.date);
-
           dispatch(
             todoApi.util.updateQueryData(
               "getAllTodos",
               { date: body.queryArgs.date },
               (draft: { todos: Todo[] }) => {
-                console.log("pushing");
                 draft.todos.push(todo_replica);
               }
             )
