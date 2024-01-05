@@ -22,6 +22,7 @@ import Icons from "../../atoms/Icons";
 import CenterLayout from "../../atoms/CenterLayout";
 import Margin from "../../atoms/Margin";
 import AddTodoItem from "../../organisms/Home/AddTodoItem";
+import LoadingSpinner from "../../atoms/LoadingSpinner";
 
 const DateContainer = styled.View`
   padding: ${spacing.small}px ${spacing.gutter}px 0;
@@ -99,32 +100,38 @@ const TodoContainer = () => {
           paddingTop: useResponsiveFontSize(15),
         }}
       >
-        {!isError ? (
-          todosData && (
-            <>
-              {todosData.map((todo) => {
-                if (
-                  selectedProject !== null &&
-                  todo.project_id !== selectedProject
-                )
-                  return null;
+        {!isLoading ? (
+          !isError ? (
+            todosData && (
+              <>
+                {todosData.map((todo) => {
+                  if (
+                    selectedProject !== null &&
+                    todo.project_id !== selectedProject
+                  )
+                    return null;
 
-                return <TodoItem key={todo.todo_id} todo={todo} />;
-              })}
-              <AddTodoItem />
-            </>
+                  return <TodoItem key={todo.todo_id} todo={todo} />;
+                })}
+                <AddTodoItem />
+              </>
+            )
+          ) : (
+            <CenterLayout>
+              <Text size="md">할일을 불러오는 중 에러가 발생했어요</Text>
+              <Margin margin={5} />
+              <Pressable
+                onPress={() => {
+                  refetch();
+                }}
+              >
+                <Text size="md">다시 로드하기</Text>
+              </Pressable>
+            </CenterLayout>
           )
         ) : (
           <CenterLayout>
-            <Text size="md">할일을 불러오는 중 에러가 발생했어요</Text>
-            <Margin margin={5} />
-            <Pressable
-              onPress={() => {
-                refetch();
-              }}
-            >
-              <Text size="md">다시 로드하기</Text>
-            </Pressable>
+            <LoadingSpinner />
           </CenterLayout>
         )}
 
