@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../configureStore";
 import {
   BaseQueryFn,
@@ -34,7 +34,9 @@ const initialState: InitialState = {
 const originalBaseQuery = fetchBaseQuery({
   baseUrl: LOCAL_API_HOST,
   prepareHeaders: (headers, { getState, endpoint, extra, type, forced }) => {
-    const token = getState().auth.accessToken;
+    const rootState = getState() as RootState;
+
+    const token = rootState.auth.accessToken;
     if (token) {
       headers.set("Authorization", `Bearer ${token}`);
     }
@@ -173,6 +175,42 @@ export const todoApi = createApi({
         }
       },
     }),
+    deleteTodo: builder.mutation<
+      {},
+      {
+        todo_id: number;
+      }
+    >({
+      query: (body: { todo_id: number }) => {
+        return {
+          url: "/todo/delete",
+          method: "POST",
+          body,
+        };
+      },
+
+      async onQueryStarted(body, { dispatch, queryFulfilled }) {
+        const patchResult = dispatch(
+          todoApi.util.updateQueryData(
+            "getAllTodos",
+            undefined,
+            (draft: Todo[]) => {
+              const index = draft.findIndex(
+                (todo) => todo.todo_id === body.todo_id
+              );
+              draft.splice(index, 1);
+            }
+          )
+        );
+
+        try {
+          await queryFulfilled;
+        } catch (error) {
+          console.log(error);
+          patchResult.undo();
+        }
+      },
+    }),
   }),
 });
 
@@ -253,9 +291,6 @@ const todoSlice = createSlice({
     ) {
       state.addTodoForm[action.payload.name] = action.payload.value;
     },
-    toggleTodoDrawer(state) {
-      state.isTodoDrawerOpen = !state.isTodoDrawerOpen;
-    },
     setTodoDrawerPosition(state, payload) {
       state.todoDrawerPosition = payload.payload;
     },
@@ -269,7 +304,6 @@ export const {
   closeTodoModal,
   setAddTodoForm,
   toggleRepeatEndModal,
-  toggleTodoDrawer,
   setTodoDrawerPosition,
 } = todoSlice.actions;
 
