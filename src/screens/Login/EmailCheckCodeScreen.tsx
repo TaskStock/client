@@ -26,10 +26,8 @@ const EmailCheckCodeScreen = ({ route, navigation }) => {
   const inputRefs = Array(6)
     .fill(null)
     .map(() => createRef());
-  // const email = route.params.email;
-  const email = "hwanheejung117@gmail.com";
-  // const codeId = route.params.codeId;
-  const codeId = 1;
+  const email = route.params.email;
+  const codeId = route.params.codeId;
 
   useEffect(() => {
     inputRefs[0].current?.focus();

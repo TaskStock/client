@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { client } from "../../services/api";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface IInitialUserState {
   accessToken: string;
@@ -24,6 +25,12 @@ export const registerUser = createAsyncThunk(
   async (data, { rejectWithValue }) => {
     try {
       const responseData = await client.post("account/register", data);
+      const { accessToken, refreshToken } = responseData;
+
+      // 토큰을 AsyncStorage에 저장
+      await AsyncStorage.setItem("accessToken", accessToken);
+      await AsyncStorage.setItem("refreshToken", refreshToken);
+
       return responseData;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -62,6 +69,7 @@ const authSlice = createSlice({
 
         state.isLoggedIn = true;
         state.loading = false;
+        console.log(state);
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.loading = false;

@@ -5,6 +5,7 @@ import LoginContainer from "../../components/molecules/Login/LoginContainer";
 import { spacing } from "../../constants/spacing";
 import { useAppDispatch } from "../../store/configureStore.hooks";
 import { registerUser } from "../../store/modules/auth";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface IUser {
   email: string;
