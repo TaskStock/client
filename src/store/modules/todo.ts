@@ -10,13 +10,17 @@ import dayjs from "dayjs";
 import { AddTodoForm, Todo } from "../../@types/todo";
 
 interface InitialState {
+  isTodoDrawerOpen: boolean;
   isAddModalOpen: boolean;
+  todoDrawerPosition: number;
   isRepeatDateModalOpen: boolean;
   addTodoForm: AddTodoForm;
 }
 
 const initialState: InitialState = {
+  isTodoDrawerOpen: false,
   isAddModalOpen: false,
+  todoDrawerPosition: 0,
   isRepeatDateModalOpen: false,
   addTodoForm: {
     content: "",
@@ -48,7 +52,7 @@ export const todoApi = createApi({
   reducerPath: "todoApi",
   baseQuery: wrappedFetchBaseQuery,
   endpoints: (builder) => ({
-    getAllTodos: builder.query({
+    getAllTodos: builder.query<Todo[], { date: string }>({
       query: (body: { date: string }) => {
         return {
           url: "/todo/read",
@@ -249,6 +253,12 @@ const todoSlice = createSlice({
     ) {
       state.addTodoForm[action.payload.name] = action.payload.value;
     },
+    toggleTodoDrawer(state) {
+      state.isTodoDrawerOpen = !state.isTodoDrawerOpen;
+    },
+    setTodoDrawerPosition(state, payload) {
+      state.todoDrawerPosition = payload.payload;
+    },
   },
 });
 
@@ -259,6 +269,8 @@ export const {
   closeTodoModal,
   setAddTodoForm,
   toggleRepeatEndModal,
+  toggleTodoDrawer,
+  setTodoDrawerPosition,
 } = todoSlice.actions;
 
 export const {

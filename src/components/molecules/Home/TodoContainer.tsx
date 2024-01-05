@@ -18,6 +18,7 @@ import {
 import dayjs from "dayjs";
 import {
   openAddTodoModal,
+  setTodoDrawerPosition,
   useGetAllTodosQuery,
 } from "../../../store/modules/todo";
 import FlexBox from "../../atoms/FlexBox";
@@ -64,7 +65,11 @@ const TodoContainer = () => {
   const currentDateFormat = currentDate.format("MM월 DD일");
 
   return (
-    <BottomDrawer onDrawerStateChange={() => {}}>
+    <BottomDrawer
+      onDrawerStateChange={(nextState) => {
+        dispatch(setTodoDrawerPosition(nextState));
+      }}
+    >
       <DateContainer>
         <FlexBox justifyContent="space-between" alignItems="center">
           <Text size="xl" weight="bold">
@@ -130,9 +135,15 @@ const TodoContainer = () => {
         />
         {!isError && todosData ? (
           <>
-            {todosData[selectedProject].todos.map((todo) => (
-              <TodoItem key={todo.todo_id} todo={todo} />
-            ))}
+            {todosData.map((todo) => {
+              if (
+                selectedProject !== null &&
+                todo.project_id !== selectedProject
+              )
+                return null;
+
+              return <TodoItem key={todo.todo_id} todo={todo} />;
+            })}
           </>
         ) : (
           <CenterLayout>
