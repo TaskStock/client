@@ -9,7 +9,11 @@ import Text from "../../atoms/Text";
 import Icons from "../../atoms/Icons";
 import styled, { useTheme } from "styled-components/native";
 import { useDispatch } from "react-redux";
-import { openEditTodoModal } from "../../../store/modules/todo";
+import {
+  openEditTodoModal,
+  useDeleteTodoMutation,
+  useToggleTodoMutation,
+} from "../../../store/modules/todo";
 import { Todo } from "../../../@types/todo";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import { Modal, View } from "react-native";
@@ -71,7 +75,6 @@ const TodoModalItem = styled.TouchableOpacity<{ isSelected?: boolean }>`
 `;
 
 const TodoItem = ({ todo }: { todo: Todo }) => {
-  const [checked, setChecked] = useState(todo.check);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 });
 
@@ -79,6 +82,9 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
   const todoDrawerPosition = useAppSelect(
     (state) => state.todo.todoDrawerPosition
   );
+
+  const [deleteTodo, result] = useDeleteTodoMutation();
+  const [toggleCheckTodo, toggleCheckTodoResult] = useToggleTodoMutation();
 
   const didMountRef = React.useRef(false);
   const MeasurePositionTriggerRef = React.useRef(false);
@@ -105,6 +111,19 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
     });
   };
 
+  const toggleTodoCheck = () => {
+    toggleCheckTodo({
+      todo_id: todo.todo_id,
+      queryArgs: {
+        date: currentDateFormat,
+      },
+    });
+  };
+
+  const currentDateFormat = useAppSelect(
+    (state) => state.calendar.currentDateYYYYMMDD
+  );
+
   return (
     <View ref={itemRef}>
       <FlexBox
@@ -113,18 +132,18 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
         styles={{ paddingBottom: spacing.padding }}
       >
         <FlexBox gap={10} alignItems="center">
-          {checked ? (
+          {todo.check ? (
             <CheckBox
               src={THEME_CONSTANTS[theme]?.checkedBoxSrc}
               onPress={() => {
-                setChecked(!checked);
+                toggleTodoCheck();
               }}
             />
           ) : (
             <CheckBox
               src={THEME_CONSTANTS[theme]?.unCheckedBoxSrc}
               onPress={() => {
-                setChecked(!checked);
+                toggleTodoCheck();
               }}
             />
           )}
@@ -132,7 +151,7 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
           <Text size="md">{todo.content}</Text>
         </FlexBox>
         <FlexBox gap={10} alignItems="center">
-          {checked ? (
+          {todo.check ? (
             <Text size="md" color={THEME_CONSTANTS[theme]?.high}>
               +{numberWithCommas(todo.level * 1000)}원
             </Text>
@@ -187,7 +206,16 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
                     수정
                   </Text>
                 </TodoModalItem>
-                <TodoModalItem>
+                <TodoModalItem
+                  onPress={() => {
+                    deleteTodo({
+                      todo_id: todo.todo_id,
+                      queryArgs: {
+                        date: currentDateFormat,
+                      },
+                    });
+                  }}
+                >
                   <Text size="md">삭제</Text>
                 </TodoModalItem>
               </TodoModal>

@@ -1,13 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Pressable, ScrollView, View } from "react-native";
 import styled from "styled-components/native";
-import { todosData } from "../../../../public/todos";
 import { spacing } from "../../../constants/spacing";
-import { ComponentHeightContext } from "../../../utils/ComponentHeightContext";
-import useHeight from "../../../hooks/useHeight";
 import Text from "../../atoms/Text";
 import BottomDrawer from "./BottomDrawer";
-import EditTodoItem from "./EditTodoItem";
 import ProjectSelectBtn from "./ProjectSelectBtn";
 import TodoItem from "./TodoItem";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
@@ -23,9 +19,9 @@ import {
 } from "../../../store/modules/todo";
 import FlexBox from "../../atoms/FlexBox";
 import Icons from "../../atoms/Icons";
-import LoadingSpinner from "../../atoms/LoadingSpinner";
 import CenterLayout from "../../atoms/CenterLayout";
 import Margin from "../../atoms/Margin";
+import AddTodoItem from "../../organisms/Home/AddTodoItem";
 
 const DateContainer = styled.View`
   padding: ${spacing.small}px ${spacing.gutter}px 0;
@@ -48,19 +44,15 @@ const TodoContainer = () => {
 
   const dispatch = useAppDispatch();
 
-  const {
-    data: todosData,
-    isLoading,
-    isError,
-    error,
-    refetch,
-  } = useGetAllTodosQuery({
+  const { data, isLoading, isError, error, refetch } = useGetAllTodosQuery({
     date: currentDate.format("YYYY-MM-DD"),
   });
 
-  // if (error) {
-  //   console.log(error);
-  // }
+  const todosData = data ? data.todos : [];
+
+  if (error) {
+    console.log(error);
+  }
 
   const currentDateFormat = currentDate.format("MM월 DD일");
 
@@ -107,47 +99,24 @@ const TodoContainer = () => {
           paddingTop: useResponsiveFontSize(15),
         }}
       >
-        <TodoItem
-          todo={{
-            todo_id: 1,
-            content: "test",
-            level: 3,
-            check: false,
-            date: "2021-08-01",
-            project_id: 1,
-            index: 0,
-            repeat_day: ["월", "수"],
-            repeat_end_date: "2021-08-31",
-          }}
-        />
-        <TodoItem
-          todo={{
-            todo_id: 2,
-            content: "wefawefwef",
-            level: 1,
-            check: false,
-            date: "2021-08-01",
-            project_id: 3,
-            index: 0,
-            repeat_day: ["월", "수"],
-            repeat_end_date: null,
-          }}
-        />
-        {!isError && todosData ? (
-          <>
-            {todosData.map((todo) => {
-              if (
-                selectedProject !== null &&
-                todo.project_id !== selectedProject
-              )
-                return null;
+        {!isError ? (
+          todosData && (
+            <>
+              {todosData.map((todo) => {
+                if (
+                  selectedProject !== null &&
+                  todo.project_id !== selectedProject
+                )
+                  return null;
 
-              return <TodoItem key={todo.todo_id} todo={todo} />;
-            })}
-          </>
+                return <TodoItem key={todo.todo_id} todo={todo} />;
+              })}
+              <AddTodoItem />
+            </>
+          )
         ) : (
           <CenterLayout>
-            <Text size="md">할일을 불러오는 중 에러가 발생했어요..</Text>
+            <Text size="md">할일을 불러오는 중 에러가 발생했어요</Text>
             <Margin margin={5} />
             <Pressable
               onPress={() => {

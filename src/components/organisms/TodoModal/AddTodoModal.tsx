@@ -159,17 +159,28 @@ export default function AddTodoModal() {
 
   const value = addTodoForm.level * 1000;
 
+  const currentDateFormat = useAppSelect(
+    (state) => state.calendar.currentDateYYYYMMDD
+  );
+
   const [addTodo, addTodoResult] = useAddTodoMutation();
+
   const [editTodo, editTodoResult] = useEditTodoMutation();
 
   const onPressSubmitBtn = () => {
     if (isEditMode) {
       editTodo({
         form: addTodoForm,
+        queryArgs: {
+          date: currentDateFormat,
+        },
       });
     } else {
       addTodo({
         form: addTodoForm,
+        queryArgs: {
+          date: currentDateFormat,
+        },
       });
     }
   };
@@ -229,6 +240,7 @@ export default function AddTodoModal() {
                 >
                   <TodoInput
                     placeholder="할 일을 입력해주세요."
+                    placeholderTextColor={theme.textDim}
                     value={addTodoForm.content}
                     onChange={(e) => {
                       dispatch(

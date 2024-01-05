@@ -54,7 +54,12 @@ export const todoApi = createApi({
   reducerPath: "todoApi",
   baseQuery: wrappedFetchBaseQuery,
   endpoints: (builder) => ({
-    getAllTodos: builder.query<Todo[], { date: string }>({
+    getAllTodos: builder.query<
+      {
+        todos: Todo[];
+      },
+      { date: string }
+    >({
       query: (body: { date: string }) => {
         return {
           url: "/todo/read",
@@ -63,13 +68,84 @@ export const todoApi = createApi({
         };
       },
     }),
+    addSimpleTodo: builder.mutation<
+      {
+        todo_id: number;
+      },
+      {
+        content: string;
+        queryArgs: {
+          date: string;
+        };
+      }
+    >({
+      query: (body: { content: string }) => {
+        const simpleTodoForm: AddTodoForm = {
+          todo_id: null,
+          content: body.content,
+          level: 0,
+          project_id: null,
+          repeat_day: [],
+          repeat_end_date: null,
+        };
+
+        return {
+          url: "/todo/new",
+          method: "POST",
+          body: simpleTodoForm,
+        };
+      },
+
+      async onQueryStarted(body, { dispatch, queryFulfilled }) {
+        try {
+          const result = await queryFulfilled;
+
+          // index랑 date의 경우.
+          const todo_replica = {
+            content: body.content,
+            todo_id: result.data.todo_id,
+            check: false,
+            date: dayjs().toISOString(),
+            index: 0,
+            project_id: null,
+            level: 0,
+            repeat_day: [],
+            repeat_end_date: null,
+          };
+
+          console.log("date" + body.queryArgs.date);
+
+          dispatch(
+            todoApi.util.updateQueryData(
+              "getAllTodos",
+              { date: body.queryArgs.date },
+              (draft: { todos: Todo[] }) => {
+                console.log("pushing");
+                draft.todos.push(todo_replica);
+              }
+            )
+          );
+        } catch (error) {
+          console.log(error);
+        }
+      },
+    }),
     addTodo: builder.mutation<
       {
         todo_id: number;
       },
-      { form: AddTodoForm }
+      {
+        form: AddTodoForm;
+        queryArgs: {
+          date: string;
+        };
+      }
     >({
       query: (body: { form: AddTodoForm }) => {
+        // if (body.form.content === "" || body.form.content.length > 30) {
+        //   throw new Error("content is empty or too long");
+        // }
+
         return {
           url: "/todo/new",
           method: "POST",
@@ -92,9 +168,9 @@ export const todoApi = createApi({
           dispatch(
             todoApi.util.updateQueryData(
               "getAllTodos",
-              undefined,
-              (draft: Todo[]) => {
-                draft.push(todo_replica);
+              { date: body.queryArgs.date },
+              (draft: { todos: Todo[] }) => {
+                draft.todos.push(todo_replica);
               }
             )
           );
@@ -108,6 +184,9 @@ export const todoApi = createApi({
       {},
       {
         form: AddTodoForm;
+        queryArgs: {
+          date: string;
+        };
       }
     >({
       query: (body: { form: AddTodoForm }) => {
@@ -122,36 +201,36 @@ export const todoApi = createApi({
         const patchUpdateTodo = dispatch(
           todoApi.util.updateQueryData(
             "getAllTodos",
-            undefined,
-            (draft: Todo[]) => {
-              const index = draft.findIndex(
+            { date: body.queryArgs.date },
+            (draft: { todos: Todo[] }) => {
+              const index = draft.todos.findIndex(
                 (todo) => todo.todo_id === body.form.todo_id
               );
-              if (index === -1) return;
-              draft[index] = {
+              draft.todos[index] = {
+                ...draft.todos[index],
                 ...body.form,
-                todo_id: draft[index].todo_id,
-                check: draft[index].check,
-                date: draft[index].date,
-                index: draft[index].index,
               };
             }
           )
         );
 
-        const patchCloseModal = dispatch(closeTodoModal());
+        dispatch(closeTodoModal());
 
         try {
           const result = await queryFulfilled;
         } catch (error) {
           console.log(error);
           patchUpdateTodo.undo();
-          patchCloseModal.undo();
         }
       },
     }),
     toggleTodo: builder.mutation({
-      query: (body: { todo_id: number }) => {
+      query: (body: {
+        todo_id: number;
+        queryArgs: {
+          date: string;
+        };
+      }) => {
         return {
           url: "/todo/toggle",
           method: "POST",
@@ -163,12 +242,12 @@ export const todoApi = createApi({
         const patchResult = dispatch(
           todoApi.util.updateQueryData(
             "getAllTodos",
-            undefined,
-            (draft: Todo[]) => {
-              const index = draft.findIndex(
+            { date: body.queryArgs.date },
+            (draft: { todos: Todo[] }) => {
+              const index = draft.todos.findIndex(
                 (todo) => todo.todo_id === body.todo_id
               );
-              draft[index].check = !draft[index].check;
+              draft.todos[index].check = !draft.todos[index].check;
             }
           )
         );
@@ -185,12 +264,20 @@ export const todoApi = createApi({
       {},
       {
         todo_id: number;
+        queryArgs: {
+          date: string;
+        };
       }
     >({
-      query: (body: { todo_id: number }) => {
+      query: (body: {
+        todo_id: number;
+        queryArgs: {
+          date: string;
+        };
+      }) => {
         return {
           url: "/todo/delete",
-          method: "POST",
+          method: "DELETE",
           body,
         };
       },
@@ -199,12 +286,12 @@ export const todoApi = createApi({
         const patchResult = dispatch(
           todoApi.util.updateQueryData(
             "getAllTodos",
-            undefined,
-            (draft: Todo[]) => {
-              const index = draft.findIndex(
+            { date: body.queryArgs.date },
+            (draft: { todos: Todo[] }) => {
+              const index = draft.todos.findIndex(
                 (todo) => todo.todo_id === body.todo_id
               );
-              draft.splice(index, 1);
+              draft.todos.splice(index, 1);
             }
           )
         );
@@ -316,6 +403,8 @@ export const {
 export const {
   useGetAllTodosQuery,
   useAddTodoMutation,
+  useAddSimpleTodoMutation,
   useEditTodoMutation,
+  useDeleteTodoMutation,
   useToggleTodoMutation,
 } = todoApi;

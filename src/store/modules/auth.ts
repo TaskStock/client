@@ -11,8 +11,10 @@ interface IInitialUserState {
 }
 
 export const initialUserState: IInitialUserState = {
-  accessToken: "",
-  refreshToken: "",
+  accessToken:
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo4OCwiaWF0IjoxNzA0NDM1NjgzLCJleHAiOjE3MDQ0MzkyODN9.rALTS0dHGCENy8NEheM64YuCqQv-yTL5HQLt8AmdX00",
+  refreshToken:
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo4OCwiaWF0IjoxNzA0NDM1NjgzfQ.s1M05qAjhdyP_BDXCfGf0z7HnuqBfusuWEF3qaPU6AM",
 
   isLoggedIn: false,
   loading: false,

@@ -8,6 +8,7 @@ const initialState = {
   weeksOfMonth: calculateWeeksOfMonth(dayjs().toISOString()),
   datesOfMonth: calculateDatesOfMonth(dayjs().toISOString()),
   currentDateString: dayjs().toISOString(),
+  currentDateYYYYMMDD: dayjs().format("YYYY-MM-DD"),
 };
 
 const calendarSlice = createSlice({
@@ -30,6 +31,9 @@ const calendarSlice = createSlice({
       state.currentDateString = action.payload;
       state.weeksOfMonth = calculateWeeksOfMonth(state.currentDateString);
       state.datesOfMonth = calculateDatesOfMonth(state.currentDateString);
+      state.currentDateYYYYMMDD = dayjs(state.currentDateString).format(
+        "YYYY-MM-DD"
+      );
     },
   },
 });
