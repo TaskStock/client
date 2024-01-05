@@ -1,20 +1,31 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import React from "react";
-import MainTab from "./MainTab";
+import React, { useEffect, useState } from "react";
 import LoginStack from "./LoginStack";
+import MainTab from "./MainTab";
 
 const Nav = createNativeStackNavigator();
 
-const Root = () => {
+const Root = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
+  const [_isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    setIsLoggedIn(isLoggedIn);
+  }, [isLoggedIn]);
+
   return (
     <Nav.Navigator
       screenOptions={{
-        // presentation: "transparentModal",
         headerShown: false,
       }}
     >
-      <Nav.Screen name="LoginStack" component={LoginStack} />
-      <Nav.Screen name="MainTab" component={MainTab} />
+      {_isLoggedIn ? (
+        <Nav.Screen name="MainTab" component={MainTab} />
+      ) : (
+        <>
+          <Nav.Screen name="LoginStack" component={LoginStack} />
+          <Nav.Screen name="MainTab" component={MainTab} />
+        </>
+      )}
     </Nav.Navigator>
   );
 };

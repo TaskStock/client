@@ -4,8 +4,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface IInitialUserState {
   accessToken: string;
-  refreshToken: string;
-
   isLoggedIn: boolean;
   loading: boolean;
   error: any;
@@ -13,27 +11,41 @@ interface IInitialUserState {
 
 export const initialUserState: IInitialUserState = {
   accessToken: "",
-  refreshToken: "",
-
   isLoggedIn: false,
   loading: false,
   error: null,
 };
 
+// 회원가입
 export const registerUser = createAsyncThunk(
   "REGISTER_USER",
   async (data, { rejectWithValue }) => {
     try {
       const responseData = await client.post("account/register", data);
-      const { accessToken, refreshToken } = responseData;
+      const { accessToken } = responseData;
 
       // 토큰을 AsyncStorage에 저장
       await AsyncStorage.setItem("accessToken", accessToken);
-      await AsyncStorage.setItem("refreshToken", refreshToken);
 
       return responseData;
     } catch (error) {
       return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+// 초기 상태를 검사하여 업데이트하는 비동기 함수
+export const checkTokenExistence = createAsyncThunk(
+  "auth/checkTokenExistence",
+  async (_, { rejectWithValue }) => {
+    try {
+      const accessToken = await AsyncStorage.getItem("accessToken");
+      if (accessToken) {
+        return { accessToken, isLoggedIn: true };
+      }
+      return { accessToken: "", isLoggedIn: false };
+    } catch (error) {
+      return rejectWithValue(error);
     }
   }
 );
@@ -55,6 +67,7 @@ const authSlice = createSlice({
       state.loading = false;
     },
     logout: (state) => {
+      AsyncStorage.removeItem("accessToken"); // 로그아웃 시 토큰 삭제
       Object.assign(state, initialUserState);
     },
   },
@@ -65,13 +78,20 @@ const authSlice = createSlice({
       })
       .addCase(registerUser.fulfilled, (state, action) => {
         state.accessToken = action.payload.accessToken;
-        state.refreshToken = action.payload.refreshToken;
-
         state.isLoggedIn = true;
         state.loading = false;
         console.log(state);
       })
       .addCase(registerUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(checkTokenExistence.fulfilled, (state, action) => {
+        state.accessToken = action.payload.accessToken;
+        state.isLoggedIn = action.payload.isLoggedIn;
+        state.loading = false;
+      })
+      .addCase(checkTokenExistence.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

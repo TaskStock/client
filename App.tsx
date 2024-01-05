@@ -8,7 +8,8 @@ import { darkTheme, grayTheme } from "./src/constants/colors";
 import { customFontsToLoad } from "./src/constants/typography";
 import Root from "./src/navigators/Root";
 import SplashScreen from "./src/screens/Login/SplashScreen";
-import { useAppSelect } from "./src/store/configureStore.hooks";
+import { useAppDispatch, useAppSelect } from "./src/store/configureStore.hooks";
+import { checkTokenExistence } from "./src/store/modules/auth";
 
 const THEME = {
   dark: {
@@ -24,6 +25,12 @@ const THEME = {
 export default function App() {
   const [isReady, setIsReady] = useState(false);
   const theme = useAppSelect((state) => state.theme.value);
+  const dispatch = useAppDispatch();
+  const isLoggedIn = useAppSelect((state) => state.auth.isLoggedIn);
+
+  useEffect(() => {
+    dispatch(checkTokenExistence());
+  }, [dispatch]);
   // const [assets] = useAssets([require("./assets/splash.png")]);
   const [fontsLoaded] = Font.useFonts(customFontsToLoad);
   useEffect(() => {
@@ -38,7 +45,7 @@ export default function App() {
     <ThemeProvider theme={THEME[theme].theme}>
       <SafeAreaProvider>
         <NavigationContainer>
-          <Root />
+          <Root isLoggedIn={isLoggedIn} />
         </NavigationContainer>
         <StatusBar barStyle={THEME[theme].barStyle} />
       </SafeAreaProvider>

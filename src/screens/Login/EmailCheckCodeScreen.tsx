@@ -33,10 +33,6 @@ const EmailCheckCodeScreen = ({ route, navigation }) => {
     inputRefs[0].current?.focus();
   }, []);
 
-  useEffect(() => {
-    console.log(code);
-  }, [code]);
-
   const handleInputChange = (text: string, index: number) => {
     // (숫자만 입력 가능) 숫자가 아니면 무시
     if (!text.match(/^[0-9]$/)) {
@@ -92,7 +88,7 @@ const EmailCheckCodeScreen = ({ route, navigation }) => {
         }),
       });
       const responseData = await response.json();
-      console.log(responseData);
+      // console.log(responseData);
     } catch (error) {
       console.error("오류 발생:", error);
       // 오류 처리 로직
