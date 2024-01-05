@@ -8,6 +8,7 @@ import EmailSendScreen from "../screens/Login/EmailSendScreen";
 import WelcomeScreen from "../screens/Login/WelcomeScreen";
 import { useAppSelect } from "../store/configureStore.hooks";
 import FindPasswordScreen from "../screens/Login/FindPasswordScreen";
+import FindPWChangeScreen from "../screens/Login/FindPWChangeScreen";
 
 const NativeStack = createNativeStackNavigator();
 
@@ -61,6 +62,11 @@ const LoginStack = ({ navigation }) => {
       <NativeStack.Screen
         name="FindPassword"
         component={FindPasswordScreen}
+        options={optionsWithHeader}
+      />
+      <NativeStack.Screen
+        name="FindPWChange"
+        component={FindPWChangeScreen}
         options={optionsWithHeader}
       />
     </NativeStack.Navigator>
