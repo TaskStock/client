@@ -8,6 +8,7 @@ import {
 } from "victory-native";
 import { DefaultTheme } from "styled-components/native";
 import { Value } from "../../@types/chart";
+import dayjs from "dayjs";
 
 const createDummyData = (arr: Value[], createLength: number): Value[] => {
   const newArray = [];
@@ -54,25 +55,6 @@ function CandleStickValueChart({
   let wickStrokeWidth = 1;
   let candleData = data;
 
-  // switch (typeIndex) {
-  //   case 0:
-  //     candleWidth = width / 20;
-  //     wickStrokeWidth = 1;
-  //     break;
-  //   case 1:
-  //     candleWidth = width / 50;
-  //     wickStrokeWidth = 1;
-  //     break;
-  //   case 2:
-  //     candleWidth = width / 130;
-  //     wickStrokeWidth = 0.8;
-  //     break;
-  //   default:
-  //     candleWidth = width / 365;
-  //     wickStrokeWidth = 0.5;
-  //     break;
-  // }
-
   if (data.length < 30) {
     candleData = createDummyData(data, 30 - data.length);
   } else {
@@ -83,6 +65,13 @@ function CandleStickValueChart({
   const minY = Math.min(...candleData.map((item) => parseInt(item.low)));
   const twoThirds = minY + ((maxY - minY) * 2) / 3;
   const oneThird = minY + ((maxY - minY) * 1) / 3;
+
+  const firstDateMinusOneDay = dayjs(candleData[0].x)
+    .subtract(1, "day")
+    .toDate();
+  const lastDatePlusOneDay = dayjs(candleData[candleData.length - 1].x)
+    .add(1, "day")
+    .toDate();
 
   return (
     <VictoryChart
@@ -112,7 +101,11 @@ function CandleStickValueChart({
         }}
       />
       <VictoryCandlestick
-        domain={{ y: [minY, maxY] }}
+        domain={{
+          y: [minY, maxY],
+          x: [firstDateMinusOneDay, lastDatePlusOneDay],
+          // x: [candleData[0].x, candleData[candleData.length - 1].x],
+        }}
         data={candleData}
         candleWidth={candleWidth}
         containerComponent={<VictoryContainer responsive={false} />}

@@ -39,7 +39,7 @@ const Divider = styled.View`
 `;
 
 const GraphContainer = ({ myData }) => {
-  const [isCandleStick, setIsCandleStick] = React.useState(false);
+  const [isCandleStick, setIsCandleStick] = React.useState(true);
 
   return (
     <View
