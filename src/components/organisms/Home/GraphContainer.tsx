@@ -11,8 +11,6 @@ import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import FlexBox from "../../atoms/FlexBox";
 import { LinearGradient } from "expo-linear-gradient";
 
-const clientHeight = Dimensions.get("window").height;
-
 const Container = styled.View`
   width: 100%;
   flex: 1;

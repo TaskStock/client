@@ -32,7 +32,9 @@ function CandleStickValueChart({
     x: Date;
   }[];
 
-  let temp_full_data;
+  if (data.length === 0) return <></>;
+
+  let temp_full_data: Value[];
 
   if (data.length < 30) {
     temp_full_data = createRestDummyData(data, 30 - data.length);

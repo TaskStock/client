@@ -48,6 +48,8 @@ export default function LineValueChart({
 }) {
   const theme = useTheme();
 
+  if (data.length === 0) return <></>;
+
   const lineData = data.map((item, index) => ({
     x: index,
     y: item.end,

@@ -9,6 +9,9 @@ import Text from "../atoms/Text";
 import CandleStickValueChart from "./CandleStickValueChart";
 import LineValueChart from "./LineValueChart";
 import { createMockData } from "../../utils/createMockData";
+import { useGetValuesQuery } from "../../store/modules/chart";
+import CenterLayout from "../atoms/CenterLayout";
+import dayjs from "dayjs";
 
 const Container = styled.View`
   width: 100%;
@@ -188,41 +191,46 @@ export const chartDateType = [
 
 function HomeChart({ isCandleStick }: { isCandleStick: boolean }) {
   const themeContext = useContext(ThemeContext);
-
+  const [index, setIndex] = React.useState(1);
   const [containerSize, setContainerSize] = useState<{
     width: number;
     height: number;
   } | null>(null);
 
-  const [data, setData] = React.useState<Value[]>([]);
+  const startDate = dayjs().subtract(30, "day").format("YYYY-MM-DD");
+  const endDate = dayjs().add(1, "day").format("YYYY-MM-DD");
 
-  // 원래 redux 안에 넣는게 좋지만, 나중에 RTK Query로 바꿀거라 그냥 여기에 넣음.
-  const [loading, setLoading] = React.useState(false);
-  const [index, setIndex] = React.useState(1);
+  const {
+    data: responseData,
+    isLoading: loading,
+    error,
+  } = useGetValuesQuery({
+    startDate,
+    endDate,
+  });
 
-  useEffect(() => {
-    mockApiCall(chartDateType[index].name);
-  }, [index]);
+  const data = responseData?.values;
 
-  // 일단 임시로 넣었음. 1주, 1달, 3달, 1년 각각의 데이터를 일단 mock data로 생성하되,
-  // 각 주별 데이터는 끝까지 채워진게 아니라, 좀 비워져있음.
+  console.log(data);
 
-  const mockApiCall = async (type) => {
-    setLoading(true);
+  if (error) console.log(error);
 
-    const length = chartDateType.find((item) => item.name === type)?.counts;
+  // const mockApiCall = async (type) => {
+  //   setLoading(true);
 
-    const randomFluctuation = Math.floor(Math.random() * length);
+  //   const length = chartDateType.find((item) => item.name === type)?.counts;
 
-    const response = await new Promise<Value[]>((resolve, reject) => {
-      setTimeout(() => {
-        resolve(createMockData(length - randomFluctuation));
-      }, 500);
-    });
+  //   const randomFluctuation = Math.floor(Math.random() * length);
 
-    setData(response);
-    setLoading(false);
-  };
+  //   const response = await new Promise<Value[]>((resolve, reject) => {
+  //     setTimeout(() => {
+  //       resolve(createMockData(length - randomFluctuation));
+  //     }, 500);
+  //   });
+
+  //   setData(response);
+  //   setLoading(false);
+  // };
 
   return (
     <Container>
@@ -236,20 +244,26 @@ function HomeChart({ isCandleStick }: { isCandleStick: boolean }) {
         }}
       >
         {containerSize && !loading ? (
-          isCandleStick ? (
-            <CandleStickValueChart
-              height={containerSize.height}
-              width={containerSize.width}
-              data={data}
-              theme={themeContext}
-            ></CandleStickValueChart>
+          !error ? (
+            isCandleStick ? (
+              <CandleStickValueChart
+                height={containerSize.height}
+                width={containerSize.width}
+                data={data}
+                theme={themeContext}
+              ></CandleStickValueChart>
+            ) : (
+              <LineValueChart
+                height={containerSize.height}
+                width={containerSize.width}
+                data={data}
+                maxLength={chartDateType[index].counts}
+              ></LineValueChart>
+            )
           ) : (
-            <LineValueChart
-              height={containerSize.height}
-              width={containerSize.width}
-              data={data}
-              maxLength={chartDateType[index].counts}
-            ></LineValueChart>
+            <CenterLayout>
+              <Text size="md">에러가 발생했습니다.</Text>
+            </CenterLayout>
           )
         ) : (
           <FlexBox
