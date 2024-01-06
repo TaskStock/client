@@ -50,7 +50,7 @@ export default function LineValueChart({
 
   const lineData = data.map((item, index) => ({
     x: index,
-    y: Number(item.close),
+    y: item.end,
   }));
 
   const maxY = Math.max(...lineData.map((item) => item.y));
@@ -79,7 +79,7 @@ export default function LineValueChart({
         theme={VictoryTheme.material}
         domain={{
           y: [minYWithPadding, maxYWithPadding],
-          x: [0, maxLength - 1],
+          x: [-1, maxLength],
         }}
         style={{
           data: {

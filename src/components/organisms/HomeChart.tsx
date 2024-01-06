@@ -10,9 +10,6 @@ import CandleStickValueChart from "./CandleStickValueChart";
 import LineValueChart from "./LineValueChart";
 import { createMockData } from "../../utils/createMockData";
 
-const BottomControllerPaddingHorizontal = 26;
-const BottomControllerPaddingVertical = 15;
-
 const Container = styled.View`
   width: 100%;
   height: 100%;
@@ -25,24 +22,6 @@ const Container = styled.View`
 const GraphContainer = styled.View`
   width: 100%;
   flex: 1;
-`;
-
-const BottomController = styled.View`
-  box-sizing: border-box;
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  padding: ${BottomControllerPaddingVertical}px
-    ${BottomControllerPaddingHorizontal}px;
-`;
-
-const BottomControllerItem = styled.View`
-  flex: 1;
-  height: 35px;
-  /* background-color: red; */
-  display: flex;
-  justify-content: center;
-  align-items: center;
 `;
 
 const dataArray = [
@@ -210,32 +189,12 @@ export const chartDateType = [
 function HomeChart({ isCandleStick }: { isCandleStick: boolean }) {
   const themeContext = useContext(ThemeContext);
 
-  // absolute하게 움직이는 뒷 버튼을 위함.
-  const bottomControllerWidth = React.useRef(0);
-  const bottomControllerItemWidth =
-    (bottomControllerWidth.current - BottomControllerPaddingHorizontal * 2) / 5;
-
   const [containerSize, setContainerSize] = useState<{
     width: number;
     height: number;
   } | null>(null);
 
-  const leftValue = React.useRef(
-    new Animated.Value(BottomControllerPaddingHorizontal)
-  );
-
-  const moveBtnBackground = (index: number) => {
-    const newLeftValue =
-      index * bottomControllerItemWidth + BottomControllerPaddingHorizontal;
-
-    Animated.timing(leftValue.current, {
-      toValue: newLeftValue,
-      duration: 400,
-      useNativeDriver: false,
-    }).start();
-  };
-
-  const [data, setData] = React.useState(dataArray);
+  const [data, setData] = React.useState<Value[]>([]);
 
   // 원래 redux 안에 넣는게 좋지만, 나중에 RTK Query로 바꿀거라 그냥 여기에 넣음.
   const [loading, setLoading] = React.useState(false);
@@ -261,8 +220,8 @@ function HomeChart({ isCandleStick }: { isCandleStick: boolean }) {
       }, 500);
     });
 
-    setLoading(false);
     setData(response);
+    setLoading(false);
   };
 
   return (
