@@ -4,6 +4,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface IInitialUserState {
   accessToken: string;
+  userId: number;
   isLoggedIn: boolean;
   loading: boolean;
   error: any;
@@ -11,6 +12,7 @@ interface IInitialUserState {
 
 export const initialUserState: IInitialUserState = {
   accessToken: "",
+  userId: 0,
   isLoggedIn: false,
   loading: false,
   error: null,
@@ -78,6 +80,7 @@ const authSlice = createSlice({
       })
       .addCase(registerUser.fulfilled, (state, action) => {
         state.accessToken = action.payload.accessToken;
+        state.userId = action.payload.user_id;
         state.isLoggedIn = true;
         state.loading = false;
         console.log(state);
