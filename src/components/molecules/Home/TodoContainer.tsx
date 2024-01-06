@@ -55,7 +55,7 @@ const TodoContainer = () => {
       )
     : [];
 
-  console.log(todosData[0]);
+  console.log(todosData);
 
   if (error) {
     console.log(error);

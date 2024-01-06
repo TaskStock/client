@@ -14,12 +14,27 @@ interface InitialState {
   addTodoForm: AddTodoForm;
 }
 
+interface getAllTodosResponse {
+  todos: {
+    todo_id: number;
+    content: string;
+    check: boolean;
+    date: string;
+    level: number;
+    index: number;
+    project_id: number | null;
+    repeat_day: string;
+    repeat_end_date: string;
+  }[];
+}
+
 const initialState: InitialState = {
   isTodoDrawerOpen: false,
   isAddModalOpen: false,
   todoDrawerPosition: 0,
   isRepeatDateModalOpen: false,
   addTodoForm: {
+    todo_id: null,
     content: "",
     level: 0,
     project_id: null,
@@ -32,22 +47,7 @@ export const todoApi = createApi({
   reducerPath: "todoApi",
   baseQuery: wrappedFetchBaseQuery,
   endpoints: (builder) => ({
-    getAllTodos: builder.query<
-      {
-        todos: {
-          todo_id: number;
-          content: string;
-          check: boolean;
-          date: string;
-          level: number;
-          index: number;
-          project_id: number | null;
-          repeat_end_date: string;
-          repeat_day: string;
-        }[];
-      },
-      { date: string }
-    >({
+    getAllTodos: builder.query<getAllTodosResponse, { date: string }>({
       query: (body: { date: string }) => {
         return {
           url: `/todo/read?date=${body.date}`,
@@ -86,7 +86,7 @@ export const todoApi = createApi({
       async onQueryStarted(body, { dispatch, queryFulfilled }) {
         const temp_todo_id = Math.random();
 
-        const todo_replica = {
+        const todo_replica: Todo = {
           content: body.content,
           todo_id: temp_todo_id,
           check: false,
@@ -284,7 +284,10 @@ export const todoApi = createApi({
         const patchResult2 = dispatch(
           chartApi.util.updateQueryData(
             "getValues",
-            {},
+            {
+              startDate: dayjs().subtract(29, "day").format("YYYY-MM-DD"),
+              endDate: dayjs().add(1, "day").format("YYYY-MM-DD"),
+            },
             (draft: { values: Value[] }) => {
               const index = draft.values.findIndex((value) => {
                 const date1 = dayjs(value.date).format("YYYY-MM-DD");
@@ -400,7 +403,7 @@ const todoSlice = createSlice({
         text: string;
         level: number;
         project_id: number | null;
-        repeat_day: string;
+        repeat_day: string | null;
         repeat_end_date: string | null;
       }>
     ) {
@@ -416,7 +419,7 @@ const todoSlice = createSlice({
         content: text,
         level: level,
         project_id: project_id || null,
-        repeat_day: repeat_day,
+        repeat_day: repeat_day || "0000000",
         repeat_end_date: repeat_end_date || null,
       };
 
@@ -441,7 +444,9 @@ const todoSlice = createSlice({
         };
       }
     ) {
-      state.addTodoForm[action.payload.name] = action.payload.value;
+      Object.assign(state.addTodoForm, {
+        [action.payload.name]: action.payload.value,
+      });
     },
     setTodoDrawerPosition(state, payload) {
       state.todoDrawerPosition = payload.payload;

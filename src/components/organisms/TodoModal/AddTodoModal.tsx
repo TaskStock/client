@@ -165,7 +165,6 @@ export default function AddTodoModal() {
   );
 
   const [addTodo, addTodoResult] = useAddTodoMutation();
-
   const [editTodo, editTodoResult] = useEditTodoMutation();
 
   const onPressSubmitBtn = () => {
@@ -185,6 +184,10 @@ export default function AddTodoModal() {
       });
     }
   };
+
+  const datePickerInitialDate = addTodoForm.repeat_end_date
+    ? new Date(addTodoForm.repeat_end_date)
+    : new Date();
 
   const onChangeDate = (event: any, selectedDate: any) => {
     const currentDate = selectedDate;
@@ -270,6 +273,7 @@ export default function AddTodoModal() {
                       <SectionHeaderText>반복</SectionHeaderText>
                       {dayList.map((item) => {
                         const isSelected =
+                          addTodoForm.repeat_day &&
                           addTodoForm.repeat_day.includes(item);
 
                         if (isSelected)
@@ -348,7 +352,7 @@ export default function AddTodoModal() {
                         {isRepeatDateModalOpen && (
                           <DatePickerBox>
                             <DateTimePicker
-                              value={new Date(addTodoForm.repeat_end_date)}
+                              value={datePickerInitialDate}
                               mode="date"
                               display="default"
                               onChange={onChangeDate}

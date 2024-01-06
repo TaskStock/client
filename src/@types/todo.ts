@@ -1,5 +1,5 @@
 export interface AddTodoForm {
-  todo_id?: number;
+  todo_id: number | null;
   content: string;
   level: number;
   project_id: number | null;

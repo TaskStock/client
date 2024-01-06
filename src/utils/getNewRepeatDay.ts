@@ -1,5 +1,11 @@
-export const getNewRepeatDay = (repeatDay: string, index: number) => {
-  // Check the value at the desired index
+export const getNewRepeatDay = (
+  repeatDay: string | null,
+  index: number
+): string => {
+  if (!repeatDay) {
+    return "0000000";
+  }
+
   let newString;
   if (repeatDay.charAt(index) === "0") {
     newString =
