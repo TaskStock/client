@@ -1,5 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../configureStore";
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { LOCAL_API_HOST } from "@env";
 
 interface AddTodoForm {
   todo_id?: number;
@@ -24,10 +26,8 @@ const initialState: InitialState = {
   },
 };
 
-const API_URL_TEMP = "http://localhost:5000";
-
 export const submitTodo = createAsyncThunk(
-  `${API_URL_TEMP}/todo/update`,
+  `${LOCAL_API_HOST}/todo/update`,
   async (_, { getState }) => {
     const {
       todo: { addTodoForm },
@@ -54,6 +54,46 @@ export const submitTodo = createAsyncThunk(
     }
   }
 );
+
+export const todoApi = createApi({
+  reducerPath: "todoApi",
+  baseQuery: fetchBaseQuery({
+    baseUrl: LOCAL_API_HOST,
+    prepareHeaders: (headers, { getState, endpoint, extra, type, forced }) => {
+      const token = getState().auth.accessToken;
+      if (token) {
+        headers.set("Authorization", `Bearer ${token}`);
+      }
+      headers.set("Content-Type", "application/json");
+      return headers;
+    },
+  }),
+  endpoints: (builder) => ({
+    getAllTodos: builder.query({
+      query: (body: { date: string }) => {
+        return {
+          url: "/todo/read",
+          method: "POST",
+          body,
+        };
+      },
+    }),
+    addTodo: builder.mutation({
+      query: (body: {
+        text: string;
+        level: number;
+        project_id: number | null;
+        repeat_day: string[];
+      }) => {
+        return {
+          url: "/todo/new",
+          method: "POST",
+          body,
+        };
+      },
+    }),
+  }),
+});
 
 const todoSlice = createSlice({
   name: "todo",
@@ -107,3 +147,4 @@ const todoSlice = createSlice({
 
 export default todoSlice.reducer;
 export const { toggleAddModal, setAddTodoForm } = todoSlice.actions;
+export const { useGetAllTodosQuery } = todoApi;

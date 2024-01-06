@@ -6,6 +6,8 @@ import numberWithCommas from "../../../utils/useNumberWithCommas";
 import CheckBox from "../../atoms/CheckBox";
 import FlexBox from "../../atoms/FlexBox";
 import Text from "../../atoms/Text";
+import Icons from "../../atoms/Icons";
+import { useTheme } from "styled-components/native";
 
 const THEME_CONSTANTS = {
   dark: {
@@ -23,6 +25,8 @@ const THEME_CONSTANTS = {
 const TodoItem = ({ todo }) => {
   const [checked, setChecked] = useState(todo.check);
   const theme = useAppSelect((state) => state.theme.value);
+
+  const styledTheme = useTheme();
 
   return (
     <FlexBox
@@ -49,13 +53,22 @@ const TodoItem = ({ todo }) => {
 
         <Text size="md">{todo.text}</Text>
       </FlexBox>
-      {checked ? (
-        <Text size="md" color={THEME_CONSTANTS[theme]?.high}>
-          +{numberWithCommas(todo.level * 1000)}원
-        </Text>
-      ) : (
-        <Text size="md">{numberWithCommas(todo.level * 1000)}원</Text>
-      )}
+      <FlexBox gap={10} alignItems="center">
+        {checked ? (
+          <Text size="md" color={THEME_CONSTANTS[theme]?.high}>
+            +{numberWithCommas(todo.level * 1000)}원
+          </Text>
+        ) : (
+          <Text size="md">{numberWithCommas(todo.level * 1000)}원</Text>
+        )}
+        <Icons
+          type="material"
+          name="dots-horizontal"
+          size={24}
+          color={styledTheme.textDimmer}
+          onPress={() => {}}
+        />
+      </FlexBox>
     </FlexBox>
   );
 };

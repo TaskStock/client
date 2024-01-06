@@ -20,7 +20,15 @@ const THEME_CONSTANTS = {
   },
 };
 
-const EditTodoItem = ({ todo }) => {
+const EditTodoItem = ({
+  todo,
+}: {
+  todo: {
+    text: string;
+    level: number;
+    check: boolean;
+  };
+}) => {
   const theme = useAppSelect((state) => state.theme.value);
 
   return (
