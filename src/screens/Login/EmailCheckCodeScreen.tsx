@@ -26,18 +26,12 @@ const EmailCheckCodeScreen = ({ route, navigation }) => {
   const inputRefs = Array(6)
     .fill(null)
     .map(() => createRef());
-  // const email = route.params.email;
-  const email = "hwanheejung117@gmail.com";
-  // const codeId = route.params.codeId;
-  const codeId = 1;
+  const email = route.params.email;
+  const codeId = route.params.codeId;
 
   useEffect(() => {
     inputRefs[0].current?.focus();
   }, []);
-
-  useEffect(() => {
-    console.log(code);
-  }, [code]);
 
   const handleInputChange = (text: string, index: number) => {
     // (숫자만 입력 가능) 숫자가 아니면 무시
@@ -94,7 +88,7 @@ const EmailCheckCodeScreen = ({ route, navigation }) => {
         }),
       });
       const responseData = await response.json();
-      console.log(responseData);
+      // console.log(responseData);
     } catch (error) {
       console.error("오류 발생:", error);
       // 오류 처리 로직
