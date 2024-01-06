@@ -188,12 +188,13 @@ export default function AddTodoModal() {
 
   const onChangeDate = (event: any, selectedDate: any) => {
     const currentDate = selectedDate;
-    console.log(currentDate);
+
+    const formattedDate = dayjs(currentDate).format("YYYY-MM-DD");
 
     dispatch(
       setAddTodoForm({
         name: "repeat_end_date",
-        value: currentDate,
+        value: formattedDate,
       })
     );
   };

@@ -12,9 +12,9 @@ interface IInitialUserState {
 
 export const initialUserState: IInitialUserState = {
   accessToken:
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo4OCwiaWF0IjoxNzA0NDM1NjgzLCJleHAiOjE3MDQ0MzkyODN9.rALTS0dHGCENy8NEheM64YuCqQv-yTL5HQLt8AmdX00",
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo5MywiaWF0IjoxNzA0NTA0NDA0LCJleHAiOjE3MDQ1MDgwMDR9.Fwkq6vxmScAji8NZN821UutDRmr_rBvYLiuA0EdkZWE",
   refreshToken:
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo4OCwiaWF0IjoxNzA0NDM1NjgzfQ.s1M05qAjhdyP_BDXCfGf0z7HnuqBfusuWEF3qaPU6AM",
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo5MywiaWF0IjoxNzA0NTA0NDA0fQ.e24FHzEbUMFP1e96lEAdiFbde9VNqfDIMVuxFv7m5Z4",
 
   isLoggedIn: false,
   loading: false,

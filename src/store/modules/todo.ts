@@ -77,6 +77,8 @@ const BaseQueryWithAuth: BaseQueryFn<
       const response = await refreshResult.json();
       const newAccessToken = response.accessToken;
 
+      console.log("get new access token", newAccessToken);
+
       api.dispatch(setAccessToken(newAccessToken));
 
       result = await originalBaseQuery(args, api, extraOptions);
@@ -185,6 +187,7 @@ export const todoApi = createApi({
                 const index = draft.todos.findIndex(
                   (todo) => todo.todo_id === temp_todo_id
                 );
+                if (index === -1) return;
                 draft.todos[index].todo_id = todo_id;
               }
             )
@@ -250,6 +253,7 @@ export const todoApi = createApi({
                 const index = draft.todos.findIndex(
                   (todo) => todo.todo_id === temp_todo_id
                 );
+                if (index === -1) return;
                 draft.todos[index].todo_id = todo_id;
               }
             )
@@ -258,6 +262,7 @@ export const todoApi = createApi({
           dispatch(closeTodoModal());
         } catch (error) {
           console.log(error);
+          patchAddTodo.undo();
         }
       },
     }),
@@ -449,7 +454,7 @@ const todoSlice = createSlice({
     },
     toggleRepeatEndModal(state) {
       if (!state.isRepeatDateModalOpen) {
-        state.addTodoForm.repeat_end_date = dayjs().toISOString();
+        state.addTodoForm.repeat_end_date = dayjs().format("YYYY-MM-DD");
       } else {
         state.addTodoForm.repeat_end_date = null;
       }
