@@ -10,6 +10,7 @@ import { DefaultTheme } from "styled-components/native";
 import { Value } from "../../@types/chart";
 import dayjs from "dayjs";
 import { createRestDummyData } from "../../utils/createRestDummyData";
+import convertUTCToLocal from "../../utils/convertUTCtoLocal";
 
 function CandleStickValueChart({
   width,
@@ -93,6 +94,10 @@ function CandleStickValueChart({
         domain={{
           x: [firstDateMinusOneDay, lastDatePlusOneDay],
           y: [minY, maxY],
+        }}
+        animate={{
+          duration: 200,
+          onLoad: { duration: 200 },
         }}
         data={candleData}
         candleWidth={candleWidth}

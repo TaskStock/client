@@ -143,6 +143,8 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
     toggleCheckTodo({
       todo_id: todo.todo_id,
       check: !todo.check,
+      todo_date: todo.date,
+      value: todo.level * 1000,
       queryArgs: {
         date: currentDateFormat,
       },

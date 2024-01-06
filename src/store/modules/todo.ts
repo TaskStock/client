@@ -3,6 +3,8 @@ import { createApi } from "@reduxjs/toolkit/query/react";
 import dayjs from "dayjs";
 import { AddTodoForm, Todo } from "../../@types/todo";
 import wrappedFetchBaseQuery from "../fetchBaseQuery";
+import { chartApi } from "./chart";
+import { Value } from "../../@types/chart";
 
 interface InitialState {
   isTodoDrawerOpen: boolean;
@@ -245,6 +247,8 @@ export const todoApi = createApi({
       query: (body: {
         todo_id: number;
         check: boolean;
+        todo_date: string;
+        value: number;
         queryArgs: {
           date: string;
         };
@@ -270,11 +274,41 @@ export const todoApi = createApi({
           )
         );
 
+        if (
+          dayjs(body.todo_date).format("YYYY-MM-DD") !==
+          dayjs().format("YYYY-MM-DD")
+        )
+          return;
+
+        const patchResult2 = dispatch(
+          chartApi.util.updateQueryData(
+            "getValues",
+            {},
+            (draft: { values: Value[] }) => {
+              const index = draft.values.findIndex((value) => {
+                const date1 = dayjs(value.date).format("YYYY-MM-DD");
+                const date2 = dayjs(body.todo_date).format("YYYY-MM-DD");
+
+                return date1 === date2;
+              });
+
+              if (index === -1) return;
+
+              if (body.check) {
+                draft.values[index].end += body.value;
+              } else {
+                draft.values[index].end -= body.value;
+              }
+            }
+          )
+        );
+
         try {
           const result = await queryFulfilled;
         } catch (error) {
           console.log(error);
           patchResult.undo();
+          patchResult2.undo();
         }
       },
     }),

@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import { Value } from "../@types/chart";
 import { formatChartValue } from "./formatChartValue";
 
@@ -7,7 +8,9 @@ export const createRestDummyData = (
 ): Value[] => {
   const newArray: Value[] = [];
 
-  const lastDate = new Date(arr[arr.length - 1].date);
+  // const lastDate = new Date(arr[arr.length - 1].date);
+
+  const lastDate = dayjs(arr[arr.length - 1].date);
 
   const sumValue = arr.reduce((acc, cur) => {
     return acc + cur.end;
@@ -21,11 +24,7 @@ export const createRestDummyData = (
       high: avgValue,
       low: avgValue,
       start: avgValue,
-      date: new Date(
-        lastDate.getFullYear(),
-        lastDate.getMonth(),
-        lastDate.getDate() + i
-      ).toISOString(),
+      date: dayjs(lastDate).add(i, "day").toISOString(),
       combo: 1,
       percentage: 0,
       value_id: arr.length + i,

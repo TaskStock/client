@@ -211,9 +211,9 @@ function HomeChart({ isCandleStick }: { isCandleStick: boolean }) {
 
   const data = responseData?.values;
 
-  console.log(data);
-
   if (error) console.log(error);
+
+  // "date": "2024-01-05T18:22:05.107Z"
 
   // const mockApiCall = async (type) => {
   //   setLoading(true);
