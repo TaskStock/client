@@ -1,10 +1,13 @@
+import { View, Text } from "react-native";
 import React from "react";
-import { View } from "react-native";
-import { BlackBtn } from "../components/atoms/Buttons";
-import { useAppDispatch, useAppSelect } from "../store/configureStore.hooks";
-import { themeSlice } from "../store/modules/theme";
+import {
+  useAppDispatch,
+  useAppSelect,
+} from "../../../store/configureStore.hooks";
+import { themeSlice } from "../../../store/modules/theme";
+import { BlackBtn } from "../../../components/atoms/Buttons";
 
-const SettingsScreen = () => {
+const ThemeScreen = () => {
   const theme = useAppSelect((state) => state.theme.value);
 
   const dispatch = useAppDispatch();
@@ -14,14 +17,12 @@ const SettingsScreen = () => {
   const switchToGrayMode = () => {
     dispatch(themeSlice.actions.setTheme("gray"));
   };
-  const handleLogout = () => {};
   return (
     <View>
       <BlackBtn text="DarkMode" onPress={switchToDarkMode} />
       <BlackBtn text="GrayMode" onPress={switchToGrayMode} />
-      <BlackBtn text="로그아웃" onPress={handleLogout} />
     </View>
   );
 };
 
-export default SettingsScreen;
+export default ThemeScreen;
