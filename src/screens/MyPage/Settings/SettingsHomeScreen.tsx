@@ -2,7 +2,8 @@ import React from "react";
 import styled from "styled-components/native";
 import Text from "../../../components/atoms/Text";
 import { spacing } from "../../../constants/spacing";
-import { BlackBtn } from "../../../components/atoms/Buttons";
+import { useAppDispatch } from "../../../store/configureStore.hooks";
+import { logout } from "../../../store/modules/auth";
 
 const Container = styled.View`
   justify-content: center;
@@ -26,7 +27,21 @@ const Menu = ({ text, onPress }) => (
   </MenuContainer>
 );
 const SettingsHomeScreen = ({ navigation }) => {
-  const handleLogout = () => {};
+  const dispatch = useAppDispatch();
+  const handleLogout = () => {
+    dispatch(logout());
+    navigation.reset({
+      index: 0,
+      routes: [
+        {
+          name: "LoginStack",
+          state: {
+            routes: [{ name: "Welcome" }],
+          },
+        },
+      ],
+    });
+  };
   return (
     <Container>
       <Menu text="계정 설정 =>" onPress={() => {}} />

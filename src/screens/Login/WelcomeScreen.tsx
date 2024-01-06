@@ -9,6 +9,7 @@ import { darkTheme, grayTheme, palette } from "../../constants/colors";
 import { spacing } from "../../constants/spacing";
 import { useAppSelect } from "../../store/configureStore.hooks";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
+import { checkStorage } from "../../utils/asyncStorage";
 
 const THEME_SOURCES = {
   dark: {
@@ -169,7 +170,7 @@ const WelcomeScreen = ({ navigation }) => {
             계속 진행하면 Taskstock의
           </Text>
           <TouchableOpacity
-            onPress={() => {}}
+            onPress={checkStorage}
             style={{
               borderBottomWidth: 1,
               borderColor: THEME_SOURCES[theme].text,

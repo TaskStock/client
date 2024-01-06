@@ -27,3 +27,14 @@ export const removeData = async (key) => {
     console.error("AsyncStorage Error: ", e);
   }
 };
+
+// 데이터 확인
+export const checkStorage = async () => {
+  try {
+    const accessToken = await AsyncStorage.getItem("accessToken");
+
+    console.log("Check => Access Token: ", accessToken);
+  } catch (error) {
+    console.error("Error reading values from AsyncStorage", error);
+  }
+};
