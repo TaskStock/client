@@ -6,6 +6,8 @@ import { spacing } from "../../constants/spacing";
 import { useAppDispatch } from "../../store/configureStore.hooks";
 import { registerUser } from "../../store/modules/auth";
 
+// 인증번호가 일치하면 이 화면으로 오는데, 다시 인증코드페이지로 돌아간 후 다시 코드를 입력하면 서버 오류가 뜨므로 뒤로가기 버튼 없앰
+
 interface IUser {
   email: string;
   userName: string;

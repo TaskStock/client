@@ -9,6 +9,7 @@ import WelcomeScreen from "../screens/Login/WelcomeScreen";
 import { useAppSelect } from "../store/configureStore.hooks";
 import FindPasswordScreen from "../screens/Login/FindPasswordScreen";
 import FindPWChangeScreen from "../screens/Login/FindPWChangeScreen";
+import { View } from "react-native";
 
 const NativeStack = createNativeStackNavigator();
 
@@ -28,6 +29,12 @@ const LoginStack = ({ navigation }) => {
     ),
     headerTitle: "",
   };
+  const optionsWithoutHeader = {
+    headerBackTitleVisible: false,
+    headerLeft: () => <View style={{ height: 35, width: "100%" }} />,
+    headerTitle: "",
+  };
+
   const theme = useAppSelect((state) => state.theme.value);
   return (
     <NativeStack.Navigator>
@@ -57,7 +64,7 @@ const LoginStack = ({ navigation }) => {
       <NativeStack.Screen
         name="EmailRegister"
         component={EmailRegisterScreen}
-        options={optionsWithHeader}
+        options={optionsWithoutHeader}
       />
       <NativeStack.Screen
         name="FindPassword"
