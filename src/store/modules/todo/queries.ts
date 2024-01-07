@@ -22,4 +22,5 @@ export const getAllTodosQuery = (builder: TodoApiBuilder) =>
         method: "GET",
       };
     },
+    providesTags: ["Todos"],
   });

@@ -194,6 +194,15 @@ export const addTodoMutation = (builder: TodoApiBuilder) =>
         if (patchUpdateHighLowValue) patchUpdateHighLowValue.undo();
       }
     },
+
+    // 만약에 todo add시에 반복이 있는경우에는, 캐싱을 다 지워주어야 한다.
+    invalidatesTags: (result, error, body) => {
+      if (!error && body.form.repeat_day !== "0000000") {
+        return ["Todos"];
+      } else {
+        return [];
+      }
+    },
   });
 
 export const editTodoMutation = (builder: TodoApiBuilder) =>
@@ -290,6 +299,14 @@ export const editTodoMutation = (builder: TodoApiBuilder) =>
       } catch (error) {
         console.log(error);
         patchUpdateTodo.undo();
+      }
+    },
+
+    invalidatesTags: (result, error, body) => {
+      if (!error && body.form.repeat_day !== "0000000") {
+        return ["Todos"];
+      } else {
+        return [];
       }
     },
   });

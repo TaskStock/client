@@ -39,13 +39,14 @@ const initialState: InitialState = {
 
 export type TodoApiBuilder = EndpointBuilder<
   (...args: any[]) => MaybePromise<QueryReturnValue<unknown, unknown, {}>>,
-  never,
+  "Todos",
   "todoApi"
 >;
 
 export const todoApi = createApi({
   reducerPath: "todoApi",
   baseQuery: wrappedFetchBaseQuery,
+  tagTypes: ["Todos"],
   endpoints: (builder) => ({
     getAllTodos: getAllTodosQuery(builder),
     addSimpleTodo: addSimpleTodoMutation(builder),
