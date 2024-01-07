@@ -1,22 +1,33 @@
 import React, { useCallback } from "react";
-import { Pressable, ScrollView, View } from "react-native";
+import {
+  Pressable,
+  ScrollView,
+  Switch,
+  TouchableWithoutFeedback,
+  View,
+} from "react-native";
 import { useDispatch } from "react-redux";
 import styled, { useTheme } from "styled-components/native";
-import { spacing } from "../../constants/spacing";
-import { AppDispatch } from "../../store/configureStore";
-import { useAppSelect } from "../../store/configureStore.hooks";
+import { spacing } from "../../../constants/spacing";
+import { AppDispatch } from "../../../store/configureStore";
+import { useAppSelect } from "../../../store/configureStore.hooks";
 import {
   setAddTodoForm,
-  submitTodo,
-  toggleAddModal,
-} from "../../store/modules/todo";
-import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
-import FlexBox from "../atoms/FlexBox";
-import Icons from "../atoms/Icons";
-import Margin from "../atoms/Margin";
-import Text from "../atoms/Text";
-import ProjectItemList from "./TodoModal/ProjectItemList";
-import ValueSlider from "./TodoModal/ValueSlider";
+  closeTodoModal,
+  toggleRepeatEndModal,
+  useAddTodoMutation,
+  useEditTodoMutation,
+} from "../../../store/modules/todo/todo";
+import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
+import FlexBox from "../../atoms/FlexBox";
+import Icons from "../../atoms/Icons";
+import Margin from "../../atoms/Margin";
+import Text from "../../atoms/Text";
+import ProjectItemList from "./ProjectItemList";
+import ValueSlider from "./ValueSlider";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import dayjs from "dayjs";
+import { getNewRepeatDay } from "../../../utils/getNewRepeatDay";
 
 const AddTodoOverlay = styled.Pressable`
   position: absolute;
@@ -104,19 +115,28 @@ const RepeatDayItem = styled.Pressable<{ isSelected?: boolean; size: number }>`
     isSelected ? theme.mainBtnReversed : theme.mainBtnGray};
 `;
 
+const DatePickerBox = styled.Pressable`
+  display: flex;
+  /* border-bottom-width: 1px; */
+  border-color: ${({ theme }) => theme.text};
+  padding: 6px 4px;
+`;
+
 const Section = ({
   header,
   children,
-  margin,
+  gapSize = "md",
 }: {
   header: React.ReactNode;
-  children: React.ReactNode;
-  margin?: number;
+  children?: React.ReactNode;
+  gapSize?: "md" | "lg" | "xl";
 }) => {
+  const margin = gapSize === "md" ? 5 : gapSize === "lg" ? 10 : 15;
+
   return (
     <View>
       {header}
-      <Margin margin={margin ? margin : 5}></Margin>
+      <Margin margin={margin}></Margin>
       {children}
     </View>
   );
@@ -127,23 +147,81 @@ const dayList = ["월", "화", "수", "목", "금", "토", "일"];
 export default function AddTodoModal() {
   const theme = useTheme();
   const dispatch = useDispatch<AppDispatch>();
-
-  const scrollViewRef = React.useRef<ScrollView>(null);
-
   const addTodoForm = useAppSelect((state) => state.todo.addTodoForm);
+  const isEditMode = Boolean(
+    useAppSelect((state) => state.todo.addTodoForm.todo_id)
+  );
+  const isRepeatDateModalOpen = useAppSelect(
+    (state) => state.todo.isRepeatDateModalOpen
+  );
+  const scrollViewRef = React.useRef<ScrollView>(null);
 
   const [dayItemWidth, setDayItemWidth] = React.useState(0);
 
   const value = addTodoForm.level * 1000;
 
-  const onPressAddTodoBtn = useCallback(() => {
-    dispatch(submitTodo());
-  }, [addTodoForm]);
+  const {
+    oneMonthBeforeQueryString,
+    todayQueryString,
+    currentDateYYYYMMDD: currentDateFormat,
+  } = useAppSelect((state) => state.calendar);
+
+  const [addTodo, addTodoResult] = useAddTodoMutation();
+  const [editTodo, editTodoResult] = useEditTodoMutation();
+
+  const onPressSubmitBtn = () => {
+    if (isEditMode) {
+      editTodo({
+        form: addTodoForm,
+        todo_date: addTodoForm.todo_date!,
+        original_level: addTodoForm.original_level,
+        // addTodoForm의 checked는, editModal이 열릴때 들어간다.
+        // 그러므로, isEditMode일때는 addTodoForm.checked가 항상 true이다.
+        todo_checked: addTodoForm.checked!,
+        queryArgs: {
+          date: currentDateFormat,
+          graph_before_date: oneMonthBeforeQueryString,
+          graph_today_date: todayQueryString,
+        },
+      });
+    } else {
+      addTodo({
+        form: addTodoForm,
+        add_date: dayjs().toISOString(),
+        queryArgs: {
+          date: currentDateFormat,
+          graph_before_date: oneMonthBeforeQueryString,
+          graph_today_date: todayQueryString,
+        },
+      });
+    }
+  };
+
+  const datePickerInitialDate = addTodoForm.repeat_end_date
+    ? new Date(addTodoForm.repeat_end_date)
+    : new Date();
+
+  const onChangeDate = (event: any, selectedDate: any) => {
+    const currentDate = selectedDate;
+
+    const formattedDate = dayjs(currentDate).format("YYYY-MM-DD");
+
+    dispatch(
+      setAddTodoForm({
+        name: "repeat_end_date",
+        value: formattedDate,
+      })
+    );
+  };
+
+  const toggleIsEndRepeat = () => {
+    dispatch(toggleRepeatEndModal());
+  };
 
   return (
     <AddTodoOverlay
       onPress={() => {
-        dispatch(toggleAddModal());
+        dispatch(closeTodoModal());
       }}
     >
       <InnerPressable>
@@ -151,7 +229,7 @@ export default function AddTodoModal() {
           <CloseBox>
             <Icons
               onPress={() => {
-                dispatch(toggleAddModal());
+                dispatch(closeTodoModal());
               }}
               type="ionicons"
               name="close"
@@ -179,10 +257,12 @@ export default function AddTodoModal() {
                 >
                   <TodoInput
                     placeholder="할 일을 입력해주세요."
+                    placeholderTextColor={theme.textDim}
+                    value={addTodoForm.content}
                     onChange={(e) => {
                       dispatch(
                         setAddTodoForm({
-                          name: "text",
+                          name: "content",
                           value: e.nativeEvent.text,
                         })
                       );
@@ -205,6 +285,7 @@ export default function AddTodoModal() {
                       <SectionHeaderText>반복</SectionHeaderText>
                       {dayList.map((item) => {
                         const isSelected =
+                          addTodoForm.repeat_day &&
                           addTodoForm.repeat_day.includes(item);
 
                         if (isSelected)
@@ -212,24 +293,23 @@ export default function AddTodoModal() {
                       })}
                     </SectionHeader>
                   }
-                  margin={10}
+                  gapSize="lg"
                 >
                   <FlexBox gap={10}>
                     {dayList.map((item, index) => {
-                      const onPress = () => {
+                      const onPressDayItem = () => {
                         dispatch(
                           setAddTodoForm({
                             name: "repeat_day",
-                            value: addTodoForm.repeat_day.includes(item)
-                              ? addTodoForm.repeat_day.filter(
-                                  (day) => day !== item
-                                )
-                              : [...addTodoForm.repeat_day, item],
+                            value: getNewRepeatDay(
+                              addTodoForm.repeat_day,
+                              index
+                            ),
                           })
                         );
                       };
 
-                      const isSelected = addTodoForm.repeat_day.includes(item);
+                      const isSelected = addTodoForm.repeat_day[index] === "1";
 
                       return (
                         <RepeatDayItem
@@ -239,7 +319,7 @@ export default function AddTodoModal() {
                           }}
                           key={index + item}
                           isSelected={isSelected}
-                          onPress={onPress}
+                          onPress={onPressDayItem}
                           size={dayItemWidth}
                         >
                           <Text
@@ -256,7 +336,50 @@ export default function AddTodoModal() {
                   </FlexBox>
                 </Section>
                 <Section
-                  margin={10}
+                  header={
+                    <SectionHeader>
+                      <FlexBox
+                        justifyContent="space-between"
+                        alignItems="center"
+                        styles={{
+                          flex: 1,
+                          minHeight: useResponsiveFontSize(50),
+                        }}
+                      >
+                        <FlexBox
+                          justifyContent="center"
+                          alignItems="center"
+                          gap={10}
+                        >
+                          <SectionHeaderText>반복 종료</SectionHeaderText>
+                          <Switch
+                            onValueChange={toggleIsEndRepeat}
+                            value={isRepeatDateModalOpen}
+                            trackColor={{
+                              false: theme.palette.neutral600_gray,
+                              true: theme.palette.neutral500_dark,
+                            }}
+                          ></Switch>
+                        </FlexBox>
+                        {isRepeatDateModalOpen && (
+                          <DatePickerBox>
+                            <DateTimePicker
+                              value={datePickerInitialDate}
+                              mode="date"
+                              display="default"
+                              onChange={onChangeDate}
+                              style={{
+                                bottom: 0,
+                              }}
+                            />
+                          </DatePickerBox>
+                        )}
+                      </FlexBox>
+                    </SectionHeader>
+                  }
+                ></Section>
+                <Section
+                  gapSize="lg"
                   header={
                     <SectionHeader>
                       <SectionHeaderText>프로젝트</SectionHeaderText>
@@ -270,8 +393,10 @@ export default function AddTodoModal() {
               </AddTodoContents>
             </Pressable>
           </ScrollView>
-          <AddTodoBtn onPress={onPressAddTodoBtn}>
-            <Text size="md">할 일 추가하기</Text>
+          <AddTodoBtn onPress={onPressSubmitBtn}>
+            <Text size="md">
+              {isEditMode ? "투두 수정하기" : "투두 추가하기"}
+            </Text>
           </AddTodoBtn>
         </AddTodoBox>
       </InnerPressable>

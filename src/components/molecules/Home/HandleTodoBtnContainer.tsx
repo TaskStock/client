@@ -5,7 +5,7 @@ import { darkTheme, grayTheme } from "../../../constants/colors";
 import { spacing } from "../../../constants/spacing";
 import useHeight from "../../../hooks/useHeight";
 import { useAppSelect } from "../../../store/configureStore.hooks";
-import { toggleAddModal } from "../../../store/modules/todo";
+import { toggleAddModal } from "../../../store/modules/todo/todo";
 import Button from "../../atoms/Button";
 import FlexBox from "../../atoms/FlexBox";
 

@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import styled, { useTheme } from "styled-components/native";
 import { useProject } from "../../../hooks/useProject";
 import { useAppSelect } from "../../../store/configureStore.hooks";
-import { setAddTodoForm } from "../../../store/modules/todo";
+import { setAddTodoForm } from "../../../store/modules/todo/todo";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import Icons from "../../atoms/Icons";
 
@@ -105,38 +105,30 @@ export default function ProjectItemList({
     }
   }, [isAddProject]);
 
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     projectContainerRef.current?.measure((x, y, width, height) => {
-  //       console.log("height: ", height);
-
-  //       setProjectContainerHeight(height);
-  //     });
-  //   }, 1000);
-
-  //   // if (projectContainerHeight == 0) return;
-
-  //   // if (isAddProject) {
-  //   //   setProjectContainerHeight((prev) => {
-  //   //     return prev + 50;
-  //   //   });
-  //   // } else {
-  //   //   setProjectContainerHeight((prev) => {
-  //   //     return prev - 50;
-  //   //   });
-  //   // }
-
-  //   setTimeout(() => {
-  //     scrollViewRef.current?.scrollToEnd({ animated: true });
-  //   }, 100);
-  // }, [isAddProject]);
-
   return (
     <ProjectItemContainer
       height={projectContainerHeight}
       onLayout={onLayoutProjectContainer}
       ref={projectContainerRef}
     >
+      <ProjectItemComponent
+        isSelected={
+          addTodoForm.project_id === null ||
+          addTodoForm.project_id === undefined
+        }
+        onPress={() => {
+          dispatch(
+            setAddTodoForm({
+              name: "project_id",
+              value: null,
+            })
+          );
+        }}
+      >
+        <ProjectItemText isSelected={addTodoForm.project_id === null}>
+          없음
+        </ProjectItemText>
+      </ProjectItemComponent>
       {projectList.map((project, index) => {
         const isSelected = project.id === addTodoForm.project_id;
 

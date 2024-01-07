@@ -132,6 +132,7 @@ const BottomDrawer: React.FunctionComponent<BottomDrawerProps> = ({
       }
     }
   };
+
   useEffect(() => {
     handlePanResponder();
   }, [defaultValue, openState, draggedUp]);

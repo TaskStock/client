@@ -68,6 +68,12 @@ const authSlice = createSlice({
       state.error = action.payload;
       state.loading = false;
     },
+    // 임시로 설정. 나중에 thunk로 바꿀것
+    setAccessToken: (state, action) => {
+      state.accessToken = action.payload;
+    },
+
+    // 이것도 나중에 refreshToken Asyncstorage에서 삭제하는 Thunk함수로.
     logout: (state) => {
       AsyncStorage.removeItem("accessToken"); // 로그아웃 시 토큰 삭제
       Object.assign(state, initialUserState);
@@ -101,7 +107,12 @@ const authSlice = createSlice({
   },
 });
 
-export const { loginStart, loginSuccess, loginFailure, logout } =
-  authSlice.actions;
+export const {
+  loginStart,
+  loginSuccess,
+  loginFailure,
+  logout,
+  setAccessToken,
+} = authSlice.actions;
 
 export const authReducer = authSlice.reducer;

@@ -7,7 +7,10 @@ const initialState = {
   itemHeight: 0,
   weeksOfMonth: calculateWeeksOfMonth(dayjs().toISOString()),
   datesOfMonth: calculateDatesOfMonth(dayjs().toISOString()),
+  oneMonthBeforeQueryString: dayjs().subtract(1, "month").format("YYYY-MM-DD"),
+  todayQueryString: dayjs().add(1, "month").format("YYYY-MM-DD"),
   currentDateString: dayjs().toISOString(),
+  currentDateYYYYMMDD: dayjs().format("YYYY-MM-DD"),
 };
 
 const calendarSlice = createSlice({
@@ -30,6 +33,9 @@ const calendarSlice = createSlice({
       state.currentDateString = action.payload;
       state.weeksOfMonth = calculateWeeksOfMonth(state.currentDateString);
       state.datesOfMonth = calculateDatesOfMonth(state.currentDateString);
+      state.currentDateYYYYMMDD = dayjs(state.currentDateString).format(
+        "YYYY-MM-DD"
+      );
     },
   },
 });

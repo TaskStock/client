@@ -8,34 +8,9 @@ import {
 } from "victory-native";
 import { DefaultTheme } from "styled-components/native";
 import { Value } from "../../@types/chart";
-
-const createDummyData = (arr: Value[], createLength: number): Value[] => {
-  const newArray = [];
-
-  const lastDate = new Date(arr[arr.length - 1].x);
-
-  const sumValue = arr.reduce((acc, cur) => {
-    return acc + parseFloat(cur.close);
-  }, 0);
-
-  const avgValue = (sumValue / arr.length).toFixed(2);
-
-  for (let i = 1; i <= createLength; i++) {
-    newArray.push({
-      close: avgValue,
-      high: avgValue,
-      low: avgValue,
-      open: avgValue,
-      x: new Date(
-        lastDate.getFullYear(),
-        lastDate.getMonth(),
-        lastDate.getDate() + i
-      ),
-    });
-  }
-
-  return [...arr, ...newArray];
-};
+import dayjs from "dayjs";
+import { createRestDummyData } from "../../utils/createRestDummyData";
+import convertUTCToLocal from "../../utils/convertUTCtoLocal";
 
 function CandleStickValueChart({
   width,
@@ -48,41 +23,45 @@ function CandleStickValueChart({
   data: Value[];
   theme: DefaultTheme;
 }) {
-  // 1주일 때 candleWidth는 width/7이지만 gap을 고려하여 넉넉히 20으로 설정. 나머지 typeIndex도 마찬가지로 설정
-  // 꼬리 너비는 데이터 양이 많아질수록 줄어들게 설정
   let candleWidth = width / 60;
   let wickStrokeWidth = 1;
-  let candleData = data;
+  let candleData: {
+    open: number;
+    close: number;
+    high: number;
+    low: number;
+    x: Date;
+  }[];
 
-  // switch (typeIndex) {
-  //   case 0:
-  //     candleWidth = width / 20;
-  //     wickStrokeWidth = 1;
-  //     break;
-  //   case 1:
-  //     candleWidth = width / 50;
-  //     wickStrokeWidth = 1;
-  //     break;
-  //   case 2:
-  //     candleWidth = width / 130;
-  //     wickStrokeWidth = 0.8;
-  //     break;
-  //   default:
-  //     candleWidth = width / 365;
-  //     wickStrokeWidth = 0.5;
-  //     break;
-  // }
+  if (data.length === 0) return <></>;
+
+  let temp_full_data: Value[];
 
   if (data.length < 30) {
-    candleData = createDummyData(data, 30 - data.length);
+    temp_full_data = createRestDummyData(data, 30 - data.length);
   } else {
-    candleData = data;
+    temp_full_data = data;
   }
 
-  const maxY = Math.max(...candleData.map((item) => parseInt(item.high)));
-  const minY = Math.min(...candleData.map((item) => parseInt(item.low)));
+  candleData = temp_full_data.map((item) => ({
+    open: item.start,
+    close: item.end,
+    high: item.high,
+    low: item.low,
+    x: new Date(convertUTCToLocal(item.date)),
+  }));
+
+  const maxY = Math.max(...candleData.map((item) => item.high));
+  const minY = Math.min(...candleData.map((item) => item.low));
   const twoThirds = minY + ((maxY - minY) * 2) / 3;
   const oneThird = minY + ((maxY - minY) * 1) / 3;
+
+  const firstDateMinusOneDay = dayjs(candleData[0].x)
+    .subtract(1, "day")
+    .toDate();
+  const lastDatePlusOneDay = dayjs(candleData[candleData.length - 1].x)
+    .add(1, "day")
+    .toDate();
 
   return (
     <VictoryChart
@@ -112,7 +91,13 @@ function CandleStickValueChart({
         }}
       />
       <VictoryCandlestick
-        domain={{ y: [minY, maxY] }}
+        domain={{
+          x: [firstDateMinusOneDay, lastDatePlusOneDay],
+          y: [minY, maxY],
+        }}
+        animate={{
+          duration: 500,
+        }}
         data={candleData}
         candleWidth={candleWidth}
         containerComponent={<VictoryContainer responsive={false} />}

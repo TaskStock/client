@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { darkTheme, grayTheme } from "../../../constants/colors";
 import { spacing } from "../../../constants/spacing";
 import { useAppSelect } from "../../../store/configureStore.hooks";
@@ -7,7 +7,17 @@ import CheckBox from "../../atoms/CheckBox";
 import FlexBox from "../../atoms/FlexBox";
 import Text from "../../atoms/Text";
 import Icons from "../../atoms/Icons";
-import { useTheme } from "styled-components/native";
+import styled, { useTheme } from "styled-components/native";
+import { useDispatch } from "react-redux";
+import {
+  openEditTodoModal,
+  useDeleteTodoMutation,
+  useToggleTodoMutation,
+} from "../../../store/modules/todo/todo";
+import { Todo } from "../../../@types/todo";
+import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
+import { Modal, View } from "react-native";
+import { Platform } from "react-native";
 
 const THEME_CONSTANTS = {
   dark: {
@@ -22,54 +32,234 @@ const THEME_CONSTANTS = {
   },
 };
 
-const TodoItem = ({ todo }) => {
-  const [checked, setChecked] = useState(todo.check);
+const ModalOverlay = styled.Pressable`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+`;
+
+const TodoModal = styled.View<{ position: { top: number; left: number } }>`
+  position: absolute;
+  top: ${({ position }) => position.top}px;
+  right: ${useResponsiveFontSize(60)}px;
+  padding: ${spacing.padding}px;
+  z-index: 100;
+  border-radius: 10px;
+  background-color: ${({ theme }) => theme.box};
+  flex-direction: column;
+  gap: 10px;
+  ${Platform.select({
+    ios: `
+      shadow-color: black;
+      shadow-offset: 0px 2px;
+      shadow-opacity: 0.25;
+      shadow-radius: 10px;
+    `,
+    android: `
+      elevation: 5;
+    `,
+  })}
+`;
+const TodoModalItem = styled.TouchableOpacity<{ isSelected?: boolean }>`
+  background-color: ${({ isSelected, theme }) => {
+    if (isSelected) {
+      return theme.text;
+    } else {
+      return theme.box;
+    }
+  }};
+  border-radius: 6px;
+  padding: ${useResponsiveFontSize(13)}px ${useResponsiveFontSize(38)}px;
+`;
+
+const TodoCheckBox = memo(
+  ({
+    isChecked,
+    onPress,
+    theme,
+  }: {
+    theme: string;
+    isChecked: boolean;
+    onPress: () => void;
+  }) => {
+    return isChecked ? (
+      <CheckBox
+        src={THEME_CONSTANTS[theme]?.checkedBoxSrc}
+        onPress={() => {
+          onPress();
+        }}
+      />
+    ) : (
+      <CheckBox
+        src={THEME_CONSTANTS[theme]?.unCheckedBoxSrc}
+        onPress={() => {
+          onPress();
+        }}
+      />
+    );
+  }
+);
+
+const TodoItem = ({ todo }: { todo: Todo }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 });
+
   const theme = useAppSelect((state) => state.theme.value);
+  const todoDrawerPosition = useAppSelect(
+    (state) => state.todo.todoDrawerPosition
+  );
+
+  const [deleteTodo, result] = useDeleteTodoMutation();
+  const [toggleCheckTodo, toggleCheckTodoResult] = useToggleTodoMutation();
+
+  const didMountRef = React.useRef(false);
+  const MeasurePositionTriggerRef = React.useRef(false);
+  const itemRef = React.useRef(null);
+
+  const { oneMonthBeforeQueryString, todayQueryString } = useAppSelect(
+    (state) => state.calendar
+  );
+
+  useEffect(() => {
+    MeasurePositionTriggerRef.current = false;
+  }, [todoDrawerPosition]);
+
+  useEffect(() => {
+    if (!didMountRef.current) {
+      didMountRef.current = true;
+      return;
+    }
+    setIsModalOpen(!isModalOpen);
+  }, [modalPosition]);
 
   const styledTheme = useTheme();
+  const dispatch = useDispatch();
+
+  const measureItemRef = () => {
+    itemRef.current?.measure((x, y, width, height, pageX, pageY) => {
+      setModalPosition({ x: pageX, y: pageY });
+    });
+  };
+
+  const toggleTodoCheck = () => {
+    toggleCheckTodo({
+      todo_id: todo.todo_id,
+      check: !todo.check,
+      todo_date: todo.date,
+      value: todo.level * 1000,
+      queryArgs: {
+        current_date: currentDateFormat,
+        graph_before_date: oneMonthBeforeQueryString,
+        graph_today_date: todayQueryString,
+      },
+    });
+  };
+
+  const currentDateFormat = useAppSelect(
+    (state) => state.calendar.currentDateYYYYMMDD
+  );
 
   return (
-    <FlexBox
-      justifyContent="space-between"
-      alignItems="center"
-      styles={{ paddingBottom: spacing.padding }}
-    >
-      <FlexBox gap={10} alignItems="center">
-        {checked ? (
-          <CheckBox
-            src={THEME_CONSTANTS[theme]?.checkedBoxSrc}
+    <View ref={itemRef}>
+      <FlexBox
+        justifyContent="space-between"
+        alignItems="center"
+        styles={{ paddingBottom: spacing.padding }}
+      >
+        <FlexBox gap={10} alignItems="center">
+          <TodoCheckBox
+            theme={theme}
+            isChecked={todo.check}
             onPress={() => {
-              setChecked(!checked);
+              toggleTodoCheck();
             }}
           />
-        ) : (
-          <CheckBox
-            src={THEME_CONSTANTS[theme]?.unCheckedBoxSrc}
-            onPress={() => {
-              setChecked(!checked);
-            }}
-          />
-        )}
 
-        <Text size="md">{todo.text}</Text>
-      </FlexBox>
-      <FlexBox gap={10} alignItems="center">
-        {checked ? (
-          <Text size="md" color={THEME_CONSTANTS[theme]?.high}>
-            +{numberWithCommas(todo.level * 1000)}원
-          </Text>
-        ) : (
-          <Text size="md">{numberWithCommas(todo.level * 1000)}원</Text>
+          <Text size="md">{todo.content}</Text>
+        </FlexBox>
+        <FlexBox gap={10} alignItems="center">
+          {todo.check ? (
+            <Text size="md" color={THEME_CONSTANTS[theme]?.high}>
+              +{numberWithCommas(todo.level * 1000)}원
+            </Text>
+          ) : (
+            <Text size="md">{numberWithCommas(todo.level * 1000)}원</Text>
+          )}
+          <Icons
+            type="material"
+            name="dots-horizontal"
+            size={24}
+            color={styledTheme.textDimmer}
+            onPress={() => {
+              if (!MeasurePositionTriggerRef.current) {
+                MeasurePositionTriggerRef.current = true;
+                measureItemRef();
+              } else {
+                setIsModalOpen(!isModalOpen);
+              }
+            }}
+          />
+        </FlexBox>
+        {isModalOpen && (
+          <Modal transparent={true}>
+            <ModalOverlay
+              onPress={() => {
+                setIsModalOpen(!isModalOpen);
+              }}
+            >
+              <TodoModal
+                position={{
+                  top: modalPosition.y,
+                  left: modalPosition.x,
+                }}
+              >
+                <TodoModalItem
+                  isSelected={true}
+                  onPress={() => {
+                    dispatch(
+                      openEditTodoModal({
+                        text: todo.content,
+                        level: todo.level,
+                        date: todo.date,
+                        checked: todo.check,
+                        project_id: todo.project_id,
+                        repeat_day: todo.repeat_day,
+                        repeat_end_date: todo.repeat_end_date,
+                        todo_id: todo.todo_id,
+                      })
+                    );
+                    setIsModalOpen(!isModalOpen);
+                  }}
+                >
+                  <Text size="md" color={styledTheme.textReverse}>
+                    수정
+                  </Text>
+                </TodoModalItem>
+                <TodoModalItem
+                  onPress={() => {
+                    deleteTodo({
+                      todo_id: todo.todo_id,
+                      todo_date: todo.date,
+                      value: todo.level * 1000,
+                      checked: todo.check,
+                      queryArgs: {
+                        date: currentDateFormat,
+                        graph_before_date: oneMonthBeforeQueryString,
+                        graph_today_date: todayQueryString,
+                      },
+                    });
+                  }}
+                >
+                  <Text size="md">삭제</Text>
+                </TodoModalItem>
+              </TodoModal>
+            </ModalOverlay>
+          </Modal>
         )}
-        <Icons
-          type="material"
-          name="dots-horizontal"
-          size={24}
-          color={styledTheme.textDimmer}
-          onPress={() => {}}
-        />
       </FlexBox>
-    </FlexBox>
+    </View>
   );
 };
 
