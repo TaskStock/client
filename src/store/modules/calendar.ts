@@ -7,6 +7,8 @@ const initialState = {
   itemHeight: 0,
   weeksOfMonth: calculateWeeksOfMonth(dayjs().toISOString()),
   datesOfMonth: calculateDatesOfMonth(dayjs().toISOString()),
+  oneMonthBeforeQueryString: dayjs().subtract(1, "month").format("YYYY-MM-DD"),
+  todayQueryString: dayjs().add(1, "month").format("YYYY-MM-DD"),
   currentDateString: dayjs().toISOString(),
   currentDateYYYYMMDD: dayjs().format("YYYY-MM-DD"),
 };

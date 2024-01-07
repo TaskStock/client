@@ -12,6 +12,7 @@ import { createMockData } from "../../utils/createMockData";
 import { useGetValuesQuery } from "../../store/modules/chart";
 import CenterLayout from "../atoms/CenterLayout";
 import dayjs from "dayjs";
+import { useAppSelect } from "../../store/configureStore.hooks";
 
 const Container = styled.View`
   width: 100%;
@@ -197,40 +198,22 @@ function HomeChart({ isCandleStick }: { isCandleStick: boolean }) {
     height: number;
   } | null>(null);
 
-  const startDate = dayjs().subtract(30, "day").format("YYYY-MM-DD");
-  const endDate = dayjs().add(1, "day").format("YYYY-MM-DD");
+  const { oneMonthBeforeQueryString, todayQueryString } = useAppSelect(
+    (state) => state.calendar
+  );
 
   const {
     data: responseData,
     isLoading: loading,
     error,
   } = useGetValuesQuery({
-    startDate,
-    endDate,
+    startDate: oneMonthBeforeQueryString,
+    endDate: todayQueryString,
   });
 
-  const data = responseData?.values;
+  const data = responseData?.values || [];
 
   if (error) console.log(error);
-
-  // "date": "2024-01-05T18:22:05.107Z"
-
-  // const mockApiCall = async (type) => {
-  //   setLoading(true);
-
-  //   const length = chartDateType.find((item) => item.name === type)?.counts;
-
-  //   const randomFluctuation = Math.floor(Math.random() * length);
-
-  //   const response = await new Promise<Value[]>((resolve, reject) => {
-  //     setTimeout(() => {
-  //       resolve(createMockData(length - randomFluctuation));
-  //     }, 500);
-  //   });
-
-  //   setData(response);
-  //   setLoading(false);
-  // };
 
   return (
     <Container>

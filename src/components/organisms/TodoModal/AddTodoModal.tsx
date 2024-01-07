@@ -160,9 +160,11 @@ export default function AddTodoModal() {
 
   const value = addTodoForm.level * 1000;
 
-  const currentDateFormat = useAppSelect(
-    (state) => state.calendar.currentDateYYYYMMDD
-  );
+  const {
+    oneMonthBeforeQueryString,
+    todayQueryString,
+    currentDateYYYYMMDD: currentDateFormat,
+  } = useAppSelect((state) => state.calendar);
 
   const [addTodo, addTodoResult] = useAddTodoMutation();
   const [editTodo, editTodoResult] = useEditTodoMutation();
@@ -171,15 +173,22 @@ export default function AddTodoModal() {
     if (isEditMode) {
       editTodo({
         form: addTodoForm,
+        todo_date: addTodoForm.todo_date!,
+        original_level: addTodoForm.original_level,
         queryArgs: {
           date: currentDateFormat,
+          graph_before_date: oneMonthBeforeQueryString,
+          graph_today_date: todayQueryString,
         },
       });
     } else {
       addTodo({
         form: addTodoForm,
+        add_date: dayjs().toISOString(),
         queryArgs: {
           date: currentDateFormat,
+          graph_before_date: oneMonthBeforeQueryString,
+          graph_today_date: todayQueryString,
         },
       });
     }

@@ -118,6 +118,10 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
   const MeasurePositionTriggerRef = React.useRef(false);
   const itemRef = React.useRef(null);
 
+  const { oneMonthBeforeQueryString, todayQueryString } = useAppSelect(
+    (state) => state.calendar
+  );
+
   useEffect(() => {
     MeasurePositionTriggerRef.current = false;
   }, [todoDrawerPosition]);
@@ -146,7 +150,9 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
       todo_date: todo.date,
       value: todo.level * 1000,
       queryArgs: {
-        date: currentDateFormat,
+        current_date: currentDateFormat,
+        graph_before_date: oneMonthBeforeQueryString,
+        graph_today_date: todayQueryString,
       },
     });
   };
@@ -216,6 +222,7 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
                       openEditTodoModal({
                         text: todo.content,
                         level: todo.level,
+                        date: todo.date,
                         project_id: todo.project_id,
                         repeat_day: todo.repeat_day,
                         repeat_end_date: todo.repeat_end_date,
@@ -233,8 +240,13 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
                   onPress={() => {
                     deleteTodo({
                       todo_id: todo.todo_id,
+                      todo_date: todo.date,
+                      value: todo.level * 1000,
+                      checked: todo.check,
                       queryArgs: {
                         date: currentDateFormat,
+                        graph_before_date: oneMonthBeforeQueryString,
+                        graph_today_date: todayQueryString,
                       },
                     });
                   }}

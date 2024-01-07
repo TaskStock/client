@@ -48,7 +48,7 @@ function CandleStickValueChart({
     close: item.end,
     high: item.high,
     low: item.low,
-    x: new Date(item.date),
+    x: new Date(convertUTCToLocal(item.date)),
   }));
 
   const maxY = Math.max(...candleData.map((item) => item.high));
@@ -96,8 +96,7 @@ function CandleStickValueChart({
           y: [minY, maxY],
         }}
         animate={{
-          duration: 200,
-          onLoad: { duration: 200 },
+          duration: 500,
         }}
         data={candleData}
         candleWidth={candleWidth}

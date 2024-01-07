@@ -5,6 +5,10 @@ import { AddTodoForm, Todo } from "../../@types/todo";
 import wrappedFetchBaseQuery from "../fetchBaseQuery";
 import { chartApi } from "./chart";
 import { Value } from "../../@types/chart";
+import {
+  checkIsLocalToday,
+  checkIsSameLocalDay,
+} from "../../utils/checkIsSameLocalDay";
 
 interface InitialState {
   isTodoDrawerOpen: boolean;
@@ -61,12 +65,13 @@ export const todoApi = createApi({
       },
       {
         content: string;
+        add_date: string;
         queryArgs: {
           date: string;
         };
       }
     >({
-      query: (body: { content: string }) => {
+      query: (body: { content: string; add_date: string }) => {
         const simpleTodoForm: AddTodoForm = {
           todo_id: null,
           content: body.content,
@@ -90,7 +95,7 @@ export const todoApi = createApi({
           content: body.content,
           todo_id: temp_todo_id,
           check: false,
-          date: dayjs().toISOString(),
+          date: body.add_date,
           index: 0,
           project_id: null,
           level: 0,
@@ -113,6 +118,7 @@ export const todoApi = createApi({
 
           const todo_id = result.data.todo_id;
 
+          // 임시 아이디를 실제 아이디로 바꿔준다.
           dispatch(
             todoApi.util.updateQueryData(
               "getAllTodos",
@@ -140,8 +146,11 @@ export const todoApi = createApi({
       },
       {
         form: AddTodoForm;
+        add_date: string;
         queryArgs: {
           date: string;
+          graph_before_date: string;
+          graph_today_date: string;
         };
       }
     >({
@@ -160,7 +169,7 @@ export const todoApi = createApi({
           ...body.form,
           todo_id: temp_todo_id,
           check: false,
-          date: dayjs().toISOString(),
+          date: body.add_date,
           index: 0,
         };
 
@@ -174,11 +183,42 @@ export const todoApi = createApi({
           )
         );
 
+        // 오늘 날짜라면, 그래프값에도 반영해준다.
+
+        let patchUpdateHighLowValue;
+
+        if (checkIsLocalToday(body.add_date)) {
+          patchUpdateHighLowValue = dispatch(
+            chartApi.util.updateQueryData(
+              "getValues",
+              {
+                startDate: body.queryArgs.graph_before_date,
+                endDate: body.queryArgs.graph_today_date,
+              },
+              ({ values }) => {
+                const index = values.findIndex((value) => {
+                  return checkIsSameLocalDay(value.date, body.add_date);
+                });
+
+                if (index === -1) {
+                  console.log("no value matches on add todo");
+                  return;
+                }
+
+                const value = body.form.level * 1000;
+
+                values[index].high += value;
+                values[index].low -= value;
+              }
+            )
+          );
+        }
         try {
           const result = await queryFulfilled;
 
           const todo_id = result.data.todo_id;
 
+          // 임시 아이디를 실제 아이디로 바꿔준다.
           dispatch(
             todoApi.util.updateQueryData(
               "getAllTodos",
@@ -197,6 +237,7 @@ export const todoApi = createApi({
         } catch (error) {
           console.log(error);
           patchAddTodo.undo();
+          if (patchUpdateHighLowValue) patchUpdateHighLowValue.undo();
         }
       },
     }),
@@ -204,12 +245,16 @@ export const todoApi = createApi({
       {},
       {
         form: AddTodoForm;
+        todo_date: string;
+        original_level?: number;
         queryArgs: {
           date: string;
+          graph_before_date: string;
+          graph_today_date: string;
         };
       }
     >({
-      query: (body: { form: AddTodoForm }) => {
+      query: (body) => {
         return {
           url: "/todo/update",
           method: "PUT",
@@ -234,6 +279,50 @@ export const todoApi = createApi({
           )
         );
 
+        let patchUpdateGraphValue;
+
+        if (body.todo_date && checkIsLocalToday(body.todo_date)) {
+          patchUpdateGraphValue = dispatch(
+            chartApi.util.updateQueryData(
+              "getValues",
+              {
+                startDate: body.queryArgs.graph_before_date,
+                endDate: body.queryArgs.graph_today_date,
+              },
+              (draft: { values: Value[] }) => {
+                console.log("editTodo update graph value");
+
+                console.log(body.original_level);
+
+                const index = draft.values.findIndex((value) => {
+                  return checkIsSameLocalDay(value.date, body.todo_date);
+                });
+
+                if (index === -1) {
+                  console.log("editTodo : no value matches on todo");
+                  return;
+                }
+
+                // if (!body.original_level) {
+                //   console.log("no original level");
+                //   return;
+                // }
+
+                if (body.original_level === undefined) {
+                  console.log("original level is undefined");
+                  return;
+                }
+
+                const diffLevel = body.form.level - body.original_level;
+
+                // draft.values[index].end += diffLevel * 1000;
+                draft.values[index].high += diffLevel * 1000;
+                draft.values[index].low -= diffLevel * 1000;
+              }
+            )
+          );
+        }
+
         dispatch(closeTodoModal());
 
         try {
@@ -251,7 +340,9 @@ export const todoApi = createApi({
         todo_date: string;
         value: number;
         queryArgs: {
-          date: string;
+          current_date: string;
+          graph_before_date: string;
+          graph_today_date: string;
         };
       }) => {
         return {
@@ -265,7 +356,7 @@ export const todoApi = createApi({
         const patchResult = dispatch(
           todoApi.util.updateQueryData(
             "getAllTodos",
-            { date: body.queryArgs.date },
+            { date: body.queryArgs.current_date },
             (draft: { todos: Todo[] }) => {
               const index = draft.todos.findIndex(
                 (todo) => todo.todo_id === body.todo_id
@@ -275,44 +366,43 @@ export const todoApi = createApi({
           )
         );
 
-        if (
-          dayjs(body.todo_date).format("YYYY-MM-DD") !==
-          dayjs().format("YYYY-MM-DD")
-        )
-          return;
+        let patchUpdateGraphValue;
 
-        const patchResult2 = dispatch(
-          chartApi.util.updateQueryData(
-            "getValues",
-            {
-              startDate: dayjs().subtract(29, "day").format("YYYY-MM-DD"),
-              endDate: dayjs().add(1, "day").format("YYYY-MM-DD"),
-            },
-            (draft: { values: Value[] }) => {
-              const index = draft.values.findIndex((value) => {
-                const date1 = dayjs(value.date).format("YYYY-MM-DD");
-                const date2 = dayjs(body.todo_date).format("YYYY-MM-DD");
+        // 오늘 날짜라면, 토글해서 check 했을때, 그래프값에도 반영해준다.
+        if (checkIsLocalToday(body.todo_date)) {
+          patchUpdateGraphValue = dispatch(
+            chartApi.util.updateQueryData(
+              "getValues",
+              {
+                startDate: body.queryArgs.graph_before_date,
+                endDate: body.queryArgs.graph_today_date,
+              },
+              (draft: { values: Value[] }) => {
+                const index = draft.values.findIndex((value) => {
+                  return checkIsSameLocalDay(value.date, body.todo_date);
+                });
 
-                return date1 === date2;
-              });
+                if (index === -1) {
+                  console.log("no value matches on todo");
+                  return;
+                }
 
-              if (index === -1) return;
-
-              if (body.check) {
-                draft.values[index].end += body.value;
-              } else {
-                draft.values[index].end -= body.value;
+                if (body.check) {
+                  draft.values[index].end += body.value;
+                } else {
+                  draft.values[index].end -= body.value;
+                }
               }
-            }
-          )
-        );
+            )
+          );
+        }
 
         try {
           const result = await queryFulfilled;
         } catch (error) {
           console.log(error);
           patchResult.undo();
-          patchResult2.undo();
+          if (patchUpdateGraphValue) patchUpdateGraphValue.undo();
         }
       },
     }),
@@ -320,17 +410,17 @@ export const todoApi = createApi({
       {},
       {
         todo_id: number;
+        todo_date: string;
+        value: number;
+        checked: boolean;
         queryArgs: {
           date: string;
+          graph_before_date: string;
+          graph_today_date: string;
         };
       }
     >({
-      query: (body: {
-        todo_id: number;
-        queryArgs: {
-          date: string;
-        };
-      }) => {
+      query: (body) => {
         return {
           url: "/todo/delete",
           method: "DELETE",
@@ -352,11 +442,43 @@ export const todoApi = createApi({
           )
         );
 
+        let patchUpdateGraphEndValue;
+
+        if (checkIsLocalToday(body.todo_date)) {
+          patchUpdateGraphEndValue = dispatch(
+            chartApi.util.updateQueryData(
+              "getValues",
+              {
+                startDate: body.queryArgs.graph_before_date,
+                endDate: body.queryArgs.graph_today_date,
+              },
+              (draft: { values: Value[] }) => {
+                const index = draft.values.findIndex((value) => {
+                  return checkIsSameLocalDay(value.date, body.queryArgs.date);
+                });
+
+                if (index === -1) {
+                  console.log("deleteTodo: no value matches on todo");
+                  return;
+                }
+
+                if (body.checked) {
+                  draft.values[index].end -= body.value;
+                }
+
+                draft.values[index].high -= body.value;
+                draft.values[index].low += body.value;
+              }
+            )
+          );
+        }
+
         try {
           await queryFulfilled;
         } catch (error) {
           console.log(error);
           patchResult.undo();
+          if (patchUpdateGraphEndValue) patchUpdateGraphEndValue.undo();
         }
       },
     }),
@@ -374,6 +496,8 @@ const todoSlice = createSlice({
         todo_id: null,
         content: "",
         level: 0,
+        original_level: 0,
+        todo_date: "",
         project_id: null,
         repeat_day: "0000000",
         repeat_end_date: null,
@@ -402,22 +526,34 @@ const todoSlice = createSlice({
         todo_id: number;
         text: string;
         level: number;
+        date: string;
         project_id: number | null;
         repeat_day: string | null;
         repeat_end_date: string | null;
       }>
     ) {
-      const { todo_id, text, level, project_id, repeat_day, repeat_end_date } =
-        action.payload;
+      const {
+        todo_id,
+        text,
+        date,
+        level,
+        project_id,
+        repeat_day,
+        repeat_end_date,
+      } = action.payload;
 
       if (!todo_id) return;
 
       state.isAddModalOpen = true;
 
+      console.log("openEditTodoModal", date);
+
       state.addTodoForm = {
         todo_id: todo_id,
         content: text,
         level: level,
+        original_level: level,
+        todo_date: date,
         project_id: project_id || null,
         repeat_day: repeat_day || "0000000",
         repeat_end_date: repeat_end_date || null,

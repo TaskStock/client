@@ -25,9 +25,8 @@ const AddTodoItem = () => {
   const [addSimpleTodo, result] = useAddSimpleTodoMutation();
   const [error, setError] = useState<string | null>();
 
-  const currentDateFormat = useAppSelect(
-    (state) => state.calendar.currentDateYYYYMMDD
-  );
+  const { currentDateString, currentDateYYYYMMDD: currentDateFormat } =
+    useAppSelect((state) => state.calendar);
 
   const theme = useTheme();
 
@@ -50,6 +49,7 @@ const AddTodoItem = () => {
 
     addSimpleTodo({
       content,
+      add_date: currentDateString,
       queryArgs: {
         date: currentDateFormat,
       },
