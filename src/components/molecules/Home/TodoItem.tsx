@@ -13,7 +13,7 @@ import {
   openEditTodoModal,
   useDeleteTodoMutation,
   useToggleTodoMutation,
-} from "../../../store/modules/todo";
+} from "../../../store/modules/todo/todo";
 import { Todo } from "../../../@types/todo";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import { Modal, View } from "react-native";

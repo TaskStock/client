@@ -16,7 +16,7 @@ import {
   openAddTodoModal,
   setTodoDrawerPosition,
   useGetAllTodosQuery,
-} from "../../../store/modules/todo";
+} from "../../../store/modules/todo/todo";
 import FlexBox from "../../atoms/FlexBox";
 import Icons from "../../atoms/Icons";
 import CenterLayout from "../../atoms/CenterLayout";

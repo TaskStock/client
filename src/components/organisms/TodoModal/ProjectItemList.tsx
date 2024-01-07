@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import styled, { useTheme } from "styled-components/native";
 import { useProject } from "../../../hooks/useProject";
 import { useAppSelect } from "../../../store/configureStore.hooks";
-import { setAddTodoForm } from "../../../store/modules/todo";
+import { setAddTodoForm } from "../../../store/modules/todo/todo";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import Icons from "../../atoms/Icons";
 

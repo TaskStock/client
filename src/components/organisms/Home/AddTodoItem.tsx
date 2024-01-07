@@ -4,7 +4,7 @@ import { spacing } from "../../../constants/spacing";
 import Icons from "../../atoms/Icons";
 import styled, { useTheme } from "styled-components/native";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
-import { useAddSimpleTodoMutation } from "../../../store/modules/todo";
+import { useAddSimpleTodoMutation } from "../../../store/modules/todo/todo";
 import { useState } from "react";
 import { useAppSelect } from "../../../store/configureStore.hooks";
 import Text from "../../atoms/Text";

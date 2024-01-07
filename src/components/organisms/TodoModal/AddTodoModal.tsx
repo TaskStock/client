@@ -17,7 +17,7 @@ import {
   toggleRepeatEndModal,
   useAddTodoMutation,
   useEditTodoMutation,
-} from "../../../store/modules/todo";
+} from "../../../store/modules/todo/todo";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import FlexBox from "../../atoms/FlexBox";
 import Icons from "../../atoms/Icons";

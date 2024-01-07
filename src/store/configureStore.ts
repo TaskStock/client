@@ -2,7 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import chartReducer, { chartApi } from "./modules/chart";
 import { themeReducer } from "./modules/theme";
 import calendarReducer from "./modules/calendar";
-import todoReducer, { todoApi } from "./modules/todo";
+import todoReducer, { todoApi } from "./modules/todo/todo";
 import { authReducer } from "./modules/auth";
 import projectReducer from "./modules/project";
 

@@ -4,7 +4,7 @@ import SliderThumb from "../../../../assets/images/slider-thumb.png";
 import styled, { useTheme } from "styled-components/native";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import { useDispatch } from "react-redux";
-import { setAddTodoForm } from "../../../store/modules/todo";
+import { setAddTodoForm } from "../../../store/modules/todo/todo";
 import { useAppSelect } from "../../../store/configureStore.hooks";
 
 const SliderLabel = styled.View`
