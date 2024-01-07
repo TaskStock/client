@@ -17,6 +17,9 @@ const originalBaseQuery = fetchBaseQuery({
   },
 });
 
+const refreshToken_temp =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo5MywiaWF0IjoxNzA0NjQwMjg5fQ.PNm73sEQGBVHuJb0OQGey-MNquo8gpCHJVBs6w2UEG0";
+
 const BaseQueryWithAuth: BaseQueryFn<
   string | { url: string; method: string; body: any },
   unknown,
@@ -28,7 +31,8 @@ const BaseQueryWithAuth: BaseQueryFn<
     // try to get a new token
     const rootState = api.getState() as RootState;
 
-    const refreshToken = rootState.auth.refreshToken;
+    // TODO: 나중에 refreshToken 로직이나, ㅁsyncStorage 로직을 넣어야 함.
+    const refreshToken = refreshToken_temp;
 
     if (!refreshToken) {
       api.dispatch(logout());

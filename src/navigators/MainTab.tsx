@@ -6,9 +6,9 @@ import useHeight from "../hooks/useHeight";
 import GroupScreen from "../screens/GroupScreen";
 import ProjectScreen from "../screens/ProjectScreen";
 import { useAppSelect } from "../store/configureStore.hooks";
+import { ComponentHeightProvider } from "../utils/ComponentHeightContext";
 import HomeStack from "./HomeStack";
 import MyPageStack from "./MyPageStack";
-import { ComponentHeightProvider } from "../utils/ComponentHeightContext";
 
 const THEME_SOURCES = {
   dark: {

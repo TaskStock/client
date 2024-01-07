@@ -1,34 +1,53 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { client } from "../../services/api";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 interface IInitialUserState {
   accessToken: string;
-  refreshToken: string;
-
+  userId: number;
   isLoggedIn: boolean;
   loading: boolean;
   error: any;
 }
 
 export const initialUserState: IInitialUserState = {
-  accessToken:
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo5MywiaWF0IjoxNzA0NTA0NDA0LCJleHAiOjE3MDQ1MDgwMDR9.Fwkq6vxmScAji8NZN821UutDRmr_rBvYLiuA0EdkZWE",
-  refreshToken:
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo5MywiaWF0IjoxNzA0NjQwMjg5fQ.PNm73sEQGBVHuJb0OQGey-MNquo8gpCHJVBs6w2UEG0",
-
+  accessToken: "",
+  userId: 0,
   isLoggedIn: false,
   loading: false,
   error: null,
 };
 
+// 회원가입
 export const registerUser = createAsyncThunk(
   "REGISTER_USER",
   async (data, { rejectWithValue }) => {
     try {
       const responseData = await client.post("account/register", data);
+      const { accessToken } = responseData;
+
+      // 토큰을 AsyncStorage에 저장
+      await AsyncStorage.setItem("accessToken", accessToken);
+
       return responseData;
     } catch (error) {
       return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+// 초기 상태를 검사하여 업데이트하는 비동기 함수
+export const checkTokenExistence = createAsyncThunk(
+  "auth/checkTokenExistence",
+  async (_, { rejectWithValue }) => {
+    try {
+      const accessToken = await AsyncStorage.getItem("accessToken");
+      if (accessToken) {
+        return { accessToken, isLoggedIn: true };
+      }
+      return { accessToken: "", isLoggedIn: false };
+    } catch (error) {
+      return rejectWithValue(error);
     }
   }
 );
@@ -56,6 +75,7 @@ const authSlice = createSlice({
 
     // 이것도 나중에 refreshToken Asyncstorage에서 삭제하는 Thunk함수로.
     logout: (state) => {
+      AsyncStorage.removeItem("accessToken"); // 로그아웃 시 토큰 삭제
       Object.assign(state, initialUserState);
     },
   },
@@ -66,12 +86,21 @@ const authSlice = createSlice({
       })
       .addCase(registerUser.fulfilled, (state, action) => {
         state.accessToken = action.payload.accessToken;
-        state.refreshToken = action.payload.refreshToken;
-
+        state.userId = action.payload.user_id;
         state.isLoggedIn = true;
         state.loading = false;
+        console.log(state);
       })
       .addCase(registerUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(checkTokenExistence.fulfilled, (state, action) => {
+        state.accessToken = action.payload.accessToken;
+        state.isLoggedIn = action.payload.isLoggedIn;
+        state.loading = false;
+      })
+      .addCase(checkTokenExistence.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

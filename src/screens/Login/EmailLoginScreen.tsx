@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TouchableOpacity, View } from "react-native";
 import { BlackBtn } from "../../components/atoms/Buttons";
 import FlexBox from "../../components/atoms/FlexBox";
@@ -10,6 +10,7 @@ import { spacing } from "../../constants/spacing";
 import { useAppSelect } from "../../store/configureStore.hooks";
 import { client } from "../../services/api";
 import { checkValidPassword } from "../../utils/checkValidity";
+import { storeData } from "../../utils/asyncStorage";
 
 const THEME_CONSTANTS = {
   dark: {
@@ -26,6 +27,7 @@ const EmailLoginScreen = ({ navigation }) => {
     email: "",
     password: "",
   });
+  const [userId, setUserId] = useState(0);
   const [emailAlert, setEmailAlert] = useState(false);
   const [pwAlert, setPwAlert] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -38,6 +40,9 @@ const EmailLoginScreen = ({ navigation }) => {
         password: user.password,
       });
       if (responseData.result === "success") {
+        storeData("accessToken", responseData.accessToken);
+        setUserId(responseData.user_id);
+
         navigation.navigate("MainTab", {
           screen: "HomeStack",
           params: {
@@ -55,7 +60,7 @@ const EmailLoginScreen = ({ navigation }) => {
       else {
         alert("로그인에 실패했습니다.");
       }
-      console.log(responseData);
+      // console.log(responseData);
     } catch (error) {
       console.error("[client] 로그인 오류 발생:", error);
     }
