@@ -202,6 +202,7 @@ export const editTodoMutation = (builder: TodoApiBuilder) =>
     {
       form: AddTodoForm;
       todo_date: string;
+      todo_checked: boolean;
       original_level?: number;
       queryArgs: {
         date: string;
@@ -271,7 +272,10 @@ export const editTodoMutation = (builder: TodoApiBuilder) =>
 
               const diffLevel = body.form.level - body.original_level;
 
-              // draft.values[index].end += diffLevel * 1000;
+              if (body.todo_checked != undefined && body.todo_checked == true) {
+                draft.values[index].end += diffLevel * 1000;
+              }
+
               draft.values[index].high += diffLevel * 1000;
               draft.values[index].low -= diffLevel * 1000;
             }

@@ -223,6 +223,7 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
                         text: todo.content,
                         level: todo.level,
                         date: todo.date,
+                        checked: todo.check,
                         project_id: todo.project_id,
                         repeat_day: todo.repeat_day,
                         repeat_end_date: todo.repeat_end_date,

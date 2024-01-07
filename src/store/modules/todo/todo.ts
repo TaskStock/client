@@ -97,6 +97,7 @@ const todoSlice = createSlice({
         todo_id: number;
         text: string;
         level: number;
+        checked: boolean;
         date: string;
         project_id: number | null;
         repeat_day: string | null;
@@ -108,6 +109,7 @@ const todoSlice = createSlice({
         text,
         date,
         level,
+        checked,
         project_id,
         repeat_day,
         repeat_end_date,
@@ -124,6 +126,7 @@ const todoSlice = createSlice({
         content: text,
         level: level,
         original_level: level,
+        checked: checked,
         todo_date: date,
         project_id: project_id || null,
         repeat_day: repeat_day || "0000000",

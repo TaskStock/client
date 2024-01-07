@@ -175,6 +175,9 @@ export default function AddTodoModal() {
         form: addTodoForm,
         todo_date: addTodoForm.todo_date!,
         original_level: addTodoForm.original_level,
+        // addTodoForm의 checked는, editModal이 열릴때 들어간다.
+        // 그러므로, isEditMode일때는 addTodoForm.checked가 항상 true이다.
+        todo_checked: addTodoForm.checked!,
         queryArgs: {
           date: currentDateFormat,
           graph_before_date: oneMonthBeforeQueryString,
