@@ -6,14 +6,12 @@ import {
   PanResponder,
   PanResponderGestureState,
 } from "react-native";
-import styled from "styled-components/native";
-import { darkTheme, grayTheme } from "../../../constants/colors";
+import styled, { useTheme } from "styled-components/native";
 import { spacing } from "../../../constants/spacing";
-import { useAppSelect } from "../../../store/configureStore.hooks";
+import useHeight from "../../../hooks/useHeight";
 import { ComponentHeightContext } from "../../../utils/ComponentHeightContext";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import Loader from "../../atoms/Loader";
-import useHeight from "../../../hooks/useHeight";
 
 const { height: screenHeight } = Dimensions.get("window");
 
@@ -136,15 +134,11 @@ const BottomDrawer: React.FunctionComponent<BottomDrawerProps> = ({
     handlePanResponder();
   }, [defaultValue, openState, draggedUp]);
 
-  const theme = useAppSelect((state) => state.theme.value);
+  const theme = useTheme();
   if (!panResponder) {
     return <Loader />;
   }
 
-  const THEME_CONSTANTS = {
-    dark: darkTheme.box,
-    gray: grayTheme.box,
-  };
   const { NOTCH_BOTTOM } = useHeight();
   return (
     <Animated.View
@@ -152,7 +146,7 @@ const BottomDrawer: React.FunctionComponent<BottomDrawerProps> = ({
         {
           width: "100%",
           height: screenHeight,
-          backgroundColor: THEME_CONSTANTS[theme],
+          backgroundColor: theme.box,
           borderRadius: useResponsiveFontSize(20),
           position: "absolute",
           bottom:

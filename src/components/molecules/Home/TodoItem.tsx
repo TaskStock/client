@@ -1,24 +1,21 @@
 import React, { useState } from "react";
-import { darkTheme, grayTheme } from "../../../constants/colors";
+import { useTheme } from "styled-components/native";
 import { spacing } from "../../../constants/spacing";
 import { useAppSelect } from "../../../store/configureStore.hooks";
 import numberWithCommas from "../../../utils/useNumberWithCommas";
 import CheckBox from "../../atoms/CheckBox";
 import FlexBox from "../../atoms/FlexBox";
-import Text from "../../atoms/Text";
 import Icons from "../../atoms/Icons";
-import { useTheme } from "styled-components/native";
+import Text from "../../atoms/Text";
 
 const THEME_CONSTANTS = {
   dark: {
     checkedBoxSrc: require("../../../../assets/icons/checked-dark.png"),
     unCheckedBoxSrc: require("../../../../assets/icons/unchecked-dark.png"),
-    high: darkTheme.high,
   },
   gray: {
     checkedBoxSrc: require("../../../../assets/icons/checked-light.png"),
     unCheckedBoxSrc: require("../../../../assets/icons/unchecked-light.png"),
-    high: grayTheme.high,
   },
 };
 
@@ -55,7 +52,7 @@ const TodoItem = ({ todo }) => {
       </FlexBox>
       <FlexBox gap={10} alignItems="center">
         {checked ? (
-          <Text size="md" color={THEME_CONSTANTS[theme]?.high}>
+          <Text size="md" color={styledTheme.high}>
             +{numberWithCommas(todo.level * 1000)}원
           </Text>
         ) : (

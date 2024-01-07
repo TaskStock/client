@@ -1,23 +1,10 @@
 import React from "react";
-import styled from "styled-components/native";
-import { darkTheme, grayTheme } from "../../../constants/colors";
+import styled, { useTheme } from "styled-components/native";
 import { spacing } from "../../../constants/spacing";
-import { useAppSelect } from "../../../store/configureStore.hooks";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import Text from "../../atoms/Text";
 
-const THEME_CONSTANTS = {
-  dark: {
-    text: darkTheme.text,
-    textDimmer: darkTheme.textDimmer,
-  },
-  gray: {
-    text: grayTheme.text,
-    textDimmer: grayTheme.textDimmer,
-  },
-};
-
-const Container = styled.TouchableOpacity`
+const Container = styled.TouchableOpacity<{ selected: boolean }>`
   padding: ${spacing.offset}px ${useResponsiveFontSize(7)}px
     ${spacing.offset - 3}px;
   border-bottom-width: ${useResponsiveFontSize(3)}px;
@@ -34,18 +21,14 @@ const ProjectSelectBtn = ({
   selected: boolean;
   onPress: () => void;
 }) => {
-  const theme = useAppSelect((state) => state.theme.value);
+  const theme = useTheme();
 
   return (
     <Container onPress={onPress} selected={selected}>
       <Text
         size="md"
         weight={selected ? "bold" : "regular"}
-        color={
-          selected
-            ? THEME_CONSTANTS[theme]?.text
-            : THEME_CONSTANTS[theme]?.textDimmer
-        }
+        color={selected ? theme.text : theme.textDimmer}
       >
         {projectName}
       </Text>

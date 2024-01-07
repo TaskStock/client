@@ -1,20 +1,10 @@
 import React, { forwardRef, useRef } from "react";
 import { TextInput as RNTextInput, TextInputProps, View } from "react-native";
-import styled from "styled-components/native";
-import { darkTheme, grayTheme } from "../../constants/colors";
+import styled, { useTheme } from "styled-components/native";
+import { grayTheme } from "../../constants/colors";
 import { spacing } from "../../constants/spacing";
-import { useAppSelect } from "../../store/configureStore.hooks";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
 import Text from "./Text";
-
-const THEME_CONSTANTS = {
-  dark: {
-    subTextColor: darkTheme.textDim,
-  },
-  gray: {
-    subTextColor: grayTheme.textDim,
-  },
-};
 
 interface ITextInput extends TextInputProps {
   subText?: string;
@@ -50,18 +40,18 @@ const TextInput: React.FC<ITextInput> = ({
   alertText,
   ...props
 }) => {
-  const theme = useAppSelect((state) => state.theme.value);
+  const theme = useTheme();
   const inputRef = useRef<RNTextInput>(null);
   return (
     <>
       <Container alert={alert} onPress={() => inputRef.current?.focus()}>
-        <Text size="xs" color={THEME_CONSTANTS[theme].subTextColor}>
+        <Text size="xs" color={theme.textDim}>
           {subText}
         </Text>
         <Input
           ref={inputRef}
           placeholder={placeholder}
-          placeholderTextColor={THEME_CONSTANTS[theme].subTextColor}
+          placeholderTextColor={theme.textDim}
           value={value}
           onChangeText={onChangeText}
           {...props}

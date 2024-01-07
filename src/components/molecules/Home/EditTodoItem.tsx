@@ -1,5 +1,5 @@
 import React from "react";
-import { darkTheme, grayTheme } from "../../../constants/colors";
+import { useTheme } from "styled-components/native";
 import { spacing } from "../../../constants/spacing";
 import { useAppSelect } from "../../../store/configureStore.hooks";
 import numberWithCommas from "../../../utils/useNumberWithCommas";
@@ -10,13 +10,9 @@ import Text from "../../atoms/Text";
 const THEME_CONSTANTS = {
   dark: {
     ordering: require("../../../../assets/icons/ordering-dark.png"),
-    high: darkTheme.high,
-    textDimmer: darkTheme.textDimmer,
   },
   gray: {
     ordering: require("../../../../assets/icons/ordering-light.png"),
-    high: grayTheme.high,
-    textDimmer: grayTheme.textDimmer,
   },
 };
 
@@ -30,6 +26,7 @@ const EditTodoItem = ({
   };
 }) => {
   const theme = useAppSelect((state) => state.theme.value);
+  const styledTheme = useTheme();
 
   return (
     <FlexBox
@@ -43,7 +40,7 @@ const EditTodoItem = ({
       </FlexBox>
       <FlexBox gap={10} alignItems="center">
         {todo.check ? (
-          <Text size="md" color={THEME_CONSTANTS[theme]?.high}>
+          <Text size="md" color={styledTheme.high}>
             +{numberWithCommas(todo.level * 1000)}원
           </Text>
         ) : (
@@ -53,7 +50,7 @@ const EditTodoItem = ({
           type="material"
           name="dots-horizontal"
           size={24}
-          color={THEME_CONSTANTS[theme]?.textDimmer}
+          color={styledTheme.textDimmer}
           onPress={() => {}}
         />
       </FlexBox>

@@ -1,26 +1,11 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import styled from "styled-components/native";
-import { darkTheme, grayTheme } from "../../../constants/colors";
+import styled, { useTheme } from "styled-components/native";
 import { spacing } from "../../../constants/spacing";
 import useHeight from "../../../hooks/useHeight";
-import { useAppSelect } from "../../../store/configureStore.hooks";
 import { toggleAddModal } from "../../../store/modules/todo";
 import Button from "../../atoms/Button";
 import FlexBox from "../../atoms/FlexBox";
-
-const THEME_CONSTANTS = {
-  dark: {
-    text: darkTheme.text,
-    textReverse: darkTheme.textReverse,
-    subBtnGray: darkTheme.subBtnGray,
-  },
-  gray: {
-    text: grayTheme.text,
-    textReverse: grayTheme.textReverse,
-    subBtnGray: grayTheme.subBtnGray,
-  },
-};
 
 const Container = styled.View<{ paddingBottom: number }>`
   position: fixed;
@@ -33,7 +18,7 @@ const Container = styled.View<{ paddingBottom: number }>`
 
 const HandleTodoBtnContainer = ({ editEnabled, setEditEnabled }) => {
   const { NOTCH_BOTTOM } = useHeight();
-  const theme = useAppSelect((state) => state.theme.value);
+  const theme = useTheme();
   const dispatch = useDispatch();
 
   return (
@@ -53,12 +38,10 @@ const HandleTodoBtnContainer = ({ editEnabled, setEditEnabled }) => {
           onPress={() => {
             setEditEnabled(!editEnabled);
           }}
-          color={editEnabled ? THEME_CONSTANTS[theme]?.textReverse : undefined}
+          color={editEnabled ? theme.textReverse : undefined}
           styles={{
             width: "35%",
-            backgroundColor: editEnabled
-              ? THEME_CONSTANTS[theme]?.text
-              : THEME_CONSTANTS[theme]?.subBtnGray,
+            backgroundColor: editEnabled ? theme.text : theme.subBtnGray,
           }}
         />
       </FlexBox>

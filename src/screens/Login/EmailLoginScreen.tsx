@@ -1,29 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { TouchableOpacity, View } from "react-native";
+import { useTheme } from "styled-components/native";
 import { BlackBtn } from "../../components/atoms/Buttons";
 import FlexBox from "../../components/atoms/FlexBox";
 import Text from "../../components/atoms/Text";
 import TextInput from "../../components/atoms/TextInput";
 import LoginContainer from "../../components/molecules/Login/LoginContainer";
-import { darkTheme, grayTheme } from "../../constants/colors";
 import { spacing } from "../../constants/spacing";
-import { useAppDispatch, useAppSelect } from "../../store/configureStore.hooks";
 import { client } from "../../services/api";
-import { checkValidPassword } from "../../utils/checkValidity";
-import { storeData } from "../../utils/asyncStorage";
+import { useAppDispatch } from "../../store/configureStore.hooks";
 import { loginSuccess } from "../../store/modules/auth";
 
-const THEME_CONSTANTS = {
-  dark: {
-    subTextColor: darkTheme.textDim,
-  },
-  gray: {
-    subTextColor: grayTheme.textDim,
-  },
-};
-
 const EmailLoginScreen = ({ navigation }) => {
-  const theme = useAppSelect((state) => state.theme.value);
+  const theme = useTheme();
   const dispatch = useAppDispatch();
   const [user, setUser] = useState({
     email: "",
@@ -83,7 +72,7 @@ const EmailLoginScreen = ({ navigation }) => {
           paddingHorizontal: 10,
         }}
       >
-        <Text size="sm" color={THEME_CONSTANTS[theme].subTextColor}>
+        <Text size="sm" color={theme.textDim}>
           {text}
         </Text>
       </TouchableOpacity>
@@ -125,7 +114,7 @@ const EmailLoginScreen = ({ navigation }) => {
         />
         <View
           style={{
-            backgroundColor: THEME_CONSTANTS[theme].subTextColor,
+            backgroundColor: theme.textDim,
             width: 1,
             height: "100%",
           }}
