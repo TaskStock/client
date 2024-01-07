@@ -54,6 +54,7 @@ const TextInput: React.FC<ITextInput> = ({
           placeholderTextColor={theme.textDim}
           value={value}
           onChangeText={onChangeText}
+          autoCapitalize="none"
           {...props}
         />
       </Container>

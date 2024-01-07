@@ -1,5 +1,5 @@
-import { View, Text } from "react-native";
 import React from "react";
+import { Text } from "react-native";
 import styled from "styled-components/native";
 import Icons from "../../components/atoms/Icons";
 
