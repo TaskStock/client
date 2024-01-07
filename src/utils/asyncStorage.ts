@@ -33,7 +33,7 @@ export const checkStorage = async () => {
   try {
     const accessToken = await AsyncStorage.getItem("accessToken");
 
-    console.log("Check => Access Token: ", accessToken);
+    console.log("AsyncStorage Check => Access Token: ", accessToken);
   } catch (error) {
     console.error("Error reading values from AsyncStorage", error);
   }

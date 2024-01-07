@@ -1,11 +1,11 @@
-import React from "react";
+import React, { forwardRef, useRef } from "react";
+import { TextInput as RNTextInput, TextInputProps, View } from "react-native";
 import styled from "styled-components/native";
 import { darkTheme, grayTheme } from "../../constants/colors";
+import { spacing } from "../../constants/spacing";
 import { useAppSelect } from "../../store/configureStore.hooks";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
 import Text from "./Text";
-import { TextInputProps, View } from "react-native";
-import { spacing } from "../../constants/spacing";
 
 const THEME_CONSTANTS = {
   dark: {
@@ -23,7 +23,7 @@ interface ITextInput extends TextInputProps {
   alertText?: string;
 }
 
-const Container = styled.View<{ alert: boolean }>`
+const Container = styled.Pressable<{ alert: boolean; onPress: () => void }>`
   border: 1px solid
     ${(props) => (props.alert ? props.theme.alert : props.theme.textDim)};
   border-radius: ${useResponsiveFontSize(6)}px;
@@ -33,7 +33,11 @@ const Container = styled.View<{ alert: boolean }>`
   margin-bottom: ${(props) => (props.alert ? 0 : spacing.padding)}px;
 `;
 
-const Input = styled.TextInput`
+const Input = styled(
+  forwardRef<RNTextInput, TextInputProps>((props, ref) => (
+    <RNTextInput ref={ref} {...props} />
+  ))
+)`
   font-size: ${useResponsiveFontSize(14)}px;
 `;
 
@@ -47,13 +51,15 @@ const TextInput: React.FC<ITextInput> = ({
   ...props
 }) => {
   const theme = useAppSelect((state) => state.theme.value);
+  const inputRef = useRef<RNTextInput>(null);
   return (
     <>
-      <Container alert={alert}>
+      <Container alert={alert} onPress={() => inputRef.current?.focus()}>
         <Text size="xs" color={THEME_CONSTANTS[theme].subTextColor}>
           {subText}
         </Text>
         <Input
+          ref={inputRef}
           placeholder={placeholder}
           placeholderTextColor={THEME_CONSTANTS[theme].subTextColor}
           value={value}

@@ -1,6 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { client } from "../../services/api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getAPIHost } from "../../utils/getAPIHost";
+import { storeData } from "../../utils/asyncStorage";
 
 interface IInitialUserState {
   accessToken: string;
@@ -52,6 +54,43 @@ export const checkTokenExistence = createAsyncThunk(
   }
 );
 
+// export const logout = createAsyncThunk(
+//   "auth/logout",
+//   async (_, { getState, rejectWithValue }) => {
+//     try {
+//       const state = getState();
+//       // console.log("state: ", state);
+//       const accessToken = state.auth.accessToken;
+//       console.log("보낼 토큰: ", accessToken);
+//       const SERVER_URL = getAPIHost();
+
+//       const response = await fetch(`${SERVER_URL}account/logout`, {
+//         method: "DELETE",
+//         headers: {
+//           "Content-Type": "application/json",
+//           Authorization: `Bearer ${accessToken}`,
+//         },
+//       });
+//       console.log("------", response.status);
+//       // if (!response.ok) {
+//       //   throw new Error("서버로부터의 응답이 올바르지 않습니다.---");
+//       // }
+//       const data = await response.json();
+//       // console.log("logout data: ", data);
+
+//       if (data.result !== "success") {
+//         throw new Error(data.message || "로그아웃 실패");
+//       }
+
+//       await AsyncStorage.removeItem("accessToken"); // 로컬에서 토큰 제거
+//       return data;
+//     } catch (error) {
+//       // console.error("로그아웃 처리 중 오류:", error);
+//       return rejectWithValue(error.message);
+//     }
+//   }
+// );
+
 const authSlice = createSlice({
   name: "auth",
   initialState: initialUserState,
@@ -61,8 +100,12 @@ const authSlice = createSlice({
     },
     loginSuccess: (state, action) => {
       state.isLoggedIn = true;
-      state = action.payload;
+      state.accessToken = action.payload.accessToken;
+      state.userId = action.payload.user_id;
       state.loading = false;
+
+      storeData("accessToken", action.payload.accessToken); // asyncStorage에 토큰 저장
+      console.log("loginSuccess: ", state);
     },
     loginFailure: (state, action) => {
       state.error = action.payload;
@@ -98,6 +141,19 @@ const authSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       });
+    // .addCase(logout.pending, (state) => {
+    //   state.loading = true;
+    //   console.log("pending: ", state);
+    // })
+    // .addCase(logout.fulfilled, (state) => {
+    //   console.log("성공: ", state);
+    //   Object.assign(state, initialUserState);
+    // })
+    // .addCase(logout.rejected, (state, action) => {
+    //   state.error = action.payload;
+    //   state.loading = false;
+    //   console.log("에러: ", action.payload);
+    // });
   },
 });
 

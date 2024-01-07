@@ -7,10 +7,11 @@ import TextInput from "../../components/atoms/TextInput";
 import LoginContainer from "../../components/molecules/Login/LoginContainer";
 import { darkTheme, grayTheme } from "../../constants/colors";
 import { spacing } from "../../constants/spacing";
-import { useAppSelect } from "../../store/configureStore.hooks";
+import { useAppDispatch, useAppSelect } from "../../store/configureStore.hooks";
 import { client } from "../../services/api";
 import { checkValidPassword } from "../../utils/checkValidity";
 import { storeData } from "../../utils/asyncStorage";
+import { loginSuccess } from "../../store/modules/auth";
 
 const THEME_CONSTANTS = {
   dark: {
@@ -23,11 +24,12 @@ const THEME_CONSTANTS = {
 
 const EmailLoginScreen = ({ navigation }) => {
   const theme = useAppSelect((state) => state.theme.value);
+  const dispatch = useAppDispatch();
   const [user, setUser] = useState({
     email: "",
     password: "",
   });
-  const [userId, setUserId] = useState(0);
+
   const [emailAlert, setEmailAlert] = useState(false);
   const [pwAlert, setPwAlert] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -40,8 +42,7 @@ const EmailLoginScreen = ({ navigation }) => {
         password: user.password,
       });
       if (responseData.result === "success") {
-        storeData("accessToken", responseData.accessToken);
-        setUserId(responseData.user_id);
+        dispatch(loginSuccess(responseData));
 
         navigation.navigate("MainTab", {
           screen: "HomeStack",

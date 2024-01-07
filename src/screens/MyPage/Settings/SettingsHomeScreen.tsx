@@ -4,6 +4,7 @@ import Text from "../../../components/atoms/Text";
 import { spacing } from "../../../constants/spacing";
 import { useAppDispatch } from "../../../store/configureStore.hooks";
 import { logout } from "../../../store/modules/auth";
+import { resetNavigation } from "../../../utils/resetNavigation";
 
 const Container = styled.View`
   justify-content: center;
@@ -28,20 +29,12 @@ const Menu = ({ text, onPress }) => (
 );
 const SettingsHomeScreen = ({ navigation }) => {
   const dispatch = useAppDispatch();
+
   const handleLogout = () => {
     dispatch(logout());
-    navigation.reset({
-      index: 0,
-      routes: [
-        {
-          name: "LoginStack",
-          state: {
-            routes: [{ name: "Welcome" }],
-          },
-        },
-      ],
-    });
+    resetNavigation(navigation);
   };
+
   return (
     <Container>
       <Menu text="계정 설정 =>" onPress={() => {}} />

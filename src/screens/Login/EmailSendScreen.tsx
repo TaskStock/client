@@ -5,6 +5,12 @@ import LoginContainer from "../../components/molecules/Login/LoginContainer";
 import { spacing } from "../../constants/spacing";
 import { client } from "../../services/api";
 import { checkValidEmail } from "../../utils/checkValidity";
+import { resetNavigation } from "../../utils/resetNavigation";
+
+// 예외처리
+// 1. 이미 가입된 이메일
+// 2. 이메일 전송 실패
+// 3. 이메일 형식 오류
 
 const EmailSendScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -29,7 +35,7 @@ const EmailSendScreen = ({ navigation }) => {
         setEmailAlert("이메일 전송에 실패했습니다.");
       }
 
-      console.log(responseData);
+      console.log(responseData); // {"codeId": 71, "result": "success"}
     } catch (error) {
       console.error("[client] 이메일 전송 오류 발생:", error);
       setEmailAlert("이메일 전송 중 오류가 발생했습니다.");
@@ -41,6 +47,7 @@ const EmailSendScreen = ({ navigation }) => {
     if (checkValidEmail(email)) {
       sendMail();
     } else {
+      // 이메일 형식 오류 check
       setEmailAlert("유효한 이메일 주소를 입력해주세요.");
     }
   };
@@ -67,7 +74,7 @@ const EmailSendScreen = ({ navigation }) => {
       {emailAlert === "이미 가입된 이메일입니다." && (
         <WhiteBtn
           text={"로그인하기"}
-          onPress={() => navigation.navigate("Welcome")}
+          onPress={() => resetNavigation(navigation)}
         />
       )}
     </LoginContainer>
