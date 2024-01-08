@@ -5,6 +5,7 @@ import calendarReducer from "./modules/calendar";
 import todoReducer, { todoApi } from "./modules/todo/todo";
 import { authReducer } from "./modules/auth";
 import projectReducer from "./modules/project";
+import homeReducer from "./modules/home";
 
 const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ const store = configureStore({
     [todoApi.reducerPath]: todoApi.reducer,
     auth: authReducer,
     chart: chartReducer,
+    home: homeReducer,
     theme: themeReducer,
     calendar: calendarReducer,
     todo: todoReducer,
