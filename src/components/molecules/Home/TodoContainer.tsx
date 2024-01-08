@@ -23,6 +23,7 @@ import CenterLayout from "../../atoms/CenterLayout";
 import Margin from "../../atoms/Margin";
 import AddTodoItem from "../../organisms/Home/AddTodoItem";
 import LoadingSpinner from "../../atoms/LoadingSpinner";
+import { setTabIndex } from "../../../store/modules/home";
 
 const DateContainer = styled.View`
   padding: ${spacing.small}px ${spacing.gutter}px 0;
@@ -69,9 +70,16 @@ const TodoContainer = () => {
     >
       <DateContainer>
         <FlexBox justifyContent="space-between" alignItems="center">
-          <Text size="xl" weight="bold">
-            {currentDateFormat}
-          </Text>
+          <Pressable
+            onPress={() => {
+              dispatch(setTabIndex(1));
+            }}
+          >
+            <Text size="xl" weight="bold">
+              {currentDateFormat}
+            </Text>
+          </Pressable>
+
           <Icons
             type="entypo"
             name="circle-with-plus"

@@ -10,6 +10,11 @@ import { ComponentHeightContext } from "../../../utils/ComponentHeightContext";
 import CalendarContainer from "./CalendarContainer";
 import GraphContainer from "./GraphContainer";
 import HomeTabHeader from "./HomeTabHeader";
+import {
+  useAppDispatch,
+  useAppSelect,
+} from "../../../store/configureStore.hooks";
+import { setTabIndex } from "../../../store/modules/home";
 
 const FirstRoute = () => <GraphContainer myData={[]} />;
 
@@ -28,22 +33,26 @@ const renderTabBar = (
       key: string;
       title: string;
     }>;
-  },
-  setIndex: React.Dispatch<React.SetStateAction<number>>
+  }
 ) => {
-  return <HomeTabHeader props={props} setIndex={setIndex} />;
+  return <HomeTabHeader props={props} />;
 };
 
 const clientHeight = Dimensions.get("window").height;
 
 const GCContainer = ({ myData }) => {
   const layout = useWindowDimensions();
+  const dispatch = useAppDispatch();
+  const index = useAppSelect((state) => state.home.tabIndex);
 
-  const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
     { key: "first", title: "그래프" },
     { key: "second", title: "캘린더" },
   ]);
+
+  const onChangeIndex = (index: number) => {
+    dispatch(setTabIndex(index));
+  };
 
   const { setContentsHeight } = useContext(ComponentHeightContext);
   return (
@@ -58,8 +67,8 @@ const GCContainer = ({ myData }) => {
       <TabView
         navigationState={{ index, routes }}
         renderScene={renderScene}
-        onIndexChange={setIndex}
-        renderTabBar={(props) => renderTabBar(props, setIndex)}
+        onIndexChange={onChangeIndex}
+        renderTabBar={(props) => renderTabBar(props)}
         initialLayout={{ width: layout.width }}
         onSwipeEnd={() => {}}
         swipeEnabled={false}

@@ -116,7 +116,7 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
 
   const didMountRef = React.useRef(false);
   const MeasurePositionTriggerRef = React.useRef(false);
-  const itemRef = React.useRef(null);
+  const itemRef = React.useRef<View | null>(null);
 
   const { oneMonthBeforeQueryString, todayQueryString } = useAppSelect(
     (state) => state.calendar

@@ -9,7 +9,7 @@ export const calculateDatesOfMonth = (currentDateString: string) => {
   const endOfMonth = currentDate.endOf("month");
   const endDay = endOfMonth.endOf("week");
 
-  const calendar = [];
+  const calendar: dayjs.Dayjs[] = [];
 
   let day = startDay;
   while (day.isBefore(endDay)) {

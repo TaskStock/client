@@ -234,12 +234,18 @@ export const editTodoMutation = (builder: TodoApiBuilder) =>
           "getAllTodos",
           { date: body.queryArgs.date },
           (draft: { todos: Todo[] }) => {
+            if (body.form.todo_id === null) return;
+
             const index = draft.todos.findIndex(
               (todo) => todo.todo_id === body.form.todo_id
             );
+
+            if (index === -1) return;
+
             draft.todos[index] = {
               ...draft.todos[index],
               ...body.form,
+              todo_id: draft.todos[index].todo_id,
             };
           }
         )
