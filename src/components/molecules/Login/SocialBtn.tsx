@@ -4,11 +4,13 @@ import { palette } from "../../../constants/colors";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import { IconsPic } from "../../atoms/Icons";
 import Text from "../../atoms/Text";
+import { useTheme } from "styled-components";
 
 const ButtonStyle = styled.TouchableOpacity<{ color?: string; type?: string }>`
   background-color: ${(props) => (props.color ? props.color : props.theme.box)};
   border: 1px solid
-    ${(props) => (props.type !== "email" ? "transparent" : props.theme.text)};
+    ${(props) =>
+      props.type !== "email" ? "transparent" : props.theme.emailLoginBtn};
   padding: ${useResponsiveFontSize(14)}px;
   border-radius: ${useResponsiveFontSize(12)}px;
   width: 100%;
@@ -30,6 +32,7 @@ const SocialBtn = ({
   onPress: () => void;
   type?: string;
 }) => {
+  const theme = useTheme();
   return (
     <ButtonStyle
       onPress={onPress}
@@ -52,7 +55,7 @@ const SocialBtn = ({
           애플로 계속하기
         </Text>
       ) : (
-        <Text size="md" weight="semibold">
+        <Text size="md" weight="semibold" color={theme.emailLoginBtn}>
           이메일로 계속하기
         </Text>
       )}
