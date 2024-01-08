@@ -10,22 +10,11 @@ const HomeStack = () => (
   <NativeStack.Navigator
     screenOptions={{
       headerShadowVisible: false,
+      headerShown: false,
     }}
   >
-    <NativeStack.Screen
-      name="Home"
-      component={HomeScreen}
-      options={{
-        headerShown: false,
-      }}
-    />
-    <NativeStack.Screen
-      name="Alarm"
-      component={AlarmScreen}
-      options={{
-        headerShown: true,
-      }}
-    />
+    <NativeStack.Screen name="Home" component={HomeScreen} />
+    <NativeStack.Screen name="Alarm" component={AlarmScreen} />
     <NativeStack.Screen
       name="Friend"
       component={FriendScreen}
