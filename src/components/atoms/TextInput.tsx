@@ -7,20 +7,22 @@ import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
 import Text from "./Text";
 
 interface ITextInput extends TextInputProps {
-  subText?: string;
+  subText?: any;
   placeholder: string;
   alert?: boolean;
-  alertText?: string;
+  alertText?: any;
 }
 
 const Container = styled.Pressable<{ alert: boolean; onPress: () => void }>`
   border: 1px solid
-    ${(props) => (props.alert ? props.theme.alert : props.theme.textDim)};
+    ${(props) =>
+      props.alert ? props.theme.alert : props.theme.textInputBorder};
   border-radius: ${useResponsiveFontSize(6)}px;
   width: 100%;
   padding: ${useResponsiveFontSize(8)}px;
   gap: ${useResponsiveFontSize(7)}px;
   margin-bottom: ${(props) => (props.alert ? 0 : spacing.padding)}px;
+  background-color: ${(props) => props.theme.textInput};
 `;
 
 const Input = styled(
@@ -29,6 +31,7 @@ const Input = styled(
   ))
 )`
   font-size: ${useResponsiveFontSize(14)}px;
+  color: ${(props) => props.theme.text};
 `;
 
 const TextInput: React.FC<ITextInput> = ({
@@ -65,7 +68,7 @@ const TextInput: React.FC<ITextInput> = ({
             width: "100%",
           }}
         >
-          <Text size="xs" color={grayTheme.alert}>
+          <Text size="xs" color={theme.alert}>
             {alertText}
           </Text>
         </View>

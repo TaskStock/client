@@ -19,6 +19,7 @@ const StyledInput = styled(TextInput)`
   height: 50px;
   text-align: center;
   font-size: ${useResponsiveFontSize(32)}px;
+  color: ${(props) => props.theme.text};
 `;
 
 const CodeInput = forwardRef<TextInput, TextInputProps>((props, ref) => (

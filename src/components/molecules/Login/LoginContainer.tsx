@@ -18,11 +18,12 @@ const THEME_SOURCES = {
   },
 };
 
-const Container = styled.View`
+const Container = styled.View<{ background?: string }>`
   flex: 1;
   justify-content: center;
   align-items: center;
-  background-color: white;
+  background-color: ${({ background, theme }) =>
+    background ? background : theme.loginBackground};
 `;
 const Logo = styled.View`
   padding: ${useResponsiveFontSize(95)}px ${spacing.gutter}px
@@ -40,13 +41,15 @@ const Children = styled.View`
 const LoginContainer = ({
   children,
   comment = "none",
+  background,
 }: {
   children: React.ReactNode;
   comment?: string;
+  background?: string;
 }) => {
   const theme = useAppSelect((state) => state.theme.value);
   return (
-    <Container>
+    <Container background={background}>
       <Logo>
         <Image
           source={THEME_SOURCES[theme]?.logo}

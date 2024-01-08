@@ -1,4 +1,5 @@
 import React from "react";
+import { Platform } from "react-native";
 import styled from "styled-components/native";
 import Divider from "../../components/molecules/Login/Divider";
 import GoogleBtn from "../../components/molecules/Login/GoogleBtn";
@@ -7,9 +8,7 @@ import Policy from "../../components/molecules/Login/Policy";
 import SocialBtn from "../../components/molecules/Login/SocialBtn";
 import { spacing } from "../../constants/spacing";
 import { checkStorage } from "../../utils/asyncStorage";
-import { client } from "../../services/api";
-import { getAPIHost } from "../../utils/getAPIHost";
-import { Platform } from "react-native";
+import { useTheme } from "styled-components";
 
 const Login = styled.View`
   gap: ${spacing.padding}px;
@@ -20,30 +19,11 @@ const WelcomeScreen = ({ navigation }) => {
   // 서비스 약관 누르면 asyncStorage에 저장된 토큰 확인
   // 개인정보 보호정책 누르면 메인 화면으로 이동
 
-  const handleGoogleLogin = async () => {
-    try {
-      const SERVER_URL = getAPIHost();
-      const endpoint = "account/login/google";
-      const response = await fetch(`${SERVER_URL}${endpoint}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error("서버로부터의 응답이 올바르지 않습니다.");
-      }
-
-      const responseData = await response.json();
-      console.log("google client: ", responseData);
-    } catch (error) {
-      console.error("Google 로그인 중 오류 발생: ", error);
-    }
-  };
+  const handleGoogleLogin = async () => {};
+  const theme = useTheme();
 
   return (
-    <LoginContainer>
+    <LoginContainer background={theme.box}>
       <Login>
         <Divider />
         <GoogleBtn onPress={handleGoogleLogin} />

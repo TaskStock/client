@@ -36,10 +36,15 @@ export const grayTheme = {
   mainBtnGray: palette.neutral200_gray,
   mainBtnReversed: palette.neutral600_dark,
   subBtnGray: palette.neutral400_gray,
+  textInput: palette.neutral100_gray,
+  textInputBorder: palette.neutral600_gray,
+  loginBackground: palette.neutral100_gray,
   box: palette.neutral100_gray,
   high: palette.red,
   low: palette.blue,
   alert: palette.alert_red,
+  loadingBtn: palette.neutral500_gray,
+  emailLoginBtn: palette.neutral500_dark,
 };
 
 export const darkTheme = {
@@ -52,8 +57,13 @@ export const darkTheme = {
   mainBtnGray: palette.neutral600_dark,
   mainBtnReversed: palette.neutral200_gray,
   subBtnGray: palette.neutral400_dark,
+  textInput: palette.neutral600_dark,
+  textInputBorder: palette.neutral600_dark,
+  loginBackground: palette.neutral500_dark,
   box: palette.neutral700_dark,
   high: palette.red,
   low: palette.green,
-  alert: palette.alert_red,
+  alert: palette.red,
+  loadingBtn: palette.neutral400_dark,
+  emailLoginBtn: palette.neutral200_dark,
 };

@@ -1,19 +1,21 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
+import { View } from "react-native";
+import { useTheme } from "styled-components";
 import Icons from "../components/atoms/Icons";
 import EmailCheckCodeScreen from "../screens/Login/EmailCheckCodeScreen";
 import EmailLoginScreen from "../screens/Login/EmailLoginScreen";
 import EmailRegisterScreen from "../screens/Login/EmailRegisterScreen";
 import EmailSendScreen from "../screens/Login/EmailSendScreen";
-import WelcomeScreen from "../screens/Login/WelcomeScreen";
-import { useAppSelect } from "../store/configureStore.hooks";
-import FindPasswordScreen from "../screens/Login/FindPasswordScreen";
 import FindPWChangeScreen from "../screens/Login/FindPWChangeScreen";
-import { View } from "react-native";
+import FindPasswordScreen from "../screens/Login/FindPasswordScreen";
+import WelcomeScreen from "../screens/Login/WelcomeScreen";
 
 const NativeStack = createNativeStackNavigator();
 
 const LoginStack = ({ navigation }) => {
+  const theme = useTheme();
+
   const optionsWithHeader = {
     headerBackTitleVisible: false,
     headerLeft: () => (
@@ -21,7 +23,7 @@ const LoginStack = ({ navigation }) => {
         type="feather"
         name="chevron-left"
         size={35}
-        color={"black"}
+        color={theme.text}
         onPress={() => {
           navigation.goBack();
         }}
@@ -29,17 +31,20 @@ const LoginStack = ({ navigation }) => {
     ),
     headerTitle: "",
   };
+
   const optionsWithoutHeader = {
     headerBackTitleVisible: false,
     headerLeft: () => <View style={{ height: 35, width: "100%" }} />,
     headerTitle: "",
   };
 
-  const theme = useAppSelect((state) => state.theme.value);
   return (
     <NativeStack.Navigator
       screenOptions={{
         headerShadowVisible: false,
+        headerStyle: {
+          backgroundColor: theme.loginBackground,
+        },
       }}
     >
       <NativeStack.Screen
@@ -48,6 +53,9 @@ const LoginStack = ({ navigation }) => {
         options={{
           headerBackTitleVisible: false,
           headerTitle: "",
+          headerStyle: {
+            backgroundColor: theme.box,
+          },
         }}
       />
       <NativeStack.Screen
