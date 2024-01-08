@@ -2,15 +2,28 @@ import { createSlice } from "@reduxjs/toolkit";
 import dayjs from "dayjs";
 import { calculateDatesOfMonth } from "../../utils/calculateDatesOfMonth";
 import { calculateWeeksOfMonth } from "../../utils/calculateWeeksOfMonth";
+import { DateString, IsoString } from "../../@types/calendar";
 
-const initialState = {
+interface initialState {
+  itemHeight: number;
+  weeksOfMonth: number;
+  datesOfMonth: dayjs.Dayjs[];
+  oneMonthBeforeQueryString: DateString;
+  todayQueryString: DateString;
+  currentDateString: IsoString;
+  currentDateYYYYMMDD: DateString;
+}
+
+const initialState: initialState = {
   itemHeight: 0,
   weeksOfMonth: calculateWeeksOfMonth(dayjs().toISOString()),
   datesOfMonth: calculateDatesOfMonth(dayjs().toISOString()),
-  oneMonthBeforeQueryString: dayjs().subtract(1, "month").format("YYYY-MM-DD"),
-  todayQueryString: dayjs().add(1, "month").format("YYYY-MM-DD"),
-  currentDateString: dayjs().toISOString(),
-  currentDateYYYYMMDD: dayjs().format("YYYY-MM-DD"),
+  oneMonthBeforeQueryString: dayjs()
+    .subtract(1, "month")
+    .format("YYYY-MM-DD") as DateString,
+  todayQueryString: dayjs().add(1, "month").format("YYYY-MM-DD") as DateString,
+  currentDateString: dayjs().toISOString() as IsoString,
+  currentDateYYYYMMDD: dayjs().format("YYYY-MM-DD") as DateString,
 };
 
 const calendarSlice = createSlice({
@@ -29,13 +42,18 @@ const calendarSlice = createSlice({
 
       state.itemHeight = itemHeight;
     },
-    setCurrentDateString: (state, action) => {
+    setCurrentDateString: (
+      state,
+      action: {
+        payload: IsoString;
+      }
+    ) => {
       state.currentDateString = action.payload;
       state.weeksOfMonth = calculateWeeksOfMonth(state.currentDateString);
       state.datesOfMonth = calculateDatesOfMonth(state.currentDateString);
       state.currentDateYYYYMMDD = dayjs(state.currentDateString).format(
         "YYYY-MM-DD"
-      );
+      ) as DateString;
     },
   },
 });

@@ -15,6 +15,7 @@ import { setCurrentDateString } from "../../../store/modules/calendar";
 import Icons from "../../atoms/Icons";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import { LinearGradient } from "expo-linear-gradient";
+import { IsoString } from "../../../@types/calendar";
 
 const clientHeight = Dimensions.get("window").height;
 
@@ -106,12 +107,18 @@ const CalendarContainer = () => {
 
   const subtract1Month = () => {
     dispatch(
-      setCurrentDateString(currentDate.subtract(1, "month").toISOString())
+      setCurrentDateString(
+        currentDate.subtract(1, "month").toISOString() as IsoString
+      )
     );
   };
 
   const add1Month = () => {
-    dispatch(setCurrentDateString(currentDate.add(1, "month").toISOString()));
+    dispatch(
+      setCurrentDateString(
+        currentDate.add(1, "month").toISOString() as IsoString
+      )
+    );
   };
 
   return (

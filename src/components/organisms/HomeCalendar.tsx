@@ -11,6 +11,7 @@ import {
 } from "../../store/modules/calendar";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
 import FlexBox from "../atoms/FlexBox";
+import { IsoString } from "../../@types/calendar";
 
 const CalendarContainer = styled.View`
   border-radius: 20px;
@@ -138,7 +139,7 @@ export default function HomeCalendar({
         item={item}
         currentDate={currentDate}
         onPress={(item: dayjs.Dayjs) => {
-          dispatch(setCurrentDateString(item.toISOString()));
+          dispatch(setCurrentDateString(item.toISOString() as IsoString));
         }}
       />
     );

@@ -240,7 +240,7 @@ export default function AddTodoModal() {
             style={{
               marginBottom: spacing.offset,
             }}
-            ref={(ref) => (scrollViewRef.current = ref)}
+            ref={scrollViewRef}
           >
             <Pressable
               style={{
