@@ -80,11 +80,10 @@ const authSlice = createSlice({
   name: "auth",
   initialState: initialUserState,
   reducers: {
-    // logout: (state) => {
-    //   AsyncStorage.removeItem("accessToken"); // 로그아웃 시 토큰 삭제
-    //   AsyncStorage.removeItem("refreshToken"); // 로그아웃 시 토큰 삭제
-    //   Object.assign(state, initialUserState);
-    // },
+    // 임시로 설정. 나중에 thunk로 바꿀것
+    setAccessToken: (state, action) => {
+      state.accessToken = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -187,5 +186,8 @@ const authSlice = createSlice({
       });
   },
 });
+
+
+export const { setAccessToken } = authSlice.actions;
 
 export const authReducer = authSlice.reducer;

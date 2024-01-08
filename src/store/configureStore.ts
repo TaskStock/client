@@ -1,17 +1,19 @@
 import { configureStore } from "@reduxjs/toolkit";
-import graphReducer, { graphApi } from "./modules/graph";
+import chartReducer, { chartApi } from "./modules/chart";
 import { themeReducer } from "./modules/theme";
 import calendarReducer from "./modules/calendar";
-import todoReducer, { todoApi } from "./modules/todo";
+import todoReducer, { todoApi } from "./modules/todo/todo";
 import { authReducer } from "./modules/auth";
 import projectReducer from "./modules/project";
+import homeReducer from "./modules/home";
 
 const store = configureStore({
   reducer: {
-    [graphApi.reducerPath]: graphApi.reducer,
+    [chartApi.reducerPath]: chartApi.reducer,
     [todoApi.reducerPath]: todoApi.reducer,
     auth: authReducer,
-    graph: graphReducer,
+    chart: chartReducer,
+    home: homeReducer,
     theme: themeReducer,
     calendar: calendarReducer,
     todo: todoReducer,
@@ -21,7 +23,7 @@ const store = configureStore({
     getDefaultMiddleware({
       serializableCheck: false,
     })
-      .concat(graphApi.middleware)
+      .concat(chartApi.middleware)
       .concat(todoApi.middleware),
 });
 

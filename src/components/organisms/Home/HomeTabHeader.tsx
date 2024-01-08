@@ -4,6 +4,8 @@ import { NavigationState, SceneRendererProps } from "react-native-tab-view";
 import styled, { useTheme } from "styled-components/native";
 import { spacing } from "../../../constants/spacing";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
+import { useAppDispatch } from "../../../store/configureStore.hooks";
+import { setTabIndex } from "../../../store/modules/home";
 
 const Container = styled.View`
   padding: 0 ${spacing.gutter}px;
@@ -26,7 +28,6 @@ const TabText = styled.Text<{ isFocused: boolean }>`
 
 export default function HomeTabHeader({
   props,
-  setIndex,
 }: {
   props: SceneRendererProps & {
     navigationState: NavigationState<{
@@ -34,11 +35,12 @@ export default function HomeTabHeader({
       title: string;
     }>;
   };
-  setIndex: React.Dispatch<React.SetStateAction<number>>;
 }) {
   const theme = useTheme();
 
   const [translateValue] = React.useState(new Animated.Value(0));
+
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     Animated.timing(translateValue, {
@@ -59,7 +61,7 @@ export default function HomeTabHeader({
           <Tab
             key={props.navigationState.routes[i].title}
             onPress={() => {
-              setIndex(i);
+              dispatch(setTabIndex(i));
             }}
             graphSelected={props.navigationState.index === i}
             onLayout={(event) => {

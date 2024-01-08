@@ -3,7 +3,8 @@ import { useDispatch } from "react-redux";
 import styled, { useTheme } from "styled-components/native";
 import { spacing } from "../../../constants/spacing";
 import useHeight from "../../../hooks/useHeight";
-import { toggleAddModal } from "../../../store/modules/todo";
+import { useAppSelect } from "../../../store/configureStore.hooks";
+import { toggleAddModal } from "../../../store/modules/todo/todo";
 import Button from "../../atoms/Button";
 import FlexBox from "../../atoms/FlexBox";
 

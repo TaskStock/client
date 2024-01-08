@@ -11,8 +11,6 @@ import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import FlexBox from "../../atoms/FlexBox";
 import { LinearGradient } from "expo-linear-gradient";
 
-const clientHeight = Dimensions.get("window").height;
-
 const Container = styled.View`
   width: 100%;
   flex: 1;
@@ -39,7 +37,7 @@ const Divider = styled.View`
 `;
 
 const GraphContainer = ({ myData }) => {
-  const [isCandleStick, setIsCandleStick] = React.useState(false);
+  const [isCandleStick, setIsCandleStick] = React.useState(true);
 
   return (
     <View
