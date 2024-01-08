@@ -114,6 +114,7 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      // 이메일 회원가입
       .addCase(registerUser.pending, (state) => {
         state.loading = true;
         console.log("회원가입 진행중");
@@ -139,6 +140,7 @@ const authSlice = createSlice({
 
         console.log("회원가입 실패", action.payload);
       })
+      // 이메일 로그인
       .addCase(loginWithEmail.pending, (state) => {
         state.loading = true;
         console.log("로그인 진행중");
@@ -187,7 +189,5 @@ const authSlice = createSlice({
       });
   },
 });
-
-// export const { loginStart, loginSuccess, loginFailure } = authSlice.actions;
 
 export const authReducer = authSlice.reducer;

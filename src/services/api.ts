@@ -1,14 +1,24 @@
 import { getAPIHost } from "../utils/getAPIHost";
 
+interface IClient {
+  body?: any;
+  accessToken?: string;
+  [key: string]: any;
+}
+
 export async function client<T = any>(
   endpoint: string,
-  { body, ...customConfig }: { body?: any; [key: string]: any } = {}
+  { body, accessToken, ...customConfig }: IClient = {}
 ): Promise<T> {
   const SERVER_URL = getAPIHost();
-  const headers = { "Content-Type": "application/json" };
+
+  const headers = {
+    "Content-Type": "application/json",
+    ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
+  };
 
   const config: RequestInit = {
-    method: body ? "POST" : "GET",
+    method: customConfig.method,
     headers: {
       ...headers,
       ...customConfig.headers,
@@ -35,6 +45,7 @@ export async function client<T = any>(
   }
 }
 
+// method: 'GET'
 client.get = function <T = any>(
   endpoint: string,
   customConfig: { [key: string]: any } = {}
@@ -42,10 +53,37 @@ client.get = function <T = any>(
   return client<T>(endpoint, { ...customConfig, method: "GET" });
 };
 
+// method: 'POST'
 client.post = function <T = any>(
   endpoint: string,
   body: any,
   customConfig: { [key: string]: any } = {}
 ): Promise<T> {
-  return client<T>(endpoint, { ...customConfig, body });
+  return client<T>(endpoint, { ...customConfig, body, method: "POST" });
+};
+
+// method: 'DELETE'
+client.delete = function <T = any>(
+  endpoint: string,
+  customConfig: { [key: string]: any } = {}
+): Promise<T> {
+  return client<T>(endpoint, { ...customConfig, method: "DELETE" });
+};
+
+// method: 'PATCH' : 리소스의 부분적인 수정
+client.patch = function <T = any>(
+  endpoint: string,
+  body: any,
+  customConfig: { [key: string]: any } = {}
+): Promise<T> {
+  return client<T>(endpoint, { ...customConfig, body, method: "PATCH" });
+};
+
+// method: 'PUT' : 리소스의 전체적인 수정 또는 생성
+client.put = function <T = any>(
+  endpoint: string,
+  body: any,
+  customConfig: { [key: string]: any } = {}
+): Promise<T> {
+  return client<T>(endpoint, { ...customConfig, body, method: "PUT" });
 };

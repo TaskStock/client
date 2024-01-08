@@ -7,7 +7,6 @@ import Text from "../../components/atoms/Text";
 import TextInput from "../../components/atoms/TextInput";
 import LoginContainer from "../../components/molecules/Login/LoginContainer";
 import { spacing } from "../../constants/spacing";
-import { client } from "../../services/api";
 import { useAppDispatch, useAppSelect } from "../../store/configureStore.hooks";
 import { loginWithEmail } from "../../store/modules/auth";
 
