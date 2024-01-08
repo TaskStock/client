@@ -52,11 +52,14 @@ const PageHeader = ({
   return (
     <Container notchTop={NOTCH_TOP}>
       {headerLeftShown ? <HeaderLeft /> : <Blank />}
-      <Title>
-        <Text size="lg" weight="semibold">
-          {title}
-        </Text>
-      </Title>
+      {title && (
+        <Title>
+          <Text size="lg" weight="semibold">
+            {title}
+          </Text>
+        </Title>
+      )}
+
       {headerRight ? headerRight : <Blank />}
     </Container>
   );
