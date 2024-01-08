@@ -1,20 +1,18 @@
 import React from "react";
-import styled from "styled-components/native";
 import { Image } from "react-native";
+import { useTheme } from "styled-components";
+import styled from "styled-components/native";
 import { spacing } from "../../../constants/spacing";
 import { useAppSelect } from "../../../store/configureStore.hooks";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import Text from "../../atoms/Text";
-import { darkTheme, grayTheme } from "../../../constants/colors";
 
 const THEME_SOURCES = {
   dark: {
     logo: require("../../../../assets/images/logo-dark.png"),
-    text: darkTheme.text,
   },
   gray: {
     logo: require("../../../../assets/images/logo-light.png"),
-    text: grayTheme.text,
   },
 };
 
@@ -38,6 +36,7 @@ const Children = styled.View`
   align-items: center;
   padding: ${spacing.gutter}px;
 `;
+
 const LoginContainer = ({
   children,
   comment = "none",
@@ -48,6 +47,9 @@ const LoginContainer = ({
   background?: string;
 }) => {
   const theme = useAppSelect((state) => state.theme.value);
+
+  const styledTheme = useTheme();
+
   return (
     <Container background={background}>
       <Logo>
@@ -61,7 +63,7 @@ const LoginContainer = ({
         />
         <Text
           size="sm"
-          color={comment !== "none" ? THEME_SOURCES[theme].text : "transparent"}
+          color={comment !== "none" ? styledTheme.text : "transparent"}
           styles={{
             textAlign: "center",
             lineHeight: spacing.lineHeight,

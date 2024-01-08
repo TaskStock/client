@@ -8,7 +8,6 @@ import {
 } from "../../../store/configureStore.hooks";
 import { logout } from "../../../store/modules/auth";
 import { resetNavigation } from "../../../utils/resetNavigation";
-import { useNavigation } from "@react-navigation/native";
 
 const Container = styled.View`
   justify-content: center;
