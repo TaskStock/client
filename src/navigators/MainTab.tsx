@@ -58,7 +58,7 @@ function MainTab() {
               <IconsWithoutFeedBack
                 type="material"
                 name="home"
-                size={size}
+                size={size * 1.2}
                 color={color}
               />
             ),
@@ -72,7 +72,7 @@ function MainTab() {
               <IconsWithoutFeedBack
                 type="ionicons"
                 name="file-tray"
-                size={size}
+                size={size * 1.2}
                 color={color}
               />
             ),
@@ -87,7 +87,7 @@ function MainTab() {
               <IconsWithoutFeedBack
                 type="materialIcons"
                 name="people-alt"
-                size={size}
+                size={size * 1.2}
                 color={color}
               />
             ),
@@ -100,9 +100,9 @@ function MainTab() {
             headerShown: false,
             tabBarIcon: ({ color, size }) => (
               <IconsWithoutFeedBack
-                type="materialIcons"
-                name="people-alt"
-                size={size}
+                type="material"
+                name="account"
+                size={size * 1.2}
                 color={color}
               />
             ),
