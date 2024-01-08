@@ -1,9 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components/native";
 import Text from "../../../components/atoms/Text";
 import { spacing } from "../../../constants/spacing";
-import { useAppDispatch } from "../../../store/configureStore.hooks";
+import {
+  useAppDispatch,
+  useAppSelect,
+} from "../../../store/configureStore.hooks";
 import { logout } from "../../../store/modules/auth";
+import { resetNavigation } from "../../../utils/resetNavigation";
+import { useNavigation } from "@react-navigation/native";
 
 const Container = styled.View`
   justify-content: center;
@@ -28,20 +33,16 @@ const Menu = ({ text, onPress }) => (
 );
 const SettingsHomeScreen = ({ navigation }) => {
   const dispatch = useAppDispatch();
-  const handleLogout = () => {
-    dispatch(logout());
-    navigation.reset({
-      index: 0,
-      routes: [
-        {
-          name: "LoginStack",
-          state: {
-            routes: [{ name: "Welcome" }],
-          },
-        },
-      ],
-    });
+  const isLoggedIn = useAppSelect((state) => state.auth.isLoggedIn);
+  const handleLogout = async () => {
+    await dispatch(logout());
   };
+  useEffect(() => {
+    if (isLoggedIn === false) {
+      resetNavigation(navigation);
+    }
+  }, [isLoggedIn, navigation]);
+
   return (
     <Container>
       <Menu text="계정 설정 =>" onPress={() => {}} />

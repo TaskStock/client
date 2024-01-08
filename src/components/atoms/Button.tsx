@@ -1,18 +1,7 @@
 import React from "react";
-import styled from "styled-components/native";
-import { darkTheme, grayTheme } from "../../constants/colors";
-import { useAppSelect } from "../../store/configureStore.hooks";
+import styled, { useTheme } from "styled-components/native";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
 import Text from "./Text";
-
-const THEME_CONSTANTS = {
-  dark: {
-    box: darkTheme.box,
-  },
-  gray: {
-    box: grayTheme.box,
-  },
-};
 
 const Container = styled.TouchableOpacity`
   /* flex: 1; */
@@ -39,7 +28,7 @@ const Button = ({
   onPress,
   styles,
 }: ButtonProps) => {
-  const theme = useAppSelect((state) => state.theme.value);
+  const theme = useTheme();
 
   return (
     <Container
@@ -47,7 +36,7 @@ const Button = ({
       style={styles}
       disabled={disabled}
     >
-      <Text color={disabled ? THEME_CONSTANTS[theme]?.box : color} size="md">
+      <Text color={disabled ? theme.box : color} size="md">
         {text}
       </Text>
     </Container>

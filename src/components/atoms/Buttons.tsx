@@ -4,9 +4,10 @@ import Text from "./Text";
 import LoadingSpinner from "./LoadingSpinner";
 import { darkTheme, grayTheme } from "../../constants/colors";
 
-const BlackBtnContainer = styled.TouchableOpacity`
+const BlackBtnContainer = styled.TouchableOpacity<{ loading: boolean }>`
   width: 100%;
-  background-color: black;
+  background-color: ${(props) =>
+    props.loading ? props.theme.textDimmer : props.theme.text};
   justify-content: center;
   align-items: center;
   border-radius: 6px;
@@ -28,9 +29,9 @@ export const BlackBtn = ({
   loading?: boolean;
 }) => {
   return (
-    <BlackBtnContainer style={style} onPress={onPress}>
+    <BlackBtnContainer style={style} onPress={onPress} loading={loading}>
       {loading ? (
-        <LoadingSpinner background={darkTheme.text} />
+        <LoadingSpinner background={grayTheme.text} />
       ) : (
         <Text size="sm" color={"white"}>
           {text}
@@ -52,7 +53,7 @@ export const WhiteBtn = ({
   loading?: boolean;
 }) => {
   return (
-    <WhiteBtnContainer style={style} onPress={onPress}>
+    <WhiteBtnContainer style={style} onPress={onPress} loading={loading}>
       {loading ? (
         <LoadingSpinner background={darkTheme.text} />
       ) : (

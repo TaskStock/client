@@ -1,3 +1,4 @@
+import { useTheme } from "styled-components/native";
 import React, { memo, useEffect, useState } from "react";
 import { darkTheme, grayTheme } from "../../../constants/colors";
 import { spacing } from "../../../constants/spacing";
@@ -5,8 +6,8 @@ import { useAppSelect } from "../../../store/configureStore.hooks";
 import numberWithCommas from "../../../utils/useNumberWithCommas";
 import CheckBox from "../../atoms/CheckBox";
 import FlexBox from "../../atoms/FlexBox";
-import Text from "../../atoms/Text";
 import Icons from "../../atoms/Icons";
+import Text from "../../atoms/Text";
 import styled, { useTheme } from "styled-components/native";
 import { useDispatch } from "react-redux";
 import {
@@ -23,12 +24,10 @@ const THEME_CONSTANTS = {
   dark: {
     checkedBoxSrc: require("../../../../assets/icons/checked-dark.png"),
     unCheckedBoxSrc: require("../../../../assets/icons/unchecked-dark.png"),
-    high: darkTheme.high,
   },
   gray: {
     checkedBoxSrc: require("../../../../assets/icons/checked-light.png"),
     unCheckedBoxSrc: require("../../../../assets/icons/unchecked-light.png"),
-    high: grayTheme.high,
   },
 };
 

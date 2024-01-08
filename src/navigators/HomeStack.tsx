@@ -8,11 +8,9 @@ const NativeStack = createNativeStackNavigator();
 
 const HomeStack = () => (
   <NativeStack.Navigator
-    screenOptions={
-      {
-        //   headerShown: false,
-      }
-    }
+    screenOptions={{
+      headerShadowVisible: false,
+    }}
   >
     <NativeStack.Screen
       name="Home"

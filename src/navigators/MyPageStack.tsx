@@ -7,7 +7,11 @@ import MyPageScreen from "../screens/MyPage/MyPageScreen";
 const NativeStack = createNativeStackNavigator();
 
 const MyPageStack = () => (
-  <NativeStack.Navigator screenOptions={{}}>
+  <NativeStack.Navigator
+    screenOptions={{
+      headerShadowVisible: false,
+    }}
+  >
     <NativeStack.Screen
       name="MyPage"
       component={MyPageScreen}

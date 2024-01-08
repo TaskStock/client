@@ -6,19 +6,13 @@ import MainTab from "./MainTab";
 const Nav = createNativeStackNavigator();
 
 const Root = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
-  const [_isLoggedIn, setIsLoggedIn] = useState(false);
-
-  useEffect(() => {
-    setIsLoggedIn(isLoggedIn);
-  }, [isLoggedIn]);
-
   return (
     <Nav.Navigator
       screenOptions={{
         headerShown: false,
       }}
     >
-      {_isLoggedIn ? (
+      {isLoggedIn ? (
         <Nav.Screen name="MainTab" component={MainTab} />
       ) : (
         <>

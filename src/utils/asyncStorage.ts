@@ -32,8 +32,10 @@ export const removeData = async (key) => {
 export const checkStorage = async () => {
   try {
     const accessToken = await AsyncStorage.getItem("accessToken");
+    const refreshToken = await AsyncStorage.getItem("refreshToken");
 
-    console.log("Check => Access Token: ", accessToken);
+    console.log("AsyncStorage Check => accessToken: ", accessToken);
+    console.log("AsyncStorage Check => refreshToken: ", refreshToken);
   } catch (error) {
     console.error("Error reading values from AsyncStorage", error);
   }

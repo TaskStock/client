@@ -1,24 +1,10 @@
 import React from "react";
 import { View } from "react-native";
-import { darkTheme, grayTheme } from "../../../constants/colors";
+import { useTheme } from "styled-components";
 import { spacing } from "../../../constants/spacing";
-import { useAppSelect } from "../../../store/configureStore.hooks";
 import numberWithCommas from "../../../utils/useNumberWithCommas";
 import FlexBox from "../../atoms/FlexBox";
 import Text from "../../atoms/Text";
-
-const THEME_CONSTANTS = {
-  dark: {
-    textDim: darkTheme.textDim,
-    high: darkTheme.high,
-    low: darkTheme.low,
-  },
-  gray: {
-    textDim: grayTheme.textDim,
-    high: grayTheme.high,
-    low: grayTheme.low,
-  },
-};
 
 const HomeUserInfo = ({
   data,
@@ -29,7 +15,7 @@ const HomeUserInfo = ({
     nickname: string;
   };
 }) => {
-  const theme = useAppSelect((state) => state.theme.value);
+  const theme = useTheme();
   const diff = data.cumulative_value - data.value_month_ago;
   const diff_rate =
     ((data.cumulative_value - data.value_month_ago) * 100) /
@@ -50,21 +36,13 @@ const HomeUserInfo = ({
           gap={spacing.padding / 2}
           styles={{ paddingTop: spacing.small }}
         >
-          <Text
-            size="sm"
-            weight="regular"
-            color={THEME_CONSTANTS[theme]?.textDim}
-          >
+          <Text size="sm" weight="regular" color={theme.textDim}>
             1개월 전보다
           </Text>
           <Text
             size="sm"
             weight="regular"
-            color={
-              diff > 0
-                ? THEME_CONSTANTS[theme]?.high
-                : THEME_CONSTANTS[theme]?.low
-            }
+            color={diff > 0 ? theme.high : theme.low}
           >
             {numberWithCommas(diff)}원 ({renderDiffRate.toString()}%)
           </Text>

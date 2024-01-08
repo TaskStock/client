@@ -3,10 +3,12 @@ import { BlackBtn } from "../../components/atoms/Buttons";
 import TextInput from "../../components/atoms/TextInput";
 import LoginContainer from "../../components/molecules/Login/LoginContainer";
 import { spacing } from "../../constants/spacing";
-import { useAppDispatch } from "../../store/configureStore.hooks";
-import { registerUser } from "../../store/modules/auth";
+import { useAppDispatch, useAppSelect } from "../../store/configureStore.hooks";
+import { registerWithEmail } from "../../utils/authUtils/signInUtils";
 
-interface IUser {
+// 인증번호가 일치하면 이 화면으로 오는데, 다시 인증코드페이지로 돌아간 후 다시 코드를 입력하면 서버 오류가 뜨므로 뒤로가기 버튼 없앰
+
+export interface IRegisterUser {
   email: string;
   userName: string;
   password: string;
@@ -18,7 +20,7 @@ interface IUser {
 const EmailRegisterScreen = ({ route, navigation }) => {
   const email = route.params.email;
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [user, setUser] = useState<IUser>({
+  const [user, setUser] = useState<IRegisterUser>({
     email: "",
     userName: "",
     password: "",
@@ -26,6 +28,7 @@ const EmailRegisterScreen = ({ route, navigation }) => {
     theme: "gray",
     language: "korean",
   });
+  const isLoggedIn = useAppSelect((state) => state.auth.isLoggedIn);
 
   useEffect(() => {
     setUser((prevUser) => ({
@@ -43,14 +46,19 @@ const EmailRegisterScreen = ({ route, navigation }) => {
     }));
   };
 
-  const handleSignUp = () => {
+  useEffect(() => {
+    if (isLoggedIn === true) {
+      navigation.navigate("MainTab", { screen: "Home" });
+    }
+  }, [isLoggedIn]);
+
+  const handleSignUp = async () => {
     if (user.password !== confirmPassword) {
       alert("Passwords do not match");
       return;
     }
-    // 회원가입 성공
-    dispatch(registerUser(user));
-    navigation.navigate("MainTab", { screen: "Home" });
+
+    await dispatch(registerWithEmail(user));
   };
 
   return (
