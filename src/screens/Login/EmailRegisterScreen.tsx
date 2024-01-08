@@ -30,6 +30,15 @@ const EmailRegisterScreen = ({ route, navigation }) => {
   });
   const isLoggedIn = useAppSelect((state) => state.auth.isLoggedIn);
 
+  // // 테마 설정
+  // const appTheme = useAppSelect((state) => state.theme.value);
+  // useEffect(() => {
+  //   setUser((prevUser) => ({
+  //     ...prevUser,
+  //     theme: appTheme,
+  //   }));
+  // }, [appTheme]);
+
   useEffect(() => {
     setUser((prevUser) => ({
       ...prevUser,

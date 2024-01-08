@@ -1,21 +1,16 @@
-import { View, Text } from "react-native";
 import React from "react";
-import {
-  useAppDispatch,
-  useAppSelect,
-} from "../../../store/configureStore.hooks";
-import { themeSlice } from "../../../store/modules/theme";
+import { View } from "react-native";
 import { BlackBtn } from "../../../components/atoms/Buttons";
+import { useAppDispatch } from "../../../store/configureStore.hooks";
+import { pickTheme } from "../../../store/modules/theme";
 
 const ThemeScreen = () => {
-  const theme = useAppSelect((state) => state.theme.value);
-
   const dispatch = useAppDispatch();
   const switchToDarkMode = () => {
-    dispatch(themeSlice.actions.setTheme("dark"));
+    dispatch(pickTheme("dark"));
   };
   const switchToGrayMode = () => {
-    dispatch(themeSlice.actions.setTheme("gray"));
+    dispatch(pickTheme("gray"));
   };
   return (
     <View>
