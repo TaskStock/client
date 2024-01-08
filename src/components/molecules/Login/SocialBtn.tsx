@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components/native";
-import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import { palette } from "../../../constants/colors";
+import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import { IconsPic } from "../../atoms/Icons";
 import Text from "../../atoms/Text";
 
@@ -28,7 +28,6 @@ const SocialBtn = ({
   type = "email",
 }: {
   onPress: () => void;
-
   type?: string;
 }) => {
   return (
@@ -45,7 +44,7 @@ const SocialBtn = ({
     >
       {type !== "email" && <IconsPic source={IconsAsset[type]} size={18} />}
       {type === "kakao" ? (
-        <Text size="md" weight="semibold">
+        <Text size="md" weight="semibold" color={"black"}>
           카카오로 계속하기
         </Text>
       ) : type === "apple" ? (
