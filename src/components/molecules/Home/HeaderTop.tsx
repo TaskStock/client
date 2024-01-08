@@ -1,15 +1,13 @@
 import React, { useContext } from "react";
 import { Image } from "react-native";
-import { useDispatch } from "react-redux";
 import styled from "styled-components/native";
 import { spacing } from "../../../constants/spacing";
 import useHeight from "../../../hooks/useHeight";
 import { useAppSelect } from "../../../store/configureStore.hooks";
-import { themeSlice } from "../../../store/modules/theme";
+import { ComponentHeightContext } from "../../../utils/ComponentHeightContext";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import FlexBox from "../../atoms/FlexBox";
 import { IconsPic } from "../../atoms/Icons";
-import { ComponentHeightContext } from "../../../utils/ComponentHeightContext";
 
 const Container = styled.View<{ notchTop: number }>`
   background-color: ${({ theme }) => theme.background};
