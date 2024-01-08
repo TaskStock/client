@@ -8,7 +8,7 @@ import TextInput from "../../components/atoms/TextInput";
 import LoginContainer from "../../components/molecules/Login/LoginContainer";
 import { spacing } from "../../constants/spacing";
 import { useAppDispatch, useAppSelect } from "../../store/configureStore.hooks";
-import { loginWithEmail } from "../../store/modules/auth";
+import { loginWithEmail } from "../../utils/authUtils/signInUtils";
 
 const EmailLoginScreen = ({ navigation }) => {
   const theme = useTheme();

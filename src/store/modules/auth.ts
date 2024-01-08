@@ -1,7 +1,11 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { client } from "../../services/api";
 import { checkStorage, storeData } from "../../utils/asyncStorage";
+import {
+  loginWithEmail,
+  registerWithEmail,
+} from "../../utils/authUtils/signInUtils";
+import { checkAndRenewTokens } from "../../utils/authUtils/tokenUtils";
 
 interface IInitialUserState {
   accessToken: string;
@@ -20,36 +24,6 @@ export const initialUserState: IInitialUserState = {
   loading: false,
   error: null,
 };
-
-// 회원가입
-// accessToken => asyncStorage, redux에 저장
-// refreshToken => asyncStorage에 저장
-// accessExp, refreshExp => redux에 저장
-export const registerUser = createAsyncThunk(
-  "REGISTER_USER",
-  async (data, { rejectWithValue }) => {
-    try {
-      const responseData = await client.post("account/register", data);
-      console.log("회원가입 시 서버 응답:", responseData);
-      return responseData;
-    } catch (error) {
-      return rejectWithValue(error.response.data);
-    }
-  }
-);
-
-export const loginWithEmail = createAsyncThunk(
-  "LOGIN_WITH_EMAIL",
-  async (data, { rejectWithValue }) => {
-    try {
-      const responseData = await client.post("account/login/email", data);
-      console.log("로그인 시 서버 응답: ", responseData);
-      return responseData;
-    } catch (error) {
-      return rejectWithValue(error.response.data);
-    }
-  }
-);
 
 // 초기 상태를 검사하여 업데이트하는 비동기 함수
 export const checkTokenExistence = createAsyncThunk(
@@ -115,11 +89,11 @@ const authSlice = createSlice({
   extraReducers: (builder) => {
     builder
       // 이메일 회원가입
-      .addCase(registerUser.pending, (state) => {
+      .addCase(registerWithEmail.pending, (state) => {
         state.loading = true;
         console.log("회원가입 진행중");
       })
-      .addCase(registerUser.fulfilled, (state, action) => {
+      .addCase(registerWithEmail.fulfilled, (state, action) => {
         // redux에 저장
         state.accessToken = action.payload.accessToken;
         // state.accessExp = action.payload.accessExp;
@@ -134,7 +108,7 @@ const authSlice = createSlice({
 
         checkStorage();
       })
-      .addCase(registerUser.rejected, (state, action) => {
+      .addCase(registerWithEmail.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
 
@@ -146,15 +120,17 @@ const authSlice = createSlice({
         console.log("로그인 진행중");
       })
       .addCase(loginWithEmail.fulfilled, (state, action) => {
-        state.accessToken = action.payload.accessToken;
-        // state.accessExp = action.payload.accessExp;
-        // state.refreshExp = action.payload.refreshExp;
-        state.isLoggedIn = true;
-        state.loading = false;
+        if (action.payload.accessToken) {
+          state.accessToken = action.payload.accessToken;
+          // state.accessExp = action.payload.accessExp;
+          // state.refreshExp = action.payload.refreshExp;
+          state.isLoggedIn = true;
+          state.loading = false;
 
-        storeData("accessToken", action.payload.accessToken);
-        storeData("refreshToken", action.payload.refreshToken);
-        console.log("로그인 성공: ", state);
+          storeData("accessToken", action.payload.accessToken);
+          storeData("refreshToken", action.payload.refreshToken);
+          console.log("로그인 성공: ", action.payload);
+        }
       })
       .addCase(loginWithEmail.rejected, (state, action) => {
         state.loading = false;
@@ -170,6 +146,7 @@ const authSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
+      // 로그아웃
       .addCase(logout.pending, (state) => {
         state.loading = true;
         console.log("pending: ", state);
@@ -186,6 +163,27 @@ const authSlice = createSlice({
         state.error = action.payload;
         state.loading = false;
         console.log("에러: ", action.payload);
+      })
+      // 토큰 갱신
+      .addCase(checkAndRenewTokens.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(checkAndRenewTokens.fulfilled, (state, action) => {
+        state.loading = false;
+        // 토큰이 있는 경우(만료되었더라도)
+        if (action.payload) {
+          const { accessToken, refreshToken, accessExp, refreshExp } =
+            action.payload;
+          state.accessToken = accessToken;
+          state.accessExp = accessExp;
+          state.refreshExp = refreshExp;
+          storeData("accessToken", accessToken);
+          storeData("refreshToken", refreshToken);
+        }
+      })
+      .addCase(checkAndRenewTokens.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
       });
   },
 });
