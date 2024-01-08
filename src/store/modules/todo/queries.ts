@@ -1,3 +1,4 @@
+import { DateString } from "../../../@types/calendar";
 import { TodoApiBuilder } from "./todo";
 
 interface getAllTodosResponse {
@@ -15,7 +16,7 @@ interface getAllTodosResponse {
 }
 
 export const getAllTodosQuery = (builder: TodoApiBuilder) =>
-  builder.query<getAllTodosResponse, { date: string }>({
+  builder.query<getAllTodosResponse, { date: DateString }>({
     query: (body: { date: string }) => {
       return {
         url: `/todo/read?date=${body.date}`,

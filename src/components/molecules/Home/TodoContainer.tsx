@@ -24,6 +24,7 @@ import Margin from "../../atoms/Margin";
 import AddTodoItem from "../../organisms/Home/AddTodoItem";
 import LoadingSpinner from "../../atoms/LoadingSpinner";
 import { setTabIndex } from "../../../store/modules/home";
+import { DateString } from "../../../@types/calendar";
 
 const DateContainer = styled.View`
   padding: ${spacing.small}px ${spacing.gutter}px 0;
@@ -47,7 +48,7 @@ const TodoContainer = () => {
   const dispatch = useAppDispatch();
 
   const { data, isLoading, isError, error, refetch } = useGetAllTodosQuery({
-    date: currentDate.format("YYYY-MM-DD"),
+    date: currentDate.format("YYYY-MM-DD") as DateString,
   });
 
   const todosData = data
