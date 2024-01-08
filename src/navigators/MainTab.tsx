@@ -32,6 +32,8 @@ function MainTab() {
     <ComponentHeightProvider>
       <Tab.Navigator
         screenOptions={{
+          headerShadowVisible: false,
+
           tabBarActiveTintColor: THEME_SOURCES[theme].activeTint,
           tabBarInactiveTintColor: THEME_SOURCES[theme].inactiveTint,
           // headerShown: false,

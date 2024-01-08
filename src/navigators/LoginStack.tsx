@@ -37,7 +37,11 @@ const LoginStack = ({ navigation }) => {
 
   const theme = useAppSelect((state) => state.theme.value);
   return (
-    <NativeStack.Navigator>
+    <NativeStack.Navigator
+      screenOptions={{
+        headerShadowVisible: false,
+      }}
+    >
       <NativeStack.Screen
         name="Welcome"
         component={WelcomeScreen}

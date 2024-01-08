@@ -9,6 +9,7 @@ import { spacing } from "../../constants/spacing";
 import { checkStorage } from "../../utils/asyncStorage";
 import { client } from "../../services/api";
 import { getAPIHost } from "../../utils/getAPIHost";
+import { Platform } from "react-native";
 
 const Login = styled.View`
   gap: ${spacing.padding}px;
@@ -47,7 +48,8 @@ const WelcomeScreen = ({ navigation }) => {
         <Divider />
         <GoogleBtn onPress={handleGoogleLogin} />
         <SocialBtn type="kakao" onPress={() => {}} />
-        <SocialBtn type="apple" onPress={() => {}} />
+        {Platform.OS === "ios" && <SocialBtn type="apple" onPress={() => {}} />}
+
         <SocialBtn
           type="email"
           onPress={() => {

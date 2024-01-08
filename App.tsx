@@ -26,13 +26,13 @@ const THEME = {
 export default function App() {
   const [isReady, setIsReady] = useState(false);
   const theme = useAppSelect((state) => state.theme.value);
-  const dispatch = useAppDispatch();
   const isLoggedIn = useAppSelect((state) => state.auth.isLoggedIn);
   const tokenLoading = useAppSelect((state) => state.auth.loading);
 
+  const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(checkTokenExistence());
-    dispatch(checkAndRenewTokens());
+    // dispatch(checkAndRenewTokens());
   }, [dispatch]);
 
   // const [assets] = useAssets([require("./assets/splash.png")]);
