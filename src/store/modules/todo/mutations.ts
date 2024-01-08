@@ -9,6 +9,7 @@ import {
 } from "../../../utils/checkIsSameLocalDay";
 import { chartApi } from "../chart";
 import { Value } from "../../../@types/chart";
+import { DateString } from "../../../@types/calendar";
 
 export const addSimpleTodoMutation = (builder: TodoApiBuilder) =>
   builder.mutation<
@@ -19,7 +20,7 @@ export const addSimpleTodoMutation = (builder: TodoApiBuilder) =>
       content: string;
       add_date: string;
       queryArgs: {
-        date: string;
+        date: DateString;
       };
     }
   >({
@@ -102,9 +103,9 @@ export const addTodoMutation = (builder: TodoApiBuilder) =>
       form: AddTodoForm;
       add_date: string;
       queryArgs: {
-        date: string;
-        graph_before_date: string;
-        graph_today_date: string;
+        date: DateString;
+        graph_before_date: DateString;
+        graph_today_date: DateString;
       };
     }
   >({
@@ -214,9 +215,9 @@ export const editTodoMutation = (builder: TodoApiBuilder) =>
       todo_checked: boolean;
       original_level?: number;
       queryArgs: {
-        date: string;
-        graph_before_date: string;
-        graph_today_date: string;
+        date: DateString;
+        graph_before_date: DateString;
+        graph_today_date: DateString;
       };
     }
   >({
@@ -325,9 +326,9 @@ export const toggleTodoMutation = (builder: TodoApiBuilder) =>
       todo_date: string;
       value: number;
       queryArgs: {
-        current_date: string;
-        graph_before_date: string;
-        graph_today_date: string;
+        current_date: DateString;
+        graph_before_date: DateString;
+        graph_today_date: DateString;
       };
     }) => {
       return {
@@ -401,9 +402,9 @@ export const deleteTodoMutation = (builder: TodoApiBuilder) =>
       value: number;
       checked: boolean;
       queryArgs: {
-        date: string;
-        graph_before_date: string;
-        graph_today_date: string;
+        date: DateString;
+        graph_before_date: DateString;
+        graph_today_date: DateString;
       };
     }
   >({
