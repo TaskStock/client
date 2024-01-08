@@ -1,24 +1,21 @@
-import { useTheme } from "styled-components/native";
 import React, { memo, useEffect, useState } from "react";
-import { darkTheme, grayTheme } from "../../../constants/colors";
+import { Modal, Platform, View } from "react-native";
+import { useDispatch } from "react-redux";
+import styled, { useTheme } from "styled-components/native";
+import { Todo } from "../../../@types/todo";
 import { spacing } from "../../../constants/spacing";
 import { useAppSelect } from "../../../store/configureStore.hooks";
-import numberWithCommas from "../../../utils/useNumberWithCommas";
-import CheckBox from "../../atoms/CheckBox";
-import FlexBox from "../../atoms/FlexBox";
-import Icons from "../../atoms/Icons";
-import Text from "../../atoms/Text";
-import styled, { useTheme } from "styled-components/native";
-import { useDispatch } from "react-redux";
 import {
   openEditTodoModal,
   useDeleteTodoMutation,
   useToggleTodoMutation,
 } from "../../../store/modules/todo/todo";
-import { Todo } from "../../../@types/todo";
+import numberWithCommas from "../../../utils/useNumberWithCommas";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
-import { Modal, View } from "react-native";
-import { Platform } from "react-native";
+import CheckBox from "../../atoms/CheckBox";
+import FlexBox from "../../atoms/FlexBox";
+import Icons from "../../atoms/Icons";
+import Text from "../../atoms/Text";
 
 const THEME_CONSTANTS = {
   dark: {
