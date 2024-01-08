@@ -22,22 +22,24 @@ const CalendarContainer = styled.View`
   padding-top: ${spacing.padding}px;
 `;
 
-const CalendarItemContainer = styled.View`
+const CalendarItemContainer = styled.View<{ size?: number }>`
   flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
+  width: ${({ size }) => (size ? size : 30)}px;
+  height: ${({ size }) => (size ? size : 30)}px;
 `;
 
 const CalendarItemInner = styled.View<{
   bgColor?: string;
-  size?: number;
 }>`
-  width: ${({ size }) => (size ? size : 30)}px;
-  height: ${({ size }) => (size ? size : 30)}px;
-  border-radius: ${({ size }) => (size ? size : 30) / 2}px;
-  display: flex;
+  width: ${useResponsiveFontSize(40)}px;
+  height: ${useResponsiveFontSize(40)}px;
+  border-radius: ${useResponsiveFontSize(40 / 2)}px;
   background-color: ${({ bgColor }) => (bgColor ? bgColor : "none")};
+
+  display: flex;
   justify-content: center;
   align-items: center;
 `;
@@ -64,8 +66,8 @@ const ListHeaderComponent = () => {
           index === 0 ? themeContext.palette.red : themeContext.text;
 
         return (
-          <CalendarItemContainer key={index}>
-            <CalendarItemInner size={itemHeight}>
+          <CalendarItemContainer key={index} size={itemHeight}>
+            <CalendarItemInner>
               <CalendarItemText weight={500} color={color} size={16}>
                 {item}
               </CalendarItemText>
@@ -101,15 +103,18 @@ const CalendarItem = memo(
     }, [currentDate, item]);
 
     return (
-      <CalendarItemContainer>
+      <CalendarItemContainer size={itemHeight}>
         <Pressable onPress={() => onPress(item)}>
           <CalendarItemInner
-            size={itemHeight}
-            bgColor={isSelected ? themeContext.background : "transparent"}
+            bgColor={isSelected ? themeContext.text : "transparent"}
           >
             <CalendarItemText
               color={
-                !notThisMonth ? themeContext.text : themeContext.textDimmer
+                !notThisMonth
+                  ? isSelected
+                    ? themeContext.textReverse
+                    : themeContext.text
+                  : themeContext.textDimmer
               }
               size={14}
             >
