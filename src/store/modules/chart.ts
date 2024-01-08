@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import wrappedFetchBaseQuery from "../fetchBaseQuery";
 import { Value } from "../../@types/chart";
+import { DateString } from "../../@types/calendar";
 
 const initialState = {
   data: [],
@@ -17,11 +18,11 @@ export const chartApi = createApi({
         values: Value[];
       },
       {
-        startDate: string;
-        endDate: string;
+        startDate: DateString;
+        endDate: DateString;
       }
     >({
-      query: (body: { startDate: string; endDate: string }) => ({
+      query: (body) => ({
         url: `/value/getValues?start_date=${body.startDate}&end_date=${body.endDate}`,
         method: "GET",
       }),
