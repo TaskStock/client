@@ -31,9 +31,11 @@ export const checkTokenExistence = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const accessToken = await AsyncStorage.getItem("accessToken");
+
       if (accessToken) {
         return { accessToken, isLoggedIn: true };
       }
+
       return { accessToken: "", isLoggedIn: false };
     } catch (error) {
       return rejectWithValue(error);
@@ -105,7 +107,7 @@ const authSlice = createSlice({
         storeData("accessToken", action.payload.accessToken);
         storeData("refreshToken", action.payload.refreshToken);
 
-        checkStorage();
+        // checkStorage();
       })
       .addCase(registerWithEmail.rejected, (state, action) => {
         state.loading = false;
@@ -128,6 +130,8 @@ const authSlice = createSlice({
 
           storeData("accessToken", action.payload.accessToken);
           storeData("refreshToken", action.payload.refreshToken);
+
+          checkStorage();
           console.log("로그인 성공: ", action.payload);
         }
       })

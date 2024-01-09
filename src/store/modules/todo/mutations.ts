@@ -470,3 +470,80 @@ export const deleteTodoMutation = (builder: TodoApiBuilder) =>
       }
     },
   });
+
+export const changeTodoOrderMutation = (builder: TodoApiBuilder) =>
+  builder.mutation<
+    {},
+    {
+      todo_id: number;
+      changed_index: number;
+      queryArgs: {
+        requested_date: DateString;
+      };
+    }
+  >({
+    query: (body) => {
+      return {
+        url: "/todo/changeorder",
+        method: "POST",
+        body,
+      };
+    },
+
+    async onQueryStarted(body, { dispatch, queryFulfilled }) {
+      const dispatchChangeTodoIndex = dispatch(
+        todoApi.util.updateQueryData(
+          "getAllTodos",
+          { date: body.queryArgs.requested_date },
+          (draft: { todos: Todo[] }) => {
+            const changed_index = body.changed_index;
+
+            const index = draft.todos.findIndex(
+              (todo) => todo.todo_id === body.todo_id
+            );
+
+            if (index === -1) return;
+
+            const change_item = draft.todos[index];
+
+            // 바꾸려는 index가 이전 index와 같을때는 아무것도 안함.
+            if (change_item.index === changed_index) {
+              console.log("same index");
+              return;
+            }
+
+            // 바꾸려는 index가 이전 index보다 클때는, 그 사이에 있는 index들을 전부 +1 해준다.
+            if (draft.todos[index].index < changed_index) {
+              for (let i = draft.todos[index].index; i < changed_index; i++) {
+                draft.todos[i].index -= 1;
+              }
+
+              console.log("아래로 내리기");
+            } else if (draft.todos[index].index > changed_index) {
+              // 바꾸려는 index가 이전 index보다 작을때는, 그 사이에 있는 index들을 전부 -1 해준다.
+
+              console.log("위로 올리기");
+
+              for (let i = changed_index; i < draft.todos[index].index; i++) {
+                draft.todos[i].index += 1;
+              }
+            }
+
+            draft.todos[index].index = changed_index;
+
+            // 어차피 todoContainer에서 정렬해줌.
+            // draft.todos.sort((a, b) => {
+            //   return a.index - b.index;
+            // });
+          }
+        )
+      );
+
+      try {
+        await queryFulfilled;
+      } catch (error) {
+        console.log(error);
+        // dispatchChangeTodoIndex.undo();
+      }
+    },
+  });

@@ -25,6 +25,8 @@ import AddTodoItem from "../../organisms/Home/AddTodoItem";
 import LoadingSpinner from "../../atoms/LoadingSpinner";
 import { setTabIndex } from "../../../store/modules/home";
 import { DateString } from "../../../@types/calendar";
+import DraggableFlatList from "react-native-draggable-flatlist";
+import DraggableTodoList from "../../organisms/Home/DraggableTodoList";
 
 const DateContainer = styled.View`
   padding: ${spacing.small}px ${spacing.gutter}px 0;
@@ -41,27 +43,27 @@ const TodoContainer = () => {
   const [projects, setProjects] = useState([]);
   const [selectedProject, setSelectedProject] = useState(null);
 
-  const currentDate = dayjs(
-    useAppSelect((state) => state.calendar.currentDateString)
+  const { currentDateString, currentDateYYYYMMDD } = useAppSelect(
+    (state) => state.calendar
   );
 
   const dispatch = useAppDispatch();
 
   const { data, isLoading, isError, error, refetch } = useGetAllTodosQuery({
-    date: currentDate.format("YYYY-MM-DD") as DateString,
+    date: currentDateYYYYMMDD as DateString,
   });
 
-  const todosData = data
-    ? [...data.todos].sort(
-        (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
-      )
-    : [];
+  const todosData = data ? [...data.todos] : [];
+
+  for (let i = 0; i < todosData.length; i++) {
+    console.log(todosData[i].content, todosData[i].index);
+  }
 
   if (error) {
     console.log(error);
   }
 
-  const currentDateFormat = currentDate.format("MM월 DD일");
+  const headerDate = dayjs(currentDateString).format("MM월 DD일");
 
   return (
     <BottomDrawer
@@ -77,7 +79,7 @@ const TodoContainer = () => {
             }}
           >
             <Text size="xl" weight="bold">
-              {currentDateFormat}
+              {headerDate}
             </Text>
           </Pressable>
 
@@ -106,7 +108,7 @@ const TodoContainer = () => {
           />
         ))}
       </ProjectsContainer>
-      <ScrollView
+      <View
         style={{
           flex: 1,
           paddingHorizontal: spacing.gutter,
@@ -116,18 +118,10 @@ const TodoContainer = () => {
         {!isLoading ? (
           !isError ? (
             todosData && (
-              <>
-                {todosData.map((todo) => {
-                  if (
-                    selectedProject !== null &&
-                    todo.project_id !== selectedProject
-                  )
-                    return null;
-
-                  return <TodoItem key={todo.todo_id} todo={todo} />;
-                })}
-                <AddTodoItem />
-              </>
+              <DraggableTodoList
+                todosData={todosData}
+                selectedProject={selectedProject}
+              ></DraggableTodoList>
             )
           ) : (
             <CenterLayout>
@@ -156,7 +150,7 @@ const TodoContainer = () => {
           )
           <TodoItem key={todo.todo_id} todo={todo} />
         ))} */}
-      </ScrollView>
+      </View>
     </BottomDrawer>
   );
 };

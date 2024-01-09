@@ -6,6 +6,7 @@ import wrappedFetchBaseQuery from "../../fetchBaseQuery";
 import {
   addSimpleTodoMutation,
   addTodoMutation,
+  changeTodoOrderMutation,
   deleteTodoMutation,
   editTodoMutation,
   toggleTodoMutation,
@@ -54,6 +55,7 @@ export const todoApi = createApi({
     editTodo: editTodoMutation(builder),
     toggleTodo: toggleTodoMutation(builder),
     deleteTodo: deleteTodoMutation(builder),
+    changeOrderTodo: changeTodoOrderMutation(builder),
   }),
 });
 
@@ -182,4 +184,5 @@ export const {
   useEditTodoMutation,
   useDeleteTodoMutation,
   useToggleTodoMutation,
+  useChangeOrderTodoMutation,
 } = todoApi;

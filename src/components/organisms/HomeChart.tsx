@@ -206,6 +206,7 @@ function HomeChart({ isCandleStick }: { isCandleStick: boolean }) {
     data: responseData,
     isLoading: loading,
     error,
+    refetch,
   } = useGetValuesQuery({
     startDate: oneMonthBeforeQueryString,
     endDate: todayQueryString,
@@ -246,6 +247,9 @@ function HomeChart({ isCandleStick }: { isCandleStick: boolean }) {
           ) : (
             <CenterLayout>
               <Text size="md">에러가 발생했습니다.</Text>
+              <Pressable onPress={refetch}>
+                <Text size="md">다시 시도해주세요.</Text>
+              </Pressable>
             </CenterLayout>
           )
         ) : (

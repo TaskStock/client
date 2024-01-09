@@ -12,6 +12,7 @@ import { useAppDispatch, useAppSelect } from "./src/store/configureStore.hooks";
 import { checkTokenExistence } from "./src/store/modules/auth";
 import { startingTheme } from "./src/store/modules/theme";
 import { removeData } from "./src/utils/asyncStorage";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 const THEME = {
   dark: {
@@ -53,7 +54,9 @@ export default function App() {
     <ThemeProvider theme={THEME[theme].theme}>
       <SafeAreaProvider>
         <NavigationContainer>
-          <Root isLoggedIn={isLoggedIn} />
+          <GestureHandlerRootView style={{ flex: 1 }}>
+            <Root isLoggedIn={isLoggedIn} />
+          </GestureHandlerRootView>
         </NavigationContainer>
         <StatusBar barStyle={THEME[theme].barStyle} />
       </SafeAreaProvider>

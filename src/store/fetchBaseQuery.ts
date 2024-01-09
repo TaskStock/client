@@ -2,6 +2,7 @@ import { BaseQueryFn, fetchBaseQuery } from "@reduxjs/toolkit/query";
 import { logout, setAccessToken } from "./modules/auth";
 import { LOCAL_API_HOST } from "@env";
 import { RootState } from "./configureStore";
+import { checkAndRenewTokens } from "../utils/authUtils/tokenUtils";
 
 const originalBaseQuery = fetchBaseQuery({
   baseUrl: LOCAL_API_HOST,
@@ -9,16 +10,19 @@ const originalBaseQuery = fetchBaseQuery({
     const rootState = getState() as RootState;
 
     const token = rootState.auth.accessToken;
+
+    console.log("token", token, LOCAL_API_HOST);
+
     if (token) {
       headers.set("Authorization", `Bearer ${token}`);
     }
     headers.set("Content-Type", "application/json");
+
     return headers;
   },
 });
 
-const refreshToken_temp =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo5MywiaWF0IjoxNzA0NjQwMjg5fQ.PNm73sEQGBVHuJb0OQGey-MNquo8gpCHJVBs6w2UEG0";
+// 현재 state에는 accessToken이 있다.
 
 const BaseQueryWithAuth: BaseQueryFn<
   string | { url: string; method: string; body: any },
@@ -28,39 +32,15 @@ const BaseQueryWithAuth: BaseQueryFn<
   let result = await originalBaseQuery(args, api, extraOptions);
 
   if (result.error && result.error.originalStatus === 401) {
-    // try to get a new token
-    const rootState = api.getState() as RootState;
+    console.log("401 에러 발생, 토큰 갱신 시도");
 
-    // TODO: 나중에 refreshToken 로직이나, ㅁsyncStorage 로직을 넣어야 함.
-    const refreshToken = refreshToken_temp;
+    await api.dispatch(checkAndRenewTokens());
 
-    if (!refreshToken) {
-      api.dispatch(logout());
-      return;
-    }
+    const result = await originalBaseQuery(args, api, extraOptions);
 
-    const refreshResult = await fetch(`${LOCAL_API_HOST}/account/refresh`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ refreshToken }),
-    });
-
-    if (refreshResult.ok) {
-      const response = await refreshResult.json();
-      const newAccessToken = response.accessToken;
-
-      console.log("get new access token", newAccessToken);
-
-      api.dispatch(setAccessToken(newAccessToken));
-
-      result = await originalBaseQuery(args, api, extraOptions);
-      return result;
-    } else {
-      api.dispatch(logout());
-    }
+    return result;
   }
+
   return result;
 };
 
