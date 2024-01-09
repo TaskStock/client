@@ -24,13 +24,12 @@ export default function DraggableTodoList({
   );
 
   const onDragEnd = (params: DragEndParams<Todo>) => {
-    const sortedData = [...params.data].sort((a, b) => a.index - b.index);
-
     const toIndex = params.to;
     const fromIndex = params.from;
 
     changeTodoOrder({
-      todo_id: sortedData[fromIndex].todo_id,
+      todo_id: todosData[fromIndex].todo_id,
+      changed_todos: params.data,
       changed_index: toIndex,
       queryArgs: {
         requested_date: currentDateFormat,
