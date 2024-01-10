@@ -63,8 +63,6 @@ export default function LineValueChart({
   const maxYWithPadding = maxY + (maxY - minY) / 3;
   const minYWithPadding = minY - (maxY - minY) / 3;
 
-  console.log(maxYWithPadding, minYWithPadding, maxLength);
-
   return (
     <VictoryChart
       width={width}

@@ -21,10 +21,12 @@ const initialState: initialState = {
   itemHeight: 0,
   weeksOfMonth: calculateWeeksOfMonth(dayjs().toISOString()),
   datesOfMonth: calculateDatesOfMonth(dayjs().toISOString()),
+  // 얘는 로컬임.
   oneMonthBeforeQueryString: dayjs()
     .local()
     .subtract(1, "month")
     .format("YYYY-MM-DD") as DateString,
+  // 얘는 로컬임.
   todayQueryString: dayjs()
     .local()
     .add(1, "month")
