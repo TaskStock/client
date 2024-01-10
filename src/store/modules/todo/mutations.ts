@@ -82,7 +82,7 @@ export const addSimpleTodoMutation = (builder: TodoApiBuilder) =>
               );
               if (todoIndex === -1) return;
               draft.todos[todoIndex].todo_id = todo_id;
-              draft.todos[todoIndex].index = index;
+              // draft.todos[todoIndex].index = index;
             }
           )
         );
@@ -185,7 +185,7 @@ export const addTodoMutation = (builder: TodoApiBuilder) =>
               );
               if (todoIndex === -1) return;
               draft.todos[todoIndex].todo_id = todo_id;
-              draft.todos[todoIndex].index = index;
+              // draft.todos[todoIndex].index = index;
             }
           )
         );
