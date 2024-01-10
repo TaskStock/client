@@ -101,7 +101,7 @@ export const addTodoMutation = (builder: TodoApiBuilder) =>
     },
     {
       form: AddTodoForm;
-      add_date: string;
+      add_date: IsoString;
       queryArgs: {
         date: DateString;
         graph_before_date: DateString;
@@ -508,10 +508,12 @@ export const changeTodoOrderMutation = (builder: TodoApiBuilder) =>
             // draft.todos = body.changed_todos;
 
             draft.todos = [
+              // 변경 날짜가 아니면 순서를 가만히 놔두고,
               ...draft.todos.filter(
                 (todo) =>
                   !checkIsSameLocalDay(todo.date, body.requested_date_full)
               ),
+              // 변경 날짜에 해당하는 todo들만 array를 싹다 바꾸어준다.
               ...body.changed_todos,
             ];
           }

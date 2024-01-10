@@ -3,6 +3,9 @@ import dayjs from "dayjs";
 import { calculateDatesOfMonth } from "../../utils/calculateDatesOfMonth";
 import { calculateWeeksOfMonth } from "../../utils/calculateWeeksOfMonth";
 import { DateString, IsoString } from "../../@types/calendar";
+import utc from "dayjs/plugin/utc";
+
+dayjs.extend(utc);
 
 interface initialState {
   itemHeight: number;
@@ -19,9 +22,13 @@ const initialState: initialState = {
   weeksOfMonth: calculateWeeksOfMonth(dayjs().toISOString()),
   datesOfMonth: calculateDatesOfMonth(dayjs().toISOString()),
   oneMonthBeforeQueryString: dayjs()
+    .local()
     .subtract(1, "month")
     .format("YYYY-MM-DD") as DateString,
-  todayQueryString: dayjs().add(1, "month").format("YYYY-MM-DD") as DateString,
+  todayQueryString: dayjs()
+    .local()
+    .add(1, "month")
+    .format("YYYY-MM-DD") as DateString,
   currentDateString: dayjs().toISOString() as IsoString,
   currentDateYYYYMMDD: dayjs().format("YYYY-MM-DD") as DateString,
 };
