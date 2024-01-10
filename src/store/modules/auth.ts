@@ -83,8 +83,6 @@ const authSlice = createSlice({
         state.loading = false;
         state.strategy = action.payload.strategy;
 
-        console.log("회원가입 action: ", action.payload);
-
         // AsyncStorage에 저장
         storeData("accessToken", action.payload.accessToken);
         storeData("refreshToken", action.payload.refreshToken);
@@ -92,6 +90,8 @@ const authSlice = createSlice({
         storeData("refreshExp", action.payload.refreshExp);
         // strategy는 회원가입 시에만 저장
         storeData("strategy", action.payload.strategy);
+
+        console.log("회원가입 성공: ");
       })
       .addCase(registerWithEmail.rejected, (state, action) => {
         state.loading = false;
@@ -116,7 +116,7 @@ const authSlice = createSlice({
           storeData("refreshToken", action.payload.refreshToken);
           storeData("accessExp", action.payload.accessExp);
           storeData("refreshExp", action.payload.refreshExp);
-          console.log("로그인 성공: ", action.payload);
+          console.log("로그인 성공: ");
         }
       })
       .addCase(loginWithEmail.rejected, (state, action) => {

@@ -29,7 +29,7 @@ export const checkAndRenewTokens = createAsyncThunk(
       auth: { accessToken, accessExp, refreshExp },
     } = state;
     // 15분으로 다시 변경해야함
-    const fifteenMinInSec = 59 * 60;
+    const fifteenMinInSec = 15 * 60;
 
     // refreshToken => asyncStorage에서 가져옴, 만료 7일 전 갱신
     const refreshToken = await getData("refreshToken");
@@ -37,10 +37,6 @@ export const checkAndRenewTokens = createAsyncThunk(
 
     // UTC 기준 Unix timestamp (seconds)
     const currentTime = Math.floor(Date.now() / 1000);
-    console.log("=====토큰 확인 및 갱신 시도=====");
-    console.log("현재 시간: ", currentTime);
-    console.log("accessExp: ", accessExp);
-    console.log("refreshExp: ", refreshExp);
 
     // accessToken, refreshToken 둘다 유효한 경우
     if (
