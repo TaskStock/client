@@ -7,14 +7,17 @@ import DraggableFlatList, {
   DragEndParams,
   ScaleDecorator,
 } from "react-native-draggable-flatlist";
-import { useChangeOrderTodoMutation } from "../../../store/modules/todo/todo";
+import {
+  useChangeOrderTodoMutation,
+  useGetAllTodosQuery,
+} from "../../../store/modules/todo/todo";
 import { useAppSelect } from "../../../store/configureStore.hooks";
+import { DateString } from "../../../@types/calendar";
+import { todosData } from "../../../../public/todos";
 
 export default function DraggableTodoList({
-  todosData,
   selectedProject,
 }: {
-  todosData: Todo[];
   selectedProject: number | null;
 }) {
   const [changeTodoOrder, result] = useChangeOrderTodoMutation();
@@ -36,6 +39,12 @@ export default function DraggableTodoList({
       },
     });
   };
+
+  const { data } = useGetAllTodosQuery({
+    date: currentDateFormat as DateString,
+  });
+
+  const todosData = data ? data.todos : [];
 
   const renderTodoItem = ({ item, getIndex, drag, isActive }) => {
     if (selectedProject !== null && item.project_id !== selectedProject) {
@@ -60,18 +69,7 @@ export default function DraggableTodoList({
         }
         keyExtractor={(item: Todo) => item.todo_id.toString()}
         onDragEnd={onDragEnd}
-      >
-        {/* {todosData.map((todo) => {
-          if (selectedProject !== null && todo.project_id !== selectedProject)
-            return null;
-
-          return (
-            <Pressable onPress={drag}>
-              <TodoItem key={todo.todo_id} todo={todo} />
-            </Pressable>
-          );
-        })} */}
-      </DraggableFlatList>
+      ></DraggableFlatList>
       <AddTodoItem />
     </>
   );

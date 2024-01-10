@@ -55,10 +55,6 @@ const TodoContainer = () => {
 
   const todosData = data ? [...data.todos] : [];
 
-  for (let i = 0; i < todosData.length; i++) {
-    console.log(todosData[i].content, todosData[i].index);
-  }
-
   if (error) {
     console.log(error);
   }
@@ -119,7 +115,6 @@ const TodoContainer = () => {
           !isError ? (
             todosData && (
               <DraggableTodoList
-                todosData={todosData}
                 selectedProject={selectedProject}
               ></DraggableTodoList>
             )
