@@ -37,7 +37,7 @@ export const addSimpleTodoMutation = (builder: TodoApiBuilder) =>
       return {
         url: "/todo/new",
         method: "POST",
-        body: simpleTodoForm,
+        body: { ...simpleTodoForm, nowUTC: body.add_date },
       };
     },
 
@@ -109,11 +109,11 @@ export const addTodoMutation = (builder: TodoApiBuilder) =>
       };
     }
   >({
-    query: (body: { form: AddTodoForm }) => {
+    query: (body) => {
       return {
         url: "/todo/new",
         method: "POST",
-        body: body.form,
+        body: { ...body.form, nowUTC: body.add_date },
       };
     },
 
