@@ -177,7 +177,7 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
         </FlexBox>
         <FlexBox gap={10} alignItems="center">
           {todo.check ? (
-            <Text size="md" color={THEME_CONSTANTS[theme]?.high}>
+            <Text size="md" color={styledTheme.high}>
               +{numberWithCommas(todo.level * 1000)}원
             </Text>
           ) : (
