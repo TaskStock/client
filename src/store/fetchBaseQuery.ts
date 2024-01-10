@@ -1,5 +1,5 @@
 import { BaseQueryFn, fetchBaseQuery } from "@reduxjs/toolkit/query";
-import { logout, setAccessToken } from "./modules/auth";
+import { setAccessToken } from "./modules/auth";
 import { LOCAL_API_HOST } from "@env";
 import { RootState } from "./configureStore";
 import { checkAndRenewTokens } from "../utils/authUtils/tokenUtils";

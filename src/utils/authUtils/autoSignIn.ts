@@ -32,5 +32,6 @@ export const loginWithCredentials = async (email: string, password: string) => {
     email,
     password,
   });
+
   return response;
 };

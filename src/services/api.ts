@@ -1,3 +1,4 @@
+import { checkAndRenewTokens } from "../utils/authUtils/tokenUtils";
 import { getAPIHost } from "../utils/getAPIHost";
 
 interface IClient {
@@ -10,6 +11,9 @@ export async function client<T = any>(
   endpoint: string,
   { body, accessToken, ...customConfig }: IClient = {}
 ): Promise<T> {
+  // 토큰 유효한지 확인
+  await checkAndRenewTokens();
+
   const SERVER_URL = getAPIHost();
 
   const headers = {
