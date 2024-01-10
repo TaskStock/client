@@ -13,7 +13,8 @@ import {
 } from "../../../store/modules/todo/todo";
 import { useAppSelect } from "../../../store/configureStore.hooks";
 import { DateString } from "../../../@types/calendar";
-import { todosData } from "../../../../public/todos";
+import { spacing } from "../../../constants/spacing";
+import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 
 export default function DraggableTodoList({
   selectedProject,
@@ -25,20 +26,6 @@ export default function DraggableTodoList({
   const currentDateFormat = useAppSelect(
     (state) => state.calendar.currentDateYYYYMMDD
   );
-
-  const onDragEnd = (params: DragEndParams<Todo>) => {
-    const toIndex = params.to;
-    const fromIndex = params.from;
-
-    changeTodoOrder({
-      todo_id: todosData[fromIndex].todo_id,
-      changed_todos: params.data,
-      changed_index: toIndex,
-      queryArgs: {
-        requested_date: currentDateFormat,
-      },
-    });
-  };
 
   const { data } = useGetAllTodosQuery({
     date: currentDateFormat as DateString,
@@ -60,8 +47,27 @@ export default function DraggableTodoList({
     );
   };
 
+  const onDragEnd = (params: DragEndParams<Todo>) => {
+    const toIndex = params.to;
+    const fromIndex = params.from;
+
+    changeTodoOrder({
+      todo_id: todosData[fromIndex].todo_id,
+      changed_todos: params.data,
+      changed_index: toIndex,
+      queryArgs: {
+        requested_date: currentDateFormat,
+      },
+    });
+  };
+
   return (
-    <>
+    <View
+      style={{
+        paddingHorizontal: spacing.gutter,
+        paddingTop: useResponsiveFontSize(15),
+      }}
+    >
       <DraggableFlatList
         data={todosData}
         renderItem={({ item, getIndex, drag, isActive }) =>
@@ -71,6 +77,6 @@ export default function DraggableTodoList({
         onDragEnd={onDragEnd}
       ></DraggableFlatList>
       <AddTodoItem />
-    </>
+    </View>
   );
 }

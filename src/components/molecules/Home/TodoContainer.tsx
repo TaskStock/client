@@ -107,8 +107,6 @@ const TodoContainer = () => {
       <View
         style={{
           flex: 1,
-          paddingHorizontal: spacing.gutter,
-          paddingTop: useResponsiveFontSize(15),
         }}
       >
         {!isLoading ? (
@@ -136,15 +134,6 @@ const TodoContainer = () => {
             <LoadingSpinner />
           </CenterLayout>
         )}
-
-        {/* {data[selectedProject].todos.map((todo) => (
-          editEnabled ? (
-            <EditTodoItem key={todo.todo_id} todo={todo} />
-          ) : (
-            <TodoItem key={todo.todo_id} todo={todo} />
-          )
-          <TodoItem key={todo.todo_id} todo={todo} />
-        ))} */}
       </View>
     </BottomDrawer>
   );
