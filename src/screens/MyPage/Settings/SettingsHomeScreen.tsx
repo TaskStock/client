@@ -6,8 +6,10 @@ import {
   useAppDispatch,
   useAppSelect,
 } from "../../../store/configureStore.hooks";
-import { logout } from "../../../store/modules/auth";
+
 import { resetNavigation } from "../../../utils/resetNavigation";
+import { logout } from "../../../utils/authUtils/signInUtils";
+import { checkAndRenewTokens } from "../../../utils/authUtils/tokenUtils";
 
 const Container = styled.View`
   justify-content: center;
@@ -52,6 +54,7 @@ const SettingsHomeScreen = ({ navigation }) => {
         }}
       />
       <Menu text="로그아웃" onPress={handleLogout} />
+      <Menu text="토큰갱신" onPress={checkAndRenewTokens} />
     </Container>
   );
 };

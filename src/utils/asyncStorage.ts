@@ -34,9 +34,13 @@ export const checkStorage = async () => {
   try {
     const accessToken = await AsyncStorage.getItem("accessToken");
     const refreshToken = await AsyncStorage.getItem("refreshToken");
-
-    console.log("AsyncStorage Check => accessToken: ", accessToken);
-    console.log("AsyncStorage Check => refreshToken: ", refreshToken);
+    const accessExp = await AsyncStorage.getItem("accessExp");
+    const refreshExp = await AsyncStorage.getItem("refreshExp");
+    console.log("===== AsyncStorage Check =====");
+    console.log("accessToken: ", accessToken);
+    console.log("refreshToken: ", refreshToken);
+    console.log("accessExp: ", accessExp);
+    console.log("refreshExp: ", refreshExp);
   } catch (error) {
     console.error("Error reading values from AsyncStorage", error);
   }

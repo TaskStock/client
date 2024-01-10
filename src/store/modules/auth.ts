@@ -3,6 +3,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { checkStorage, storeData } from "../../utils/asyncStorage";
 import {
   loginWithEmail,
+  logout,
   registerWithEmail,
 } from "../../utils/authUtils/signInUtils";
 import { checkAndRenewTokens } from "../../utils/authUtils/tokenUtils";
@@ -14,6 +15,7 @@ interface IInitialUserState {
   isLoggedIn: boolean;
   loading: boolean;
   error: any;
+  strategy: string;
 }
 
 export const initialUserState: IInitialUserState = {
@@ -23,6 +25,7 @@ export const initialUserState: IInitialUserState = {
   isLoggedIn: false,
   loading: false,
   error: null,
+  strategy: "",
 };
 
 // 초기 상태를 검사하여 업데이트하는 비동기 함수
@@ -31,50 +34,27 @@ export const checkTokenExistence = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const accessToken = await AsyncStorage.getItem("accessToken");
+      const accessExp = await AsyncStorage.getItem("accessExp");
+      const refreshExp = await AsyncStorage.getItem("refreshExp");
 
-      if (accessToken) {
-        return { accessToken, isLoggedIn: true };
+      if (accessToken && accessExp && refreshExp) {
+        return {
+          accessToken,
+          accessExp: Number(accessExp),
+          refreshExp: Number(refreshExp),
+          isLoggedIn: true,
+        };
       }
 
-      return { accessToken: "", isLoggedIn: false };
+      return {
+        accessToken: "",
+        accessExp: 0,
+        refreshExp: 0,
+        isLoggedIn: false,
+      };
     } catch (error) {
       return rejectWithValue(error);
     }
-  }
-);
-
-export const logout = createAsyncThunk(
-  "auth/logout",
-  async (_, { getState, rejectWithValue }) => {
-    console.log("logout 실행");
-    // try {
-    //   const state = getState();
-    //   // console.log("state: ", state);
-    //   const accessToken = state.auth.accessToken;
-    //   console.log("보낼 토큰: ", accessToken);
-    //   const SERVER_URL = getAPIHost();
-    //   const response = await fetch(`${SERVER_URL}account/logout`, {
-    //     method: "DELETE",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //       Authorization: `Bearer ${accessToken}`,
-    //     },
-    //   });
-    //   console.log("------", response.status);
-    //   // if (!response.ok) {
-    //   //   throw new Error("서버로부터의 응답이 올바르지 않습니다.---");
-    //   // }
-    //   const data = await response.json();
-    //   // console.log("logout data: ", data);
-    //   if (data.result !== "success") {
-    //     throw new Error(data.message || "로그아웃 실패");
-    //   }
-    //   await AsyncStorage.removeItem("accessToken"); // 로컬에서 토큰 제거
-    //   return data;
-    // } catch (error) {
-    //   // console.error("로그아웃 처리 중 오류:", error);
-    //   return rejectWithValue(error.message);
-    // }
   }
 );
 
@@ -97,17 +77,21 @@ const authSlice = createSlice({
       .addCase(registerWithEmail.fulfilled, (state, action) => {
         // redux에 저장
         state.accessToken = action.payload.accessToken;
-        // state.accessExp = action.payload.accessExp;
-        // state.refreshExp = action.payload.refreshExp;
+        state.accessExp = action.payload.accessExp;
+        state.refreshExp = action.payload.refreshExp;
         state.isLoggedIn = true;
         state.loading = false;
-        console.log("회원가입 redux: ", state);
+        state.strategy = action.payload.strategy;
+
+        console.log("회원가입 action: ", action.payload);
 
         // AsyncStorage에 저장
         storeData("accessToken", action.payload.accessToken);
         storeData("refreshToken", action.payload.refreshToken);
-
-        // checkStorage();
+        storeData("accessExp", action.payload.accessExp);
+        storeData("refreshExp", action.payload.refreshExp);
+        // strategy는 회원가입 시에만 저장
+        storeData("strategy", action.payload.strategy);
       })
       .addCase(registerWithEmail.rejected, (state, action) => {
         state.loading = false;
@@ -123,15 +107,15 @@ const authSlice = createSlice({
       .addCase(loginWithEmail.fulfilled, (state, action) => {
         if (action.payload.accessToken) {
           state.accessToken = action.payload.accessToken;
-          // state.accessExp = action.payload.accessExp;
-          // state.refreshExp = action.payload.refreshExp;
+          state.accessExp = action.payload.accessExp;
+          state.refreshExp = action.payload.refreshExp;
           state.isLoggedIn = true;
           state.loading = false;
 
           storeData("accessToken", action.payload.accessToken);
           storeData("refreshToken", action.payload.refreshToken);
-
-          checkStorage();
+          storeData("accessExp", action.payload.accessExp);
+          storeData("refreshExp", action.payload.refreshExp);
           console.log("로그인 성공: ", action.payload);
         }
       })
@@ -142,6 +126,9 @@ const authSlice = createSlice({
       })
       .addCase(checkTokenExistence.fulfilled, (state, action) => {
         state.accessToken = action.payload.accessToken;
+        console.log("토큰 업데이트: ", action.payload);
+        state.accessExp = action.payload.accessExp;
+        state.refreshExp = action.payload.refreshExp;
         state.isLoggedIn = action.payload.isLoggedIn;
         state.loading = false;
       })
@@ -152,20 +139,26 @@ const authSlice = createSlice({
       // 로그아웃
       .addCase(logout.pending, (state) => {
         state.loading = true;
-        console.log("pending: ", state);
+        console.log("로그아웃 진행중: ", state);
       })
       .addCase(logout.fulfilled, (state) => {
         // asyncStorage에서 토큰 제거
         AsyncStorage.removeItem("accessToken");
         AsyncStorage.removeItem("refreshToken");
+        AsyncStorage.removeItem("accessExp");
+        AsyncStorage.removeItem("refreshExp");
 
-        Object.assign(state, initialUserState);
-        console.log(state);
+        state.accessToken = "";
+        state.accessExp = 0;
+        state.refreshExp = 0;
+        state.isLoggedIn = false;
+        state.loading = false;
+        state.error = null;
       })
       .addCase(logout.rejected, (state, action) => {
         state.error = action.payload;
         state.loading = false;
-        console.log("에러: ", action.payload);
+        console.log("로그아웃 에러: ", action.payload);
       })
       // 토큰 갱신
       .addCase(checkAndRenewTokens.pending, (state) => {
@@ -179,9 +172,13 @@ const authSlice = createSlice({
             action.payload;
           state.accessToken = accessToken;
           state.accessExp = accessExp;
-          state.refreshExp = refreshExp;
+          if (refreshExp && refreshExp) {
+            state.refreshExp = refreshExp;
+            storeData("refreshExp", refreshExp);
+            storeData("refreshToken", refreshToken);
+          }
           storeData("accessToken", accessToken);
-          storeData("refreshToken", refreshToken);
+          storeData("accessExp", accessExp);
         }
       })
       .addCase(checkAndRenewTokens.rejected, (state, action) => {
