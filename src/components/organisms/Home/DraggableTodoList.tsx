@@ -15,6 +15,7 @@ import { useAppSelect } from "../../../store/configureStore.hooks";
 import { DateString } from "../../../@types/calendar";
 import { spacing } from "../../../constants/spacing";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
+import { checkIsSameLocalDay } from "../../../utils/checkIsSameLocalDay";
 
 export default function DraggableTodoList({
   selectedProject,
@@ -23,15 +24,36 @@ export default function DraggableTodoList({
 }) {
   const [changeTodoOrder, result] = useChangeOrderTodoMutation();
 
-  const currentDateFormat = useAppSelect(
-    (state) => state.calendar.currentDateYYYYMMDD
-  );
+  const { currentDateYYYYMMDD: currentDateFormat, currentDateString } =
+    useAppSelect((state) => state.calendar);
 
   const { data } = useGetAllTodosQuery({
     date: currentDateFormat as DateString,
   });
 
-  const todosData = data ? data.todos : [];
+  const todosData =
+    data && data.todos
+      ? data.todos.filter((todo) =>
+          checkIsSameLocalDay(todo.date, currentDateFormat)
+        )
+      : [];
+
+  const onDragEnd = (params: DragEndParams<Todo>) => {
+    // 이 index는 부분 array에서의 index다.
+    const toIndex = params.to;
+    const fromIndex = params.from;
+
+    changeTodoOrder({
+      todo_id: todosData[fromIndex].todo_id,
+      from_index: fromIndex,
+      to_index: toIndex,
+      changed_todos: params.data,
+      requested_date_full: currentDateString,
+      queryArgs: {
+        requested_date: currentDateFormat,
+      },
+    });
+  };
 
   const renderTodoItem = ({ item, getIndex, drag, isActive }) => {
     if (selectedProject !== null && item.project_id !== selectedProject) {
@@ -45,20 +67,6 @@ export default function DraggableTodoList({
         </Pressable>
       </ScaleDecorator>
     );
-  };
-
-  const onDragEnd = (params: DragEndParams<Todo>) => {
-    const toIndex = params.to;
-    const fromIndex = params.from;
-
-    changeTodoOrder({
-      todo_id: todosData[fromIndex].todo_id,
-      changed_todos: params.data,
-      changed_index: toIndex,
-      queryArgs: {
-        requested_date: currentDateFormat,
-      },
-    });
   };
 
   return (

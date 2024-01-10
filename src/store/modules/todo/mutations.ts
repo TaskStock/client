@@ -9,7 +9,7 @@ import {
 } from "../../../utils/checkIsSameLocalDay";
 import { chartApi } from "../chart";
 import { Value } from "../../../@types/chart";
-import { DateString } from "../../../@types/calendar";
+import { DateString, IsoString } from "../../../@types/calendar";
 
 export const addSimpleTodoMutation = (builder: TodoApiBuilder) =>
   builder.mutation<
@@ -476,8 +476,10 @@ export const changeTodoOrderMutation = (builder: TodoApiBuilder) =>
     {},
     {
       todo_id: number;
-      changed_index: number;
+      from_index: number;
+      to_index: number;
       changed_todos: Todo[];
+      requested_date_full: IsoString;
       queryArgs: {
         requested_date: DateString;
       };
@@ -489,18 +491,29 @@ export const changeTodoOrderMutation = (builder: TodoApiBuilder) =>
         method: "POST",
         body: {
           todo_id: body.todo_id,
-          changed_index: body.changed_index,
+          changed_index: body.to_index,
         },
       };
     },
 
     async onQueryStarted(body, { dispatch, queryFulfilled }) {
+      //오늘 날짜에 해당하는거는 local 시간대로 보내주는데,
+      // 문제는 받아온 todo에서 filter할때는, utc 시간대로 비교를 해야한다는거다.
+
       const dispatchChangeTodoIndex = dispatch(
         todoApi.util.updateQueryData(
           "getAllTodos",
           { date: body.queryArgs.requested_date },
           (draft: { todos: Todo[] }) => {
-            draft.todos = body.changed_todos;
+            // draft.todos = body.changed_todos;
+
+            draft.todos = [
+              ...draft.todos.filter(
+                (todo) =>
+                  !checkIsSameLocalDay(todo.date, body.requested_date_full)
+              ),
+              ...body.changed_todos,
+            ];
           }
         )
       );
