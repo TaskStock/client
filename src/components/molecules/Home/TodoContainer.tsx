@@ -41,7 +41,7 @@ const ProjectsContainer = styled.View`
 
 const TodoContainer = () => {
   const [projects, setProjects] = useState([]);
-  const [selectedProject, setSelectedProject] = useState(null);
+  const [selectedProjectId, setSelectedProjectId] = useState(null);
 
   const { currentDateString, currentDateYYYYMMDD } = useAppSelect(
     (state) => state.calendar
@@ -92,15 +92,15 @@ const TodoContainer = () => {
       <ProjectsContainer>
         <ProjectSelectBtn
           projectName={"전체"}
-          selected={selectedProject === null}
-          onPress={() => setSelectedProject(null)}
+          selected={selectedProjectId === null}
+          onPress={() => setSelectedProjectId(null)}
         />
         {projects.map((project) => (
           <ProjectSelectBtn
             projectName={project.name}
             key={project.id}
-            selected={selectedProject === project.id}
-            onPress={() => setSelectedProject(project.id)}
+            selected={selectedProjectId === project.id}
+            onPress={() => setSelectedProjectId(project.id)}
           />
         ))}
       </ProjectsContainer>
@@ -113,7 +113,7 @@ const TodoContainer = () => {
           !isError ? (
             todosData && (
               <DraggableTodoList
-                selectedProject={selectedProject}
+                selectedProjectId={selectedProjectId}
               ></DraggableTodoList>
             )
           ) : (
