@@ -37,7 +37,7 @@ export const addSimpleTodoMutation = (builder: TodoApiBuilder) =>
       return {
         url: "/todo/new",
         method: "POST",
-        body: simpleTodoForm,
+        body: { ...simpleTodoForm, nowUTC: body.add_date },
       };
     },
 
@@ -77,11 +77,12 @@ export const addSimpleTodoMutation = (builder: TodoApiBuilder) =>
             "getAllTodos",
             { date: body.queryArgs.date },
             (draft: { todos: Todo[] }) => {
-              const index = draft.todos.findIndex(
+              const todoIndex = draft.todos.findIndex(
                 (todo) => todo.todo_id === temp_todo_id
               );
-              if (index === -1) return;
-              draft.todos[index].todo_id = todo_id;
+              if (todoIndex === -1) return;
+              draft.todos[todoIndex].todo_id = todo_id;
+              draft.todos[todoIndex].index = index;
             }
           )
         );
@@ -109,11 +110,11 @@ export const addTodoMutation = (builder: TodoApiBuilder) =>
       };
     }
   >({
-    query: (body: { form: AddTodoForm }) => {
+    query: (body) => {
       return {
         url: "/todo/new",
         method: "POST",
-        body: body.form,
+        body: { ...body.form, nowUTC: body.add_date },
       };
     },
 
@@ -179,11 +180,12 @@ export const addTodoMutation = (builder: TodoApiBuilder) =>
             "getAllTodos",
             { date: body.queryArgs.date },
             (draft: { todos: Todo[] }) => {
-              const index = draft.todos.findIndex(
+              const todoIndex = draft.todos.findIndex(
                 (todo) => todo.todo_id === temp_todo_id
               );
-              if (index === -1) return;
-              draft.todos[index].todo_id = todo_id;
+              if (todoIndex === -1) return;
+              draft.todos[todoIndex].todo_id = todo_id;
+              draft.todos[todoIndex].index = index;
             }
           )
         );
@@ -475,10 +477,13 @@ export const changeTodoOrderMutation = (builder: TodoApiBuilder) =>
   builder.mutation<
     {},
     {
-      todo_id: number;
-      from_index: number;
-      to_index: number;
+      selectedProjectId: number | null;
       changed_todos: Todo[];
+      original_todos: Todo[];
+      changed_todos_item: {
+        todo_id: number;
+        changed_index: number;
+      }[];
       requested_date_full: IsoString;
       queryArgs: {
         requested_date: DateString;
@@ -487,11 +492,10 @@ export const changeTodoOrderMutation = (builder: TodoApiBuilder) =>
   >({
     query: (body) => {
       return {
-        url: "/todo/changeorder",
-        method: "POST",
+        url: "/todo/index",
+        method: "PUT",
         body: {
-          todo_id: body.todo_id,
-          changed_index: body.to_index,
+          changed_todos: body.changed_todos_item,
         },
       };
     },
@@ -500,22 +504,68 @@ export const changeTodoOrderMutation = (builder: TodoApiBuilder) =>
       //오늘 날짜에 해당하는거는 local 시간대로 보내주는데,
       // 문제는 받아온 todo에서 filter할때는, utc 시간대로 비교를 해야한다는거다.
 
+      const { changed_todos, original_todos, changed_todos_item } = body;
+
+      const orderAndIndexChangedTodos: Todo[] = changed_todos.map((todo) => {
+        const index = changed_todos_item.findIndex(
+          (item) => item.todo_id === todo.todo_id
+        );
+
+        if (index === -1) {
+          return todo;
+        }
+
+        return {
+          ...todo,
+          index: changed_todos_item[index].changed_index,
+        };
+      });
+
       const dispatchChangeTodoIndex = dispatch(
         todoApi.util.updateQueryData(
           "getAllTodos",
           { date: body.queryArgs.requested_date },
           (draft: { todos: Todo[] }) => {
-            // draft.todos = body.changed_todos;
+            const { selectedProjectId } = body;
 
-            draft.todos = [
-              // 변경 날짜가 아니면 순서를 가만히 놔두고,
-              ...draft.todos.filter(
-                (todo) =>
-                  !checkIsSameLocalDay(todo.date, body.requested_date_full)
-              ),
-              // 변경 날짜에 해당하는 todo들만 array를 싹다 바꾸어준다.
-              ...body.changed_todos,
-            ];
+            // 변하지 않는것은, 그대로 두고, 변하는것만 바꿔준다.
+            // 만약에 selectedProjectId == null이었다? 그러면 모든 todo이다.
+            // 만약에 특정 프로젝트를 선택했다? 그러면 그 프로젝트에 해당하는 todo만 바꿔준다.
+
+            // 즉 order가 자동으로 업데이트 되지 않도록 하는 이유는.
+            // todo가 새롭게 추가될때 0 으로 추가되기 때문이다.
+            // 그러면 push를 해도, index에 따라 sort하지 않기 때문에,
+            // 따로 index tracking을 안해줘도 된다.
+
+            // 대신 나중에 서버에서 index를 받아서 업데이트 해주어야 한다.
+
+            if (selectedProjectId === null) {
+              draft.todos = [
+                ...draft.todos.filter(
+                  (todo) =>
+                    !checkIsSameLocalDay(todo.date, body.requested_date_full)
+                ),
+                // 이러면 순서도 바뀌고, index도 업데이트 된다.
+
+                // 그 다음으로, todo
+                ...orderAndIndexChangedTodos,
+              ];
+            } else {
+              // 프로젝트가 있는경우.
+              draft.todos = [
+                ...draft.todos.filter(
+                  (todo) =>
+                    !checkIsSameLocalDay(todo.date, body.requested_date_full) ||
+                    todo.project_id !== body.selectedProjectId
+                ),
+                ...draft.todos.filter(
+                  (todo) =>
+                    checkIsSameLocalDay(todo.date, body.requested_date_full) &&
+                    todo.project_id !== body.selectedProjectId
+                ),
+                ...orderAndIndexChangedTodos,
+              ];
+            }
           }
         )
       );
@@ -523,7 +573,7 @@ export const changeTodoOrderMutation = (builder: TodoApiBuilder) =>
       try {
         await queryFulfilled;
       } catch (error) {
-        // console.log(error);
+        console.log(error);
         // dispatchChangeTodoIndex.undo();
       }
     },

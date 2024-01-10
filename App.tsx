@@ -13,6 +13,7 @@ import { checkTokenExistence } from "./src/store/modules/auth";
 import { startingTheme } from "./src/store/modules/theme";
 import { removeData } from "./src/utils/asyncStorage";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { checkAndRenewTokens } from "./src/utils/authUtils/tokenUtils";
 
 const THEME = {
   dark: {
@@ -36,8 +37,14 @@ export default function App() {
   useEffect(() => {
     dispatch(checkTokenExistence());
     dispatch(startingTheme());
-    // dispatch(checkAndRenewTokens());
-  }, [dispatch]);
+    if (isLoggedIn) {
+      dispatch(checkAndRenewTokens());
+    }
+  }, [dispatch, isLoggedIn]);
+  // useEffect(() => {
+  //   removeData("accessToken");
+  //   removeData("refreshToken");
+  // }, []);
 
   // const [assets] = useAssets([require("./assets/splash.png")]);
   const [fontsLoaded] = Font.useFonts(customFontsToLoad);

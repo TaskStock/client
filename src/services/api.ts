@@ -1,3 +1,4 @@
+import { checkAndRenewTokens } from "../utils/authUtils/tokenUtils";
 import { getAPIHost } from "../utils/getAPIHost";
 
 interface IClient {
@@ -10,6 +11,9 @@ export async function client<T = any>(
   endpoint: string,
   { body, accessToken, ...customConfig }: IClient = {}
 ): Promise<T> {
+  // 토큰 유효한지 확인
+  await checkAndRenewTokens();
+
   const SERVER_URL = getAPIHost();
 
   const headers = {
@@ -33,14 +37,19 @@ export async function client<T = any>(
   try {
     const response = await fetch(SERVER_URL + endpoint, config);
     const data = await response.json();
+    console.log(SERVER_URL + endpoint);
 
     if (!response.ok) {
+      console.log(data);
+
       const errorMessage = data.message || response.statusText;
       throw new Error(errorMessage);
     }
 
     return data;
   } catch (err) {
+    console.log(err);
+
     return Promise.reject(err.message);
   }
 }

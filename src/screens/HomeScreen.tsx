@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Dimensions, Modal } from "react-native";
 import { useDispatch } from "react-redux";
 import styled from "styled-components/native";
@@ -9,6 +9,7 @@ import GCContainer from "../components/organisms/Home/GCContainer";
 import { useAppSelect } from "../store/configureStore.hooks";
 import { ComponentHeightContext } from "../utils/ComponentHeightContext";
 import TodoContainer from "../components/molecules/Home/TodoContainer";
+import { client } from "../services/api";
 
 const Container = styled.View`
   background-color: ${({ theme }) => theme.background};

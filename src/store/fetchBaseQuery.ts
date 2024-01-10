@@ -1,5 +1,5 @@
 import { BaseQueryFn, fetchBaseQuery } from "@reduxjs/toolkit/query";
-import { logout, setAccessToken } from "./modules/auth";
+import { setAccessToken } from "./modules/auth";
 import { LOCAL_API_HOST } from "@env";
 import { RootState } from "./configureStore";
 import { checkAndRenewTokens } from "../utils/authUtils/tokenUtils";
@@ -34,7 +34,7 @@ const BaseQueryWithAuth: BaseQueryFn<
   if (result.error && result.error.originalStatus === 401) {
     console.log("401 에러 발생, 토큰 갱신 시도");
 
-    await api.dispatch(checkAndRenewTokens());
+    // await api.dispatch(checkAndRenewTokens());
 
     const result = await originalBaseQuery(args, api, extraOptions);
 
