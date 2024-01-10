@@ -475,10 +475,13 @@ export const changeTodoOrderMutation = (builder: TodoApiBuilder) =>
   builder.mutation<
     {},
     {
-      todo_id: number;
-      from_index: number;
-      to_index: number;
+      selectedProjectId: number | null;
       changed_todos: Todo[];
+      original_todos: Todo[];
+      changed_todos_item: {
+        todo_id: number;
+        changed_index: number;
+      }[];
       requested_date_full: IsoString;
       queryArgs: {
         requested_date: DateString;
@@ -487,11 +490,10 @@ export const changeTodoOrderMutation = (builder: TodoApiBuilder) =>
   >({
     query: (body) => {
       return {
-        url: "/todo/changeorder",
-        method: "POST",
+        url: "/todo/index",
+        method: "PUT",
         body: {
-          todo_id: body.todo_id,
-          changed_index: body.to_index,
+          changed_todos: body.changed_todos_item,
         },
       };
     },
@@ -500,20 +502,58 @@ export const changeTodoOrderMutation = (builder: TodoApiBuilder) =>
       //오늘 날짜에 해당하는거는 local 시간대로 보내주는데,
       // 문제는 받아온 todo에서 filter할때는, utc 시간대로 비교를 해야한다는거다.
 
+      const { changed_todos, original_todos, changed_todos_item } = body;
+
+      const toChangedItems: Todo[] = original_todos.map((todo) => {
+        const index = changed_todos_item.findIndex(
+          (item) => item.todo_id === todo.todo_id
+        );
+
+        if (index === -1) {
+          return todo;
+        }
+
+        return {
+          ...todo,
+          index: changed_todos_item[index].changed_index,
+        };
+      });
+
       const dispatchChangeTodoIndex = dispatch(
         todoApi.util.updateQueryData(
           "getAllTodos",
           { date: body.queryArgs.requested_date },
           (draft: { todos: Todo[] }) => {
-            // draft.todos = body.changed_todos;
+            const { selectedProjectId } = body;
 
-            draft.todos = [
-              ...draft.todos.filter(
-                (todo) =>
-                  !checkIsSameLocalDay(todo.date, body.requested_date_full)
-              ),
-              ...body.changed_todos,
-            ];
+            // 변하지 않는것은, 그대로 두고, 변하는것만 바꿔준다.
+            // 만약에 selectedProjectId == null이었다? 그러면 모든 todo이다.
+            // 만약에 특정 프로젝트를 선택했다? 그러면 그 프로젝트에 해당하는 todo만 바꿔준다.
+
+            if (selectedProjectId === null) {
+              draft.todos = [
+                ...draft.todos.filter(
+                  (todo) =>
+                    !checkIsSameLocalDay(todo.date, body.requested_date_full)
+                ),
+                ...toChangedItems,
+              ];
+            } else {
+              // 프로젝트가 있는경우.
+              draft.todos = [
+                ...draft.todos.filter(
+                  (todo) =>
+                    !checkIsSameLocalDay(todo.date, body.requested_date_full) ||
+                    todo.project_id !== body.selectedProjectId
+                ),
+                ...draft.todos.filter(
+                  (todo) =>
+                    checkIsSameLocalDay(todo.date, body.requested_date_full) &&
+                    todo.project_id !== body.selectedProjectId
+                ),
+                ...toChangedItems,
+              ];
+            }
           }
         )
       );
@@ -521,7 +561,7 @@ export const changeTodoOrderMutation = (builder: TodoApiBuilder) =>
       try {
         await queryFulfilled;
       } catch (error) {
-        // console.log(error);
+        console.log(error);
         // dispatchChangeTodoIndex.undo();
       }
     },
