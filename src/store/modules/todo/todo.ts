@@ -2,7 +2,6 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { createApi, EndpointBuilder } from "@reduxjs/toolkit/query/react";
 import dayjs from "dayjs";
 import { AddTodoForm } from "../../../@types/todo";
-import wrappedFetchBaseQuery from "../../fetchBaseQuery";
 import {
   addSimpleTodoMutation,
   addTodoMutation,
@@ -14,6 +13,8 @@ import {
 import { QueryReturnValue } from "@reduxjs/toolkit/dist/query/baseQueryTypes";
 import { MaybePromise } from "@reduxjs/toolkit/dist/query/tsHelpers";
 import { getAllTodosQuery } from "./queries";
+import { LOCAL_API_HOST } from "@env";
+import { myFetchFunction } from "../../myFetchFunction";
 
 interface InitialState {
   isTodoDrawerOpen: boolean;
@@ -46,7 +47,7 @@ export type TodoApiBuilder = EndpointBuilder<
 
 export const todoApi = createApi({
   reducerPath: "todoApi",
-  baseQuery: wrappedFetchBaseQuery,
+  baseQuery: myFetchFunction(`${LOCAL_API_HOST}`),
   tagTypes: ["Todos"],
   endpoints: (builder) => ({
     getAllTodos: getAllTodosQuery(builder),

@@ -4,6 +4,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import wrappedFetchBaseQuery from "../fetchBaseQuery";
 import { Value } from "../../@types/chart";
 import { DateString } from "../../@types/calendar";
+import { myFetchFunction } from "../myFetchFunction";
 
 const initialState = {
   data: [],
@@ -11,7 +12,7 @@ const initialState = {
 
 export const chartApi = createApi({
   reducerPath: "chartApi",
-  baseQuery: wrappedFetchBaseQuery,
+  baseQuery: myFetchFunction(LOCAL_API_HOST),
   endpoints: (builder) => ({
     getValues: builder.query<
       {

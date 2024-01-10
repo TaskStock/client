@@ -19,7 +19,7 @@ export const getAllTodosQuery = (builder: TodoApiBuilder) =>
   builder.query<getAllTodosResponse, { date: DateString }>({
     query: (body: { date: string }) => {
       return {
-        url: `/todo/read?date=${body.date}`,
+        url: `/todo/onemonth?date=${body.date}`,
         method: "GET",
       };
     },

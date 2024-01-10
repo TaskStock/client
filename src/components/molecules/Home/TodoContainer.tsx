@@ -50,7 +50,7 @@ const TodoContainer = () => {
   const dispatch = useAppDispatch();
 
   const { data, isLoading, isError, error, refetch } = useGetAllTodosQuery({
-    date: currentDateYYYYMMDD as DateString,
+    date: dayjs(currentDateString).format("YYYY-MM"),
   });
 
   const todosData = data ? [...data.todos] : [];

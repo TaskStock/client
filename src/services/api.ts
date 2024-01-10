@@ -37,14 +37,19 @@ export async function client<T = any>(
   try {
     const response = await fetch(SERVER_URL + endpoint, config);
     const data = await response.json();
+    console.log(SERVER_URL + endpoint);
 
     if (!response.ok) {
+      console.log(data);
+
       const errorMessage = data.message || response.statusText;
       throw new Error(errorMessage);
     }
 
     return data;
   } catch (err) {
+    console.log(err);
+
     return Promise.reject(err.message);
   }
 }
