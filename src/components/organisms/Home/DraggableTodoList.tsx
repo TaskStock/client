@@ -33,9 +33,9 @@ export default function DraggableTodoList({
 
   const currentDayTodos =
     data && data.todos
-      ? data.todos
-          .filter((todo) => checkIsSameLocalDay(todo.date, currentDateFormat))
-          .sort((a, b) => a.index - b.index)
+      ? data.todos.filter((todo) =>
+          checkIsSameLocalDay(todo.date, currentDateFormat)
+        )
       : [];
 
   const selectedTodos =
