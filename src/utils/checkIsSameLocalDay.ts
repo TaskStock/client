@@ -53,6 +53,8 @@ function checkIsWithInOneDay(value_date: string, todo_date: string) {
   return hoursDifference <= 24;
 }
 
+// 오늘 날짜가 아니라, 정산 날짜여야 함.
+
 export {
   checkIsSameLocalDay,
   checkIsLocalToday,

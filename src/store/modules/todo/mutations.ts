@@ -6,8 +6,6 @@ import { TodoApiBuilder, closeTodoModal, todoApi } from "./todo";
 import {
   checkIsLocalToday,
   checkIsSameLocalDay,
-  check,
-  checkIsWithInOneDayIsWithInOneDay,
   checkIsWithInOneDay,
 } from "../../../utils/checkIsSameLocalDay";
 import { chartApi } from "../chart";
@@ -149,30 +147,31 @@ export const addTodoMutation = (builder: TodoApiBuilder) =>
 
       let patchUpdateHighLowValue;
 
-      if (checkIsLocalToday(body.add_date)) {
-        patchUpdateHighLowValue = dispatch(
-          chartApi.util.updateQueryData(
-            "getValues",
-            {
-              startDate: body.queryArgs.graph_before_date,
-              endDate: body.queryArgs.graph_today_date,
-            },
-            ({ values }) => {
-              const index = values.findIndex((value) => {
-                return checkIsWithInOneDay(value.date, body.add_date);
-              });
+      // 이건 어차피 오늘 오전 6시부터 내일 오전 6시까지이므로.
+      // if (checkIsLocalToday(body.add_date)) {
+      patchUpdateHighLowValue = dispatch(
+        chartApi.util.updateQueryData(
+          "getValues",
+          {
+            startDate: body.queryArgs.graph_before_date,
+            endDate: body.queryArgs.graph_today_date,
+          },
+          ({ values }) => {
+            const index = values.findIndex((value) => {
+              return checkIsWithInOneDay(value.date, body.add_date);
+            });
 
-              if (index === -1) {
-                console.log("no value matches on add todo");
-                return;
-              }
-
-              values[index].high += body.form.level * upValue;
-              values[index].low -= body.form.level * downValue;
+            if (index === -1) {
+              console.log("no value matches on add todo");
+              return;
             }
-          )
-        );
-      }
+
+            values[index].high += body.form.level * upValue;
+            values[index].low -= body.form.level * downValue;
+          }
+        )
+      );
+      // }
       try {
         const result = await queryFulfilled;
 
@@ -260,7 +259,7 @@ export const editTodoMutation = (builder: TodoApiBuilder) =>
 
       let patchUpdateGraphValue;
 
-      if (body.todo_date && checkIsLocalToday(body.todo_date)) {
+      if (body.todo_date) {
         patchUpdateGraphValue = dispatch(
           chartApi.util.updateQueryData(
             "getValues",
@@ -354,33 +353,33 @@ export const toggleTodoMutation = (builder: TodoApiBuilder) =>
       let patchUpdateGraphValue;
 
       // 오늘 날짜라면, 토글해서 check 했을때, 그래프값에도 반영해준다.
-      if (checkIsLocalToday(body.todo_date)) {
-        patchUpdateGraphValue = dispatch(
-          chartApi.util.updateQueryData(
-            "getValues",
-            {
-              startDate: body.queryArgs.graph_before_date,
-              endDate: body.queryArgs.graph_today_date,
-            },
-            (draft: { values: Value[] }) => {
-              const index = draft.values.findIndex((value) => {
-                return checkIsWithInOneDay(value.date, body.todo_date);
-              });
+      // if (checkIsLocalToday(body.todo_date)) {
+      patchUpdateGraphValue = dispatch(
+        chartApi.util.updateQueryData(
+          "getValues",
+          {
+            startDate: body.queryArgs.graph_before_date,
+            endDate: body.queryArgs.graph_today_date,
+          },
+          (draft: { values: Value[] }) => {
+            const index = draft.values.findIndex((value) => {
+              return checkIsWithInOneDay(value.date, body.todo_date);
+            });
 
-              if (index === -1) {
-                console.log("no value matches on todo");
-                return;
-              }
-
-              if (body.check) {
-                draft.values[index].end += body.level * upValue;
-              } else {
-                draft.values[index].end -= body.level * downValue;
-              }
+            if (index === -1) {
+              console.log("no value matches on todo");
+              return;
             }
-          )
-        );
-      }
+
+            if (body.check) {
+              draft.values[index].end += body.level * upValue;
+            } else {
+              draft.values[index].end -= body.level * downValue;
+            }
+          }
+        )
+      );
+      // }
 
       try {
         const result = await queryFulfilled;
@@ -431,34 +430,34 @@ export const deleteTodoMutation = (builder: TodoApiBuilder) =>
 
       let patchUpdateGraphEndValue;
 
-      if (checkIsLocalToday(body.todo_date)) {
-        patchUpdateGraphEndValue = dispatch(
-          chartApi.util.updateQueryData(
-            "getValues",
-            {
-              startDate: body.queryArgs.graph_before_date,
-              endDate: body.queryArgs.graph_today_date,
-            },
-            (draft: { values: Value[] }) => {
-              const index = draft.values.findIndex((value) => {
-                return checkIsWithInOneDay(value.date, body.queryArgs.date);
-              });
+      // if (checkIsLocalToday(body.todo_date)) {
+      patchUpdateGraphEndValue = dispatch(
+        chartApi.util.updateQueryData(
+          "getValues",
+          {
+            startDate: body.queryArgs.graph_before_date,
+            endDate: body.queryArgs.graph_today_date,
+          },
+          (draft: { values: Value[] }) => {
+            const index = draft.values.findIndex((value) => {
+              return checkIsWithInOneDay(value.date, body.queryArgs.date);
+            });
 
-              if (index === -1) {
-                console.log("deleteTodo: no value matches on todo");
-                return;
-              }
-
-              if (body.checked) {
-                draft.values[index].end -= body.value;
-              }
-
-              draft.values[index].high -= body.value;
-              draft.values[index].low += body.value;
+            if (index === -1) {
+              console.log("deleteTodo: no value matches on todo");
+              return;
             }
-          )
-        );
-      }
+
+            if (body.checked) {
+              draft.values[index].end -= body.value;
+            }
+
+            draft.values[index].high -= body.value;
+            draft.values[index].low += body.value;
+          }
+        )
+      );
+      // }
 
       try {
         await queryFulfilled;
