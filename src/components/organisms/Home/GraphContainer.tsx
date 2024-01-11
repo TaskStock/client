@@ -11,6 +11,7 @@ import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import FlexBox from "../../atoms/FlexBox";
 import { LinearGradient } from "expo-linear-gradient";
 import useUser from "../../../hooks/useUser";
+import { useAppSelect } from "../../../store/configureStore.hooks";
 
 const Container = styled.View`
   width: 100%;
@@ -39,6 +40,16 @@ const Divider = styled.View`
 
 const GraphContainer = ({ myData }) => {
   const [isCandleStick, setIsCandleStick] = React.useState(true);
+
+  const theme = useAppSelect((state) => state.theme);
+  const gradient =
+    theme.value === "dark"
+      ? [
+          "rgba(255, 255, 255, 0.00)",
+          "rgba(255, 255, 255, 0.09)",
+          "rgba(255, 255, 255, 0.20)",
+        ]
+      : ["rgba(255, 255, 255, 0.00)", "rgba(255, 255, 255, 0.47)", "#FFFFFF"];
 
   const { user, error, loading } = useUser();
 
@@ -92,11 +103,7 @@ const GraphContainer = ({ myData }) => {
       </FlexBox>
       <Container>
         <LinearGradient
-          colors={[
-            "rgba(255, 255, 255, 0.00)",
-            "rgba(255, 255, 255, 0.47)",
-            "#FFFFFF",
-          ]}
+          colors={gradient}
           start={{ x: 0, y: 0 }}
           end={{ x: 0, y: 1 }}
           style={{
