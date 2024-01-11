@@ -79,6 +79,9 @@ const AddTodoItem = () => {
           onSubmitEditing={() => {
             addTodo();
           }}
+          style={{
+            color: theme.text,
+          }}
           placeholderTextColor={theme.textDim}
           value={content}
           placeholder="할일 추가"
