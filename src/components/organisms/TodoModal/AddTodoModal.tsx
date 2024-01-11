@@ -49,11 +49,14 @@ const InnerPressable = styled.Pressable`
   height: 50%;
 `;
 
-const AddTodoBox = styled.View`
+const AddTodoBox = styled.View<{ systemTheme: string }>`
   height: 100%;
   border-radius: 20px;
   padding: ${spacing.offset}px;
-  background-color: ${({ theme }) => theme.palette.neutral100_gray};
+  background-color: ${({ theme }) => theme.box};
+  border-width: ${({ systemTheme }) => (systemTheme === "dark" ? 0.4 : 0)}px;
+  border-color: ${({ systemTheme }) =>
+    systemTheme === "dark" ? "white" : "transparent"};
   shadow-color: #000;
   shadow-offset: 0px 4px;
   shadow-opacity: 0.25;
@@ -75,7 +78,7 @@ const AddTodoBtn = styled.TouchableOpacity`
   justify-content: center;
   align-items: center;
 
-  background-color: ${({ theme }) => theme.palette.neutral200_gray};
+  background-color: ${({ theme }) => theme.background};
 `;
 
 const CloseBox = styled.View`
@@ -91,9 +94,10 @@ const SectionHeader = styled.View`
   z-index: 2;
 `;
 
-const SectionHeaderText = styled.Text`
+const SectionHeaderText = styled.Text<{ systemTheme?: string }>`
   font-size: ${useResponsiveFontSize(18)}px;
-  color: ${({ theme }) => theme.textDim};
+  color: ${({ theme, systemTheme }) =>
+    systemTheme === "dark" ? theme.textDimReverse : theme.textDim};
 `;
 
 const ValueText = styled(SectionHeaderText)`
@@ -104,6 +108,7 @@ const TodoInput = styled.TextInput`
   border-color: ${({ theme }) => theme.textDimmer};
   border-bottom-width: 1px;
   padding: 6px 1px;
+  color: ${({ theme }) => theme.text};
 `;
 
 const RepeatDayItem = styled.Pressable<{ isSelected?: boolean; size: number }>`
@@ -114,8 +119,15 @@ const RepeatDayItem = styled.Pressable<{ isSelected?: boolean; size: number }>`
   width: ${({ size }) => size}px;
   height: ${({ size }) => size}px;
   border-radius: 50px;
+
+  border-width: ${({ isSelected, theme }) =>
+    theme.name == "dark" && isSelected ? "1px" : "0px"};
+  border-color: ${({ theme }) => theme.text};
+
   background-color: ${({ theme, isSelected }) =>
-    isSelected ? theme.mainBtnReversed : theme.mainBtnGray};
+    theme.name === "gray" && isSelected
+      ? theme.mainBtnReversed
+      : theme.mainBtnGray};
 `;
 
 const DatePickerBox = styled.Pressable`
@@ -159,13 +171,11 @@ export default function AddTodoModal() {
   );
   const scrollViewRef = React.useRef<ScrollView>(null);
 
+  const systemTheme = useAppSelect((state) => state.theme.value);
+
   const [dayItemWidth, setDayItemWidth] = React.useState(0);
 
   const value = addTodoForm.level * 1000;
-
-  const { currentDateYYYYMMDD: currentDateFormat } = useAppSelect(
-    (state) => state.calendar
-  );
 
   const {
     getValuesQueryArgs: { startDate, endDate },
@@ -232,7 +242,7 @@ export default function AddTodoModal() {
       }}
     >
       <InnerPressable>
-        <AddTodoBox>
+        <AddTodoBox systemTheme={systemTheme}>
           <CloseBox>
             <Icons
               onPress={() => {
@@ -258,7 +268,9 @@ export default function AddTodoModal() {
                 <Section
                   header={
                     <SectionHeader>
-                      <SectionHeaderText>할 일</SectionHeaderText>
+                      <SectionHeaderText systemTheme="dark">
+                        할 일
+                      </SectionHeaderText>
                     </SectionHeader>
                   }
                 >
@@ -332,7 +344,11 @@ export default function AddTodoModal() {
                           <Text
                             size="md"
                             color={
-                              isSelected ? theme.textReverse : theme.textDim
+                              theme.name == "gray"
+                                ? isSelected
+                                  ? theme.textReverse
+                                  : theme.textDim
+                                : "white"
                             }
                           >
                             {item}
@@ -362,9 +378,17 @@ export default function AddTodoModal() {
                           <Switch
                             onValueChange={toggleIsEndRepeat}
                             value={isRepeatDateModalOpen}
+                            thumbColor={
+                              theme.name == "gray"
+                                ? theme.palette.neutral500_dark
+                                : theme.textReverse
+                            }
                             trackColor={{
                               false: theme.palette.neutral600_gray,
-                              true: theme.palette.neutral500_dark,
+                              true:
+                                theme.name == "gray"
+                                  ? theme.palette.neutral500_dark
+                                  : theme.text,
                             }}
                           ></Switch>
                         </FlexBox>
