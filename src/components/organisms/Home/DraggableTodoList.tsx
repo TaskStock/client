@@ -16,6 +16,7 @@ import { DateString } from "../../../@types/calendar";
 import { spacing } from "../../../constants/spacing";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import { checkIsSameLocalDay } from "../../../utils/checkIsSameLocalDay";
+import useTodos from "../../../hooks/useTodos";
 
 export default function DraggableTodoList({
   selectedProjectId,
@@ -27,16 +28,11 @@ export default function DraggableTodoList({
   const { currentDateYYYYMMDD: currentDateFormat, currentDateString } =
     useAppSelect((state) => state.calendar);
 
-  const { data } = useGetAllTodosQuery({
-    date: currentDateFormat as DateString,
-  });
+  const { data: todos } = useTodos();
 
-  const currentDayTodos =
-    data && data.todos
-      ? data.todos.filter((todo) =>
-          checkIsSameLocalDay(todo.date, currentDateFormat)
-        )
-      : [];
+  const currentDayTodos = todos
+    ? todos.filter((todo) => checkIsSameLocalDay(todo.date, currentDateFormat))
+    : [];
 
   const selectedTodos =
     selectedProjectId !== null

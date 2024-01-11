@@ -1,13 +1,13 @@
 import dayjs from "dayjs";
 import { useAppSelect } from "../store/configureStore.hooks";
 import { useGetAllTodosQuery } from "../store/modules/todo/todo";
+import { DateStringYYYYMM } from "../@types/calendar";
 
 const useTodos = () => {
-  const { currentDateString, currentDateYYYYMMDD } = useAppSelect(
-    (state) => state.calendar
-  );
+  const { currentDateString, currentDateYYYYMMDD: currentDateFormat } =
+    useAppSelect((state) => state.calendar);
   const { data, isLoading, isError, error, refetch } = useGetAllTodosQuery({
-    date: dayjs(currentDateString).format("YYYY-MM"),
+    date: currentDateFormat,
   });
 
   return {

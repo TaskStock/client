@@ -1,4 +1,5 @@
-import { DateString } from "../../../@types/calendar";
+import dayjs from "dayjs";
+import { DateString, DateStringYYYYMM } from "../../../@types/calendar";
 import { TodoApiBuilder } from "./todo";
 
 interface getAllTodosResponse {
@@ -19,7 +20,9 @@ export const getAllTodosQuery = (builder: TodoApiBuilder) =>
   builder.query<getAllTodosResponse, { date: DateString }>({
     query: (body) => {
       return {
-        url: `/todo/onemonth?date=${body.date}`,
+        // FIXME. 그런데 이렇게 보낼때. 1월 1일 오전 9시 이전이라면.
+        // 이게 그 전의 달의 데이터를 가져오지 않겠는가?
+        url: `/todo/onemonth?date=${dayjs(body.date).format("YYYY-MM")}`,
         method: "GET",
       };
     },
