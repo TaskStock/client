@@ -16,6 +16,7 @@ import CheckBox from "../../atoms/CheckBox";
 import FlexBox from "../../atoms/FlexBox";
 import Icons from "../../atoms/Icons";
 import Text from "../../atoms/Text";
+import useTodos from "../../../hooks/useTodos";
 
 const THEME_CONSTANTS = {
   dark: {
@@ -139,6 +140,8 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
     });
   };
 
+  const { getAllTodoQueryArg } = useTodos();
+
   const toggleTodoCheck = () => {
     toggleCheckTodo({
       todo_id: todo.todo_id,
@@ -146,7 +149,7 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
       todo_date: todo.date,
       level: todo.level,
       queryArgs: {
-        current_date: currentDateFormat,
+        current_date: getAllTodoQueryArg.date,
         graph_before_date: oneMonthBeforeQueryString,
         graph_today_date: todayQueryString,
       },
@@ -241,7 +244,7 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
                       value: todo.level * 1000,
                       checked: todo.check,
                       queryArgs: {
-                        date: currentDateFormat,
+                        date: getAllTodoQueryArg.date,
                         graph_before_date: oneMonthBeforeQueryString,
                         graph_today_date: todayQueryString,
                       },

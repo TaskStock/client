@@ -8,6 +8,7 @@ import { useAddSimpleTodoMutation } from "../../../store/modules/todo/todo";
 import { useState } from "react";
 import { useAppSelect } from "../../../store/configureStore.hooks";
 import Text from "../../atoms/Text";
+import useTodos from "../../../hooks/useTodos";
 
 const AddTodoInput = styled.TextInput`
   background-color: ${({ theme }) => theme.box};
@@ -25,8 +26,8 @@ const AddTodoItem = () => {
   const [addSimpleTodo, result] = useAddSimpleTodoMutation();
   const [error, setError] = useState<string | null>();
 
-  const { currentDateString, currentDateYYYYMMDD: currentDateFormat } =
-    useAppSelect((state) => state.calendar);
+  const { currentDateString } = useAppSelect((state) => state.calendar);
+  const { getAllTodoQueryArg } = useTodos();
 
   const theme = useTheme();
 
@@ -51,7 +52,7 @@ const AddTodoItem = () => {
       content,
       add_date: currentDateString,
       queryArgs: {
-        date: currentDateFormat,
+        date: getAllTodoQueryArg.date,
       },
     });
 

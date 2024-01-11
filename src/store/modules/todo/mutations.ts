@@ -11,6 +11,7 @@ import {
 import { chartApi } from "../chart";
 import { Value } from "../../../@types/chart";
 import { DateString, IsoString } from "../../../@types/calendar";
+import { useGetAllTodosQueryDate } from "./queries";
 
 const upValue = 1000;
 const downValue = 1000;
@@ -24,11 +25,11 @@ export const addSimpleTodoMutation = (builder: TodoApiBuilder) =>
       content: string;
       add_date: string;
       queryArgs: {
-        date: DateString;
+        date: useGetAllTodosQueryDate;
       };
     }
   >({
-    query: (body: { content: string; add_date: string }) => {
+    query: (body) => {
       const simpleTodoForm: AddTodoForm = {
         todo_id: null,
         content: body.content,
@@ -108,7 +109,7 @@ export const addTodoMutation = (builder: TodoApiBuilder) =>
       form: AddTodoForm;
       add_date: IsoString;
       queryArgs: {
-        date: DateString;
+        date: useGetAllTodosQueryDate;
         graph_before_date: DateString;
         graph_today_date: DateString;
       };
@@ -202,13 +203,13 @@ export const addTodoMutation = (builder: TodoApiBuilder) =>
     },
 
     // 만약에 todo add시에 반복이 있는경우에는, 캐싱을 다 지워주어야 한다.
-    invalidatesTags: (result, error, body) => {
-      if (!error && body.form.repeat_day !== "0000000") {
-        return ["Todos"];
-      } else {
-        return [];
-      }
-    },
+    // invalidatesTags: (result, error, body) => {
+    //   if (!error && body.form.repeat_day !== "0000000") {
+    //     return ["Todos"];
+    //   } else {
+    //     return [];
+    //   }
+    // },
   });
 
 export const editTodoMutation = (builder: TodoApiBuilder) =>
@@ -220,7 +221,7 @@ export const editTodoMutation = (builder: TodoApiBuilder) =>
       todo_checked: boolean;
       original_level?: number;
       queryArgs: {
-        date: DateString;
+        date: useGetAllTodosQueryDate;
         graph_before_date: DateString;
         graph_today_date: DateString;
       };
@@ -306,14 +307,6 @@ export const editTodoMutation = (builder: TodoApiBuilder) =>
         patchUpdateTodo.undo();
       }
     },
-
-    invalidatesTags: (result, error, body) => {
-      if (!error && body.form.repeat_day !== "0000000") {
-        return ["Todos"];
-      } else {
-        return [];
-      }
-    },
   });
 
 export const toggleTodoMutation = (builder: TodoApiBuilder) =>
@@ -324,7 +317,7 @@ export const toggleTodoMutation = (builder: TodoApiBuilder) =>
       todo_date: string;
       level: number;
       queryArgs: {
-        current_date: DateString;
+        current_date: useGetAllTodosQueryDate;
         graph_before_date: DateString;
         graph_today_date: DateString;
       };
@@ -400,7 +393,7 @@ export const deleteTodoMutation = (builder: TodoApiBuilder) =>
       value: number;
       checked: boolean;
       queryArgs: {
-        date: DateString;
+        date: useGetAllTodosQueryDate;
         graph_before_date: DateString;
         graph_today_date: DateString;
       };
@@ -482,7 +475,7 @@ export const changeTodoOrderMutation = (builder: TodoApiBuilder) =>
       }[];
       requested_date_full: IsoString;
       queryArgs: {
-        requested_date: DateString;
+        requested_date: useGetAllTodosQueryDate;
       };
     }
   >({
@@ -570,7 +563,7 @@ export const changeTodoOrderMutation = (builder: TodoApiBuilder) =>
         await queryFulfilled;
       } catch (error) {
         console.log(error);
-        // dispatchChangeTodoIndex.undo();
+        dispatchChangeTodoIndex.undo();
       }
     },
   });

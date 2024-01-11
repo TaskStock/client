@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import { DateString, DateStringYYYYMM } from "../../../@types/calendar";
-import { TodoApiBuilder } from "./todo";
+import { TodoApiBuilder, useGetAllTodosQuery } from "./todo";
 
 interface getAllTodosResponse {
   todos: {
@@ -16,13 +16,22 @@ interface getAllTodosResponse {
   }[];
 }
 
+export interface useGetAllTodosQueryArg {
+  date: DateString;
+}
+
+export type useGetAllTodosQueryDate = Pick<
+  useGetAllTodosQueryArg,
+  "date"
+>["date"];
+
 export const getAllTodosQuery = (builder: TodoApiBuilder) =>
-  builder.query<getAllTodosResponse, { date: DateString }>({
+  builder.query<getAllTodosResponse, useGetAllTodosQueryArg>({
     query: (body) => {
       return {
         // FIXME. 그런데 이렇게 보낼때. 1월 1일 오전 9시 이전이라면.
         // 이게 그 전의 달의 데이터를 가져오지 않겠는가?
-        url: `/todo/onemonth?date=${dayjs(body.date).format("YYYY-MM")}`,
+        url: `/todo/onemonth?date=${body.date}`,
         method: "GET",
       };
     },
@@ -30,6 +39,5 @@ export const getAllTodosQuery = (builder: TodoApiBuilder) =>
 
     async onCacheEntryAdded(arg, { cacheDataLoaded, dispatch }) {
       const response = await cacheDataLoaded;
-      console.log("cacheEntry", response);
     },
   });

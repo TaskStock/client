@@ -179,8 +179,6 @@ export default function HomeCalendar({
     return extractDatesWithTodos(todos);
   }, [todos]);
 
-  console.log(hasTodoDates);
-
   const renderItem = ({
     item,
     index,
