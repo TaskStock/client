@@ -12,12 +12,16 @@ import FlexBox from "../../atoms/FlexBox";
 import { LinearGradient } from "expo-linear-gradient";
 import useUser from "../../../hooks/useUser";
 import { useAppSelect } from "../../../store/configureStore.hooks";
+import WagmeChart from "../WagmeChart";
 
 const Container = styled.View`
   width: 100%;
   flex: 1;
   border-radius: ${spacing.offset}px;
   margin-top: ${spacing.padding}px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   /* background-color: ${(props) => props.theme.box}; */
 `;
 
@@ -38,6 +42,16 @@ const Divider = styled.View`
   background-color: ${({ theme }) => theme.textDimmer};
 `;
 
+const ContainerSize = React.createContext({
+  width: 0,
+  height: 0,
+});
+
+export const sizeContext = React.createContext({
+  width: 0,
+  height: 0,
+});
+
 const GraphContainer = ({ myData }) => {
   const [isCandleStick, setIsCandleStick] = React.useState(true);
 
@@ -52,6 +66,11 @@ const GraphContainer = ({ myData }) => {
       : ["rgba(255, 255, 255, 0.00)", "rgba(255, 255, 255, 0.47)", "#FFFFFF"];
 
   const { user, error, loading } = useUser();
+
+  const [size, setSize] = React.useState({
+    width: 0,
+    height: 0,
+  });
 
   return (
     <View
@@ -101,7 +120,16 @@ const GraphContainer = ({ myData }) => {
           </IconBox>
         </IconContainer>
       </FlexBox>
-      <Container>
+      <Container
+        onLayout={(e) => {
+          const { width, height } = e.nativeEvent.layout;
+          console.log("graph container layout");
+
+          if (size.width !== width || size.height !== height) {
+            setSize({ width, height });
+          }
+        }}
+      >
         <LinearGradient
           colors={gradient}
           start={{ x: 0, y: 0 }}
@@ -114,7 +142,9 @@ const GraphContainer = ({ myData }) => {
             // marginTop: spacing.padding,
           }}
         ></LinearGradient>
-        <HomeChart isCandleStick={isCandleStick} />
+        <sizeContext.Provider value={size}>
+          <HomeChart isCandleStick={isCandleStick} />
+        </sizeContext.Provider>
       </Container>
     </View>
   );

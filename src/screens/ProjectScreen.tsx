@@ -1,7 +1,7 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import React from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { Pressable, Text, TouchableOpacity, View } from "react-native";
 import { checkStorage } from "../utils/asyncStorage";
+import { VictoryAxis, VictoryCandlestick, VictoryChart } from "victory-native";
 
 const ProjectScreen = () => {
   return (

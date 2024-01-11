@@ -8,3 +8,11 @@ export interface Value {
   high: number;
   combo: number;
 }
+
+export interface WagmiData {
+  timestamp: number;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+}
