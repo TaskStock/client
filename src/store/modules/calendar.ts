@@ -11,8 +11,8 @@ interface initialState {
   itemHeight: number;
   weeksOfMonth: number;
   datesOfMonth: dayjs.Dayjs[];
-  oneMonthBeforeQueryString: DateString;
-  todayQueryString: DateString;
+  // oneMonthBeforeQueryString: DateString;
+  // todayQueryString: DateString;
   currentDateString: IsoString;
   currentDateYYYYMMDD: DateString;
 }
@@ -26,15 +26,15 @@ const initialState: initialState = {
   // 얘는 로컬로 보여주도록 수정해야한다.
   datesOfMonth: calculateDatesOfMonth(dayjs().toISOString()),
   // 얘는 로컬로 보내주기로 되어있었음.
-  oneMonthBeforeQueryString: dayjs()
-    .local()
-    .subtract(1, "month")
-    .format("YYYY-MM-DD") as DateString,
-  // 얘는 로컬로 보내주기로 되어있었음.
-  todayQueryString: dayjs()
-    .local()
-    .add(1, "month")
-    .format("YYYY-MM-DD") as DateString,
+  // oneMonthBeforeQueryString: dayjs()
+  //   .local()
+  //   .subtract(29, "day")
+  //   .format("YYYY-MM-DD") as DateString,
+  // // 얘는 로컬로 보내주기로 되어있었음.
+  // todayQueryString: dayjs()
+  //   .local()
+  //   .add(1, "day")
+  //   .format("YYYY-MM-DD") as DateString,
   // 얘는 받아온 todoList와 value date의 기준이 되는 친구. 무조건 UTC.
   currentDateString: dayjs().toISOString() as IsoString,
   currentDateYYYYMMDD: dayjs().format("YYYY-MM-DD") as DateString,

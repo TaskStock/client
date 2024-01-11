@@ -12,7 +12,6 @@ import {
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
 import FlexBox from "../atoms/FlexBox";
 import { DateString, IsoString } from "../../@types/calendar";
-import { useGetAllTodosQuery } from "../../store/modules/todo/todo";
 import { checkIsSameLocalDay } from "../../utils/checkIsSameLocalDay";
 import useTodos from "../../hooks/useTodos";
 import { Todo } from "../../@types/todo";
@@ -178,8 +177,6 @@ export default function HomeCalendar({
 
     return extractDatesWithTodos(todos);
   }, [todos]);
-
-  console.log(hasTodoDates);
 
   const renderItem = ({
     item,

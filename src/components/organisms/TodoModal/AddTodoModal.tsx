@@ -29,6 +29,8 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import dayjs from "dayjs";
 import { getNewRepeatDay } from "../../../utils/getNewRepeatDay";
 import { IsoString } from "../../../@types/calendar";
+import useTodos from "../../../hooks/useTodos";
+import useValue from "../../../hooks/useValue";
 
 const AddTodoOverlay = styled.Pressable`
   position: absolute;
@@ -161,11 +163,15 @@ export default function AddTodoModal() {
 
   const value = addTodoForm.level * 1000;
 
+  const { currentDateYYYYMMDD: currentDateFormat } = useAppSelect(
+    (state) => state.calendar
+  );
+
   const {
-    oneMonthBeforeQueryString,
-    todayQueryString,
-    currentDateYYYYMMDD: currentDateFormat,
-  } = useAppSelect((state) => state.calendar);
+    getValuesQueryArgs: { startDate, endDate },
+  } = useValue();
+
+  const { getAllTodoQueryArg } = useTodos();
 
   const [addTodo, addTodoResult] = useAddTodoMutation();
   const [editTodo, editTodoResult] = useEditTodoMutation();
@@ -180,9 +186,9 @@ export default function AddTodoModal() {
         // 그러므로, isEditMode일때는 addTodoForm.checked가 항상 true이다.
         todo_checked: addTodoForm.checked!,
         queryArgs: {
-          date: currentDateFormat,
-          graph_before_date: oneMonthBeforeQueryString,
-          graph_today_date: todayQueryString,
+          date: getAllTodoQueryArg.date,
+          graph_before_date: startDate,
+          graph_today_date: endDate,
         },
       });
     } else {
@@ -190,9 +196,9 @@ export default function AddTodoModal() {
         form: addTodoForm,
         add_date: dayjs().toISOString() as IsoString,
         queryArgs: {
-          date: currentDateFormat,
-          graph_before_date: oneMonthBeforeQueryString,
-          graph_today_date: todayQueryString,
+          date: getAllTodoQueryArg.date,
+          graph_before_date: startDate,
+          graph_today_date: endDate,
         },
       });
     }

@@ -15,7 +15,6 @@ import dayjs from "dayjs";
 import {
   openAddTodoModal,
   setTodoDrawerPosition,
-  useGetAllTodosQuery,
 } from "../../../store/modules/todo/todo";
 import FlexBox from "../../atoms/FlexBox";
 import Icons from "../../atoms/Icons";
@@ -24,8 +23,6 @@ import Margin from "../../atoms/Margin";
 import AddTodoItem from "../../organisms/Home/AddTodoItem";
 import LoadingSpinner from "../../atoms/LoadingSpinner";
 import { setTabIndex } from "../../../store/modules/home";
-import { DateString } from "../../../@types/calendar";
-import DraggableFlatList from "react-native-draggable-flatlist";
 import DraggableTodoList from "../../organisms/Home/DraggableTodoList";
 import useTodos from "../../../hooks/useTodos";
 

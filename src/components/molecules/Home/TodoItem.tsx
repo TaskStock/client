@@ -16,6 +16,8 @@ import CheckBox from "../../atoms/CheckBox";
 import FlexBox from "../../atoms/FlexBox";
 import Icons from "../../atoms/Icons";
 import Text from "../../atoms/Text";
+import useTodos from "../../../hooks/useTodos";
+import useValue from "../../../hooks/useValue";
 
 const THEME_CONSTANTS = {
   dark: {
@@ -114,9 +116,9 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
   const MeasurePositionTriggerRef = React.useRef(false);
   const itemRef = React.useRef<View | null>(null);
 
-  const { oneMonthBeforeQueryString, todayQueryString } = useAppSelect(
-    (state) => state.calendar
-  );
+  const {
+    getValuesQueryArgs: { startDate, endDate },
+  } = useValue();
 
   useEffect(() => {
     MeasurePositionTriggerRef.current = false;
@@ -139,6 +141,8 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
     });
   };
 
+  const { getAllTodoQueryArg } = useTodos();
+
   const toggleTodoCheck = () => {
     toggleCheckTodo({
       todo_id: todo.todo_id,
@@ -146,9 +150,9 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
       todo_date: todo.date,
       level: todo.level,
       queryArgs: {
-        current_date: currentDateFormat,
-        graph_before_date: oneMonthBeforeQueryString,
-        graph_today_date: todayQueryString,
+        current_date: getAllTodoQueryArg.date,
+        graph_before_date: startDate,
+        graph_today_date: endDate,
       },
     });
   };
@@ -241,9 +245,9 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
                       value: todo.level * 1000,
                       checked: todo.check,
                       queryArgs: {
-                        date: currentDateFormat,
-                        graph_before_date: oneMonthBeforeQueryString,
-                        graph_today_date: todayQueryString,
+                        date: getAllTodoQueryArg.date,
+                        graph_before_date: startDate,
+                        graph_today_date: endDate,
                       },
                     });
                   }}
