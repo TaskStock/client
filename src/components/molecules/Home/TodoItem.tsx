@@ -253,14 +253,7 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
                   </Text>
                 </TodoModalItem>
                 <TodoModalItem isSelected={false} onPress={() => {}}>
-                  <Text
-                    size="md"
-                    color={
-                      styledTheme.name == "gray"
-                        ? styledTheme.textReverse
-                        : styledTheme.text
-                    }
-                  >
+                  <Text size="md" color={styledTheme.text}>
                     내일하기
                   </Text>
                 </TodoModalItem>
