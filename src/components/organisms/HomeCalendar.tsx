@@ -11,7 +11,11 @@ import {
 } from "../../store/modules/calendar";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
 import FlexBox from "../atoms/FlexBox";
-import { IsoString } from "../../@types/calendar";
+import { DateString, IsoString } from "../../@types/calendar";
+import { useGetAllTodosQuery } from "../../store/modules/todo/todo";
+import { checkIsSameLocalDay } from "../../utils/checkIsSameLocalDay";
+import useTodos from "../../hooks/useTodos";
+import { Todo } from "../../@types/todo";
 
 const CalendarContainer = styled.View`
   border-radius: 20px;
@@ -24,9 +28,11 @@ const CalendarContainer = styled.View`
 
 const CalendarItemContainer = styled.View<{ size?: number }>`
   flex: 1;
-  display: flex;
-  justify-content: center;
+  /* display: flex; */
+  /* justify-content: center; */
   align-items: center;
+  /* border-width: 1px;
+  border-color: black; */
   width: ${({ size }) => (size ? size : 30)}px;
   height: ${({ size }) => (size ? size : 30)}px;
 `;
@@ -34,14 +40,23 @@ const CalendarItemContainer = styled.View<{ size?: number }>`
 const CalendarItemInner = styled.View<{
   bgColor?: string;
 }>`
-  width: ${useResponsiveFontSize(40)}px;
-  height: ${useResponsiveFontSize(40)}px;
-  border-radius: ${useResponsiveFontSize(40 / 2)}px;
+  width: ${useResponsiveFontSize(35)}px;
+  height: ${useResponsiveFontSize(35)}px;
+  border-radius: ${useResponsiveFontSize(35 / 2)}px;
   background-color: ${({ bgColor }) => (bgColor ? bgColor : "none")};
 
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+
+const CalendarItemDot = styled.View`
+  position: absolute;
+  bottom: ${useResponsiveFontSize(4)}px;
+  width: ${useResponsiveFontSize(4)}px;
+  height: ${useResponsiveFontSize(4)}px;
+  border-radius: ${useResponsiveFontSize(2)}px;
+  background-color: ${({ theme }) => theme.palette.red};
 `;
 
 const CalendarItemText = styled.Text<{
@@ -84,10 +99,12 @@ const CalendarItem = memo(
     item,
     currentDate,
     onPress,
+    hasTodo,
   }: {
     item: dayjs.Dayjs;
     currentDate: dayjs.Dayjs;
     onPress: (item: dayjs.Dayjs) => void;
+    hasTodo: boolean;
   }) => {
     const itemHeight = useAppSelect((state) => state.calendar.itemHeight);
     const themeContext = useTheme();
@@ -122,6 +139,7 @@ const CalendarItem = memo(
             </CalendarItemText>
           </CalendarItemInner>
         </Pressable>
+        {!notThisMonth && hasTodo && <CalendarItemDot></CalendarItemDot>}
       </CalendarItemContainer>
     );
   }
@@ -132,6 +150,29 @@ export default function HomeCalendar({
 }: {
   currentDate: dayjs.Dayjs;
 }) {
+  const { data: todos } = useTodos();
+
+  const hasTodoDates: string[] = useMemo(() => {
+    function extractDatesWithTodos(todos: Todo[]): string[] {
+      const uniqueDatesSet = new Set<string>();
+
+      todos.forEach((todo) => {
+        if (todo.date && todo.date.trim() !== "") {
+          uniqueDatesSet.add(todo.date);
+        }
+      });
+
+      // Convert the Set to an array to get the final result
+      const uniqueDatesArray: string[] = Array.from(uniqueDatesSet);
+
+      return uniqueDatesArray;
+    }
+
+    return extractDatesWithTodos(todos);
+  }, [todos]);
+
+  console.log(hasTodoDates);
+
   const renderItem = ({
     item,
     index,
@@ -139,17 +180,25 @@ export default function HomeCalendar({
     item: dayjs.Dayjs;
     index: number;
   }) => {
+    // 얘는 렌더할때 필요한건가? ㄴㄴ 처음에 투두아이템을 받아왔을때 필요한것이다.
+    // 그리고 투두아이템이 바뀌거나 했을때.
+
+    const hasTodo = hasTodoDates.some((date) => {
+      return checkIsSameLocalDay(date, item.toISOString());
+    });
+
     return (
       <CalendarItem
         item={item}
         currentDate={currentDate}
+        hasTodo={hasTodo}
         onPress={(item: dayjs.Dayjs) => {
           dispatch(setCurrentDateString(item.toISOString() as IsoString));
         }}
       />
     );
   };
-  const data = useAppSelect((state) => state.calendar.datesOfMonth);
+  const datesOfMonth = useAppSelect((state) => state.calendar.datesOfMonth);
   const dispatch = useDispatch();
 
   const onLayout = (event: LayoutChangeEvent) => {
@@ -167,7 +216,7 @@ export default function HomeCalendar({
       >
         <FlatList
           numColumns={7}
-          data={data}
+          data={datesOfMonth}
           keyExtractor={(item, index) => index.toString()}
           renderItem={renderItem}
           ListHeaderComponent={<ListHeaderComponent></ListHeaderComponent>}

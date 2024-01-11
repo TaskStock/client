@@ -102,7 +102,7 @@ export const addTodoMutation = (builder: TodoApiBuilder) =>
     },
     {
       form: AddTodoForm;
-      add_date: string;
+      add_date: IsoString;
       queryArgs: {
         date: DateString;
         graph_before_date: DateString;

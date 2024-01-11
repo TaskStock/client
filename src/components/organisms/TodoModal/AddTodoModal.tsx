@@ -28,6 +28,7 @@ import ValueSlider from "./ValueSlider";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import dayjs from "dayjs";
 import { getNewRepeatDay } from "../../../utils/getNewRepeatDay";
+import { IsoString } from "../../../@types/calendar";
 
 const AddTodoOverlay = styled.Pressable`
   position: absolute;
@@ -187,7 +188,7 @@ export default function AddTodoModal() {
     } else {
       addTodo({
         form: addTodoForm,
-        add_date: dayjs().toISOString(),
+        add_date: dayjs().toISOString() as IsoString,
         queryArgs: {
           date: currentDateFormat,
           graph_before_date: oneMonthBeforeQueryString,

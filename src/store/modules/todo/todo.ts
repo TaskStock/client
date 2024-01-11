@@ -89,12 +89,6 @@ const todoSlice = createSlice({
         repeat_end_date: null,
       };
     },
-
-    // FIXME: 만약 반복이 수정된 경우라면?
-    // 혹은 추가할때 반복이 된 경우라면?
-    // 그럼 캐싱을 다 해제해주어야 한다.
-
-    // 어디서? addTodo랑, editTodo 부분에서.
     openEditTodoModal(
       state,
       action: PayloadAction<{
