@@ -188,7 +188,7 @@ export default function ProjectItemList({
           name="plus"
           size={20}
           onPress={onPressAddProjectBtn}
-          color={theme.name === "dark" ? theme.text : theme.textDimmer}
+          color={theme.text}
           hitSlop={{
             top: 20,
             bottom: 20,

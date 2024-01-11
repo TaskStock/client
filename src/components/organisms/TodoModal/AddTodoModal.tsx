@@ -378,11 +378,7 @@ export default function AddTodoModal() {
                           <Switch
                             onValueChange={toggleIsEndRepeat}
                             value={isRepeatDateModalOpen}
-                            thumbColor={
-                              theme.name == "gray"
-                                ? theme.palette.neutral500_dark
-                                : theme.textReverse
-                            }
+                            thumbColor={theme.textReverse}
                             trackColor={{
                               false: theme.palette.neutral600_gray,
                               true:
