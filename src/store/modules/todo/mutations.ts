@@ -8,10 +8,14 @@ import {
   checkIsSameLocalDay,
   checkIsWithInOneDay,
 } from "../../../utils/checkIsSameLocalDay";
-import { chartApi } from "../chart";
+import {
+  chartApi,
+  useGetValuesQueryEndDate,
+  useGetValuesQueryStartDate,
+} from "../chart";
 import { Value } from "../../../@types/chart";
 import { DateString, IsoString } from "../../../@types/calendar";
-import { useGetAllTodosQueryDate } from "./queries";
+import { useGetAllTodosQueryArg, useGetAllTodosQueryDate } from "./queries";
 
 const upValue = 1000;
 const downValue = 1000;
@@ -110,8 +114,8 @@ export const addTodoMutation = (builder: TodoApiBuilder) =>
       add_date: IsoString;
       queryArgs: {
         date: useGetAllTodosQueryDate;
-        graph_before_date: DateString;
-        graph_today_date: DateString;
+        graph_before_date: useGetValuesQueryStartDate;
+        graph_today_date: useGetValuesQueryEndDate;
       };
     }
   >({
@@ -222,8 +226,8 @@ export const editTodoMutation = (builder: TodoApiBuilder) =>
       original_level?: number;
       queryArgs: {
         date: useGetAllTodosQueryDate;
-        graph_before_date: DateString;
-        graph_today_date: DateString;
+        graph_before_date: useGetValuesQueryStartDate;
+        graph_today_date: useGetValuesQueryEndDate;
       };
     }
   >({
@@ -318,8 +322,8 @@ export const toggleTodoMutation = (builder: TodoApiBuilder) =>
       level: number;
       queryArgs: {
         current_date: useGetAllTodosQueryDate;
-        graph_before_date: DateString;
-        graph_today_date: DateString;
+        graph_before_date: useGetValuesQueryStartDate;
+        graph_today_date: useGetValuesQueryEndDate;
       };
     }) => {
       return {
@@ -394,8 +398,8 @@ export const deleteTodoMutation = (builder: TodoApiBuilder) =>
       checked: boolean;
       queryArgs: {
         date: useGetAllTodosQueryDate;
-        graph_before_date: DateString;
-        graph_today_date: DateString;
+        graph_before_date: useGetValuesQueryStartDate;
+        graph_today_date: useGetValuesQueryEndDate;
       };
     }
   >({

@@ -30,6 +30,7 @@ import dayjs from "dayjs";
 import { getNewRepeatDay } from "../../../utils/getNewRepeatDay";
 import { IsoString } from "../../../@types/calendar";
 import useTodos from "../../../hooks/useTodos";
+import useValue from "../../../hooks/useValue";
 
 const AddTodoOverlay = styled.Pressable`
   position: absolute;
@@ -162,11 +163,13 @@ export default function AddTodoModal() {
 
   const value = addTodoForm.level * 1000;
 
+  const { currentDateYYYYMMDD: currentDateFormat } = useAppSelect(
+    (state) => state.calendar
+  );
+
   const {
-    oneMonthBeforeQueryString,
-    todayQueryString,
-    currentDateYYYYMMDD: currentDateFormat,
-  } = useAppSelect((state) => state.calendar);
+    getValuesQueryArgs: { startDate, endDate },
+  } = useValue();
 
   const { getAllTodoQueryArg } = useTodos();
 
@@ -184,8 +187,8 @@ export default function AddTodoModal() {
         todo_checked: addTodoForm.checked!,
         queryArgs: {
           date: getAllTodoQueryArg.date,
-          graph_before_date: oneMonthBeforeQueryString,
-          graph_today_date: todayQueryString,
+          graph_before_date: startDate,
+          graph_today_date: endDate,
         },
       });
     } else {
@@ -194,8 +197,8 @@ export default function AddTodoModal() {
         add_date: dayjs().toISOString() as IsoString,
         queryArgs: {
           date: getAllTodoQueryArg.date,
-          graph_before_date: oneMonthBeforeQueryString,
-          graph_today_date: todayQueryString,
+          graph_before_date: startDate,
+          graph_today_date: endDate,
         },
       });
     }

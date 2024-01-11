@@ -9,10 +9,10 @@ import Text from "../atoms/Text";
 import CandleStickValueChart from "./CandleStickValueChart";
 import LineValueChart from "./LineValueChart";
 import { createMockData } from "../../utils/createMockData";
-import { useGetValuesQuery } from "../../store/modules/chart";
 import CenterLayout from "../atoms/CenterLayout";
 import dayjs from "dayjs";
 import { useAppSelect } from "../../store/configureStore.hooks";
+import useValue from "../../hooks/useValue";
 
 const Container = styled.View`
   width: 100%;
@@ -198,23 +198,9 @@ function HomeChart({ isCandleStick }: { isCandleStick: boolean }) {
     height: number;
   } | null>(null);
 
-  const { oneMonthBeforeQueryString, todayQueryString } = useAppSelect(
-    (state) => state.calendar
-  );
+  const { data, isLoading, isError, error, refetch } = useValue();
 
-  const {
-    data: responseData,
-    isLoading: loading,
-    error,
-    refetch,
-  } = useGetValuesQuery({
-    startDate: oneMonthBeforeQueryString,
-    endDate: todayQueryString,
-  });
-
-  const data = responseData?.values || [];
-
-  if (error) console.log(error);
+  if (isError) console.log(error);
 
   return (
     <Container>
@@ -227,7 +213,7 @@ function HomeChart({ isCandleStick }: { isCandleStick: boolean }) {
           });
         }}
       >
-        {containerSize && !loading ? (
+        {containerSize && !isLoading ? (
           !error ? (
             isCandleStick ? (
               <CandleStickValueChart
