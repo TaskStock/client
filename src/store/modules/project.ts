@@ -1,6 +1,7 @@
 import { LOCAL_API_HOST } from "@env";
 import { createSlice } from "@reduxjs/toolkit";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query";
+import { myFetchFunction } from "../myFetchFunction";
 
 interface Project {
   id: string;
@@ -24,12 +25,32 @@ const initialState: InitialState = {
   error: null,
 };
 
-const projectApi = createApi({
+export const projectApi = createApi({
   reducerPath: "projectApi",
-  baseQuery: fetchBaseQuery({
-    baseUrl: `${LOCAL_API_HOST}`,
+  baseQuery: myFetchFunction("df"),
+  endpoints: (builder) => ({
+    getAllProjects: builder.query<Project[], void>({
+      query: () => ({
+        url: "/project",
+        method: "GET",
+      }),
+    }),
+
+    addProject: builder.mutation<Project, { title: string }>({
+      query: (body) => ({
+        url: "/project",
+        method: "POST",
+        body,
+      }),
+    }),
+
+    deleteProject: builder.mutation<Project, { id: string }>({
+      query: (body) => ({
+        url: `/project/${body.id}`,
+        method: "DELETE",
+      }),
+    }),
   }),
-  endpoints: (builder) => ({}),
 });
 
 const projectSlice = createSlice({
