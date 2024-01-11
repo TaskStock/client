@@ -144,7 +144,7 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
       todo_id: todo.todo_id,
       check: !todo.check,
       todo_date: todo.date,
-      value: todo.level * 1000,
+      level: todo.level,
       queryArgs: {
         current_date: currentDateFormat,
         graph_before_date: oneMonthBeforeQueryString,

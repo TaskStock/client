@@ -6,10 +6,16 @@ import { TodoApiBuilder, closeTodoModal, todoApi } from "./todo";
 import {
   checkIsLocalToday,
   checkIsSameLocalDay,
+  check,
+  checkIsWithInOneDayIsWithInOneDay,
+  checkIsWithInOneDay,
 } from "../../../utils/checkIsSameLocalDay";
 import { chartApi } from "../chart";
 import { Value } from "../../../@types/chart";
 import { DateString, IsoString } from "../../../@types/calendar";
+
+const upValue = 1000;
+const downValue = 1000;
 
 export const addSimpleTodoMutation = (builder: TodoApiBuilder) =>
   builder.mutation<
@@ -153,7 +159,7 @@ export const addTodoMutation = (builder: TodoApiBuilder) =>
             },
             ({ values }) => {
               const index = values.findIndex((value) => {
-                return checkIsSameLocalDay(value.date, body.add_date);
+                return checkIsWithInOneDay(value.date, body.add_date);
               });
 
               if (index === -1) {
@@ -161,10 +167,8 @@ export const addTodoMutation = (builder: TodoApiBuilder) =>
                 return;
               }
 
-              const value = body.form.level * 1000;
-
-              values[index].high += value;
-              values[index].low -= value;
+              values[index].high += body.form.level * upValue;
+              values[index].low -= body.form.level * downValue;
             }
           )
         );
@@ -267,21 +271,14 @@ export const editTodoMutation = (builder: TodoApiBuilder) =>
             (draft: { values: Value[] }) => {
               console.log("editTodo update graph value");
 
-              console.log(body.original_level);
-
               const index = draft.values.findIndex((value) => {
-                return checkIsSameLocalDay(value.date, body.todo_date);
+                return checkIsWithInOneDay(value.date, body.todo_date);
               });
 
               if (index === -1) {
                 console.log("editTodo : no value matches on todo");
                 return;
               }
-
-              // if (!body.original_level) {
-              //   console.log("no original level");
-              //   return;
-              // }
 
               if (body.original_level === undefined) {
                 console.log("original level is undefined");
@@ -291,11 +288,11 @@ export const editTodoMutation = (builder: TodoApiBuilder) =>
               const diffLevel = body.form.level - body.original_level;
 
               if (body.todo_checked != undefined && body.todo_checked == true) {
-                draft.values[index].end += diffLevel * 1000;
+                draft.values[index].end += diffLevel * upValue;
               }
 
-              draft.values[index].high += diffLevel * 1000;
-              draft.values[index].low -= diffLevel * 1000;
+              draft.values[index].high += diffLevel * upValue;
+              draft.values[index].low -= diffLevel * downValue;
             }
           )
         );
@@ -326,7 +323,7 @@ export const toggleTodoMutation = (builder: TodoApiBuilder) =>
       todo_id: number;
       check: boolean;
       todo_date: string;
-      value: number;
+      level: number;
       queryArgs: {
         current_date: DateString;
         graph_before_date: DateString;
@@ -367,7 +364,7 @@ export const toggleTodoMutation = (builder: TodoApiBuilder) =>
             },
             (draft: { values: Value[] }) => {
               const index = draft.values.findIndex((value) => {
-                return checkIsSameLocalDay(value.date, body.todo_date);
+                return checkIsWithInOneDay(value.date, body.todo_date);
               });
 
               if (index === -1) {
@@ -376,9 +373,9 @@ export const toggleTodoMutation = (builder: TodoApiBuilder) =>
               }
 
               if (body.check) {
-                draft.values[index].end += body.value;
+                draft.values[index].end += body.level * upValue;
               } else {
-                draft.values[index].end -= body.value;
+                draft.values[index].end -= body.level * downValue;
               }
             }
           )
@@ -444,7 +441,7 @@ export const deleteTodoMutation = (builder: TodoApiBuilder) =>
             },
             (draft: { values: Value[] }) => {
               const index = draft.values.findIndex((value) => {
-                return checkIsSameLocalDay(value.date, body.queryArgs.date);
+                return checkIsWithInOneDay(value.date, body.queryArgs.date);
               });
 
               if (index === -1) {

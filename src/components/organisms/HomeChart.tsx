@@ -216,6 +216,8 @@ function HomeChart({ isCandleStick }: { isCandleStick: boolean }) {
 
   console.log(data);
 
+  console.log(data);
+
   if (error) console.log(error);
 
   return (
