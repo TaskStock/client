@@ -17,7 +17,7 @@ interface getAllTodosResponse {
 }
 
 export interface useGetAllTodosQueryArg {
-  date: DateString;
+  date: DateStringYYYYMM;
 }
 
 export type useGetAllTodosQueryDate = Pick<

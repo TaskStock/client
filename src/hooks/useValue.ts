@@ -7,8 +7,7 @@ import {
 import { DateString } from "../@types/calendar";
 
 const useValue = () => {
-  const { oneMonthBeforeQueryString, todayQueryString, currentDateString } =
-    useAppSelect((state) => state.calendar);
+  const { currentDateString } = useAppSelect((state) => state.calendar);
 
   const getDates = () => {
     const startDate = dayjs()
