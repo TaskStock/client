@@ -106,6 +106,17 @@ const CalendarContainer = () => {
     useAppSelect((state) => state.calendar.currentDateString)
   );
 
+  const theme = useTheme();
+
+  const gradient =
+    theme.name === "dark"
+      ? [
+          "rgba(255, 255, 255, 0.00)",
+          "rgba(255, 255, 255, 0.09)",
+          "rgba(255, 255, 255, 0.20)",
+        ]
+      : ["rgba(255, 255, 255, 0.00)", "rgba(255, 255, 255, 0.47)", "#FFFFFF"];
+
   const dispatch = useAppDispatch();
 
   const subtract1Month = () => {
@@ -139,11 +150,7 @@ const CalendarContainer = () => {
       />
       <Container>
         <LinearGradient
-          colors={[
-            "rgba(255, 255, 255, 0.00)",
-            "rgba(255, 255, 255, 0.47)",
-            "#FFFFFF",
-          ]}
+          colors={gradient}
           start={{ x: 0, y: 0 }}
           end={{ x: 0, y: 1 }}
           style={{

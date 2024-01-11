@@ -70,6 +70,7 @@ const AddTodoItem = () => {
           type="entypo"
           name="circle-with-plus"
           size={28}
+          color={theme.text}
           onPress={() => {
             addTodo();
           }}
@@ -77,6 +78,9 @@ const AddTodoItem = () => {
         <AddTodoInput
           onSubmitEditing={() => {
             addTodo();
+          }}
+          style={{
+            color: theme.text,
           }}
           placeholderTextColor={theme.textDim}
           value={content}

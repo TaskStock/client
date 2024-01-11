@@ -45,7 +45,10 @@ const TodoModal = styled.View<{ position: { top: number; left: number } }>`
   padding: ${spacing.padding}px;
   z-index: 100;
   border-radius: 10px;
-  background-color: ${({ theme }) => theme.box};
+  background-color: ${({ theme }) =>
+    theme.name == "dark"
+      ? theme.palette.neutral500_dark
+      : theme.palette.neutral100_gray};
   flex-direction: column;
   gap: 10px;
   ${Platform.select({
@@ -62,6 +65,11 @@ const TodoModal = styled.View<{ position: { top: number; left: number } }>`
 `;
 const TodoModalItem = styled.TouchableOpacity<{ isSelected?: boolean }>`
   background-color: ${({ isSelected, theme }) => {
+    if (theme.name == "dark" && isSelected) {
+      return theme.palette.neutral700_gray;
+    } else if (theme.name == "dark") {
+      return theme.palette.neutral500_dark;
+    }
     if (isSelected) {
       return theme.text;
     } else {
@@ -233,8 +241,27 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
                     setIsModalOpen(!isModalOpen);
                   }}
                 >
-                  <Text size="md" color={styledTheme.textReverse}>
-                    수정
+                  <Text
+                    size="md"
+                    color={
+                      styledTheme.name == "gray"
+                        ? styledTheme.textReverse
+                        : styledTheme.text
+                    }
+                  >
+                    수정하기
+                  </Text>
+                </TodoModalItem>
+                <TodoModalItem isSelected={false} onPress={() => {}}>
+                  <Text
+                    size="md"
+                    color={
+                      styledTheme.name == "gray"
+                        ? styledTheme.textReverse
+                        : styledTheme.text
+                    }
+                  >
+                    내일하기
                   </Text>
                 </TodoModalItem>
                 <TodoModalItem
@@ -252,7 +279,7 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
                     });
                   }}
                 >
-                  <Text size="md">삭제</Text>
+                  <Text size="md">삭제하기</Text>
                 </TodoModalItem>
               </TodoModal>
             </ModalOverlay>
