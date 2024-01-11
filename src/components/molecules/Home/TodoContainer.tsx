@@ -27,6 +27,7 @@ import { setTabIndex } from "../../../store/modules/home";
 import { DateString } from "../../../@types/calendar";
 import DraggableFlatList from "react-native-draggable-flatlist";
 import DraggableTodoList from "../../organisms/Home/DraggableTodoList";
+import useTodos from "../../../hooks/useTodos";
 
 const DateContainer = styled.View`
   padding: ${spacing.small}px ${spacing.gutter}px 0;
@@ -49,11 +50,7 @@ const TodoContainer = () => {
 
   const dispatch = useAppDispatch();
 
-  const { data, isLoading, isError, error, refetch } = useGetAllTodosQuery({
-    date: dayjs(currentDateString).format("YYYY-MM"),
-  });
-
-  const todosData = data ? [...data.todos] : [];
+  const { data: todosData, error, isError, isLoading, refetch } = useTodos();
 
   if (error) {
     console.log(error);

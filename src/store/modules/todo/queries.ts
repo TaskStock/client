@@ -17,11 +17,16 @@ interface getAllTodosResponse {
 
 export const getAllTodosQuery = (builder: TodoApiBuilder) =>
   builder.query<getAllTodosResponse, { date: DateString }>({
-    query: (body: { date: string }) => {
+    query: (body) => {
       return {
         url: `/todo/onemonth?date=${body.date}`,
         method: "GET",
       };
     },
     providesTags: ["Todos"],
+
+    async onCacheEntryAdded(arg, { cacheDataLoaded, dispatch }) {
+      const response = await cacheDataLoaded;
+      console.log("cacheEntry", response);
+    },
   });
