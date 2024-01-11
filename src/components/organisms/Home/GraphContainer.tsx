@@ -10,6 +10,7 @@ import { WithLocalSvg } from "react-native-svg";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import FlexBox from "../../atoms/FlexBox";
 import { LinearGradient } from "expo-linear-gradient";
+import useUser from "../../../hooks/useUser";
 
 const Container = styled.View`
   width: 100%;
@@ -39,6 +40,8 @@ const Divider = styled.View`
 const GraphContainer = ({ myData }) => {
   const [isCandleStick, setIsCandleStick] = React.useState(true);
 
+  const { user, error, loading } = useUser();
+
   return (
     <View
       style={{
@@ -50,9 +53,9 @@ const GraphContainer = ({ myData }) => {
       <FlexBox alignItems="flex-end" justifyContent="space-between">
         <HomeUserInfo
           data={{
-            cumulative_value: 1000000,
-            value_month_ago: 1000000,
-            nickname: "김민수",
+            cumulative_value: user.cumulative_value,
+            value_month_ago: user.value_month_ago,
+            nickname: user.user_name,
           }}
         />
         <IconContainer>

@@ -14,6 +14,7 @@ import { startingTheme } from "./src/store/modules/theme";
 import { removeData } from "./src/utils/asyncStorage";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { checkAndRenewTokens } from "./src/utils/authUtils/tokenUtils";
+import { getUserInfoThunk } from "./src/store/modules/user";
 
 const THEME = {
   dark: {
@@ -41,6 +42,7 @@ export default function App() {
       dispatch(checkAndRenewTokens());
     }
   }, [dispatch, isLoggedIn]);
+
   // useEffect(() => {
   //   removeData("accessToken");
   //   removeData("refreshToken");

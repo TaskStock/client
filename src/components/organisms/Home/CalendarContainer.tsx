@@ -16,6 +16,7 @@ import Icons from "../../atoms/Icons";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import { LinearGradient } from "expo-linear-gradient";
 import { IsoString } from "../../../@types/calendar";
+import useUser from "../../../hooks/useUser";
 
 const clientHeight = Dimensions.get("window").height;
 
@@ -37,9 +38,11 @@ const DateInfo = ({
 }) => {
   const theme = useTheme();
 
+  const { user } = useUser();
+
   const data = {
-    cumulative_value: 100000,
-    value_month_ago: 10000,
+    cumulative_value: user.cumulative_value,
+    value_month_ago: user.value_month_ago,
   };
 
   const diff = data.cumulative_value - data.value_month_ago;
