@@ -5,7 +5,7 @@ export const checkValidEmail = (email) => {
 
 // 수정 필요
 export const checkValidPassword = (password) => {
-  const regex =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+  // 8자 이상이며, 적어도 하나의 숫자를 포함하는 정규표현식
+  const regex = /^(?=.*[0-9]).{8,}$/;
   return regex.test(password);
 };
