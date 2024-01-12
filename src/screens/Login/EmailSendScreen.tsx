@@ -28,6 +28,7 @@ const EmailSendScreen = ({ navigation }) => {
         navigation.navigate("EmailCheckCode", {
           email,
           codeId: responseData.codeId,
+          type: "register",
         });
       } else if (responseData.result === "fail") {
         setEmailAlert("이미 가입된 이메일입니다.");

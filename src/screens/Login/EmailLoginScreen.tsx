@@ -98,7 +98,7 @@ const EmailLoginScreen = ({ navigation }) => {
         <SubBtn
           text={"비밀번호 찾기"}
           onPress={() => {
-            navigation.navigate("FindPassword");
+            navigation.navigate("FindPwEmailSend");
           }}
         />
       </FlexBox>
