@@ -11,7 +11,7 @@ import SplashScreen from "./src/screens/Login/SplashScreen";
 import { useAppDispatch, useAppSelect } from "./src/store/configureStore.hooks";
 import { checkTokenExistence } from "./src/store/modules/auth";
 import { startingTheme } from "./src/store/modules/theme";
-import { removeData } from "./src/utils/asyncStorage";
+import { getData, removeData } from "./src/utils/asyncStorage";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { checkAndRenewTokens } from "./src/utils/authUtils/tokenUtils";
 import { getUserInfoThunk } from "./src/store/modules/user";
@@ -46,6 +46,9 @@ export default function App() {
   // useEffect(() => {
   //   removeData("accessToken");
   //   removeData("refreshToken");
+  //   removeData("accessExp");
+  //   removeData("refreshExp");
+  //   removeData("strategy");
   // }, []);
 
   // const [assets] = useAssets([require("./assets/splash.png")]);
