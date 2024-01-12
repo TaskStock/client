@@ -8,6 +8,7 @@ import { resetNavigation } from "../../utils/resetNavigation";
 import { logout } from "../../utils/authUtils/signInUtils";
 import { checkAndRenewTokens } from "../../utils/authUtils/tokenUtils";
 import { checkStorage } from "../../utils/asyncStorage";
+import { getAPIHost } from "../../utils/getAPIHost";
 
 const Container = styled.View`
   justify-content: center;
@@ -60,6 +61,7 @@ const SettingsHomeScreen = ({ navigation }) => {
       <Menu text="asyncStorage check" onPress={checkStorage} />
       <Menu text="redux check" onPress={checkRedux} />
       <Menu text="로그아웃" onPress={handleLogout} />
+      <Menu text="check api" onPress={getAPIHost} />
     </Container>
   );
 };
