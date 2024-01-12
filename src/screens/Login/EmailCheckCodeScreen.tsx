@@ -55,6 +55,7 @@ const EmailCheckCodeScreen = ({ route, navigation }) => {
     .map(() => createRef<TextInput>());
   const email = route.params.email;
   const codeId = route.params.codeId;
+  const type = route.params.type; // findPw, register
   const [alert, setAlert] = useState("");
   const [loading, setLoading] = useState(false);
   const theme = useTheme();
@@ -137,8 +138,10 @@ const EmailCheckCodeScreen = ({ route, navigation }) => {
 
     const res = await checkCode();
     setLoading(false);
-    if (res.result === "success") {
+    if (res.result === "success" && type === "register") {
       navigation.navigate("EmailRegister", { email });
+    } else if (res.result === "success" && type === "findPw") {
+      navigation.navigate("FindPwSetNewPw", { email });
     } else if (res.result === "fail") {
       setAlert("인증번호가 일치하지 않습니다.");
     } else {
