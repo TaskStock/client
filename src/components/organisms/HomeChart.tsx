@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { memo, useContext, useEffect, useState } from "react";
 
 import { Animated, Pressable } from "react-native";
 import styled, { ThemeContext } from "styled-components/native";
@@ -201,8 +201,6 @@ function HomeChart({ isCandleStick }: { isCandleStick: boolean }) {
 
   const { data, isLoading, isError, error, refetch } = useValue();
 
-  console.log(data);
-
   if (isError) console.log(error);
 
   return (
@@ -307,4 +305,4 @@ function HomeChart({ isCandleStick }: { isCandleStick: boolean }) {
   );
 }
 
-export default HomeChart;
+export default memo(HomeChart);

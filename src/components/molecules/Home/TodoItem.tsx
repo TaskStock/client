@@ -283,4 +283,4 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
   );
 };
 
-export default TodoItem;
+export default memo(TodoItem);

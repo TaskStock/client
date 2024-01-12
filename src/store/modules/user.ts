@@ -60,8 +60,6 @@ export const getUserInfoThunk = createAsyncThunk(
 
       console.log("getUserInfoThunk success");
 
-      console.log(data);
-
       return data;
     } catch (error) {
       console.log("getUserInfoThunk error");

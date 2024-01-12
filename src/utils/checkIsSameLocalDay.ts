@@ -17,14 +17,20 @@ function checkIsSameLocalDay(utcString1: string, utcString2: string): boolean {
   return localDt1.isSame(localDt2, "day");
 }
 
-function checkIsLocalToday(utcString: string): boolean {
+function checkIsLocalBetween6to6(utcString: string): boolean {
   // Parse UTC string into dayjs object
   const dt = dayjs.utc(utcString);
 
-  // Convert UTC datetime object to local datetime object
-  const localDt = dt.local();
+  const localDateStart = dayjs()
+    .local()
+    .set("hour", 6)
+    .set("minute", 0)
+    .set("second", 0)
+    .set("millisecond", 0);
 
-  return localDt.isSame(dayjs().local(), "day");
+  const localDateEnd = localDateStart.add(1, "day");
+
+  return dt.isAfter(localDateStart) && dt.isBefore(localDateEnd);
 }
 
 function checkIsSameLocalDayValueTodo(
@@ -57,7 +63,7 @@ function checkIsWithInOneDay(value_date: string, todo_date: string) {
 
 export {
   checkIsSameLocalDay,
-  checkIsLocalToday,
   checkIsSameLocalDayValueTodo,
   checkIsWithInOneDay,
+  checkIsLocalBetween6to6,
 };
