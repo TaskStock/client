@@ -13,6 +13,7 @@ import CenterLayout from "../atoms/CenterLayout";
 import dayjs from "dayjs";
 import { useAppSelect } from "../../store/configureStore.hooks";
 import useValue from "../../hooks/useValue";
+import WagmeChart from "./WagmiChart";
 
 const Container = styled.View`
   width: 100%;
@@ -200,6 +201,8 @@ function HomeChart({ isCandleStick }: { isCandleStick: boolean }) {
 
   const { data, isLoading, isError, error, refetch } = useValue();
 
+  console.log(data);
+
   if (isError) console.log(error);
 
   return (
@@ -216,13 +219,14 @@ function HomeChart({ isCandleStick }: { isCandleStick: boolean }) {
         {containerSize && !isLoading ? (
           !error ? (
             isCandleStick ? (
-              <CandleStickValueChart
-                height={containerSize.height}
-                width={containerSize.width}
-                data={data}
-                theme={themeContext}
-              ></CandleStickValueChart>
+              <WagmeChart></WagmeChart>
             ) : (
+              // <CandleStickValueChart
+              //   height={containerSize.height}
+              //   width={containerSize.width}
+              //   data={data}
+              //   theme={themeContext}
+              // ></CandleStickValueChart>
               <LineValueChart
                 height={containerSize.height}
                 width={containerSize.width}
