@@ -178,6 +178,9 @@ export const addTodoMutation = (builder: TodoApiBuilder) =>
           )
         );
       }
+
+      dispatch(closeTodoModal());
+
       try {
         const result = await queryFulfilled;
 
@@ -198,8 +201,6 @@ export const addTodoMutation = (builder: TodoApiBuilder) =>
             }
           )
         );
-
-        dispatch(closeTodoModal());
       } catch (error) {
         console.log(error);
         patchAddTodo.undo();
