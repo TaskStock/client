@@ -590,9 +590,11 @@ export const changeToNextDayTodoMutation = (builder: TodoApiBuilder) =>
   >({
     query: (body) => {
       return {
-        url: "/todo/nextday",
+        url: "/todo/tomorrow",
         method: "POST",
-        body,
+        body: {
+          todo_id: body.todo_id,
+        },
       };
     },
 
@@ -648,8 +650,8 @@ export const changeToNextDayTodoMutation = (builder: TodoApiBuilder) =>
         await queryFulfilled;
       } catch (error) {
         console.log(error);
-        // patchResult.undo();
-        // if (patchUpdateGraphValue) patchUpdateGraphValue.undo();
+        patchResult.undo();
+        if (patchUpdateGraphValue) patchUpdateGraphValue.undo();
       }
     },
   });

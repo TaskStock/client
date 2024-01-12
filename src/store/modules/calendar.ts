@@ -17,11 +17,8 @@ interface initialState {
 
 const initialState: initialState = {
   itemHeight: 0,
-  // 얘는 로컬로 보여주도록 수정해야한다.
   weeksOfMonth: calculateWeeksOfMonth(dayjs().toISOString()),
-  // 얘는 로컬로 보여주도록 수정해야한다.
   datesOfMonth: calculateDatesOfMonth(dayjs().toISOString()),
-  // 얘는 로컬로 보내주기로 되어있었음.
   currentDateString: dayjs().toISOString() as IsoString,
   currentDateYYYYMMDD: dayjs().format("YYYY-MM-DD") as DateString,
 };

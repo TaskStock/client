@@ -41,9 +41,9 @@ const ModalOverlay = styled.Pressable`
   height: 100%;
 `;
 
-const TodoModal = styled.View<{ position: { top: number; left: number } }>`
+const TodoModal = styled.View<{ position: { bottom: number; left: number } }>`
   position: absolute;
-  top: ${({ position }) => position.top}px;
+  top: ${({ position }) => position.bottom}px;
   right: ${useResponsiveFontSize(60)}px;
   padding: ${spacing.padding}px;
   z-index: 100;
@@ -287,7 +287,7 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
             >
               <TodoModal
                 position={{
-                  top: modalPosition.y,
+                  bottom: modalPosition.y,
                   left: modalPosition.x,
                 }}
               >
@@ -303,14 +303,17 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
                     수정하기
                   </Text>
                 </TodoModalItem>
-                <TodoModalItem
-                  isSelected={false}
-                  onPress={onPressChangeToNextDayTodo}
-                >
-                  <Text size="md" color={styledTheme.text}>
-                    내일하기
-                  </Text>
-                </TodoModalItem>
+                {!todo.check && (
+                  <TodoModalItem
+                    isSelected={false}
+                    onPress={onPressChangeToNextDayTodo}
+                  >
+                    <Text size="md" color={styledTheme.text}>
+                      내일하기
+                    </Text>
+                  </TodoModalItem>
+                )}
+
                 <TodoModalItem onPress={onPressDeleteTodo}>
                   <Text size="md">삭제하기</Text>
                 </TodoModalItem>
