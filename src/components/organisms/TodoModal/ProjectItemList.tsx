@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import { Pressable, ScrollView, TextInput, View } from "react-native";
 import { useDispatch } from "react-redux";
 import styled, { useTheme } from "styled-components/native";
@@ -27,9 +27,23 @@ const ProjectItem = styled.View<{ isSelected?: boolean }>`
   flex-direction: row;
   padding: 9px 20px;
   height: 36px;
+
   background-color: ${({ theme, isSelected }) =>
-    isSelected ? theme.mainBtnReversed : theme.mainBtnGray};
+    theme.name == "gray" && isSelected
+      ? theme.mainBtnReversed
+      : theme.mainBtnGray};
   border-radius: 20px;
+
+  border-color: ${({ theme, isSelected }) =>
+    theme.name == "dark" && isSelected ? theme.text : "none"};
+
+  border-width: ${({ isSelected }) => (isSelected ? "1px" : "0px")};
+`;
+
+const ProjectItemText = styled.Text<{ isSelected?: boolean }>`
+  font-size: ${useResponsiveFontSize(18)}px;
+  color: ${({ theme, isSelected }) =>
+    theme.name === "gray" && isSelected ? theme.textReverse : theme.text};
 `;
 
 const ProjectItemComponent = ({
@@ -43,18 +57,14 @@ const ProjectItemComponent = ({
 }) => {
   const theme = useTheme();
 
+  const systemTheme = useAppSelect((state) => state.theme.value);
+
   return (
     <Pressable onPress={onPress}>
       <ProjectItem isSelected={isSelected}>{children}</ProjectItem>
     </Pressable>
   );
 };
-
-const ProjectItemText = styled.Text<{ isSelected?: boolean }>`
-  font-size: ${useResponsiveFontSize(18)}px;
-  color: ${({ theme, isSelected }) =>
-    isSelected ? theme.textReverse : theme.text};
-`;
 
 export default function ProjectItemList({
   scrollViewRef,
@@ -71,6 +81,7 @@ export default function ProjectItemList({
   } = useProject();
 
   const dispatch = useDispatch();
+  const textInputRef = useRef<TextInput | null>(null);
 
   const addTodoForm = useAppSelect((state) => state.todo.addTodoForm);
 
@@ -81,6 +92,7 @@ export default function ProjectItemList({
     [addTodoForm]
   );
 
+  const theme = useTheme();
   const [projectContainerHeight, setProjectContainerHeight] = React.useState(0);
 
   const onLayoutProjectContainer = (e) => {
@@ -92,6 +104,13 @@ export default function ProjectItemList({
   const projectContainerRef = React.useRef<View>(null);
 
   const onPressAddProjectBtn = () => {
+    setTimeout(() => {
+      console.log(textInputRef.current);
+      if (textInputRef.current) {
+        textInputRef.current.focus();
+      }
+    }, 300);
+
     setIsAddProject((prev) => {
       return !prev;
     });
@@ -151,10 +170,12 @@ export default function ProjectItemList({
       {isAddProject && (
         <ProjectItemComponent>
           <TextInput
-            placeholder="프로젝트 이름을 입력해주세요."
+            ref={textInputRef}
+            cursorColor={theme.text}
             style={{
-              width: 180,
+              color: theme.text,
             }}
+            placeholderTextColor={theme.text}
             value={newProjectInput}
             onChange={onChangeNewProjectName}
             onSubmitEditing={fetchAddProject}
@@ -167,6 +188,7 @@ export default function ProjectItemList({
           name="plus"
           size={20}
           onPress={onPressAddProjectBtn}
+          color={theme.text}
           hitSlop={{
             top: 20,
             bottom: 20,

@@ -2,11 +2,11 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { createApi, EndpointBuilder } from "@reduxjs/toolkit/query/react";
 import dayjs from "dayjs";
 import { AddTodoForm } from "../../../@types/todo";
-import wrappedFetchBaseQuery from "../../fetchBaseQuery";
 import {
   addSimpleTodoMutation,
   addTodoMutation,
   changeTodoOrderMutation,
+  changeToNextDayTodoMutation,
   deleteTodoMutation,
   editTodoMutation,
   toggleTodoMutation,
@@ -14,6 +14,7 @@ import {
 import { QueryReturnValue } from "@reduxjs/toolkit/dist/query/baseQueryTypes";
 import { MaybePromise } from "@reduxjs/toolkit/dist/query/tsHelpers";
 import { getAllTodosQuery } from "./queries";
+import { myFetchFunction } from "../../myFetchFunction";
 
 interface InitialState {
   isTodoDrawerOpen: boolean;
@@ -46,7 +47,7 @@ export type TodoApiBuilder = EndpointBuilder<
 
 export const todoApi = createApi({
   reducerPath: "todoApi",
-  baseQuery: wrappedFetchBaseQuery,
+  baseQuery: myFetchFunction(``),
   tagTypes: ["Todos"],
   endpoints: (builder) => ({
     getAllTodos: getAllTodosQuery(builder),
@@ -56,6 +57,7 @@ export const todoApi = createApi({
     toggleTodo: toggleTodoMutation(builder),
     deleteTodo: deleteTodoMutation(builder),
     changeOrderTodo: changeTodoOrderMutation(builder),
+    changeToNextDayTodoMutation: changeToNextDayTodoMutation(builder),
   }),
 });
 
@@ -88,12 +90,6 @@ const todoSlice = createSlice({
         repeat_end_date: null,
       };
     },
-
-    // FIXME: 만약 반복이 수정된 경우라면?
-    // 혹은 추가할때 반복이 된 경우라면?
-    // 그럼 캐싱을 다 해제해주어야 한다.
-
-    // 어디서? addTodo랑, editTodo 부분에서.
     openEditTodoModal(
       state,
       action: PayloadAction<{
@@ -185,4 +181,5 @@ export const {
   useDeleteTodoMutation,
   useToggleTodoMutation,
   useChangeOrderTodoMutation,
+  useChangeToNextDayTodoMutationMutation,
 } = todoApi;

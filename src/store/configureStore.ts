@@ -6,11 +6,12 @@ import todoReducer, { todoApi } from "./modules/todo/todo";
 import { authReducer } from "./modules/auth";
 import projectReducer from "./modules/project";
 import homeReducer from "./modules/home";
-
+import userReducer from "./modules/user";
 const store = configureStore({
   reducer: {
     [chartApi.reducerPath]: chartApi.reducer,
     [todoApi.reducerPath]: todoApi.reducer,
+    user: userReducer,
     auth: authReducer,
     chart: chartReducer,
     home: homeReducer,

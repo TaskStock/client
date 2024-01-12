@@ -27,10 +27,12 @@ export const palette = {
 } as const;
 
 export const grayTheme = {
+  name: "gray",
   palette,
   text: palette.neutral700_gray,
   textDim: palette.neutral600_gray,
   textReverse: palette.neutral100_gray,
+  textDimReverse: palette.neutral300_dark,
   textDimmer: palette.neutral500_gray,
   background: palette.neutral300_gray,
   mainBtnGray: palette.neutral200_gray,
@@ -48,11 +50,13 @@ export const grayTheme = {
 };
 
 export const darkTheme = {
+  name: "dark",
   palette,
   text: palette.neutral100_dark,
   textDim: palette.neutral300_dark,
   textDimmer: palette.neutral200_dark,
   textReverse: palette.neutral500_dark,
+  textDimReverse: palette.neutral600_gray,
   background: palette.neutral500_dark,
   mainBtnGray: palette.neutral600_dark,
   mainBtnReversed: palette.neutral200_gray,

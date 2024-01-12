@@ -96,7 +96,7 @@ function CandleStickValueChart({
           y: [minY, maxY],
         }}
         animate={{
-          duration: 500,
+          duration: 1000,
         }}
         data={candleData}
         candleWidth={candleWidth}

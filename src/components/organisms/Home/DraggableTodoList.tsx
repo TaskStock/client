@@ -16,6 +16,7 @@ import { DateString } from "../../../@types/calendar";
 import { spacing } from "../../../constants/spacing";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import { checkIsSameLocalDay } from "../../../utils/checkIsSameLocalDay";
+import useTodos from "../../../hooks/useTodos";
 
 export default function DraggableTodoList({
   selectedProjectId,
@@ -27,16 +28,11 @@ export default function DraggableTodoList({
   const { currentDateYYYYMMDD: currentDateFormat, currentDateString } =
     useAppSelect((state) => state.calendar);
 
-  const { data } = useGetAllTodosQuery({
-    date: currentDateFormat as DateString,
-  });
+  const { data: todos, getAllTodoQueryArg } = useTodos();
 
-  const currentDayTodos =
-    data && data.todos
-      ? data.todos
-          .filter((todo) => checkIsSameLocalDay(todo.date, currentDateFormat))
-          .sort((a, b) => a.index - b.index)
-      : [];
+  const currentDayTodos = todos
+    ? todos.filter((todo) => checkIsSameLocalDay(todo.date, currentDateFormat))
+    : [];
 
   const selectedTodos =
     selectedProjectId !== null
@@ -112,7 +108,7 @@ export default function DraggableTodoList({
       changed_todos_item: changedTodos,
       requested_date_full: currentDateString,
       queryArgs: {
-        requested_date: currentDateFormat,
+        requested_date: getAllTodoQueryArg.date,
       },
     });
   };
@@ -146,7 +142,7 @@ export default function DraggableTodoList({
         keyExtractor={(item: Todo) => item.todo_id.toString()}
         onDragEnd={onDragEnd}
       ></DraggableFlatList>
-      <AddTodoItem />
+      {/* <AddTodoItem /> */}
     </View>
   );
 }

@@ -28,6 +28,9 @@ import ValueSlider from "./ValueSlider";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import dayjs from "dayjs";
 import { getNewRepeatDay } from "../../../utils/getNewRepeatDay";
+import { IsoString } from "../../../@types/calendar";
+import useTodos from "../../../hooks/useTodos";
+import useValue from "../../../hooks/useValue";
 
 const AddTodoOverlay = styled.Pressable`
   position: absolute;
@@ -46,11 +49,14 @@ const InnerPressable = styled.Pressable`
   height: 50%;
 `;
 
-const AddTodoBox = styled.View`
+const AddTodoBox = styled.View<{ systemTheme: string }>`
   height: 100%;
   border-radius: 20px;
   padding: ${spacing.offset}px;
-  background-color: ${({ theme }) => theme.palette.neutral100_gray};
+  background-color: ${({ theme }) => theme.box};
+  border-width: ${({ systemTheme }) => (systemTheme === "dark" ? 0.4 : 0)}px;
+  border-color: ${({ systemTheme }) =>
+    systemTheme === "dark" ? "white" : "transparent"};
   shadow-color: #000;
   shadow-offset: 0px 4px;
   shadow-opacity: 0.25;
@@ -72,7 +78,7 @@ const AddTodoBtn = styled.TouchableOpacity`
   justify-content: center;
   align-items: center;
 
-  background-color: ${({ theme }) => theme.palette.neutral200_gray};
+  background-color: ${({ theme }) => theme.background};
 `;
 
 const CloseBox = styled.View`
@@ -88,9 +94,10 @@ const SectionHeader = styled.View`
   z-index: 2;
 `;
 
-const SectionHeaderText = styled.Text`
+const SectionHeaderText = styled.Text<{ systemTheme?: string }>`
   font-size: ${useResponsiveFontSize(18)}px;
-  color: ${({ theme }) => theme.textDim};
+  color: ${({ theme, systemTheme }) =>
+    systemTheme === "dark" ? theme.textDimReverse : theme.textDim};
 `;
 
 const ValueText = styled(SectionHeaderText)`
@@ -101,6 +108,7 @@ const TodoInput = styled.TextInput`
   border-color: ${({ theme }) => theme.textDimmer};
   border-bottom-width: 1px;
   padding: 6px 1px;
+  color: ${({ theme }) => theme.text};
 `;
 
 const RepeatDayItem = styled.Pressable<{ isSelected?: boolean; size: number }>`
@@ -111,8 +119,15 @@ const RepeatDayItem = styled.Pressable<{ isSelected?: boolean; size: number }>`
   width: ${({ size }) => size}px;
   height: ${({ size }) => size}px;
   border-radius: 50px;
+
+  border-width: ${({ isSelected, theme }) =>
+    theme.name == "dark" && isSelected ? "1px" : "0px"};
+  border-color: ${({ theme }) => theme.text};
+
   background-color: ${({ theme, isSelected }) =>
-    isSelected ? theme.mainBtnReversed : theme.mainBtnGray};
+    theme.name === "gray" && isSelected
+      ? theme.mainBtnReversed
+      : theme.mainBtnGray};
 `;
 
 const DatePickerBox = styled.Pressable`
@@ -156,18 +171,22 @@ export default function AddTodoModal() {
   );
   const scrollViewRef = React.useRef<ScrollView>(null);
 
+  const systemTheme = useAppSelect((state) => state.theme.value);
+
   const [dayItemWidth, setDayItemWidth] = React.useState(0);
 
   const value = addTodoForm.level * 1000;
 
   const {
-    oneMonthBeforeQueryString,
-    todayQueryString,
-    currentDateYYYYMMDD: currentDateFormat,
-  } = useAppSelect((state) => state.calendar);
+    getValuesQueryArgs: { startDate, endDate },
+  } = useValue();
+
+  const { getAllTodoQueryArg } = useTodos();
 
   const [addTodo, addTodoResult] = useAddTodoMutation();
   const [editTodo, editTodoResult] = useEditTodoMutation();
+
+  const currentDate = useAppSelect((state) => state.calendar.currentDateString);
 
   const onPressSubmitBtn = () => {
     if (isEditMode) {
@@ -179,19 +198,19 @@ export default function AddTodoModal() {
         // 그러므로, isEditMode일때는 addTodoForm.checked가 항상 true이다.
         todo_checked: addTodoForm.checked!,
         queryArgs: {
-          date: currentDateFormat,
-          graph_before_date: oneMonthBeforeQueryString,
-          graph_today_date: todayQueryString,
+          date: getAllTodoQueryArg.date,
+          graph_before_date: startDate,
+          graph_today_date: endDate,
         },
       });
     } else {
       addTodo({
         form: addTodoForm,
-        add_date: dayjs().toISOString(),
+        add_date: currentDate as IsoString,
         queryArgs: {
-          date: currentDateFormat,
-          graph_before_date: oneMonthBeforeQueryString,
-          graph_today_date: todayQueryString,
+          date: getAllTodoQueryArg.date,
+          graph_before_date: startDate,
+          graph_today_date: endDate,
         },
       });
     }
@@ -225,7 +244,7 @@ export default function AddTodoModal() {
       }}
     >
       <InnerPressable>
-        <AddTodoBox>
+        <AddTodoBox systemTheme={systemTheme}>
           <CloseBox>
             <Icons
               onPress={() => {
@@ -251,7 +270,9 @@ export default function AddTodoModal() {
                 <Section
                   header={
                     <SectionHeader>
-                      <SectionHeaderText>할 일</SectionHeaderText>
+                      <SectionHeaderText systemTheme="dark">
+                        할 일
+                      </SectionHeaderText>
                     </SectionHeader>
                   }
                 >
@@ -325,7 +346,11 @@ export default function AddTodoModal() {
                           <Text
                             size="md"
                             color={
-                              isSelected ? theme.textReverse : theme.textDim
+                              theme.name == "gray"
+                                ? isSelected
+                                  ? theme.textReverse
+                                  : theme.textDim
+                                : "white"
                             }
                           >
                             {item}
@@ -355,9 +380,13 @@ export default function AddTodoModal() {
                           <Switch
                             onValueChange={toggleIsEndRepeat}
                             value={isRepeatDateModalOpen}
+                            thumbColor={theme.textReverse}
                             trackColor={{
                               false: theme.palette.neutral600_gray,
-                              true: theme.palette.neutral500_dark,
+                              true:
+                                theme.name == "gray"
+                                  ? theme.palette.neutral500_dark
+                                  : theme.text,
                             }}
                           ></Switch>
                         </FlexBox>

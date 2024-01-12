@@ -3,25 +3,25 @@ import dayjs from "dayjs";
 import { calculateDatesOfMonth } from "../../utils/calculateDatesOfMonth";
 import { calculateWeeksOfMonth } from "../../utils/calculateWeeksOfMonth";
 import { DateString, IsoString } from "../../@types/calendar";
+import utc from "dayjs/plugin/utc";
+
+dayjs.extend(utc);
 
 interface initialState {
   itemHeight: number;
   weeksOfMonth: number;
   datesOfMonth: dayjs.Dayjs[];
-  oneMonthBeforeQueryString: DateString;
-  todayQueryString: DateString;
   currentDateString: IsoString;
   currentDateYYYYMMDD: DateString;
 }
 
 const initialState: initialState = {
   itemHeight: 0,
+  // 얘는 로컬로 보여주도록 수정해야한다.
   weeksOfMonth: calculateWeeksOfMonth(dayjs().toISOString()),
+  // 얘는 로컬로 보여주도록 수정해야한다.
   datesOfMonth: calculateDatesOfMonth(dayjs().toISOString()),
-  oneMonthBeforeQueryString: dayjs()
-    .subtract(1, "month")
-    .format("YYYY-MM-DD") as DateString,
-  todayQueryString: dayjs().add(1, "month").format("YYYY-MM-DD") as DateString,
+  // 얘는 로컬로 보내주기로 되어있었음.
   currentDateString: dayjs().toISOString() as IsoString,
   currentDateYYYYMMDD: dayjs().format("YYYY-MM-DD") as DateString,
 };
@@ -36,7 +36,6 @@ const calendarSlice = createSlice({
       }
 
       const height = action.payload;
-
       const weeksOfMonth = state.weeksOfMonth;
       const itemHeight = weeksOfMonth > 0 ? height / (weeksOfMonth + 1) : 0;
 
