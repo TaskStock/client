@@ -40,8 +40,6 @@ function checkIsWithInOneDay(value_date: string, todo_date: string) {
 
   const hoursDifference = dateB.diff(dateA, "hour");
 
-  console.log(hoursDifference);
-
   // Check if the difference is within 24 hours
   return hoursDifference <= 24;
 }

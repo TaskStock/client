@@ -105,7 +105,6 @@ export default function ProjectItemList({
 
   const onPressAddProjectBtn = () => {
     setTimeout(() => {
-      console.log(textInputRef.current);
       if (textInputRef.current) {
         textInputRef.current.focus();
       }
