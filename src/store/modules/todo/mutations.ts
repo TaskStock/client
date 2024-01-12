@@ -1,6 +1,3 @@
-import { QueryReturnValue } from "@reduxjs/toolkit/dist/query/baseQueryTypes";
-import { MaybePromise } from "@reduxjs/toolkit/dist/query/tsHelpers";
-import { EndpointBuilder } from "@reduxjs/toolkit/query";
 import { AddTodoForm, Todo } from "../../../@types/todo";
 import { TodoApiBuilder, closeTodoModal, todoApi } from "./todo";
 import {
@@ -14,8 +11,9 @@ import {
   useGetValuesQueryStartDate,
 } from "../chart";
 import { Value } from "../../../@types/chart";
-import { DateString, IsoString } from "../../../@types/calendar";
-import { useGetAllTodosQueryArg, useGetAllTodosQueryDate } from "./queries";
+import { IsoString } from "../../../@types/calendar";
+import { useGetAllTodosQueryDate } from "./queries";
+import dayjs from "dayjs";
 
 const upValue = 1000;
 const downValue = 1000;
@@ -569,6 +567,87 @@ export const changeTodoOrderMutation = (builder: TodoApiBuilder) =>
       } catch (error) {
         console.log(error);
         dispatchChangeTodoIndex.undo();
+      }
+    },
+  });
+
+export const changeToNextDayTodoMutation = (builder: TodoApiBuilder) =>
+  builder.mutation<
+    {},
+    {
+      todo_id: number;
+      todo_date: string;
+      todo_level: number;
+      todo_checked: boolean;
+      queryArgs: {
+        current_date: useGetAllTodosQueryDate;
+        graph_before_date: useGetValuesQueryStartDate;
+        graph_today_date: useGetValuesQueryEndDate;
+      };
+    }
+  >({
+    query: (body) => {
+      return {
+        url: "/todo/nextday",
+        method: "POST",
+        body,
+      };
+    },
+
+    async onQueryStarted(body, { dispatch, queryFulfilled }) {
+      const patchResult = dispatch(
+        todoApi.util.updateQueryData(
+          "getAllTodos",
+          { date: body.queryArgs.current_date },
+          (draft: { todos: Todo[] }) => {
+            const index = draft.todos.findIndex(
+              (todo) => todo.todo_id === body.todo_id
+            );
+
+            const nextDate = dayjs(body.todo_date).add(1, "day");
+
+            draft.todos[index].date = nextDate.toISOString();
+          }
+        )
+      );
+
+      let patchUpdateGraphValue;
+
+      if (checkIsLocalBetween6to6(body.todo_date)) {
+        patchUpdateGraphValue = dispatch(
+          chartApi.util.updateQueryData(
+            "getValues",
+            {
+              startDate: body.queryArgs.graph_before_date,
+              endDate: body.queryArgs.graph_today_date,
+            },
+            (draft: { values: Value[] }) => {
+              const index = draft.values.findIndex((value) => {
+                return checkIsWithInOneDay(value.date, body.todo_date);
+              });
+
+              if (index === -1) {
+                console.log("changeToNextDayTodo: no value matches on todo");
+                return;
+              }
+
+              draft.values[index].high -= body.todo_level * upValue;
+              draft.values[index].low += body.todo_level * downValue;
+
+              if (body.todo_checked) {
+                draft.values[index].end -= body.todo_level * upValue;
+              }
+            }
+          )
+        );
+      }
+
+      try {
+        await queryFulfilled;
+      } catch (error) {
+        console.log(error);
+        // patchResult.undo();
+        // if (patchUpdateGraphValue) patchUpdateGraphValue.undo();
       }
     },
   });
