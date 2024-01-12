@@ -376,6 +376,8 @@ export const toggleTodoMutation = (builder: TodoApiBuilder) =>
             }
           )
         );
+      } else {
+        console.log("not today todo");
       }
       // }
 
