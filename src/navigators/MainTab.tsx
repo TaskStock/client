@@ -1,32 +1,20 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import React from "react";
+import { useTheme } from "styled-components";
 import { IconsWithoutFeedBack } from "../components/atoms/Icons";
-import { darkTheme, grayTheme } from "../constants/colors";
 import useHeight from "../hooks/useHeight";
 import GroupScreen from "../screens/GroupScreen";
 import ProjectScreen from "../screens/ProjectScreen";
-import { useAppSelect } from "../store/configureStore.hooks";
 import { ComponentHeightProvider } from "../utils/ComponentHeightContext";
 import HomeStack from "./HomeStack";
 import MyPageStack from "./MyPageStack";
-
-const THEME_SOURCES = {
-  dark: {
-    background: darkTheme.box,
-    activeTint: darkTheme.text,
-    inactiveTint: darkTheme.textDimmer,
-  },
-  gray: {
-    background: grayTheme.box,
-    activeTint: grayTheme.text,
-    inactiveTint: grayTheme.textDimmer,
-  },
-};
+import FriendScreen from "../screens/FriendScreen";
 
 const Tab = createBottomTabNavigator();
 
 function MainTab() {
-  const theme = useAppSelect((state) => state.theme.value);
+  // const theme = useAppSelect((state) => state.theme.value);
+  const theme = useTheme();
   const { NOTCH_BOTTOM, NOTCH_TOP } = useHeight();
   return (
     <ComponentHeightProvider>
@@ -34,16 +22,16 @@ function MainTab() {
         screenOptions={{
           headerShadowVisible: false,
 
-          tabBarActiveTintColor: THEME_SOURCES[theme].activeTint,
-          tabBarInactiveTintColor: THEME_SOURCES[theme].inactiveTint,
+          tabBarActiveTintColor: theme.text,
+          tabBarInactiveTintColor: theme.textDimmer,
           // headerShown: false,
           tabBarStyle: {
-            backgroundColor: THEME_SOURCES[theme].background,
+            backgroundColor: theme.box,
             height: NOTCH_BOTTOM + 60,
             borderTopWidth: 0,
           },
           headerStyle: {
-            backgroundColor: THEME_SOURCES[theme].background,
+            backgroundColor: theme.box,
             height: NOTCH_TOP + 50,
           },
           tabBarShowLabel: false,
@@ -94,8 +82,8 @@ function MainTab() {
           }}
         />
         <Tab.Screen
-          name="MyPageStack"
-          component={MyPageStack}
+          name="Friend"
+          component={FriendScreen}
           options={{
             headerShown: false,
             tabBarIcon: ({ color, size }) => (

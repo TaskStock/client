@@ -7,7 +7,7 @@ import { useAppSelect } from "../../../store/configureStore.hooks";
 import { ComponentHeightContext } from "../../../utils/ComponentHeightContext";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import FlexBox from "../../atoms/FlexBox";
-import { IconsPic } from "../../atoms/Icons";
+import Icons, { IconsPic } from "../../atoms/Icons";
 
 const Container = styled.View<{ notchTop: number }>`
   background-color: ${({ theme }) => theme.background};
@@ -63,11 +63,12 @@ function HeaderTop({ navigation }) {
             size={30}
             onPress={() => navigation.navigate("Alarm")}
           />
-          <IconsPic
-            source={THEME_SOURCES[theme]?.person}
-            size={30}
+          <Icons
+            type="feather"
+            name="settings"
+            size={26}
             onPress={() => {
-              navigation.navigate("Friend");
+              navigation.navigate("SettingsStack", { screen: "Settings" });
             }}
           />
         </FlexBox>

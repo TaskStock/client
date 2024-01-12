@@ -1,8 +1,8 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
-import HomeScreen from "../screens/HomeScreen";
 import AlarmScreen from "../screens/AlarmScreen";
-import FriendScreen from "../screens/FriendScreen";
+import HomeScreen from "../screens/HomeScreen";
+import SettingsStack from "./SettingsStack";
 
 const NativeStack = createNativeStackNavigator();
 
@@ -16,8 +16,8 @@ const HomeStack = () => (
     <NativeStack.Screen name="Home" component={HomeScreen} />
     <NativeStack.Screen name="Alarm" component={AlarmScreen} />
     <NativeStack.Screen
-      name="Friend"
-      component={FriendScreen}
+      name="SettingsStack"
+      component={SettingsStack}
       options={{
         headerShown: true,
       }}
