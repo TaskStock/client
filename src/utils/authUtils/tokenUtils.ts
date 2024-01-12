@@ -5,12 +5,15 @@ import { getSavedCredentials, loginWithCredentials } from "./autoSignIn";
 import { RootState } from "../../store/configureStore";
 
 // 토큰 갱신을 위한 서버 요청 함수
-const requestNewTokens = async (refreshToken: string) => {
+const requestNewTokens = async (accessToken: string, refreshToken: string) => {
   // refreshToken을 사용하여 새 토큰을 요청
+
   try {
-    const response = await client.post("account/refresh", {
-      refreshToken,
-    });
+    const response = await client.post(
+      "account/refresh",
+      { refreshToken },
+      { accessToken }
+    );
     console.log("=====새 토큰 요청 성공=====", response);
     return response;
   } catch (error) {
@@ -58,7 +61,7 @@ export const checkAndRenewTokens = createAsyncThunk(
     ) {
       // 새 accessToken 요청
       console.log("=====accessToken 만료, refreshToken 유효=====");
-      return requestNewTokens(refreshToken);
+      return requestNewTokens(accessToken, refreshToken);
     }
 
     // CASE 2: accessToken, refreshToken 둘 다 만료 || refreshToken 만료 7일 전 자동로그인으로 재발급
