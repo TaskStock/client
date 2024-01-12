@@ -1,5 +1,5 @@
 import React, { memo, useEffect, useState } from "react";
-import { Modal, Platform, View } from "react-native";
+import { Modal, Platform, View, Text as RNText } from "react-native";
 import { useDispatch } from "react-redux";
 import styled, { useTheme } from "styled-components/native";
 import { Todo } from "../../../@types/todo";
@@ -7,6 +7,7 @@ import { spacing } from "../../../constants/spacing";
 import { useAppSelect } from "../../../store/configureStore.hooks";
 import {
   openEditTodoModal,
+  useChangeToNextDayTodoMutationMutation,
   useDeleteTodoMutation,
   useToggleTodoMutation,
 } from "../../../store/modules/todo/todo";
@@ -18,6 +19,8 @@ import Icons from "../../atoms/Icons";
 import Text from "../../atoms/Text";
 import useTodos from "../../../hooks/useTodos";
 import useValue from "../../../hooks/useValue";
+import dayjs from "dayjs";
+import { DateString, DateStringYYYYMM } from "../../../@types/calendar";
 
 const THEME_CONSTANTS = {
   dark: {
@@ -117,16 +120,30 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
     (state) => state.todo.todoDrawerPosition
   );
 
-  const [deleteTodo, result] = useDeleteTodoMutation();
-  const [toggleCheckTodo, toggleCheckTodoResult] = useToggleTodoMutation();
+  const [changeToNextDayTodo] = useChangeToNextDayTodoMutationMutation();
+  const [deleteTodo] = useDeleteTodoMutation();
+  const [toggleCheckTodo] = useToggleTodoMutation();
 
   const didMountRef = React.useRef(false);
   const MeasurePositionTriggerRef = React.useRef(false);
   const itemRef = React.useRef<View | null>(null);
 
-  const {
-    getValuesQueryArgs: { startDate, endDate },
-  } = useValue();
+  console.log("todoitem rerendered", todo.content);
+
+  const startDate = dayjs()
+    .local()
+    .subtract(29, "day")
+    .format("YYYY-MM-DD") as DateString;
+  const endDate = dayjs()
+    .local()
+    .add(1, "day")
+    .format("YYYY-MM-DD") as DateString;
+
+  const getAllTodoQueryArg = {
+    date: dayjs().local().format("YYYY-MM") as DateStringYYYYMM,
+  };
+
+  // const { getAllTodoQueryArg } = useTodos();
 
   useEffect(() => {
     MeasurePositionTriggerRef.current = false;
@@ -149,8 +166,6 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
     });
   };
 
-  const { getAllTodoQueryArg } = useTodos();
-
   const toggleTodoCheck = () => {
     toggleCheckTodo({
       todo_id: todo.todo_id,
@@ -165,9 +180,49 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
     });
   };
 
-  const currentDateFormat = useAppSelect(
-    (state) => state.calendar.currentDateYYYYMMDD
-  );
+  const onPressChangeToNextDayTodo = () => {
+    changeToNextDayTodo({
+      todo_id: todo.todo_id,
+      todo_date: todo.date,
+      todo_checked: todo.check,
+      todo_level: todo.level,
+      queryArgs: {
+        current_date: getAllTodoQueryArg.date,
+        graph_before_date: startDate,
+        graph_today_date: endDate,
+      },
+    });
+  };
+
+  const onPressEditTodo = () => {
+    dispatch(
+      openEditTodoModal({
+        text: todo.content,
+        level: todo.level,
+        date: todo.date,
+        checked: todo.check,
+        project_id: todo.project_id,
+        repeat_day: todo.repeat_day,
+        repeat_end_date: todo.repeat_end_date,
+        todo_id: todo.todo_id,
+      })
+    );
+    setIsModalOpen(!isModalOpen);
+  };
+
+  const onPressDeleteTodo = () => {
+    deleteTodo({
+      todo_id: todo.todo_id,
+      todo_date: todo.date,
+      value: todo.level * 1000,
+      checked: todo.check,
+      queryArgs: {
+        date: getAllTodoQueryArg.date,
+        graph_before_date: startDate,
+        graph_today_date: endDate,
+      },
+    });
+  };
 
   return (
     <View ref={itemRef}>
@@ -176,7 +231,13 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
         alignItems="center"
         styles={{ paddingBottom: spacing.padding }}
       >
-        <FlexBox gap={10} alignItems="center">
+        <FlexBox
+          gap={10}
+          alignItems="center"
+          styles={{
+            flex: 1,
+          }}
+        >
           <TodoCheckBox
             theme={theme}
             isChecked={todo.check}
@@ -184,8 +245,17 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
               toggleTodoCheck();
             }}
           />
-
-          <Text size="md">{todo.content}</Text>
+          <RNText
+            numberOfLines={1}
+            ellipsizeMode="tail"
+            style={{
+              color: styledTheme.text,
+              flex: 1,
+              fontSize: useResponsiveFontSize(17),
+            }}
+          >
+            {todo.content}
+          </RNText>
         </FlexBox>
         <FlexBox gap={10} alignItems="center">
           {todo.check ? (
@@ -223,24 +293,7 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
                   left: modalPosition.x,
                 }}
               >
-                <TodoModalItem
-                  isSelected={true}
-                  onPress={() => {
-                    dispatch(
-                      openEditTodoModal({
-                        text: todo.content,
-                        level: todo.level,
-                        date: todo.date,
-                        checked: todo.check,
-                        project_id: todo.project_id,
-                        repeat_day: todo.repeat_day,
-                        repeat_end_date: todo.repeat_end_date,
-                        todo_id: todo.todo_id,
-                      })
-                    );
-                    setIsModalOpen(!isModalOpen);
-                  }}
-                >
+                <TodoModalItem isSelected={true} onPress={onPressEditTodo}>
                   <Text
                     size="md"
                     color={
@@ -252,26 +305,15 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
                     수정하기
                   </Text>
                 </TodoModalItem>
-                <TodoModalItem isSelected={false} onPress={() => {}}>
+                <TodoModalItem
+                  isSelected={false}
+                  onPress={onPressChangeToNextDayTodo}
+                >
                   <Text size="md" color={styledTheme.text}>
                     내일하기
                   </Text>
                 </TodoModalItem>
-                <TodoModalItem
-                  onPress={() => {
-                    deleteTodo({
-                      todo_id: todo.todo_id,
-                      todo_date: todo.date,
-                      value: todo.level * 1000,
-                      checked: todo.check,
-                      queryArgs: {
-                        date: getAllTodoQueryArg.date,
-                        graph_before_date: startDate,
-                        graph_today_date: endDate,
-                      },
-                    });
-                  }}
-                >
+                <TodoModalItem onPress={onPressDeleteTodo}>
                   <Text size="md">삭제하기</Text>
                 </TodoModalItem>
               </TodoModal>
@@ -283,4 +325,4 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
   );
 };
 
-export default TodoItem;
+export default memo(TodoItem);

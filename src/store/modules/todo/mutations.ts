@@ -1,10 +1,7 @@
-import { QueryReturnValue } from "@reduxjs/toolkit/dist/query/baseQueryTypes";
-import { MaybePromise } from "@reduxjs/toolkit/dist/query/tsHelpers";
-import { EndpointBuilder } from "@reduxjs/toolkit/query";
 import { AddTodoForm, Todo } from "../../../@types/todo";
 import { TodoApiBuilder, closeTodoModal, todoApi } from "./todo";
 import {
-  checkIsLocalToday,
+  checkIsLocalBetween6to6,
   checkIsSameLocalDay,
   checkIsWithInOneDay,
 } from "../../../utils/checkIsSameLocalDay";
@@ -14,8 +11,9 @@ import {
   useGetValuesQueryStartDate,
 } from "../chart";
 import { Value } from "../../../@types/chart";
-import { DateString, IsoString } from "../../../@types/calendar";
-import { useGetAllTodosQueryArg, useGetAllTodosQueryDate } from "./queries";
+import { IsoString } from "../../../@types/calendar";
+import { useGetAllTodosQueryDate } from "./queries";
+import dayjs from "dayjs";
 
 const upValue = 1000;
 const downValue = 1000;
@@ -152,31 +150,35 @@ export const addTodoMutation = (builder: TodoApiBuilder) =>
 
       let patchUpdateHighLowValue;
 
-      // 이건 어차피 오늘 오전 6시부터 내일 오전 6시까지이므로.
-      // if (checkIsLocalToday(body.add_date)) {
-      patchUpdateHighLowValue = dispatch(
-        chartApi.util.updateQueryData(
-          "getValues",
-          {
-            startDate: body.queryArgs.graph_before_date,
-            endDate: body.queryArgs.graph_today_date,
-          },
-          ({ values }) => {
-            const index = values.findIndex((value) => {
-              return checkIsWithInOneDay(value.date, body.add_date);
-            });
+      // todo를 추가한 날짜가. 로컬기준 오늘의 오전 6시부터, 내일의 오전 6시 사이인지.
+      // 만약에 그렇다면, 그래프값에도 반영해준다.
+      if (checkIsLocalBetween6to6(body.add_date)) {
+        patchUpdateHighLowValue = dispatch(
+          chartApi.util.updateQueryData(
+            "getValues",
+            {
+              startDate: body.queryArgs.graph_before_date,
+              endDate: body.queryArgs.graph_today_date,
+            },
+            ({ values }) => {
+              const index = values.findIndex((value) => {
+                return checkIsWithInOneDay(value.date, body.add_date);
+              });
 
-            if (index === -1) {
-              console.log("no value matches on add todo");
-              return;
+              if (index === -1) {
+                console.log("no value matches on add todo");
+                return;
+              }
+
+              values[index].high += body.form.level * upValue;
+              values[index].low -= body.form.level * downValue;
             }
+          )
+        );
+      }
 
-            values[index].high += body.form.level * upValue;
-            values[index].low -= body.form.level * downValue;
-          }
-        )
-      );
-      // }
+      dispatch(closeTodoModal());
+
       try {
         const result = await queryFulfilled;
 
@@ -197,8 +199,6 @@ export const addTodoMutation = (builder: TodoApiBuilder) =>
             }
           )
         );
-
-        dispatch(closeTodoModal());
       } catch (error) {
         console.log(error);
         patchAddTodo.undo();
@@ -264,7 +264,7 @@ export const editTodoMutation = (builder: TodoApiBuilder) =>
 
       let patchUpdateGraphValue;
 
-      if (body.todo_date) {
+      if (body.todo_date && checkIsLocalBetween6to6(body.todo_date)) {
         patchUpdateGraphValue = dispatch(
           chartApi.util.updateQueryData(
             "getValues",
@@ -350,32 +350,31 @@ export const toggleTodoMutation = (builder: TodoApiBuilder) =>
       let patchUpdateGraphValue;
 
       // 오늘 날짜라면, 토글해서 check 했을때, 그래프값에도 반영해준다.
-      // if (checkIsLocalToday(body.todo_date)) {
-      patchUpdateGraphValue = dispatch(
-        chartApi.util.updateQueryData(
-          "getValues",
-          {
-            startDate: body.queryArgs.graph_before_date,
-            endDate: body.queryArgs.graph_today_date,
-          },
-          (draft: { values: Value[] }) => {
-            const index = draft.values.findIndex((value) => {
-              return checkIsWithInOneDay(value.date, body.todo_date);
-            });
-
-            if (index === -1) {
-              console.log("no value matches on todo");
-              return;
+      if (checkIsLocalBetween6to6(body.todo_date)) {
+        patchUpdateGraphValue = dispatch(
+          chartApi.util.updateQueryData(
+            "getValues",
+            {
+              startDate: body.queryArgs.graph_before_date,
+              endDate: body.queryArgs.graph_today_date,
+            },
+            (draft: { values: Value[] }) => {
+              const index = draft.values.findIndex((value) => {
+                return checkIsWithInOneDay(value.date, body.todo_date);
+              });
+              if (index === -1) {
+                console.log("no value matches on todo");
+                return;
+              }
+              if (body.check) {
+                draft.values[index].end += body.level * upValue;
+              } else {
+                draft.values[index].end -= body.level * downValue;
+              }
             }
-
-            if (body.check) {
-              draft.values[index].end += body.level * upValue;
-            } else {
-              draft.values[index].end -= body.level * downValue;
-            }
-          }
-        )
-      );
+          )
+        );
+      }
       // }
 
       try {
@@ -427,34 +426,34 @@ export const deleteTodoMutation = (builder: TodoApiBuilder) =>
 
       let patchUpdateGraphEndValue;
 
-      // if (checkIsLocalToday(body.todo_date)) {
-      patchUpdateGraphEndValue = dispatch(
-        chartApi.util.updateQueryData(
-          "getValues",
-          {
-            startDate: body.queryArgs.graph_before_date,
-            endDate: body.queryArgs.graph_today_date,
-          },
-          (draft: { values: Value[] }) => {
-            const index = draft.values.findIndex((value) => {
-              return checkIsWithInOneDay(value.date, body.queryArgs.date);
-            });
+      if (checkIsLocalBetween6to6(body.todo_date)) {
+        patchUpdateGraphEndValue = dispatch(
+          chartApi.util.updateQueryData(
+            "getValues",
+            {
+              startDate: body.queryArgs.graph_before_date,
+              endDate: body.queryArgs.graph_today_date,
+            },
+            (draft: { values: Value[] }) => {
+              const index = draft.values.findIndex((value) => {
+                return checkIsWithInOneDay(value.date, body.todo_date);
+              });
 
-            if (index === -1) {
-              console.log("deleteTodo: no value matches on todo");
-              return;
+              if (index === -1) {
+                console.log("deleteTodo: no value matches on todo");
+                return;
+              }
+
+              if (body.checked) {
+                draft.values[index].end -= body.value;
+              }
+
+              draft.values[index].high -= body.value;
+              draft.values[index].low += body.value;
             }
-
-            if (body.checked) {
-              draft.values[index].end -= body.value;
-            }
-
-            draft.values[index].high -= body.value;
-            draft.values[index].low += body.value;
-          }
-        )
-      );
-      // }
+          )
+        );
+      }
 
       try {
         await queryFulfilled;
@@ -568,6 +567,87 @@ export const changeTodoOrderMutation = (builder: TodoApiBuilder) =>
       } catch (error) {
         console.log(error);
         dispatchChangeTodoIndex.undo();
+      }
+    },
+  });
+
+export const changeToNextDayTodoMutation = (builder: TodoApiBuilder) =>
+  builder.mutation<
+    {},
+    {
+      todo_id: number;
+      todo_date: string;
+      todo_level: number;
+      todo_checked: boolean;
+      queryArgs: {
+        current_date: useGetAllTodosQueryDate;
+        graph_before_date: useGetValuesQueryStartDate;
+        graph_today_date: useGetValuesQueryEndDate;
+      };
+    }
+  >({
+    query: (body) => {
+      return {
+        url: "/todo/nextday",
+        method: "POST",
+        body,
+      };
+    },
+
+    async onQueryStarted(body, { dispatch, queryFulfilled }) {
+      const patchResult = dispatch(
+        todoApi.util.updateQueryData(
+          "getAllTodos",
+          { date: body.queryArgs.current_date },
+          (draft: { todos: Todo[] }) => {
+            const index = draft.todos.findIndex(
+              (todo) => todo.todo_id === body.todo_id
+            );
+
+            const nextDate = dayjs(body.todo_date).add(1, "day");
+
+            draft.todos[index].date = nextDate.toISOString();
+          }
+        )
+      );
+
+      let patchUpdateGraphValue;
+
+      if (checkIsLocalBetween6to6(body.todo_date)) {
+        patchUpdateGraphValue = dispatch(
+          chartApi.util.updateQueryData(
+            "getValues",
+            {
+              startDate: body.queryArgs.graph_before_date,
+              endDate: body.queryArgs.graph_today_date,
+            },
+            (draft: { values: Value[] }) => {
+              const index = draft.values.findIndex((value) => {
+                return checkIsWithInOneDay(value.date, body.todo_date);
+              });
+
+              if (index === -1) {
+                console.log("changeToNextDayTodo: no value matches on todo");
+                return;
+              }
+
+              draft.values[index].high -= body.todo_level * upValue;
+              draft.values[index].low += body.todo_level * downValue;
+
+              if (body.todo_checked) {
+                draft.values[index].end -= body.todo_level * upValue;
+              }
+            }
+          )
+        );
+      }
+
+      try {
+        await queryFulfilled;
+      } catch (error) {
+        console.log(error);
+        // patchResult.undo();
+        // if (patchUpdateGraphValue) patchUpdateGraphValue.undo();
       }
     },
   });
