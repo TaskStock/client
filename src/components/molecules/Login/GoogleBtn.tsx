@@ -4,6 +4,7 @@ import { palette } from "../../../constants/colors";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import { IconsPic } from "../../atoms/Icons";
 import Text from "../../atoms/Text";
+import RecentlyLogginIn from "./RecentlyLogginIn";
 
 const GoogleButtonContainer = styled.TouchableOpacity`
   flex-direction: row;
@@ -27,9 +28,17 @@ const GoogleLeft = styled.View`
 const GoogleRight = styled.View`
   padding: ${useResponsiveFontSize(14)}px;
 `;
-const GoogleBtn = ({ onPress }) => {
+
+const GoogleBtn = ({
+  onPress,
+  recentlyLoggiedIn,
+}: {
+  onPress: () => void;
+  recentlyLoggiedIn?: boolean;
+}) => {
   return (
     <GoogleButtonContainer onPress={onPress}>
+      <RecentlyLogginIn shown={recentlyLoggiedIn} />
       <GoogleLeft>
         <IconsPic
           source={require("../../../../assets/icons/google.png")}

@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { checkStorage, storeData } from "../../utils/asyncStorage";
+import { getData, storeData } from "../../utils/asyncStorage";
 import {
   loginWithEmail,
   logout,
@@ -33,9 +33,10 @@ export const checkTokenExistence = createAsyncThunk(
   "auth/checkTokenExistence",
   async (_, { rejectWithValue }) => {
     try {
-      const accessToken = await AsyncStorage.getItem("accessToken");
-      const accessExp = await AsyncStorage.getItem("accessExp");
-      const refreshExp = await AsyncStorage.getItem("refreshExp");
+      const accessToken = await getData("accessToken");
+      const accessExp = await getData("accessExp");
+      const refreshExp = await getData("refreshExp");
+      const strategy = await getData("strategy");
 
       if (accessToken && accessExp && refreshExp) {
         return {
@@ -43,6 +44,7 @@ export const checkTokenExistence = createAsyncThunk(
           accessExp: Number(accessExp),
           refreshExp: Number(refreshExp),
           isLoggedIn: true,
+          strategy,
         };
       }
 
@@ -51,6 +53,7 @@ export const checkTokenExistence = createAsyncThunk(
         accessExp: 0,
         refreshExp: 0,
         isLoggedIn: false,
+        strategy,
       };
     } catch (error) {
       return rejectWithValue(error);
@@ -116,6 +119,7 @@ const authSlice = createSlice({
           storeData("refreshToken", action.payload.refreshToken);
           storeData("accessExp", action.payload.accessExp);
           storeData("refreshExp", action.payload.refreshExp);
+
           console.log("로그인 성공: ");
         }
       })
@@ -126,10 +130,11 @@ const authSlice = createSlice({
       })
       .addCase(checkTokenExistence.fulfilled, (state, action) => {
         state.accessToken = action.payload.accessToken;
-        console.log("토큰 업데이트: ", action.payload);
+
         state.accessExp = action.payload.accessExp;
         state.refreshExp = action.payload.refreshExp;
         state.isLoggedIn = action.payload.isLoggedIn;
+        state.strategy = action.payload.strategy;
         state.loading = false;
       })
       .addCase(checkTokenExistence.rejected, (state, action) => {
