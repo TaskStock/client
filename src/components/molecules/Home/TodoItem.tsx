@@ -128,8 +128,6 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
   const MeasurePositionTriggerRef = React.useRef(false);
   const itemRef = React.useRef<View | null>(null);
 
-  console.log("todoitem rerendered", todo.content);
-
   const startDate = dayjs()
     .local()
     .subtract(29, "day")

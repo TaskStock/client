@@ -349,6 +349,8 @@ export const toggleTodoMutation = (builder: TodoApiBuilder) =>
 
       let patchUpdateGraphValue;
 
+      console.log(body.todo_date);
+
       // 오늘 날짜라면, 토글해서 check 했을때, 그래프값에도 반영해준다.
       if (checkIsLocalBetween6to6(body.todo_date)) {
         patchUpdateGraphValue = dispatch(

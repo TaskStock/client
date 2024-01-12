@@ -192,14 +192,16 @@ export default function HomeCalendar({
       return checkIsSameLocalDay(date, item.toISOString());
     });
 
+    const onPressCalendarItem = (item: dayjs.Dayjs) => {
+      dispatch(setCurrentDateString(item.toISOString() as IsoString));
+    };
+
     return (
       <CalendarItem
         item={item}
         currentDate={currentDate}
         hasTodo={hasTodo}
-        onPress={(item: dayjs.Dayjs) => {
-          dispatch(setCurrentDateString(item.toISOString() as IsoString));
-        }}
+        onPress={onPressCalendarItem}
       />
     );
   };

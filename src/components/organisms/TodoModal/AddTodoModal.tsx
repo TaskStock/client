@@ -186,6 +186,8 @@ export default function AddTodoModal() {
   const [addTodo, addTodoResult] = useAddTodoMutation();
   const [editTodo, editTodoResult] = useEditTodoMutation();
 
+  const currentDate = useAppSelect((state) => state.calendar.currentDateString);
+
   const onPressSubmitBtn = () => {
     if (isEditMode) {
       editTodo({
@@ -204,7 +206,7 @@ export default function AddTodoModal() {
     } else {
       addTodo({
         form: addTodoForm,
-        add_date: dayjs().toISOString() as IsoString,
+        add_date: currentDate as IsoString,
         queryArgs: {
           date: getAllTodoQueryArg.date,
           graph_before_date: startDate,
