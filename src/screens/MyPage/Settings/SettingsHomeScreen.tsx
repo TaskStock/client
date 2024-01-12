@@ -10,6 +10,7 @@ import {
 import { resetNavigation } from "../../../utils/resetNavigation";
 import { logout } from "../../../utils/authUtils/signInUtils";
 import { checkAndRenewTokens } from "../../../utils/authUtils/tokenUtils";
+import { checkStorage } from "../../../utils/asyncStorage";
 
 const Container = styled.View`
   justify-content: center;
@@ -44,6 +45,12 @@ const SettingsHomeScreen = ({ navigation }) => {
     }
   }, [isLoggedIn, navigation]);
 
+  const redux = useAppSelect((state) => state.auth);
+  const checkRedux = () => {
+    console.log("=====redux=====");
+    console.log(redux);
+  };
+
   return (
     <Container>
       <Menu text="계정 설정 =>" onPress={() => {}} />
@@ -53,8 +60,9 @@ const SettingsHomeScreen = ({ navigation }) => {
           navigation.navigate("SettingsTheme");
         }}
       />
+      <Menu text="asyncStorage check" onPress={checkStorage} />
+      <Menu text="redux check" onPress={checkRedux} />
       <Menu text="로그아웃" onPress={handleLogout} />
-      <Menu text="토큰갱신" onPress={checkAndRenewTokens} />
     </Container>
   );
 };
