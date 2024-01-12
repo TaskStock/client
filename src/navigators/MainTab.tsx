@@ -7,13 +7,11 @@ import GroupScreen from "../screens/GroupScreen";
 import ProjectScreen from "../screens/ProjectScreen";
 import { ComponentHeightProvider } from "../utils/ComponentHeightContext";
 import HomeStack from "./HomeStack";
-import MyPageStack from "./MyPageStack";
 import FriendScreen from "../screens/FriendScreen";
 
 const Tab = createBottomTabNavigator();
 
 function MainTab() {
-  // const theme = useAppSelect((state) => state.theme.value);
   const theme = useTheme();
   const { NOTCH_BOTTOM, NOTCH_TOP } = useHeight();
   return (
@@ -28,7 +26,7 @@ function MainTab() {
           tabBarStyle: {
             backgroundColor: theme.box,
             height: NOTCH_BOTTOM + 60,
-            borderTopWidth: 0,
+            // borderTopWidth: 0,
           },
           headerStyle: {
             backgroundColor: theme.box,

@@ -1,16 +1,13 @@
 import React, { useEffect } from "react";
 import styled from "styled-components/native";
-import Text from "../../../components/atoms/Text";
-import { spacing } from "../../../constants/spacing";
-import {
-  useAppDispatch,
-  useAppSelect,
-} from "../../../store/configureStore.hooks";
+import Text from "../../components/atoms/Text";
+import { spacing } from "../../constants/spacing";
+import { useAppDispatch, useAppSelect } from "../../store/configureStore.hooks";
 
-import { resetNavigation } from "../../../utils/resetNavigation";
-import { logout } from "../../../utils/authUtils/signInUtils";
-import { checkAndRenewTokens } from "../../../utils/authUtils/tokenUtils";
-import { checkStorage } from "../../../utils/asyncStorage";
+import { resetNavigation } from "../../utils/resetNavigation";
+import { logout } from "../../utils/authUtils/signInUtils";
+import { checkAndRenewTokens } from "../../utils/authUtils/tokenUtils";
+import { checkStorage } from "../../utils/asyncStorage";
 
 const Container = styled.View`
   justify-content: center;

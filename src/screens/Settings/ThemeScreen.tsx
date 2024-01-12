@@ -1,8 +1,8 @@
 import React from "react";
 import { View } from "react-native";
-import { BlackBtn } from "../../../components/atoms/Buttons";
-import { useAppDispatch } from "../../../store/configureStore.hooks";
-import { pickTheme } from "../../../store/modules/theme";
+import { BlackBtn } from "../../components/atoms/Buttons";
+import { useAppDispatch } from "../../store/configureStore.hooks";
+import { pickTheme } from "../../store/modules/theme";
 
 const ThemeScreen = () => {
   const dispatch = useAppDispatch();

@@ -8,6 +8,7 @@ import { ComponentHeightContext } from "../../../utils/ComponentHeightContext";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import FlexBox from "../../atoms/FlexBox";
 import Icons, { IconsPic } from "../../atoms/Icons";
+import { useTheme } from "styled-components";
 
 const Container = styled.View<{ notchTop: number }>`
   background-color: ${({ theme }) => theme.background};
@@ -18,12 +19,10 @@ const THEME_SOURCES = {
   dark: {
     logo: require("../../../../assets/images/logo-dark.png"),
     bell: require("../../../../assets/icons/bell-dark.png"),
-    person: require("../../../../assets/icons/person-dark.png"),
   },
   gray: {
     logo: require("../../../../assets/images/logo-light.png"),
     bell: require("../../../../assets/icons/bell-light.png"),
-    person: require("../../../../assets/icons/person-light.png"),
   },
 };
 
@@ -32,7 +31,7 @@ function HeaderTop({ navigation }) {
 
   const { NOTCH_TOP } = useHeight();
   const theme = useAppSelect((state) => state.theme.value);
-
+  const styledTheme = useTheme();
   return (
     <Container
       notchTop={NOTCH_TOP}
@@ -70,6 +69,7 @@ function HeaderTop({ navigation }) {
             onPress={() => {
               navigation.navigate("SettingsStack", { screen: "Settings" });
             }}
+            color={styledTheme.text}
           />
         </FlexBox>
       </FlexBox>
