@@ -50,6 +50,10 @@ export const convertAndCreateWagmiData = (
 
   const newArray: WagmiData[] = [...convertedData];
 
+  if (newArray.length == 0) {
+    return newArray;
+  }
+
   const lastDate = dayjs(arr[arr.length - 1].date);
 
   const sumValue = arr.reduce((acc, cur) => {

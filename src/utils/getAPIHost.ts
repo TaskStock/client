@@ -4,6 +4,8 @@ import { LOCAL_API_HOST_ANDROID, LOCAL_API_HOST_IOS } from "@env";
 export const _ANDROID_API_HOST = `${LOCAL_API_HOST_ANDROID}`;
 export const _IOS_API_HOST = `${LOCAL_API_HOST_IOS}`;
 
+console.log("LOCAL_API_HOST_ANDROID", LOCAL_API_HOST_ANDROID);
+
 export const getAPIHost = (): string => {
   if (Platform.OS === "ios") {
     return _IOS_API_HOST;
