@@ -3,6 +3,8 @@ import { useTheme } from "styled-components/native";
 import useWagmiCandleStick from "../../hooks/useWagmiCandleStick";
 import {
   CandlestickChartCandles,
+  CandlestickChartCrosshair,
+  CandlestickChartCrosshairTooltip,
   CandlestickChartProvider,
 } from "./WagmiChart/candle";
 import { CandlestickChart } from "./WagmiChart/candle/Chart";
@@ -394,9 +396,13 @@ export default function WagmiChart() {
             positiveColor={theme.palette.red}
             negativeColor={theme.palette.blue}
           />
-          {/* <CandlestickChart.Crosshair>
-            <CandlestickChart.Tooltip />
-          </CandlestickChart.Crosshair> */}
+          <CandlestickChartCrosshair>
+            <CandlestickChartCrosshairTooltip
+              textStyle={{
+                color: theme.text,
+              }}
+            />
+          </CandlestickChartCrosshair>
         </CandlestickChart>
       </CandlestickChartProvider>
     </>
