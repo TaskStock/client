@@ -1,7 +1,11 @@
 import * as React from "react";
-import { CandlestickChart, TCandle } from "react-native-wagmi-charts";
 import { useTheme } from "styled-components/native";
 import useWagmiCandleStick from "../../hooks/useWagmiCandleStick";
+import {
+  CandlestickChartCandles,
+  CandlestickChartProvider,
+} from "./WagmiChart/candle";
+import { CandlestickChart } from "./WagmiChart/candle/Chart";
 
 const mockData = [
   {
@@ -377,24 +381,24 @@ export const CustomWidthContext = React.createContext({
   height: 0,
 });
 
-export default function WagmeChart() {
+export default function WagmiChart() {
   const { data } = useWagmiCandleStick();
   const theme = useTheme();
 
   return (
     <>
-      <CandlestickChart.Provider data={data}>
+      <CandlestickChartProvider data={data}>
         <CandlestickChart>
-          <CandlestickChart.Candles
+          <CandlestickChartCandles
             useAnimations={true}
             positiveColor={theme.palette.red}
             negativeColor={theme.palette.blue}
           />
-          <CandlestickChart.Crosshair>
+          {/* <CandlestickChart.Crosshair>
             <CandlestickChart.Tooltip />
-          </CandlestickChart.Crosshair>
+          </CandlestickChart.Crosshair> */}
         </CandlestickChart>
-      </CandlestickChart.Provider>
+      </CandlestickChartProvider>
     </>
   );
 }

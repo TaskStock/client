@@ -12,7 +12,6 @@ import FlexBox from "../../atoms/FlexBox";
 import { LinearGradient } from "expo-linear-gradient";
 import useUser from "../../../hooks/useUser";
 import { useAppSelect } from "../../../store/configureStore.hooks";
-import WagmeChart from "../WagmeChart";
 
 const Container = styled.View`
   width: 100%;
@@ -123,7 +122,6 @@ const GraphContainer = ({ myData }) => {
       <Container
         onLayout={(e) => {
           const { width, height } = e.nativeEvent.layout;
-          console.log("graph container layout");
 
           if (size.width !== width || size.height !== height) {
             setSize({ width, height });

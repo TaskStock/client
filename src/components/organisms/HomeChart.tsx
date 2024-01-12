@@ -13,7 +13,7 @@ import CenterLayout from "../atoms/CenterLayout";
 import dayjs from "dayjs";
 import { useAppSelect } from "../../store/configureStore.hooks";
 import useValue from "../../hooks/useValue";
-import WagmeChart from "./WagmeChart";
+import WagmeChart from "./WagmiChart";
 
 const Container = styled.View`
   width: 100%;
@@ -200,6 +200,8 @@ function HomeChart({ isCandleStick }: { isCandleStick: boolean }) {
   } | null>(null);
 
   const { data, isLoading, isError, error, refetch } = useValue();
+
+  console.log(data);
 
   if (isError) console.log(error);
 
