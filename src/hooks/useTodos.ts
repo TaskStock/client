@@ -16,6 +16,8 @@ const useTodos = () => {
     date: currentDateYYYYMMLocal,
   };
 
+  console.log("useTodos");
+
   const { data, isLoading, isError, error, refetch } =
     useGetAllTodosQuery(queryArg);
 

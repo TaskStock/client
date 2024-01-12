@@ -142,7 +142,7 @@ export default function DraggableTodoList({
         keyExtractor={(item: Todo) => item.todo_id.toString()}
         onDragEnd={onDragEnd}
       ></DraggableFlatList>
-      <AddTodoItem />
+      {/* <AddTodoItem /> */}
     </View>
   );
 }
