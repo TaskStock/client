@@ -1,11 +1,12 @@
 import React, { createRef, forwardRef, useEffect, useState } from "react";
 import { TextInput, TextInputProps, View } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { useTheme } from "styled-components";
 import styled from "styled-components/native";
 import { BlackBtn } from "../../components/atoms/Buttons";
 import FlexBox from "../../components/atoms/FlexBox";
 import Text from "../../components/atoms/Text";
 import LoginContainer from "../../components/molecules/Login/LoginContainer";
-import { grayTheme } from "../../constants/colors";
 import { spacing } from "../../constants/spacing";
 import { client } from "../../services/api";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
@@ -26,6 +27,21 @@ const CodeInput = forwardRef<TextInput, TextInputProps>((props, ref) => (
   <StyledInput ref={ref} {...props} />
 ));
 
+const ResendEmail = ({ onPress }) => {
+  return (
+    <>
+      <TouchableOpacity
+        onPress={onPress}
+        style={{ borderBottomColor: "white", borderBottomWidth: 1 }}
+      >
+        <Text size="sm">인증번호 재전송</Text>
+      </TouchableOpacity>
+
+      <View style={{ height: useResponsiveFontSize(27) }} />
+    </>
+  );
+};
+
 const BorderBottom = styled.View<{ hasContent: boolean }>`
   height: ${spacing.small}px;
   background-color: ${(props) =>
@@ -41,6 +57,7 @@ const EmailCheckCodeScreen = ({ route, navigation }) => {
   const codeId = route.params.codeId;
   const [alert, setAlert] = useState("");
   const [loading, setLoading] = useState(false);
+  const theme = useTheme();
 
   useEffect(() => {
     inputRefs[0].current?.focus();
@@ -114,6 +131,7 @@ const EmailCheckCodeScreen = ({ route, navigation }) => {
     setLoading(true);
     if (code.join("").length !== 6) {
       setAlert("6자리의 인증코드를 입력해주세요.");
+      setLoading(false);
       return;
     }
 
@@ -161,12 +179,13 @@ const EmailCheckCodeScreen = ({ route, navigation }) => {
             marginBottom: spacing.padding,
           }}
         >
-          <Text size="xs" color={grayTheme.alert}>
+          <Text size="xs" color={theme.alert}>
             {alert}
           </Text>
         </View>
       )}
 
+      <ResendEmail onPress={() => {}} />
       <BlackBtn text={"다음"} onPress={handleSubmit} loading={loading} />
     </LoginContainer>
   );

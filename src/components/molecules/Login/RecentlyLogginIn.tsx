@@ -26,6 +26,8 @@ const Polygon = styled.View`
   border-left-color: transparent;
   border-right-color: transparent;
   border-top-color: rgba(0, 0, 0, 0.8);
+  justify-content: center;
+  align-items: center;
 `;
 
 const RecentlyLogginIn = ({ shown = false }: { shown?: boolean }) => {
