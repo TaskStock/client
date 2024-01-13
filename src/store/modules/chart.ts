@@ -1,4 +1,3 @@
-import { LOCAL_API_HOST } from "@env";
 import { createSlice } from "@reduxjs/toolkit";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import wrappedFetchBaseQuery from "../fetchBaseQuery";
@@ -10,18 +9,29 @@ const initialState = {
   data: [],
 };
 
+export interface useGetValuesQueryArg {
+  startDate: DateString;
+  endDate: DateString;
+}
+
+export type useGetValuesQueryStartDate = Pick<
+  useGetValuesQueryArg,
+  "startDate"
+>["startDate"];
+export type useGetValuesQueryEndDate = Pick<
+  useGetValuesQueryArg,
+  "endDate"
+>["endDate"];
+
 export const chartApi = createApi({
   reducerPath: "chartApi",
-  baseQuery: myFetchFunction(LOCAL_API_HOST),
+  baseQuery: myFetchFunction(""),
   endpoints: (builder) => ({
     getValues: builder.query<
       {
         values: Value[];
       },
-      {
-        startDate: DateString;
-        endDate: DateString;
-      }
+      useGetValuesQueryArg
     >({
       query: (body) => ({
         url: `/value/getValues?start_date=${body.startDate}&end_date=${body.endDate}`,

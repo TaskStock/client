@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { Value } from "../@types/chart";
+import { Value, WagmiData } from "../@types/chart";
 import { formatChartValue } from "./formatChartValue";
 
 export const createRestDummyData = (
@@ -32,4 +32,46 @@ export const createRestDummyData = (
   }
 
   return [...arr, ...newArray];
+};
+
+export const convertAndCreateWagmiData = (
+  arr: Value[],
+  createLength: number
+): WagmiData[] => {
+  const convertedData = arr.map((item) => {
+    return {
+      timestamp: dayjs(item.date).unix(),
+      open: item.start,
+      high: item.high,
+      low: item.low,
+      close: item.end,
+    };
+  });
+
+  const newArray: WagmiData[] = [...convertedData];
+
+  if (newArray.length == 0) {
+    return newArray;
+  }
+
+  const lastDate = dayjs(arr[arr.length - 1].date);
+
+  const sumValue = arr.reduce((acc, cur) => {
+    return acc + cur.end;
+  }, 0);
+
+  const avgValue = sumValue / arr.length;
+
+  for (let i = 1; i <= createLength; i++) {
+    const newDate = dayjs(lastDate).add(i, "day").toISOString();
+    newArray.push({
+      timestamp: dayjs(newDate).unix(),
+      open: avgValue,
+      close: avgValue,
+      low: avgValue,
+      high: avgValue,
+    });
+  }
+
+  return newArray;
 };

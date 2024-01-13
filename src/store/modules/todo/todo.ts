@@ -6,6 +6,7 @@ import {
   addSimpleTodoMutation,
   addTodoMutation,
   changeTodoOrderMutation,
+  changeToNextDayTodoMutation,
   deleteTodoMutation,
   editTodoMutation,
   toggleTodoMutation,
@@ -13,7 +14,6 @@ import {
 import { QueryReturnValue } from "@reduxjs/toolkit/dist/query/baseQueryTypes";
 import { MaybePromise } from "@reduxjs/toolkit/dist/query/tsHelpers";
 import { getAllTodosQuery } from "./queries";
-import { LOCAL_API_HOST } from "@env";
 import { myFetchFunction } from "../../myFetchFunction";
 
 interface InitialState {
@@ -47,7 +47,7 @@ export type TodoApiBuilder = EndpointBuilder<
 
 export const todoApi = createApi({
   reducerPath: "todoApi",
-  baseQuery: myFetchFunction(`${LOCAL_API_HOST}`),
+  baseQuery: myFetchFunction(``),
   tagTypes: ["Todos"],
   endpoints: (builder) => ({
     getAllTodos: getAllTodosQuery(builder),
@@ -57,6 +57,7 @@ export const todoApi = createApi({
     toggleTodo: toggleTodoMutation(builder),
     deleteTodo: deleteTodoMutation(builder),
     changeOrderTodo: changeTodoOrderMutation(builder),
+    changeToNextDayTodoMutation: changeToNextDayTodoMutation(builder),
   }),
 });
 
@@ -180,4 +181,5 @@ export const {
   useDeleteTodoMutation,
   useToggleTodoMutation,
   useChangeOrderTodoMutation,
+  useChangeToNextDayTodoMutationMutation,
 } = todoApi;

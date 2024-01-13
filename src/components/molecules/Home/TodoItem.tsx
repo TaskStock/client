@@ -1,5 +1,5 @@
 import React, { memo, useEffect, useState } from "react";
-import { Modal, Platform, View } from "react-native";
+import { Modal, Platform, View, Text as RNText } from "react-native";
 import { useDispatch } from "react-redux";
 import styled, { useTheme } from "styled-components/native";
 import { Todo } from "../../../@types/todo";
@@ -7,6 +7,7 @@ import { spacing } from "../../../constants/spacing";
 import { useAppSelect } from "../../../store/configureStore.hooks";
 import {
   openEditTodoModal,
+  useChangeToNextDayTodoMutationMutation,
   useDeleteTodoMutation,
   useToggleTodoMutation,
 } from "../../../store/modules/todo/todo";
@@ -16,6 +17,11 @@ import CheckBox from "../../atoms/CheckBox";
 import FlexBox from "../../atoms/FlexBox";
 import Icons from "../../atoms/Icons";
 import Text from "../../atoms/Text";
+import useTodos from "../../../hooks/useTodos";
+import useValue from "../../../hooks/useValue";
+import dayjs from "dayjs";
+import { DateString, DateStringYYYYMM } from "../../../@types/calendar";
+import { checkIsWithInCurrentCalcDay } from "../../../utils/checkIsSameLocalDay";
 
 const THEME_CONSTANTS = {
   dark: {
@@ -36,14 +42,17 @@ const ModalOverlay = styled.Pressable`
   height: 100%;
 `;
 
-const TodoModal = styled.View<{ position: { top: number; left: number } }>`
+const TodoModal = styled.View<{ position: { bottom: number; left: number } }>`
   position: absolute;
-  top: ${({ position }) => position.top}px;
+  top: ${({ position }) => position.bottom}px;
   right: ${useResponsiveFontSize(60)}px;
   padding: ${spacing.padding}px;
   z-index: 100;
   border-radius: 10px;
-  background-color: ${({ theme }) => theme.box};
+  background-color: ${({ theme }) =>
+    theme.name == "dark"
+      ? theme.palette.neutral500_dark
+      : theme.palette.neutral100_gray};
   flex-direction: column;
   gap: 10px;
   ${Platform.select({
@@ -60,6 +69,11 @@ const TodoModal = styled.View<{ position: { top: number; left: number } }>`
 `;
 const TodoModalItem = styled.TouchableOpacity<{ isSelected?: boolean }>`
   background-color: ${({ isSelected, theme }) => {
+    if (theme.name == "dark" && isSelected) {
+      return theme.palette.neutral700_gray;
+    } else if (theme.name == "dark") {
+      return theme.palette.neutral500_dark;
+    }
     if (isSelected) {
       return theme.text;
     } else {
@@ -107,16 +121,28 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
     (state) => state.todo.todoDrawerPosition
   );
 
-  const [deleteTodo, result] = useDeleteTodoMutation();
-  const [toggleCheckTodo, toggleCheckTodoResult] = useToggleTodoMutation();
+  const [changeToNextDayTodo] = useChangeToNextDayTodoMutationMutation();
+  const [deleteTodo] = useDeleteTodoMutation();
+  const [toggleCheckTodo] = useToggleTodoMutation();
 
   const didMountRef = React.useRef(false);
   const MeasurePositionTriggerRef = React.useRef(false);
   const itemRef = React.useRef<View | null>(null);
 
-  const { oneMonthBeforeQueryString, todayQueryString } = useAppSelect(
-    (state) => state.calendar
-  );
+  const startDate = dayjs()
+    .local()
+    .subtract(29, "day")
+    .format("YYYY-MM-DD") as DateString;
+  const endDate = dayjs()
+    .local()
+    .add(1, "day")
+    .format("YYYY-MM-DD") as DateString;
+
+  const getAllTodoQueryArg = {
+    date: dayjs().local().format("YYYY-MM") as DateStringYYYYMM,
+  };
+
+  // const { getAllTodoQueryArg } = useTodos();
 
   useEffect(() => {
     MeasurePositionTriggerRef.current = false;
@@ -144,18 +170,58 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
       todo_id: todo.todo_id,
       check: !todo.check,
       todo_date: todo.date,
-      value: todo.level * 1000,
+      level: todo.level,
       queryArgs: {
-        current_date: currentDateFormat,
-        graph_before_date: oneMonthBeforeQueryString,
-        graph_today_date: todayQueryString,
+        current_date: getAllTodoQueryArg.date,
+        graph_before_date: startDate,
+        graph_today_date: endDate,
       },
     });
   };
 
-  const currentDateFormat = useAppSelect(
-    (state) => state.calendar.currentDateYYYYMMDD
-  );
+  const onPressChangeToNextDayTodo = () => {
+    changeToNextDayTodo({
+      todo_id: todo.todo_id,
+      todo_date: todo.date,
+      todo_checked: todo.check,
+      todo_level: todo.level,
+      queryArgs: {
+        current_date: getAllTodoQueryArg.date,
+        graph_before_date: startDate,
+        graph_today_date: endDate,
+      },
+    });
+  };
+
+  const onPressEditTodo = () => {
+    dispatch(
+      openEditTodoModal({
+        text: todo.content,
+        level: todo.level,
+        date: todo.date,
+        checked: todo.check,
+        project_id: todo.project_id,
+        repeat_day: todo.repeat_day,
+        repeat_end_date: todo.repeat_end_date,
+        todo_id: todo.todo_id,
+      })
+    );
+    setIsModalOpen(!isModalOpen);
+  };
+
+  const onPressDeleteTodo = () => {
+    deleteTodo({
+      todo_id: todo.todo_id,
+      todo_date: todo.date,
+      value: todo.level * 1000,
+      checked: todo.check,
+      queryArgs: {
+        date: getAllTodoQueryArg.date,
+        graph_before_date: startDate,
+        graph_today_date: endDate,
+      },
+    });
+  };
 
   return (
     <View ref={itemRef}>
@@ -164,7 +230,13 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
         alignItems="center"
         styles={{ paddingBottom: spacing.padding }}
       >
-        <FlexBox gap={10} alignItems="center">
+        <FlexBox
+          gap={10}
+          alignItems="center"
+          styles={{
+            flex: 1,
+          }}
+        >
           <TodoCheckBox
             theme={theme}
             isChecked={todo.check}
@@ -172,8 +244,17 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
               toggleTodoCheck();
             }}
           />
-
-          <Text size="md">{todo.content}</Text>
+          <RNText
+            numberOfLines={1}
+            ellipsizeMode="tail"
+            style={{
+              color: styledTheme.text,
+              flex: 1,
+              fontSize: useResponsiveFontSize(17),
+            }}
+          >
+            {todo.content}
+          </RNText>
         </FlexBox>
         <FlexBox gap={10} alignItems="center">
           {todo.check ? (
@@ -207,48 +288,35 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
             >
               <TodoModal
                 position={{
-                  top: modalPosition.y,
+                  bottom: modalPosition.y,
                   left: modalPosition.x,
                 }}
               >
-                <TodoModalItem
-                  isSelected={true}
-                  onPress={() => {
-                    dispatch(
-                      openEditTodoModal({
-                        text: todo.content,
-                        level: todo.level,
-                        date: todo.date,
-                        checked: todo.check,
-                        project_id: todo.project_id,
-                        repeat_day: todo.repeat_day,
-                        repeat_end_date: todo.repeat_end_date,
-                        todo_id: todo.todo_id,
-                      })
-                    );
-                    setIsModalOpen(!isModalOpen);
-                  }}
-                >
-                  <Text size="md" color={styledTheme.textReverse}>
-                    수정
+                <TodoModalItem isSelected={true} onPress={onPressEditTodo}>
+                  <Text
+                    size="md"
+                    color={
+                      styledTheme.name == "gray"
+                        ? styledTheme.textReverse
+                        : styledTheme.text
+                    }
+                  >
+                    수정하기
                   </Text>
                 </TodoModalItem>
-                <TodoModalItem
-                  onPress={() => {
-                    deleteTodo({
-                      todo_id: todo.todo_id,
-                      todo_date: todo.date,
-                      value: todo.level * 1000,
-                      checked: todo.check,
-                      queryArgs: {
-                        date: currentDateFormat,
-                        graph_before_date: oneMonthBeforeQueryString,
-                        graph_today_date: todayQueryString,
-                      },
-                    });
-                  }}
-                >
-                  <Text size="md">삭제</Text>
+                {!todo.check && checkIsWithInCurrentCalcDay(todo.date) && (
+                  <TodoModalItem
+                    isSelected={false}
+                    onPress={onPressChangeToNextDayTodo}
+                  >
+                    <Text size="md" color={styledTheme.text}>
+                      내일하기
+                    </Text>
+                  </TodoModalItem>
+                )}
+
+                <TodoModalItem onPress={onPressDeleteTodo}>
+                  <Text size="md">삭제하기</Text>
                 </TodoModalItem>
               </TodoModal>
             </ModalOverlay>
@@ -259,4 +327,4 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
   );
 };
 
-export default TodoItem;
+export default memo(TodoItem);

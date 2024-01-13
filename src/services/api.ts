@@ -21,6 +21,8 @@ export async function client<T = any>(
     ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
   };
 
+  // console.log("=========== 받은 access 토큰: ", accessToken);
+
   const config: RequestInit = {
     method: customConfig.method,
     headers: {
@@ -37,7 +39,7 @@ export async function client<T = any>(
   try {
     const response = await fetch(SERVER_URL + endpoint, config);
     const data = await response.json();
-    console.log(SERVER_URL + endpoint);
+    // console.log(SERVER_URL + endpoint);
 
     if (!response.ok) {
       console.log(data);

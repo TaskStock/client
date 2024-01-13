@@ -1,4 +1,4 @@
-import { LOCAL_API_HOST } from "@env";
+import { LOCAL_API_HOST_IOS } from "@env";
 import { createSlice } from "@reduxjs/toolkit";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query";
 import { myFetchFunction } from "../myFetchFunction";

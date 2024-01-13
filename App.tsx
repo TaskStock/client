@@ -11,9 +11,10 @@ import SplashScreen from "./src/screens/Login/SplashScreen";
 import { useAppDispatch, useAppSelect } from "./src/store/configureStore.hooks";
 import { checkTokenExistence } from "./src/store/modules/auth";
 import { startingTheme } from "./src/store/modules/theme";
-import { removeData } from "./src/utils/asyncStorage";
+import { getData, removeData } from "./src/utils/asyncStorage";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { checkAndRenewTokens } from "./src/utils/authUtils/tokenUtils";
+import { getUserInfoThunk } from "./src/store/modules/user";
 
 const THEME = {
   dark: {
@@ -27,7 +28,7 @@ const THEME = {
 };
 
 export default function App() {
-  const [isReady, setIsReady] = useState(false);
+  const [isReady, setIsReady] = useState(true);
   const theme = useAppSelect((state) => state.theme.value);
 
   const isLoggedIn = useAppSelect((state) => state.auth.isLoggedIn);
@@ -35,25 +36,31 @@ export default function App() {
 
   const dispatch = useAppDispatch();
   useEffect(() => {
+    // asyncstorage에서 엑세스토큰, 만료일, refresh만료일을 가져와서
     dispatch(checkTokenExistence());
     dispatch(startingTheme());
     if (isLoggedIn) {
       dispatch(checkAndRenewTokens());
     }
   }, [dispatch, isLoggedIn]);
+
   // useEffect(() => {
   //   removeData("accessToken");
   //   removeData("refreshToken");
+  //   removeData("accessExp");
+  //   removeData("refreshExp");
+  //   removeData("strategy");
   // }, []);
 
   // const [assets] = useAssets([require("./assets/splash.png")]);
   const [fontsLoaded] = Font.useFonts(customFontsToLoad);
 
-  useEffect(() => {
-    setTimeout(() => {
-      setIsReady(true);
-    }, 1000);
-  }, []);
+  // useEffect(() => {
+
+  //   setTimeout(() => {
+  //     setIsReady(true);
+  //   }, 1000);
+  // }, []);
 
   if (!isReady || !fontsLoaded || tokenLoading) return <SplashScreen />;
 

@@ -15,7 +15,6 @@ import dayjs from "dayjs";
 import {
   openAddTodoModal,
   setTodoDrawerPosition,
-  useGetAllTodosQuery,
 } from "../../../store/modules/todo/todo";
 import FlexBox from "../../atoms/FlexBox";
 import Icons from "../../atoms/Icons";
@@ -24,10 +23,9 @@ import Margin from "../../atoms/Margin";
 import AddTodoItem from "../../organisms/Home/AddTodoItem";
 import LoadingSpinner from "../../atoms/LoadingSpinner";
 import { setTabIndex } from "../../../store/modules/home";
-import { DateString } from "../../../@types/calendar";
-import DraggableFlatList from "react-native-draggable-flatlist";
 import DraggableTodoList from "../../organisms/Home/DraggableTodoList";
 import useTodos from "../../../hooks/useTodos";
+import { useTheme } from "styled-components";
 
 const DateContainer = styled.View`
   padding: ${spacing.small}px ${spacing.gutter}px 0;
@@ -44,6 +42,7 @@ const TodoContainer = () => {
   const [projects, setProjects] = useState([]);
   const [selectedProjectId, setSelectedProjectId] = useState(null);
 
+  const theme = useTheme();
   const { currentDateString, currentDateYYYYMMDD } = useAppSelect(
     (state) => state.calendar
   );
@@ -80,6 +79,7 @@ const TodoContainer = () => {
             type="entypo"
             name="circle-with-plus"
             size={28}
+            color={theme.name === "dark" ? theme.text : theme.textDimmer}
             onPress={() => {
               dispatch(openAddTodoModal());
             }}

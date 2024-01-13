@@ -12,7 +12,6 @@ import {
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
 import FlexBox from "../atoms/FlexBox";
 import { DateString, IsoString } from "../../@types/calendar";
-import { useGetAllTodosQuery } from "../../store/modules/todo/todo";
 import { checkIsSameLocalDay } from "../../utils/checkIsSameLocalDay";
 import useTodos from "../../hooks/useTodos";
 import { Todo } from "../../@types/todo";
@@ -39,12 +38,15 @@ const CalendarItemContainer = styled.View<{ size?: number }>`
 
 const CalendarItemInner = styled.View<{
   bgColor?: string;
+  borderColor?: string;
 }>`
   width: ${useResponsiveFontSize(35)}px;
   height: ${useResponsiveFontSize(35)}px;
   border-radius: ${useResponsiveFontSize(35 / 2)}px;
   background-color: ${({ bgColor }) => (bgColor ? bgColor : "none")};
-
+  border-color: ${({ borderColor }) =>
+    borderColor ? borderColor : "transparent"};
+  border-width: ${useResponsiveFontSize(0.8)}px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -119,11 +121,16 @@ const CalendarItem = memo(
       return item.isSame(currentDate, "day");
     }, [currentDate, item]);
 
+    const isToday = useMemo(() => {
+      return item.isSame(dayjs(), "day");
+    }, [item]);
+
     return (
       <CalendarItemContainer size={itemHeight}>
         <Pressable onPress={() => onPress(item)}>
           <CalendarItemInner
             bgColor={isSelected ? themeContext.text : "transparent"}
+            borderColor={isToday ? themeContext.text : "transparent"}
           >
             <CalendarItemText
               color={
@@ -171,8 +178,6 @@ export default function HomeCalendar({
     return extractDatesWithTodos(todos);
   }, [todos]);
 
-  console.log(hasTodoDates);
-
   const renderItem = ({
     item,
     index,
@@ -187,14 +192,16 @@ export default function HomeCalendar({
       return checkIsSameLocalDay(date, item.toISOString());
     });
 
+    const onPressCalendarItem = (item: dayjs.Dayjs) => {
+      dispatch(setCurrentDateString(item.toISOString() as IsoString));
+    };
+
     return (
       <CalendarItem
         item={item}
         currentDate={currentDate}
         hasTodo={hasTodo}
-        onPress={(item: dayjs.Dayjs) => {
-          dispatch(setCurrentDateString(item.toISOString() as IsoString));
-        }}
+        onPress={onPressCalendarItem}
       />
     );
   };

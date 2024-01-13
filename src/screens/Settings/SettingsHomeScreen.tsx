@@ -1,15 +1,14 @@
 import React, { useEffect } from "react";
 import styled from "styled-components/native";
-import Text from "../../../components/atoms/Text";
-import { spacing } from "../../../constants/spacing";
-import {
-  useAppDispatch,
-  useAppSelect,
-} from "../../../store/configureStore.hooks";
+import Text from "../../components/atoms/Text";
+import { spacing } from "../../constants/spacing";
+import { useAppDispatch, useAppSelect } from "../../store/configureStore.hooks";
 
-import { resetNavigation } from "../../../utils/resetNavigation";
-import { logout } from "../../../utils/authUtils/signInUtils";
-import { checkAndRenewTokens } from "../../../utils/authUtils/tokenUtils";
+import { resetNavigation } from "../../utils/resetNavigation";
+import { logout } from "../../utils/authUtils/signInUtils";
+import { checkAndRenewTokens } from "../../utils/authUtils/tokenUtils";
+import { checkStorage } from "../../utils/asyncStorage";
+import { getAPIHost } from "../../utils/getAPIHost";
 
 const Container = styled.View`
   justify-content: center;
@@ -44,6 +43,12 @@ const SettingsHomeScreen = ({ navigation }) => {
     }
   }, [isLoggedIn, navigation]);
 
+  const redux = useAppSelect((state) => state.auth);
+  const checkRedux = () => {
+    console.log("=====redux=====");
+    console.log(redux);
+  };
+
   return (
     <Container>
       <Menu text="계정 설정 =>" onPress={() => {}} />
@@ -53,8 +58,10 @@ const SettingsHomeScreen = ({ navigation }) => {
           navigation.navigate("SettingsTheme");
         }}
       />
+      <Menu text="asyncStorage check" onPress={checkStorage} />
+      <Menu text="redux check" onPress={checkRedux} />
       <Menu text="로그아웃" onPress={handleLogout} />
-      <Menu text="토큰갱신" onPress={checkAndRenewTokens} />
+      <Menu text="check api" onPress={getAPIHost} />
     </Container>
   );
 };

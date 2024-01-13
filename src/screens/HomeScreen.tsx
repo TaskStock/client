@@ -6,10 +6,11 @@ import { data } from "../../public/home";
 import HeaderTop from "../components/molecules/Home/HeaderTop";
 import AddTodoModal from "../components/organisms/TodoModal/AddTodoModal";
 import GCContainer from "../components/organisms/Home/GCContainer";
-import { useAppSelect } from "../store/configureStore.hooks";
+import { useAppDispatch, useAppSelect } from "../store/configureStore.hooks";
 import { ComponentHeightContext } from "../utils/ComponentHeightContext";
 import TodoContainer from "../components/molecules/Home/TodoContainer";
 import { client } from "../services/api";
+import { getUserInfoThunk } from "../store/modules/user";
 
 const Container = styled.View`
   background-color: ${({ theme }) => theme.background};
@@ -23,7 +24,13 @@ const HomeScreen = ({ navigation }) => {
   );
 
   const isAddModalOpen = useAppSelect((state) => state.todo.isAddModalOpen);
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    console.log("get user info thunk");
+
+    dispatch(getUserInfoThunk());
+  }, []);
 
   return (
     <Container>

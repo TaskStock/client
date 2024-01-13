@@ -16,6 +16,7 @@ import Icons from "../../atoms/Icons";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import { LinearGradient } from "expo-linear-gradient";
 import { IsoString } from "../../../@types/calendar";
+import useUser from "../../../hooks/useUser";
 
 const clientHeight = Dimensions.get("window").height;
 
@@ -37,9 +38,11 @@ const DateInfo = ({
 }) => {
   const theme = useTheme();
 
+  const { user } = useUser();
+
   const data = {
-    cumulative_value: 100000,
-    value_month_ago: 10000,
+    cumulative_value: user.cumulative_value,
+    value_month_ago: user.value_month_ago,
   };
 
   const diff = data.cumulative_value - data.value_month_ago;
@@ -103,6 +106,17 @@ const CalendarContainer = () => {
     useAppSelect((state) => state.calendar.currentDateString)
   );
 
+  const theme = useTheme();
+
+  const gradient =
+    theme.name === "dark"
+      ? [
+          "rgba(255, 255, 255, 0.00)",
+          "rgba(255, 255, 255, 0.09)",
+          "rgba(255, 255, 255, 0.20)",
+        ]
+      : ["rgba(255, 255, 255, 0.00)", "rgba(255, 255, 255, 0.47)", "#FFFFFF"];
+
   const dispatch = useAppDispatch();
 
   const subtract1Month = () => {
@@ -136,11 +150,7 @@ const CalendarContainer = () => {
       />
       <Container>
         <LinearGradient
-          colors={[
-            "rgba(255, 255, 255, 0.00)",
-            "rgba(255, 255, 255, 0.47)",
-            "#FFFFFF",
-          ]}
+          colors={gradient}
           start={{ x: 0, y: 0 }}
           end={{ x: 0, y: 1 }}
           style={{
