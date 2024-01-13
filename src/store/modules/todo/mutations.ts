@@ -1,7 +1,7 @@
 import { AddTodoForm, Todo } from "../../../@types/todo";
 import { TodoApiBuilder, closeTodoModal, todoApi } from "./todo";
 import {
-  checkIsLocalBetween6to6,
+  checkIsWithInCurrentCalcDay,
   checkIsSameLocalDay,
   checkIsWithInOneDay,
 } from "../../../utils/checkIsSameLocalDay";
@@ -152,7 +152,7 @@ export const addTodoMutation = (builder: TodoApiBuilder) =>
 
       // todo를 추가한 날짜가. 로컬기준 오늘의 오전 6시부터, 내일의 오전 6시 사이인지.
       // 만약에 그렇다면, 그래프값에도 반영해준다.
-      if (checkIsLocalBetween6to6(body.add_date)) {
+      if (checkIsWithInCurrentCalcDay(body.add_date)) {
         patchUpdateHighLowValue = dispatch(
           chartApi.util.updateQueryData(
             "getValues",
@@ -264,7 +264,7 @@ export const editTodoMutation = (builder: TodoApiBuilder) =>
 
       let patchUpdateGraphValue;
 
-      if (body.todo_date && checkIsLocalBetween6to6(body.todo_date)) {
+      if (body.todo_date && checkIsWithInCurrentCalcDay(body.todo_date)) {
         patchUpdateGraphValue = dispatch(
           chartApi.util.updateQueryData(
             "getValues",
@@ -352,7 +352,7 @@ export const toggleTodoMutation = (builder: TodoApiBuilder) =>
       console.log(body.todo_date);
 
       // 오늘 날짜라면, 토글해서 check 했을때, 그래프값에도 반영해준다.
-      if (checkIsLocalBetween6to6(body.todo_date)) {
+      if (checkIsWithInCurrentCalcDay(body.todo_date)) {
         patchUpdateGraphValue = dispatch(
           chartApi.util.updateQueryData(
             "getValues",
@@ -430,7 +430,7 @@ export const deleteTodoMutation = (builder: TodoApiBuilder) =>
 
       let patchUpdateGraphEndValue;
 
-      if (checkIsLocalBetween6to6(body.todo_date)) {
+      if (checkIsWithInCurrentCalcDay(body.todo_date)) {
         patchUpdateGraphEndValue = dispatch(
           chartApi.util.updateQueryData(
             "getValues",
@@ -619,7 +619,7 @@ export const changeToNextDayTodoMutation = (builder: TodoApiBuilder) =>
 
       let patchUpdateGraphValue;
 
-      if (checkIsLocalBetween6to6(body.todo_date)) {
+      if (checkIsWithInCurrentCalcDay(body.todo_date)) {
         patchUpdateGraphValue = dispatch(
           chartApi.util.updateQueryData(
             "getValues",

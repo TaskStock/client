@@ -28,7 +28,7 @@ const THEME = {
 };
 
 export default function App() {
-  const [isReady, setIsReady] = useState(false);
+  const [isReady, setIsReady] = useState(true);
   const theme = useAppSelect((state) => state.theme.value);
 
   const isLoggedIn = useAppSelect((state) => state.auth.isLoggedIn);
@@ -36,6 +36,7 @@ export default function App() {
 
   const dispatch = useAppDispatch();
   useEffect(() => {
+    // asyncstorage에서 엑세스토큰, 만료일, refresh만료일을 가져와서
     dispatch(checkTokenExistence());
     dispatch(startingTheme());
     if (isLoggedIn) {
@@ -54,11 +55,12 @@ export default function App() {
   // const [assets] = useAssets([require("./assets/splash.png")]);
   const [fontsLoaded] = Font.useFonts(customFontsToLoad);
 
-  useEffect(() => {
-    setTimeout(() => {
-      setIsReady(true);
-    }, 1000);
-  }, []);
+  // useEffect(() => {
+
+  //   setTimeout(() => {
+  //     setIsReady(true);
+  //   }, 1000);
+  // }, []);
 
   if (!isReady || !fontsLoaded || tokenLoading) return <SplashScreen />;
 

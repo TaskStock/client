@@ -13,21 +13,43 @@ function checkIsSameLocalDay(utcString1: string, utcString2: string): boolean {
   return dt1.isSame(dt2, "day");
 }
 
-// 어제 6시부터 오늘 6시 사이의 시간인지 확인. 즉 정산날짜에 해당하는 utc인지를 확인.
-function checkIsLocalBetween6to6(utcString: string): boolean {
+// 즉 정산날짜에 해당하는 utc인지를 확인.
+function checkIsWithInCurrentCalcDay(utcString: string): boolean {
   // Parse UTC string into dayjs object
-  const dt = dayjs.utc(utcString);
+  const dt = dayjs(utcString);
 
-  const localDateStart = dayjs()
-    .set("hour", 6)
-    .set("minute", 0)
-    .set("second", 0)
-    .set("millisecond", 0)
-    .subtract(1, "day");
+  let calcDateStart;
 
-  const localDateEnd = localDateStart.add(1, "day");
+  if (
+    dayjs().isBefore(
+      dayjs()
+        .set("hour", 6)
+        .set("minute", 0)
+        .set("second", 0)
+        .set("millisecond", 0)
+    )
+  ) {
+    calcDateStart = dayjs()
+      .set("hour", 6)
+      .set("minute", 0)
+      .set("second", 0)
+      .set("millisecond", 0)
+      .subtract(1, "day");
 
-  return dt.isAfter(localDateStart) && dt.isBefore(localDateEnd);
+    const calcDateEnd = calcDateStart.add(1, "day");
+
+    return dt.isAfter(calcDateStart) && dt.isBefore(calcDateEnd);
+  } else {
+    calcDateStart = dayjs()
+      .set("hour", 6)
+      .set("minute", 0)
+      .set("second", 0)
+      .set("millisecond", 0);
+
+    const calcDateEnd = calcDateStart.add(1, "day");
+
+    return dt.isAfter(calcDateStart) && dt.isBefore(calcDateEnd);
+  }
 }
 
 // todo에 해당하는 value 찾기 용.
@@ -44,4 +66,8 @@ function checkIsWithInOneDay(value_date: string, todo_date: string) {
   return hoursDifference <= 24;
 }
 
-export { checkIsSameLocalDay, checkIsWithInOneDay, checkIsLocalBetween6to6 };
+export {
+  checkIsSameLocalDay,
+  checkIsWithInOneDay,
+  checkIsWithInCurrentCalcDay,
+};
