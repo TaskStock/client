@@ -3,7 +3,6 @@ import { useAppSelect } from "../store/configureStore.hooks";
 import { useGetAllTodosQuery } from "../store/modules/todo/todo";
 import { DateStringYYYYMM } from "../@types/calendar";
 import { useGetAllTodosQueryArg } from "../store/modules/todo/queries";
-import { checkIsLocalBetween6to6 } from "../utils/checkIsSameLocalDay";
 
 const useTodos = () => {
   const { currentDateString } = useAppSelect((state) => state.calendar);

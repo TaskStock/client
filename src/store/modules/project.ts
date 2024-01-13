@@ -1,4 +1,4 @@
-import { LOCAL_API_HOST } from "@env";
+import { LOCAL_API_HOST_IOS } from "@env";
 import { createSlice } from "@reduxjs/toolkit";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query";
 
@@ -27,7 +27,7 @@ const initialState: InitialState = {
 const projectApi = createApi({
   reducerPath: "projectApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: `${LOCAL_API_HOST}`,
+    baseUrl: `${LOCAL_API_HOST_IOS}`,
   }),
   endpoints: (builder) => ({}),
 });
