@@ -99,31 +99,7 @@ const TodoContainer = () => {
           flex: 1,
         }}
       >
-        {!isLoading ? (
-          !isError ? (
-            todosData && (
-              <DraggableTodoList
-                selectedProjectId={selectedProjectId}
-              ></DraggableTodoList>
-            )
-          ) : (
-            <CenterLayout>
-              <Text size="md">할일을 불러오는 중 에러가 발생했어요</Text>
-              <Margin margin={5} />
-              <Pressable
-                onPress={() => {
-                  refetch();
-                }}
-              >
-                <Text size="md">다시 로드하기</Text>
-              </Pressable>
-            </CenterLayout>
-          )
-        ) : (
-          <CenterLayout>
-            <LoadingSpinner />
-          </CenterLayout>
-        )}
+        <DraggableTodoList selectedProjectId={selectedProjectId} />
       </View>
     </BottomDrawer>
   );

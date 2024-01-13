@@ -1,4 +1,5 @@
-import { View, Text, Pressable } from "react-native";
+import { View, Pressable } from "react-native";
+
 import React from "react";
 import { Todo } from "../../../@types/todo";
 import TodoItem from "../../molecules/Home/TodoItem";
@@ -17,6 +18,10 @@ import { spacing } from "../../../constants/spacing";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import { checkIsSameLocalDay } from "../../../utils/checkIsSameLocalDay";
 import useTodos from "../../../hooks/useTodos";
+import Text from "../../atoms/Text";
+import Margin from "../../atoms/Margin";
+import CenterLayout from "../../atoms/CenterLayout";
+import LoadingSpinner from "../../atoms/LoadingSpinner";
 
 export default function DraggableTodoList({
   selectedProjectId,
@@ -25,14 +30,16 @@ export default function DraggableTodoList({
 }) {
   const [changeTodoOrder, result] = useChangeOrderTodoMutation();
 
-  const { currentDateYYYYMMDD: currentDateFormat, currentDateString } =
-    useAppSelect((state) => state.calendar);
+  const { currentDateString } = useAppSelect((state) => state.calendar);
 
-  const { data: todos, getAllTodoQueryArg } = useTodos();
-
-  const currentDayTodos = todos
-    ? todos.filter((todo) => checkIsSameLocalDay(todo.date, currentDateFormat))
-    : [];
+  const {
+    data: todos,
+    currentDayTodos,
+    getAllTodoQueryArg,
+    isLoading,
+    isError,
+    refetch,
+  } = useTodos();
 
   const selectedTodos =
     selectedProjectId !== null
@@ -127,22 +134,42 @@ export default function DraggableTodoList({
     );
   };
 
-  return (
-    <View
-      style={{
-        paddingHorizontal: spacing.gutter,
-        paddingTop: useResponsiveFontSize(15),
-      }}
-    >
-      <DraggableFlatList
-        data={selectedTodos}
-        renderItem={({ item, getIndex, drag, isActive }) =>
-          renderTodoItem({ item, getIndex, drag, isActive })
-        }
-        keyExtractor={(item: Todo) => item.todo_id.toString()}
-        onDragEnd={onDragEnd}
-      ></DraggableFlatList>
-      {/* <AddTodoItem /> */}
-    </View>
+  return !isLoading ? (
+    !isError ? (
+      todos && (
+        <View
+          style={{
+            paddingHorizontal: spacing.gutter,
+            paddingTop: useResponsiveFontSize(15),
+          }}
+        >
+          <DraggableFlatList
+            data={selectedTodos}
+            renderItem={({ item, getIndex, drag, isActive }) =>
+              renderTodoItem({ item, getIndex, drag, isActive })
+            }
+            keyExtractor={(item: Todo) => item.todo_id.toString()}
+            onDragEnd={onDragEnd}
+          ></DraggableFlatList>
+          {/* <AddTodoItem /> */}
+        </View>
+      )
+    ) : (
+      <CenterLayout>
+        <Text size="md">할일을 불러오는 중 에러가 발생했어요</Text>
+        <Margin margin={5} />
+        <Pressable
+          onPress={() => {
+            refetch();
+          }}
+        >
+          <Text size="md">다시 로드하기</Text>
+        </Pressable>
+      </CenterLayout>
+    )
+  ) : (
+    <CenterLayout>
+      <LoadingSpinner />
+    </CenterLayout>
   );
 }
