@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState } from "react";
+import React, { memo, useCallback, useEffect, useState } from "react";
 import { Modal, Platform, View, Text as RNText } from "react-native";
 import { useDispatch } from "react-redux";
 import styled, { useTheme } from "styled-components/native";
@@ -22,6 +22,8 @@ import useValue from "../../../hooks/useValue";
 import dayjs from "dayjs";
 import { DateString, DateStringYYYYMM } from "../../../@types/calendar";
 import { checkIsWithInCurrentCalcDay } from "../../../utils/checkIsSameLocalDay";
+import { useGetAllTodoArgs } from "../../../hooks/useGetAllTodoArgs";
+import { useGetValuesArg } from "../../../hooks/useGetValuesArg";
 
 const THEME_CONSTANTS = {
   dark: {
@@ -115,34 +117,22 @@ const TodoCheckBox = memo(
 const TodoItem = ({ todo }: { todo: Todo }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 });
+  const didMountRef = React.useRef(false);
+  const MeasurePositionTriggerRef = React.useRef(false);
+  const itemRef = React.useRef<View | null>(null);
 
   const theme = useAppSelect((state) => state.theme.value);
   const todoDrawerPosition = useAppSelect(
     (state) => state.todo.todoDrawerPosition
   );
-
   const [changeToNextDayTodo] = useChangeToNextDayTodoMutationMutation();
   const [deleteTodo] = useDeleteTodoMutation();
   const [toggleCheckTodo] = useToggleTodoMutation();
 
-  const didMountRef = React.useRef(false);
-  const MeasurePositionTriggerRef = React.useRef(false);
-  const itemRef = React.useRef<View | null>(null);
+  console.log("todoItem rerendered", todo.content);
 
-  const startDate = dayjs()
-    .local()
-    .subtract(29, "day")
-    .format("YYYY-MM-DD") as DateString;
-  const endDate = dayjs()
-    .local()
-    .add(1, "day")
-    .format("YYYY-MM-DD") as DateString;
-
-  const getAllTodoQueryArg = {
-    date: dayjs().local().format("YYYY-MM") as DateStringYYYYMM,
-  };
-
-  // const { getAllTodoQueryArg } = useTodos();
+  const getAllTodoQueryArg = useGetAllTodoArgs();
+  const { startDate, endDate } = useGetValuesArg();
 
   useEffect(() => {
     MeasurePositionTriggerRef.current = false;
@@ -159,13 +149,13 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
   const styledTheme = useTheme();
   const dispatch = useDispatch();
 
-  const measureItemRef = () => {
+  const measureItemRef = useCallback(() => {
     itemRef.current?.measure((x, y, width, height, pageX, pageY) => {
       setModalPosition({ x: pageX, y: pageY });
     });
-  };
+  }, [itemRef.current]);
 
-  const toggleTodoCheck = () => {
+  const toggleTodoCheck = useCallback(() => {
     toggleCheckTodo({
       todo_id: todo.todo_id,
       check: !todo.check,
@@ -177,9 +167,17 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
         graph_today_date: endDate,
       },
     });
-  };
+  }, [
+    todo.check,
+    todo.todo_id,
+    todo.date,
+    todo.level,
+    getAllTodoQueryArg.date,
+    startDate,
+    endDate,
+  ]);
 
-  const onPressChangeToNextDayTodo = () => {
+  const onPressChangeToNextDayTodo = useCallback(() => {
     changeToNextDayTodo({
       todo_id: todo.todo_id,
       todo_date: todo.date,
@@ -191,9 +189,17 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
         graph_today_date: endDate,
       },
     });
-  };
+  }, [
+    todo.todo_id,
+    todo.date,
+    todo.check,
+    todo.level,
+    getAllTodoQueryArg.date,
+    startDate,
+    endDate,
+  ]);
 
-  const onPressEditTodo = () => {
+  const onPressEditTodo = useCallback(() => {
     dispatch(
       openEditTodoModal({
         text: todo.content,
@@ -207,9 +213,9 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
       })
     );
     setIsModalOpen(!isModalOpen);
-  };
+  }, [todo, isModalOpen, dispatch, openEditTodoModal]);
 
-  const onPressDeleteTodo = () => {
+  const onPressDeleteTodo = useCallback(() => {
     deleteTodo({
       todo_id: todo.todo_id,
       todo_date: todo.date,
@@ -221,7 +227,15 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
         graph_today_date: endDate,
       },
     });
-  };
+  }, [
+    todo.todo_id,
+    todo.date,
+    todo.level,
+    getAllTodoQueryArg.date,
+    startDate,
+    endDate,
+    todo.check,
+  ]);
 
   return (
     <View ref={itemRef}>

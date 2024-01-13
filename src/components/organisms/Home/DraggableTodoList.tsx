@@ -3,7 +3,6 @@ import { View, Pressable } from "react-native";
 import React from "react";
 import { Todo } from "../../../@types/todo";
 import TodoItem from "../../molecules/Home/TodoItem";
-import AddTodoItem from "./AddTodoItem";
 import DraggableFlatList, {
   DragEndParams,
   ScaleDecorator,
@@ -13,10 +12,8 @@ import {
   useGetAllTodosQuery,
 } from "../../../store/modules/todo/todo";
 import { useAppSelect } from "../../../store/configureStore.hooks";
-import { DateString } from "../../../@types/calendar";
 import { spacing } from "../../../constants/spacing";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
-import { checkIsSameLocalDay } from "../../../utils/checkIsSameLocalDay";
 import useTodos from "../../../hooks/useTodos";
 import Text from "../../atoms/Text";
 import Margin from "../../atoms/Margin";
