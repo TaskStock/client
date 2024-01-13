@@ -72,6 +72,9 @@ const BottomDrawer: React.FunctionComponent<BottomDrawerProps> = ({
   const [defaultValue, setDefaultValue] = useState(0);
   const [openState, setOpenState] = useState(0);
 
+  const [panResponder, setPanResponder] = useState(null);
+  const [draggedUp, setDraggedUp] = useState(false);
+
   useEffect(() => {
     if (DEFAULT_HEIGHT !== defaultValue || OPEN_STATE !== openState) {
       setDefaultValue(DEFAULT_HEIGHT);
@@ -79,9 +82,6 @@ const BottomDrawer: React.FunctionComponent<BottomDrawerProps> = ({
     }
     handlePanResponder();
   }, [DEFAULT_HEIGHT, OPEN_STATE]);
-
-  const [panResponder, setPanResponder] = useState(null);
-  const [draggedUp, setDraggedUp] = useState(false);
 
   const y = useRef(new Animated.Value(CLOSED_STATE)).current;
   const state = useRef(new Animated.Value(CLOSED_STATE)).current;

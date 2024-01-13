@@ -1,3 +1,4 @@
+import { useAppDispatch } from "../store/configureStore.hooks";
 import { checkAndRenewTokens } from "../utils/authUtils/tokenUtils";
 import { getAPIHost } from "../utils/getAPIHost";
 
@@ -12,6 +13,7 @@ export async function client<T = any>(
   { body, accessToken, ...customConfig }: IClient = {}
 ): Promise<T> {
   // 토큰 유효한지 확인
+
   await checkAndRenewTokens();
 
   const SERVER_URL = getAPIHost();
@@ -42,7 +44,7 @@ export async function client<T = any>(
     // console.log(SERVER_URL + endpoint);
 
     if (!response.ok) {
-      console.log(data);
+      console.log("response not ok:", data);
 
       const errorMessage = data.message || response.statusText;
       throw new Error(errorMessage);
@@ -50,7 +52,7 @@ export async function client<T = any>(
 
     return data;
   } catch (err) {
-    console.log(err);
+    console.log("fetch err: ", err);
 
     return Promise.reject(err.message);
   }

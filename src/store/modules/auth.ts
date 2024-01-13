@@ -69,6 +69,30 @@ const authSlice = createSlice({
     setAccessToken: (state, action) => {
       state.accessToken = action.payload;
     },
+    setLoggedIn: (state, action) => {
+      console.log("여기 ", action.payload);
+      if (action.payload.accessToken) {
+        state.accessToken = action.payload.accessToken;
+        state.accessExp = action.payload.accessExp;
+        state.refreshExp = action.payload.refreshExp;
+        state.isLoggedIn = true;
+        state.loading = false;
+        state.error = false;
+
+        const strategy = getData("strategy");
+
+        if (strategy && typeof strategy === "string") {
+          state.strategy = strategy;
+        }
+
+        storeData("accessToken", action.payload.accessToken);
+        storeData("refreshToken", action.payload.refreshToken);
+        storeData("accessExp", action.payload.accessExp);
+        storeData("refreshExp", action.payload.refreshExp);
+
+        console.log("로그인 성공: ");
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -114,6 +138,13 @@ const authSlice = createSlice({
           state.refreshExp = action.payload.refreshExp;
           state.isLoggedIn = true;
           state.loading = false;
+          state.error = false;
+
+          const strategy = getData("strategy");
+
+          if (strategy && typeof strategy === "string") {
+            state.strategy = strategy;
+          }
 
           storeData("accessToken", action.payload.accessToken);
           storeData("refreshToken", action.payload.refreshToken);
@@ -125,7 +156,7 @@ const authSlice = createSlice({
       })
       .addCase(loginWithEmail.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        state.error = true;
         console.log("로그인 실패", action.payload);
       })
       .addCase(checkTokenExistence.fulfilled, (state, action) => {
@@ -193,6 +224,6 @@ const authSlice = createSlice({
   },
 });
 
-export const { setAccessToken } = authSlice.actions;
+export const { setAccessToken, setLoggedIn } = authSlice.actions;
 
 export const authReducer = authSlice.reducer;
