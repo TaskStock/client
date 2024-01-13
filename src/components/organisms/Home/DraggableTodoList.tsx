@@ -59,15 +59,9 @@ export default function DraggableTodoList({
     const from_todo = selectedTodos[fromIndex];
     const to_todo = selectedTodos[toIndex];
 
+    // 그 해당하는 아이템들끼리의 index를 바꿔주는 것
     if (fromIndex < toIndex) {
       console.log("밑으로 내리기");
-
-      // 이 경우에는 아이템을 내리는 경우.
-      // 이 아이템의 원래 index보다 높은 index에 해당하는 친구들은,
-      // 예를 들어서 todo index가 1,4,7,8,9 인 상황에서,
-      // fromIndex가 1이고, toIndex가 4인 경우에는,
-      // index가 4인 todo는 9로 바꾸고, 7은 4로, 8은 7로, 9는 8로 바꿔준다.
-      // 그리고 이렇게 index가 바뀐 todo들을 changedTodos에 넣어준다.
 
       for (let i = fromIndex + 1; i <= toIndex; i++) {
         const original_todo = selectedTodos[i];
@@ -94,8 +88,6 @@ export default function DraggableTodoList({
     }
 
     if (from_todo.index !== to_todo.index) {
-      console.log(from_todo.content, from_todo.index, from_todo.todo_id);
-
       changedTodos.push({
         todo_id: from_todo.todo_id,
         changed_index: to_todo.index,
@@ -106,12 +98,9 @@ export default function DraggableTodoList({
       return;
     }
 
-    console.log(changedTodos);
-
     changeTodoOrder({
       selectedProjectId: selectedProjectId,
-      changed_todos: params.data,
-      original_todos: selectedTodos,
+      current_day_todos: currentDayTodos,
       changed_todos_item: changedTodos,
       requested_date_full: currentDateString,
       queryArgs: {
