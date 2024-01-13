@@ -40,11 +40,18 @@ export const loginWithEmail = createAsyncThunk(
       const responseData = await client.post("account/login/email", data);
       // email, password => secure store에 저장
 
-      await saveCredentials(data.email, data.password);
       console.log("로그인 시 서버 응답: ", responseData);
+
+      if (responseData.result === "success") {
+        await saveCredentials(data.email, data.password);
+      }
       return responseData;
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      const result = {
+        result: "fail",
+      };
+      console.log("로그인 실패: ");
+      return rejectWithValue(result);
     }
   }
 );

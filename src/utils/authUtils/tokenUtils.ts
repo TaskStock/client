@@ -2,6 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "../../store/configureStore";
 import { getData } from "../asyncStorage";
 import { getSavedCredentials, loginWithCredentials } from "./autoSignIn";
+import { getAPIHost } from "../getAPIHost";
 
 // 토큰 갱신을 위한 서버 요청 함수
 const requestNewTokens = async (accessToken: string, refreshToken: string) => {
@@ -17,7 +18,8 @@ const requestNewTokens = async (accessToken: string, refreshToken: string) => {
     // return response;
 
     // 종속성 문제를 위해 api.ts에서 분리
-    const response = await fetch("account/refresh", {
+    const SERVER_URL = getAPIHost();
+    const response = await fetch(`${SERVER_URL}account/refresh`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

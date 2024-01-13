@@ -1,4 +1,5 @@
 import * as SecureStore from "expo-secure-store";
+import { getAPIHost } from "../getAPIHost";
 
 // 사용자의 로그인 정보를 안전하게 저장하는 함수
 export const saveCredentials = async (email: string, password: string) => {
@@ -34,7 +35,8 @@ export const loginWithCredentials = async (email: string, password: string) => {
 
   // 종속성 문제를 위해 api.ts에서 분리
   try {
-    const response = await fetch("account/login/email", {
+    const SERVER_URL = getAPIHost();
+    const response = await fetch(`${SERVER_URL}account/login/email`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
