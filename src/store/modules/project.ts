@@ -21,6 +21,7 @@ const initialState: InitialState = {
 export const projectApi = createApi({
   reducerPath: "projectApi",
   baseQuery: myFetchFunction("df"),
+  tagTypes: ["Project"],
   endpoints: (builder) => ({
     getAllProjects: builder.query<
       {
@@ -32,6 +33,7 @@ export const projectApi = createApi({
         url: "/project/all",
         method: "GET",
       }),
+      providesTags: ["Project"],
     }),
 
     addProject: builder.mutation<
@@ -51,6 +53,7 @@ export const projectApi = createApi({
           ispublic: body.ispublic,
         },
       }),
+      invalidatesTags: ["Project"],
     }),
 
     deleteProject: builder.mutation<Project, { id: string }>({
