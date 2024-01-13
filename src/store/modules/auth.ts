@@ -115,6 +115,12 @@ const authSlice = createSlice({
           state.isLoggedIn = true;
           state.loading = false;
 
+          const strategy = getData("strategy");
+
+          if (strategy && typeof strategy === "string") {
+            state.strategy = strategy;
+          }
+
           storeData("accessToken", action.payload.accessToken);
           storeData("refreshToken", action.payload.refreshToken);
           storeData("accessExp", action.payload.accessExp);

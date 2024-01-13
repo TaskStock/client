@@ -1,5 +1,4 @@
 import * as SecureStore from "expo-secure-store";
-import { client } from "../../services/api";
 
 // 사용자의 로그인 정보를 안전하게 저장하는 함수
 export const saveCredentials = async (email: string, password: string) => {

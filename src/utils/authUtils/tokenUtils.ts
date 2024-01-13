@@ -1,8 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { client } from "../../services/api";
+import { RootState } from "../../store/configureStore";
 import { getData } from "../asyncStorage";
 import { getSavedCredentials, loginWithCredentials } from "./autoSignIn";
-import { RootState } from "../../store/configureStore";
 
 // 토큰 갱신을 위한 서버 요청 함수
 const requestNewTokens = async (accessToken: string, refreshToken: string) => {
