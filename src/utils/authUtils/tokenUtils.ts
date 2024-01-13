@@ -9,13 +9,31 @@ const requestNewTokens = async (accessToken: string, refreshToken: string) => {
   // refreshToken을 사용하여 새 토큰을 요청
 
   try {
-    const response = await client.post(
-      "account/refresh",
-      { refreshToken },
-      { accessToken }
-    );
-    console.log("=====새 토큰 요청 성공=====", response);
-    return response;
+    // const response = await client.post(
+    //   "account/refresh",
+    //   { refreshToken },
+    //   { accessToken }
+    // );
+    // console.log("=====새 토큰 요청 성공=====", response);
+    // return response;
+
+    // 종속성 문제를 위해 api.ts에서 분리
+    const response = await fetch("account/refresh", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify({ refreshToken }),
+    });
+
+    if (!response.ok) {
+      throw new Error("Token refresh failed");
+    }
+
+    const data = await response.json();
+    console.log("=====새 토큰 요청 성공=====", data);
+    return data;
   } catch (error) {
     throw new Error("get new accessToken failed");
   }

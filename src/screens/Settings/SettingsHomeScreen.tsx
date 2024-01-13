@@ -3,12 +3,9 @@ import styled from "styled-components/native";
 import Text from "../../components/atoms/Text";
 import { spacing } from "../../constants/spacing";
 import { useAppDispatch, useAppSelect } from "../../store/configureStore.hooks";
-
-import { resetNavigation } from "../../utils/resetNavigation";
-import { logout } from "../../utils/authUtils/signInUtils";
-import { checkAndRenewTokens } from "../../utils/authUtils/tokenUtils";
 import { checkStorage } from "../../utils/asyncStorage";
-import { getAPIHost } from "../../utils/getAPIHost";
+import { logout } from "../../utils/authUtils/signInUtils";
+import { resetNavigation } from "../../utils/resetNavigation";
 
 const Container = styled.View`
   justify-content: center;
@@ -61,7 +58,8 @@ const SettingsHomeScreen = ({ navigation }) => {
       <Menu text="asyncStorage check" onPress={checkStorage} />
       <Menu text="redux check" onPress={checkRedux} />
       <Menu text="로그아웃" onPress={handleLogout} />
-      <Menu text="check api" onPress={getAPIHost} />
+      <Menu text="회원 탈퇴" onPress={() => {}} />
+      <Menu text="비밀번호 변경" onPress={() => {}} />
     </Container>
   );
 };

@@ -28,10 +28,24 @@ export const getSavedCredentials = async () => {
 // 로그인 함수
 export const loginWithCredentials = async (email: string, password: string) => {
   // 서버에 로그인 요청을 보내고, 토큰을 반환 받는 로직
-  const response = await client.post("account/login/email", {
-    email,
-    password,
-  });
+  // const response = await client.post("account/login/email", {
+  //   email,
+  //   password,
+  // });
 
-  return response;
+  // 종속성 문제를 위해 api.ts에서 분리
+  try {
+    const response = await fetch("account/login/email", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    });
+    console.log("=====이메일 자동로그인 성공=====");
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("자동로그인 에러 ", error);
+  }
 };
