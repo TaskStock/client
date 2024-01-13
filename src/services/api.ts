@@ -37,7 +37,10 @@ export async function client<T = any>(
   }
 
   try {
+    console.log(SERVER_URL + endpoint);
+
     const response = await fetch(SERVER_URL + endpoint, config);
+
     const data = await response.json();
     // console.log(SERVER_URL + endpoint);
 

@@ -17,10 +17,6 @@ import CheckBox from "../../atoms/CheckBox";
 import FlexBox from "../../atoms/FlexBox";
 import Icons from "../../atoms/Icons";
 import Text from "../../atoms/Text";
-import useTodos from "../../../hooks/useTodos";
-import useValue from "../../../hooks/useValue";
-import dayjs from "dayjs";
-import { DateString, DateStringYYYYMM } from "../../../@types/calendar";
 import { checkIsWithInCurrentCalcDay } from "../../../utils/checkIsSameLocalDay";
 import { useGetAllTodoArgs } from "../../../hooks/useGetAllTodoArgs";
 import { useGetValuesArg } from "../../../hooks/useGetValuesArg";
@@ -121,6 +117,8 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
   const MeasurePositionTriggerRef = React.useRef(false);
   const itemRef = React.useRef<View | null>(null);
 
+  const [toggle, setToggle] = useState(todo.check);
+
   const theme = useAppSelect((state) => state.theme.value);
   const todoDrawerPosition = useAppSelect(
     (state) => state.todo.todoDrawerPosition
@@ -156,6 +154,8 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
   }, [itemRef.current]);
 
   const toggleTodoCheck = useCallback(() => {
+    setToggle(!toggle);
+
     toggleCheckTodo({
       todo_id: todo.todo_id,
       check: !todo.check,
@@ -175,6 +175,7 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
     getAllTodoQueryArg.date,
     startDate,
     endDate,
+    toggle,
   ]);
 
   const onPressChangeToNextDayTodo = useCallback(() => {
@@ -253,7 +254,7 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
         >
           <TodoCheckBox
             theme={theme}
-            isChecked={todo.check}
+            isChecked={toggle}
             onPress={() => {
               toggleTodoCheck();
             }}
@@ -271,7 +272,7 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
           </RNText>
         </FlexBox>
         <FlexBox gap={10} alignItems="center">
-          {todo.check ? (
+          {toggle ? (
             <Text size="md" color={styledTheme.high}>
               +{numberWithCommas(todo.level * 1000)}원
             </Text>
