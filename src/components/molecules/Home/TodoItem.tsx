@@ -21,7 +21,7 @@ import useTodos from "../../../hooks/useTodos";
 import useValue from "../../../hooks/useValue";
 import dayjs from "dayjs";
 import { DateString, DateStringYYYYMM } from "../../../@types/calendar";
-import { checkIsLocalBetween6to6 } from "../../../utils/checkIsSameLocalDay";
+import { checkIsWithInCurrentCalcDay } from "../../../utils/checkIsSameLocalDay";
 
 const THEME_CONSTANTS = {
   dark: {
@@ -304,7 +304,7 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
                     수정하기
                   </Text>
                 </TodoModalItem>
-                {!todo.check && checkIsLocalBetween6to6(todo.date) && (
+                {!todo.check && checkIsWithInCurrentCalcDay(todo.date) && (
                   <TodoModalItem
                     isSelected={false}
                     onPress={onPressChangeToNextDayTodo}
