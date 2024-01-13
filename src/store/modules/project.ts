@@ -1,19 +1,12 @@
 import { LOCAL_API_HOST_IOS } from "@env";
 import { createSlice } from "@reduxjs/toolkit";
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query";
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { myFetchFunction } from "../myFetchFunction";
-
-interface Project {
-  id: string;
-  title: string;
-  reviewCount: number;
-  todoCount: number;
-  isPublic: boolean;
-}
+import { Project } from "../../@types/project";
 
 interface InitialState {
   projects: Project[];
-  selectedProjectId: string | null;
+  selectedProjectId: number | null;
   loading: boolean;
   error: string | null;
 }
@@ -29,18 +22,34 @@ export const projectApi = createApi({
   reducerPath: "projectApi",
   baseQuery: myFetchFunction("df"),
   endpoints: (builder) => ({
-    getAllProjects: builder.query<Project[], void>({
+    getAllProjects: builder.query<
+      {
+        projects: Project[];
+      },
+      void
+    >({
       query: () => ({
-        url: "/project",
+        url: "/project/all",
         method: "GET",
       }),
     }),
 
-    addProject: builder.mutation<Project, { title: string }>({
+    addProject: builder.mutation<
+      {
+        result: "success";
+      },
+      {
+        name: string;
+        ispublic: boolean;
+      }
+    >({
       query: (body) => ({
         url: "/project",
         method: "POST",
-        body,
+        body: {
+          name: body.name,
+          ispublic: body.ispublic,
+        },
       }),
     }),
 
@@ -50,15 +59,50 @@ export const projectApi = createApi({
         method: "DELETE",
       }),
     }),
+
+    updateProject: builder.mutation<
+      {
+        result: "success";
+      },
+      {
+        project_id: number;
+        name: string;
+        ispublic: boolean;
+      }
+    >({
+      query: (body) => ({
+        url: `/project`,
+        method: "PUT",
+        body: {
+          project_id: body.project_id,
+          name: body.name,
+          ispublic: body.ispublic,
+        },
+      }),
+    }),
   }),
 });
 
 const projectSlice = createSlice({
   name: "todo",
   initialState,
-  reducers: {},
+  reducers: {
+    setSelectedProjectId(
+      state,
+      action: {
+        payload: number | null;
+      }
+    ) {
+      state.selectedProjectId = action.payload;
+    },
+  },
   extraReducers() {},
 });
 
 export default projectSlice.reducer;
-export const {} = projectSlice.actions;
+export const { setSelectedProjectId } = projectSlice.actions;
+export const {
+  useGetAllProjectsQuery,
+  useAddProjectMutation,
+  useDeleteProjectMutation,
+} = projectApi;

@@ -26,6 +26,8 @@ import { setTabIndex } from "../../../store/modules/home";
 import DraggableTodoList from "../../organisms/Home/DraggableTodoList";
 import useTodos from "../../../hooks/useTodos";
 import { useTheme } from "styled-components";
+import { useProject } from "../../../hooks/useProject";
+import { setSelectedProjectId } from "../../../store/modules/project";
 
 const DateContainer = styled.View`
   padding: ${spacing.small}px ${spacing.gutter}px 0;
@@ -39,21 +41,12 @@ const ProjectsContainer = styled.View`
 `;
 
 const TodoContainer = () => {
-  const [projects, setProjects] = useState([]);
-  const [selectedProjectId, setSelectedProjectId] = useState(null);
-
   const theme = useTheme();
-  const { currentDateString, currentDateYYYYMMDD } = useAppSelect(
-    (state) => state.calendar
-  );
-
+  const { currentDateString } = useAppSelect((state) => state.calendar);
   const dispatch = useAppDispatch();
 
   const { data: todosData, error, isError, isLoading, refetch } = useTodos();
-
-  if (error) {
-    console.log(error);
-  }
+  const { projects, selectedProjectId } = useProject();
 
   const headerDate = dayjs(currentDateString).format("MM월 DD일");
 
@@ -90,14 +83,14 @@ const TodoContainer = () => {
         <ProjectSelectBtn
           projectName={"전체"}
           selected={selectedProjectId === null}
-          onPress={() => setSelectedProjectId(null)}
+          onPress={() => dispatch(setSelectedProjectId(null))}
         />
         {projects.map((project) => (
           <ProjectSelectBtn
             projectName={project.name}
-            key={project.id}
-            selected={selectedProjectId === project.id}
-            onPress={() => setSelectedProjectId(project.id)}
+            key={project.project_id}
+            selected={selectedProjectId === project.project_id}
+            onPress={() => dispatch(setSelectedProjectId(project.project_id))}
           />
         ))}
       </ProjectsContainer>
