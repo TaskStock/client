@@ -1,19 +1,11 @@
 import dayjs from "dayjs";
 import { DateString, DateStringYYYYMM } from "../../../@types/calendar";
 import { TodoApiBuilder, useGetAllTodosQuery } from "./todo";
+import { updateCalendarItemTodoCount } from "../calendar";
+import { Todo } from "../../../@types/todo";
 
 interface getAllTodosResponse {
-  todos: {
-    todo_id: number;
-    content: string;
-    check: boolean;
-    date: string;
-    level: number;
-    index: number;
-    project_id: number | null;
-    repeat_day: string;
-    repeat_end_date: string;
-  }[];
+  todos: Todo[];
 }
 
 export interface useGetAllTodosQueryArg {
@@ -41,5 +33,7 @@ export const getAllTodosQuery = (builder: TodoApiBuilder) =>
       console.log("onCacheEntryAdded");
 
       const response = await cacheDataLoaded;
+
+      dispatch(updateCalendarItemTodoCount({ todos: response.data.todos }));
     },
   });

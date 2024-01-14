@@ -5,13 +5,14 @@ import { calculateWeeksOfMonth } from "../../utils/calculateWeeksOfMonth";
 import { CalendarItem, DateString, IsoString } from "../../@types/calendar";
 import utc from "dayjs/plugin/utc";
 import { initializeCalendarItems } from "../../utils/calendarUtils/initializeCalendarItems";
+import { Todo } from "../../@types/todo";
+import convertUTCToLocal from "../../utils/convertUTCtoLocal";
 
 dayjs.extend(utc);
 
 interface initialState {
   itemHeight: number;
   weeksOfMonth: number;
-  datesOfMonth: dayjs.Dayjs[];
   calendarItems: CalendarItem[];
   currentDateString: IsoString;
   currentDateYYYYMMDD: DateString;
@@ -20,7 +21,6 @@ interface initialState {
 const initialState: initialState = {
   itemHeight: 0,
   weeksOfMonth: calculateWeeksOfMonth(dayjs().toISOString()),
-  datesOfMonth: calculateDatesOfMonth(dayjs().toISOString()),
   calendarItems: initializeCalendarItems(
     calculateDatesOfMonth(dayjs().toISOString()),
     dayjs().toISOString()
@@ -58,10 +58,10 @@ const calendarSlice = createSlice({
         dayjs(state.currentDateString).format("YYYY-MM")
       ) {
         state.weeksOfMonth = calculateWeeksOfMonth(action.payload);
-        state.datesOfMonth = calculateDatesOfMonth(action.payload);
 
+        // 오늘날짜인지, 선택된 날짜인지, 이번달인지를 계산해서 넣어준다.
         state.calendarItems = initializeCalendarItems(
-          state.datesOfMonth,
+          calculateDatesOfMonth(action.payload),
           action.payload
         );
       }
@@ -70,12 +70,10 @@ const calendarSlice = createSlice({
 
       state.calendarItems.forEach((item) => {
         const isSelected = item.date.isSame(action.payload, "date");
-        const isThisMonth = item.date.isSame(action.payload, "month");
         const isToday = item.date.isSame(dayjs().toISOString(), "date");
 
         Object.assign(item, {
           isToday,
-          isThisMonth,
           isSelected,
         });
       });
@@ -84,9 +82,57 @@ const calendarSlice = createSlice({
         "YYYY-MM-DD"
       ) as DateString;
     },
+    updateCalendarItemTodoCount: (
+      state,
+      action: {
+        payload: {
+          todos: Todo[];
+        };
+      }
+    ) => {
+      const { todos } = action.payload;
+
+      state.calendarItems.forEach((item) => {
+        const date = item.date.format("YYYY-MM-DD");
+
+        const todoCount = todos.filter((todo) => {
+          return dayjs(todo.date).format("YYYY-MM-DD") === date;
+        }).length;
+
+        Object.assign(item, {
+          todoCount,
+        });
+      });
+    },
+    updateCalendarItemTodoCountValue: (
+      state,
+      action: {
+        payload: {
+          date: IsoString;
+          value: number;
+        };
+      }
+    ) => {
+      const { date, value } = action.payload;
+
+      const todoDate = dayjs(date).format("YYYY-MM-DD");
+
+      state.calendarItems.forEach((item) => {
+        const itemDate = item.date.format("YYYY-MM-DD");
+
+        if (itemDate === todoDate) {
+          item.todoCount += value;
+        }
+      });
+    },
   },
 });
 
 export default calendarSlice.reducer;
 
-export const { setItemHeight, setCurrentDateString } = calendarSlice.actions;
+export const {
+  setItemHeight,
+  setCurrentDateString,
+  updateCalendarItemTodoCount,
+  updateCalendarItemTodoCountValue,
+} = calendarSlice.actions;
