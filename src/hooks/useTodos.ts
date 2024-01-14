@@ -4,17 +4,12 @@ import { useGetAllTodosQuery } from "../store/modules/todo/todo";
 import { DateStringYYYYMM } from "../@types/calendar";
 import { useGetAllTodosQueryArg } from "../store/modules/todo/queries";
 import { checkIsSameLocalDay } from "../utils/checkIsSameLocalDay";
+import { useGetAllTodoArgs } from "./useGetAllTodoArgs";
 
 const useTodos = () => {
   const { currentDateString } = useAppSelect((state) => state.calendar);
 
-  const currentDateYYYYMMLocal = dayjs(currentDateString)
-    .local()
-    .format("YYYY-MM") as DateStringYYYYMM;
-
-  const queryArg: useGetAllTodosQueryArg = {
-    date: currentDateYYYYMMLocal,
-  };
+  const queryArg = useGetAllTodoArgs();
 
   const { data, isLoading, isError, error, refetch } =
     useGetAllTodosQuery(queryArg);

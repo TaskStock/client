@@ -14,6 +14,7 @@ import { Value } from "../../../@types/chart";
 import { IsoString } from "../../../@types/calendar";
 import { useGetAllTodosQueryDate } from "./queries";
 import dayjs from "dayjs";
+import { updateCalendarItemTodoCountValue } from "../calendar";
 
 const upValue = 1000;
 const downValue = 1000;
@@ -179,9 +180,12 @@ export const addTodoMutation = (builder: TodoApiBuilder) =>
 
       dispatch(closeTodoModal());
 
+      dispatch(
+        updateCalendarItemTodoCountValue({ date: body.add_date, value: 1 })
+      );
+
       try {
         const result = await queryFulfilled;
-
         const todo_id = result.data.todo_id;
 
         // 임시 아이디를 실제 아이디로 바꿔준다.
@@ -349,8 +353,6 @@ export const toggleTodoMutation = (builder: TodoApiBuilder) =>
 
       let patchUpdateGraphValue;
 
-      console.log(body.todo_date);
-
       // 오늘 날짜라면, 토글해서 check 했을때, 그래프값에도 반영해준다.
       if (checkIsWithInCurrentCalcDay(body.todo_date)) {
         patchUpdateGraphValue = dispatch(
@@ -379,7 +381,6 @@ export const toggleTodoMutation = (builder: TodoApiBuilder) =>
       } else {
         console.log("not today todo");
       }
-      // }
 
       try {
         const result = await queryFulfilled;
@@ -396,7 +397,7 @@ export const deleteTodoMutation = (builder: TodoApiBuilder) =>
     {},
     {
       todo_id: number;
-      todo_date: string;
+      todo_date: IsoString;
       value: number;
       checked: boolean;
       queryArgs: {
@@ -458,6 +459,10 @@ export const deleteTodoMutation = (builder: TodoApiBuilder) =>
           )
         );
       }
+
+      dispatch(
+        updateCalendarItemTodoCountValue({ date: body.todo_date, value: -1 })
+      );
 
       try {
         await queryFulfilled;
@@ -561,7 +566,7 @@ export const changeToNextDayTodoMutation = (builder: TodoApiBuilder) =>
     {},
     {
       todo_id: number;
-      todo_date: string;
+      todo_date: IsoString;
       todo_level: number;
       todo_checked: boolean;
       queryArgs: {
@@ -628,6 +633,17 @@ export const changeToNextDayTodoMutation = (builder: TodoApiBuilder) =>
           )
         );
       }
+
+      dispatch(
+        updateCalendarItemTodoCountValue({ date: body.todo_date, value: -1 })
+      );
+
+      dispatch(
+        updateCalendarItemTodoCountValue({
+          date: dayjs(body.todo_date).add(1, "day").toISOString() as IsoString,
+          value: +1,
+        })
+      );
 
       try {
         await queryFulfilled;

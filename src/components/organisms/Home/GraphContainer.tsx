@@ -21,7 +21,17 @@ const Container = styled.View`
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: ${spacing.padding}px;
   /* background-color: ${(props) => props.theme.box}; */
+`;
+
+const InnerContent = styled.View`
+  width: 90%;
+  height: 90%;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 
 const IconContainer = styled.View`
@@ -119,15 +129,7 @@ const GraphContainer = ({ myData }) => {
           </IconBox>
         </IconContainer>
       </FlexBox>
-      <Container
-        onLayout={(e) => {
-          const { width, height } = e.nativeEvent.layout;
-
-          if (size.width !== width || size.height !== height) {
-            setSize({ width, height });
-          }
-        }}
-      >
+      <Container>
         <LinearGradient
           colors={gradient}
           start={{ x: 0, y: 0 }}
@@ -140,9 +142,19 @@ const GraphContainer = ({ myData }) => {
             // marginTop: spacing.padding,
           }}
         ></LinearGradient>
-        <sizeContext.Provider value={size}>
-          <HomeChart isCandleStick={isCandleStick} />
-        </sizeContext.Provider>
+        <InnerContent
+          onLayout={(e) => {
+            const { width, height } = e.nativeEvent.layout;
+
+            if (size.width !== width || size.height !== height) {
+              setSize({ width, height });
+            }
+          }}
+        >
+          <sizeContext.Provider value={size}>
+            <HomeChart isCandleStick={isCandleStick} />
+          </sizeContext.Provider>
+        </InnerContent>
       </Container>
     </View>
   );

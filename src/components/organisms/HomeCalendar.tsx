@@ -4,17 +4,17 @@ import { FlatList, LayoutChangeEvent, Pressable, View } from "react-native";
 import { useDispatch } from "react-redux";
 import styled, { useTheme } from "styled-components/native";
 import { spacing } from "../../constants/spacing";
-import { useAppSelect } from "../../store/configureStore.hooks";
+import { useAppDispatch, useAppSelect } from "../../store/configureStore.hooks";
 import {
   setCurrentDateString,
   setItemHeight,
 } from "../../store/modules/calendar";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
 import FlexBox from "../atoms/FlexBox";
-import { DateString, IsoString } from "../../@types/calendar";
-import { checkIsSameLocalDay } from "../../utils/checkIsSameLocalDay";
-import useTodos from "../../hooks/useTodos";
-import { Todo } from "../../@types/todo";
+import {
+  CalendarItem as TCalendarItem,
+  IsoString,
+} from "../../@types/calendar";
 
 const CalendarContainer = styled.View`
   border-radius: 20px;
@@ -96,116 +96,50 @@ const ListHeaderComponent = () => {
   );
 };
 
-const CalendarItem = memo(
-  ({
-    item,
-    currentDate,
-    onPress,
-    hasTodo,
-  }: {
-    item: dayjs.Dayjs;
-    currentDate: dayjs.Dayjs;
-    onPress: (item: dayjs.Dayjs) => void;
-    hasTodo: boolean;
-  }) => {
-    const itemHeight = useAppSelect((state) => state.calendar.itemHeight);
-    const themeContext = useTheme();
+const CalendarItem = memo(({ item }: { item: TCalendarItem }) => {
+  const itemHeight = useAppSelect((state) => state.calendar.itemHeight);
+  const themeContext = useTheme();
+  const dispatch = useAppDispatch();
+  const date = item.date.date();
 
-    const date = item.date();
-
-    const notThisMonth = useMemo(() => {
-      return item.month() !== currentDate.month();
-    }, [currentDate, item]);
-
-    const isSelected = useMemo(() => {
-      return item.isSame(currentDate, "day");
-    }, [currentDate, item]);
-
-    const isToday = useMemo(() => {
-      return item.isSame(dayjs(), "day");
-    }, [item]);
-
-    return (
-      <CalendarItemContainer size={itemHeight}>
-        <Pressable onPress={() => onPress(item)}>
-          <CalendarItemInner
-            bgColor={isSelected ? themeContext.text : "transparent"}
-            borderColor={isToday ? themeContext.text : "transparent"}
-          >
-            <CalendarItemText
-              color={
-                !notThisMonth
-                  ? isSelected
-                    ? themeContext.textReverse
-                    : themeContext.text
-                  : themeContext.textDimmer
-              }
-              size={14}
-            >
-              {date}
-            </CalendarItemText>
-          </CalendarItemInner>
-        </Pressable>
-        {!notThisMonth && hasTodo && <CalendarItemDot></CalendarItemDot>}
-      </CalendarItemContainer>
-    );
-  }
-);
-
-export default function HomeCalendar({
-  currentDate,
-}: {
-  currentDate: dayjs.Dayjs;
-}) {
-  const { data: todos } = useTodos();
-
-  const hasTodoDates: string[] = useMemo(() => {
-    function extractDatesWithTodos(todos: Todo[]): string[] {
-      const uniqueDatesSet = new Set<string>();
-
-      todos.forEach((todo) => {
-        if (todo.date && todo.date.trim() !== "") {
-          uniqueDatesSet.add(todo.date);
-        }
-      });
-
-      // Convert the Set to an array to get the final result
-      const uniqueDatesArray: string[] = Array.from(uniqueDatesSet);
-
-      return uniqueDatesArray;
-    }
-
-    return extractDatesWithTodos(todos);
-  }, [todos]);
-
-  const renderItem = ({
-    item,
-    index,
-  }: {
-    item: dayjs.Dayjs;
-    index: number;
-  }) => {
-    // 얘는 렌더할때 필요한건가? ㄴㄴ 처음에 투두아이템을 받아왔을때 필요한것이다.
-    // 그리고 투두아이템이 바뀌거나 했을때.
-
-    const hasTodo = hasTodoDates.some((date) => {
-      return checkIsSameLocalDay(date, item.toISOString());
-    });
-
-    const onPressCalendarItem = (item: dayjs.Dayjs) => {
-      dispatch(setCurrentDateString(item.toISOString() as IsoString));
-    };
-
-    return (
-      <CalendarItem
-        item={item}
-        currentDate={currentDate}
-        hasTodo={hasTodo}
-        onPress={onPressCalendarItem}
-      />
-    );
+  const onPress = (date: dayjs.Dayjs) => {
+    dispatch(setCurrentDateString(date.toISOString() as IsoString));
   };
-  const datesOfMonth = useAppSelect((state) => state.calendar.datesOfMonth);
+
+  const hasTodo = item.todoCount > 0;
+
+  return (
+    <CalendarItemContainer size={itemHeight}>
+      <Pressable onPress={() => onPress(item.date)}>
+        <CalendarItemInner
+          bgColor={item.isSelected ? themeContext.text : "transparent"}
+          borderColor={item.isToday ? themeContext.text : "transparent"}
+        >
+          <CalendarItemText
+            color={
+              item.isThisMonth
+                ? item.isSelected
+                  ? themeContext.textReverse
+                  : themeContext.text
+                : themeContext.textDimmer
+            }
+            size={14}
+          >
+            {date}
+          </CalendarItemText>
+        </CalendarItemInner>
+      </Pressable>
+      {item.isThisMonth && hasTodo && <CalendarItemDot></CalendarItemDot>}
+    </CalendarItemContainer>
+  );
+});
+
+function HomeCalendar() {
+  const calendarItems = useAppSelect((state) => state.calendar.calendarItems);
+
+  const renderItem = ({ item }: { item: TCalendarItem }) => {
+    return <CalendarItem item={item} />;
+  };
   const dispatch = useDispatch();
 
   const onLayout = (event: LayoutChangeEvent) => {
@@ -223,8 +157,8 @@ export default function HomeCalendar({
       >
         <FlatList
           numColumns={7}
-          data={datesOfMonth}
-          keyExtractor={(item, index) => index.toString()}
+          data={calendarItems}
+          keyExtractor={(item) => item.date.toISOString()}
           renderItem={renderItem}
           ListHeaderComponent={<ListHeaderComponent></ListHeaderComponent>}
         ></FlatList>
@@ -232,3 +166,5 @@ export default function HomeCalendar({
     </CalendarContainer>
   );
 }
+
+export default memo(HomeCalendar);

@@ -67,12 +67,14 @@ export default function LineValueChart({
     <VictoryChart
       width={width}
       height={height}
-      padding={{
-        left: 30,
-        right: 30,
-        top: 10,
-        bottom: 10,
-      }}
+      padding={
+        {
+          // left: 30,
+          // right: 30,
+          // top: 10,
+          // bottom: 10,
+        }
+      }
       containerComponent={
         <VictoryZoomContainer zoomDimension="x"></VictoryZoomContainer>
       }

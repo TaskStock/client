@@ -1,5 +1,5 @@
 import { View, Dimensions } from "react-native";
-import React from "react";
+import React, { memo, useEffect } from "react";
 import HomeCalendar from "../HomeCalendar";
 import { spacing } from "../../../constants/spacing";
 import styled, { useTheme } from "styled-components/native";
@@ -11,12 +11,16 @@ import {
   useAppDispatch,
   useAppSelect,
 } from "../../../store/configureStore.hooks";
-import { setCurrentDateString } from "../../../store/modules/calendar";
+import {
+  setCurrentDateString,
+  updateCalendarItemTodoCount,
+} from "../../../store/modules/calendar";
 import Icons from "../../atoms/Icons";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import { LinearGradient } from "expo-linear-gradient";
 import { IsoString } from "../../../@types/calendar";
 import useUser from "../../../hooks/useUser";
+import useTodos from "../../../hooks/useTodos";
 
 const clientHeight = Dimensions.get("window").height;
 
@@ -51,7 +55,6 @@ const DateInfo = ({
     data.cumulative_value;
 
   const renderDiffRate = diff_rate.toFixed(2);
-
   const formattedDate = currentDate.format("YYYY년 MM월");
 
   return (
@@ -106,6 +109,25 @@ const CalendarContainer = () => {
     useAppSelect((state) => state.calendar.currentDateString)
   );
 
+  const memorizedCurrentDate = React.useRef(
+    dayjs(currentDate).format("YYYY-MM")
+  );
+
+  const { data: todos } = useTodos();
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (
+      todos &&
+      dayjs(currentDate).format("YYYY-MM") !== memorizedCurrentDate.current
+    ) {
+      console.log("calculating todo count");
+
+      memorizedCurrentDate.current = dayjs(currentDate).format("YYYY-MM");
+      dispatch(updateCalendarItemTodoCount({ todos }));
+    }
+  }, [currentDate]);
+
   const theme = useTheme();
 
   const gradient =
@@ -117,9 +139,7 @@ const CalendarContainer = () => {
         ]
       : ["rgba(255, 255, 255, 0.00)", "rgba(255, 255, 255, 0.47)", "#FFFFFF"];
 
-  const dispatch = useAppDispatch();
-
-  const subtract1Month = () => {
+  const onPressLeft = () => {
     dispatch(
       setCurrentDateString(
         currentDate.subtract(1, "month").toISOString() as IsoString
@@ -127,7 +147,7 @@ const CalendarContainer = () => {
     );
   };
 
-  const add1Month = () => {
+  const onPressRight = () => {
     dispatch(
       setCurrentDateString(
         currentDate.add(1, "month").toISOString() as IsoString
@@ -145,8 +165,8 @@ const CalendarContainer = () => {
     >
       <DateInfo
         currentDate={currentDate}
-        onPressLeft={subtract1Month}
-        onPressRight={add1Month}
+        onPressLeft={onPressLeft}
+        onPressRight={onPressRight}
       />
       <Container>
         <LinearGradient
@@ -160,7 +180,7 @@ const CalendarContainer = () => {
             borderRadius: spacing.offset,
           }}
         ></LinearGradient>
-        <HomeCalendar currentDate={currentDate} />
+        <HomeCalendar />
       </Container>
     </View>
   );
