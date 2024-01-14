@@ -7,15 +7,15 @@ export const startingTheme = createAsyncThunk(
   async () => {
     const pickedTheme = await getData("theme");
     if (pickedTheme === null) {
-      console.log("시스템 테마 가져옴");
+      // console.log("시스템 테마 가져옴");
 
       return Appearance.getColorScheme() === "dark" ? "dark" : "gray";
     } else {
-      console.log("설정 테마: ", pickedTheme);
-      console.log(
-        "시스템 테마: ",
-        Appearance.getColorScheme() === "dark" ? "dark" : "gray"
-      );
+      // console.log("설정 테마: ", pickedTheme);
+      // console.log(
+      //   "시스템 테마: ",
+      //   Appearance.getColorScheme() === "dark" ? "dark" : "gray"
+      // );
       return pickedTheme;
     }
   }
@@ -48,12 +48,12 @@ export const themeSlice = createSlice({
     builder
       .addCase(startingTheme.fulfilled, (state, action) => {
         state.value = action.payload;
-        console.log("theme", state.value);
+        // console.log("theme", state.value);
       })
       .addCase(pickTheme.fulfilled, (state, action) => {
         state.value = action.payload;
         storeData("theme", action.payload);
-        console.log("pickTheme", state.value);
+        // console.log("pickTheme", state.value);
       });
   },
 });
