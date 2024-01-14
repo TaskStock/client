@@ -1,33 +1,29 @@
+import dayjs from "dayjs";
 import React, { useContext, useEffect, useState } from "react";
-import { Pressable, ScrollView, View } from "react-native";
+import { Pressable, View } from "react-native";
+import { useTheme } from "styled-components";
 import styled from "styled-components/native";
 import { spacing } from "../../../constants/spacing";
-import Text from "../../atoms/Text";
-import BottomDrawer from "./BottomDrawer";
-import ProjectSelectBtn from "./ProjectSelectBtn";
-import TodoItem from "./TodoItem";
-import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
+import useTodos from "../../../hooks/useTodos";
 import {
   useAppDispatch,
   useAppSelect,
 } from "../../../store/configureStore.hooks";
-import dayjs from "dayjs";
+import { setTabIndex } from "../../../store/modules/home";
 import {
   openAddTodoModal,
   setTodoDrawerPosition,
 } from "../../../store/modules/todo/todo";
+import { ComponentHeightContext } from "../../../utils/ComponentHeightContext";
+import CenterLayout from "../../atoms/CenterLayout";
 import FlexBox from "../../atoms/FlexBox";
 import Icons from "../../atoms/Icons";
-import CenterLayout from "../../atoms/CenterLayout";
-import Margin from "../../atoms/Margin";
-import AddTodoItem from "../../organisms/Home/AddTodoItem";
 import LoadingSpinner from "../../atoms/LoadingSpinner";
-import { setTabIndex } from "../../../store/modules/home";
+import Margin from "../../atoms/Margin";
+import Text from "../../atoms/Text";
 import DraggableTodoList from "../../organisms/Home/DraggableTodoList";
-import useTodos from "../../../hooks/useTodos";
-import { useTheme } from "styled-components";
-import FixedBottomDrawer from "./FixedBottomDrawer";
-import { ComponentHeightContext } from "../../../utils/ComponentHeightContext";
+import BottomDrawer from "./BottomDrawer";
+import ProjectSelectBtn from "./ProjectSelectBtn";
 
 const DateContainer = styled.View`
   padding: ${spacing.small}px ${spacing.gutter}px 0;
@@ -59,8 +55,7 @@ const TodoContainer = () => {
 
   const headerDate = dayjs(currentDateString).format("MM월 DD일");
 
-  const { headerHeight, contentsHeight, DEFAULT_HEIGHT, OPEN_STATE } =
-    useContext(ComponentHeightContext);
+  const { DEFAULT_HEIGHT, OPEN_STATE } = useContext(ComponentHeightContext);
   // final value
   const [defaultValue, setDefaultValue] = useState(0);
   const [openState, setOpenState] = useState(0);
@@ -71,19 +66,15 @@ const TodoContainer = () => {
       setOpenState(OPEN_STATE);
     }
   }, [DEFAULT_HEIGHT, OPEN_STATE]);
-  // console.log("DEFAULT_HEIGHT", DEFAULT_HEIGHT);
-  // console.log("OPEN_STATE", OPEN_STATE);
-  // console.log("headerHeight", headerHeight);
-  // console.log("contentsHeight", contentsHeight);
 
   if (defaultValue !== 0 && openState !== 0) {
     return (
-      <FixedBottomDrawer
+      <BottomDrawer
         openState={openState}
         closedState={defaultValue}
-        // onDrawerStateChange={(nextState) => {
-        //   dispatch(setTodoDrawerPosition(nextState));
-        // }}
+        onDrawerStateChange={(nextState) => {
+          dispatch(setTodoDrawerPosition(nextState));
+        }}
       >
         <DateContainer>
           <FlexBox justifyContent="space-between" alignItems="center">
@@ -154,7 +145,7 @@ const TodoContainer = () => {
             </CenterLayout>
           )}
         </View>
-      </FixedBottomDrawer>
+      </BottomDrawer>
     );
   } else {
     return null;

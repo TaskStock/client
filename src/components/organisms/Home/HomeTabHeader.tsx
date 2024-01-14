@@ -1,11 +1,12 @@
-import { View, Text, Animated } from "react-native";
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
+import { Animated } from "react-native";
 import { NavigationState, SceneRendererProps } from "react-native-tab-view";
 import styled, { useTheme } from "styled-components/native";
 import { spacing } from "../../../constants/spacing";
-import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import { useAppDispatch } from "../../../store/configureStore.hooks";
 import { setTabIndex } from "../../../store/modules/home";
+import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
+import { ComponentHeightContext } from "../../../utils/ComponentHeightContext";
 
 const Container = styled.View`
   padding: 0 ${spacing.gutter}px;
@@ -51,9 +52,13 @@ export default function HomeTabHeader({
   }, [props.navigationState.index]);
 
   const tabWidth = React.useRef(0);
-
+  const { setGCTabHeight } = useContext(ComponentHeightContext);
   return (
-    <Container>
+    <Container
+      onLayout={(e) => {
+        setGCTabHeight(e.nativeEvent.layout.height);
+      }}
+    >
       {props.navigationState.routes.map((route, i) => {
         const isFocused = props.navigationState.index === i;
 
