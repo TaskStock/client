@@ -1,6 +1,6 @@
 import React from "react";
-import { Text, View } from "react-native";
 import styled from "styled-components/native";
+import Text from "../components/atoms/Text";
 
 const Container = styled.View`
   flex: 1;
@@ -10,7 +10,7 @@ const Container = styled.View`
 const FriendScreen = () => {
   return (
     <Container>
-      <Text>FriendScreen</Text>
+      <Text size="lg">FriendScreen</Text>
     </Container>
   );
 };

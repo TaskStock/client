@@ -1,24 +1,11 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
-import {
-  Animated,
-  Dimensions,
-  GestureResponderEvent,
-  PanResponder,
-  PanResponderGestureState,
-} from "react-native";
-import styled, { useTheme } from "styled-components/native";
+import React, { useEffect, useRef, useState } from "react";
+import { Animated, Dimensions, PanResponder } from "react-native";
+import styled from "styled-components/native";
 import { spacing } from "../../../constants/spacing";
 import useHeight from "../../../hooks/useHeight";
-import { ComponentHeightContext } from "../../../utils/ComponentHeightContext";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
-import Loader from "../../atoms/Loader";
 
 const { height: screenHeight } = Dimensions.get("window");
-
-interface BottomDrawerProps {
-  children?: React.ReactNode;
-  onDrawerStateChange: (nextState) => void;
-}
 
 export const HorizontalLine = styled.View`
   background-color: ${({ theme }) => theme.background};
@@ -28,146 +15,93 @@ export const HorizontalLine = styled.View`
   border-radius: ${spacing.small}px;
 `;
 
-export const animateMove = (
-  y: Animated.Value,
-  toValue: number | Animated.Value,
-  callback?: any
-) => {
-  Animated.spring(y, {
-    toValue: -toValue,
-    tension: 20,
-    useNativeDriver: true,
-  }).start((finished) => {
-    finished && callback && callback();
-  });
-};
+const Drawer = styled.View`
+  width: 100%;
+  background-color: ${(props) => props.theme.box};
+  border-radius: ${useResponsiveFontSize(20)}px;
+  position: absolute;
+  /* top: 0; */
+`;
+const AnimatedBox = Animated.createAnimatedComponent(Drawer);
 
-const getNextState = (
-  currentState,
-  OPEN_STATE: number,
-  CLOSED_STATE: number,
-  draggedUp: boolean
-) => {
-  switch (currentState) {
-    case OPEN_STATE:
-      return draggedUp ? OPEN_STATE : CLOSED_STATE;
-    case CLOSED_STATE:
-      return draggedUp ? OPEN_STATE : CLOSED_STATE;
-    default:
-      return currentState;
-  }
-};
-
-const BottomDrawer: React.FunctionComponent<BottomDrawerProps> = ({
+const BottomDrawer = ({
   children,
+  openState,
+  closedState,
   onDrawerStateChange,
 }) => {
-  const {
-    DEFAULT_HEIGHT,
-    OPEN_STATE,
-    CLOSED_STATE, // 0
-  } = useContext(ComponentHeightContext);
-
-  // final value
-  const [defaultValue, setDefaultValue] = useState(0);
-  const [openState, setOpenState] = useState(0);
-
-  const [panResponder, setPanResponder] = useState(null);
-  const [draggedUp, setDraggedUp] = useState(false);
+  const { BOTTOM_TAB } = useHeight();
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const drawerPositionY = useRef<any>(new Animated.Value(0)).current;
 
   useEffect(() => {
-    if (DEFAULT_HEIGHT !== defaultValue || OPEN_STATE !== openState) {
-      setDefaultValue(DEFAULT_HEIGHT);
-      setOpenState(OPEN_STATE);
-    }
-    handlePanResponder();
-  }, [DEFAULT_HEIGHT, OPEN_STATE]);
+    const nextState = drawerOpen ? "OPEN_STATE" : "CLOSED_STATE";
+    onDrawerStateChange(nextState);
+  }, [drawerOpen]);
 
-  const y = useRef(new Animated.Value(CLOSED_STATE)).current;
-  const state = useRef(new Animated.Value(CLOSED_STATE)).current;
-  const movementValue = (moveY: number) => screenHeight - moveY;
+  const open = closedState - openState;
+  const panResponder = useRef(
+    PanResponder.create({
+      onStartShouldSetPanResponder: () => true,
+      onPanResponderGrant: () => {
+        drawerPositionY.setOffset(drawerPositionY._value); // 현재 위치를 오프셋으로 설정
+        drawerPositionY.setValue(0); // 현재 값 초기화
+      },
+      onPanResponderMove: Animated.event([null, { dy: drawerPositionY }], {
+        useNativeDriver: false,
+      }),
+      onPanResponderRelease: (_, { dy }) => {
+        drawerPositionY.flattenOffset(); // 오프셋 초기화
 
-  const onPanResponderMove = (
-    _: GestureResponderEvent,
-    { moveY }: PanResponderGestureState
-  ) => {
-    const val = movementValue(moveY);
-    animateMove(y, val);
-  };
+        const openThreshold = -200;
+        if (drawerPositionY._value < openThreshold) {
+          if (dy > 100) {
+            // 열린 상태에서 아래로 충분히 드래그한 경우
+            setDrawerOpen(false);
+            Animated.spring(drawerPositionY, {
+              toValue: 0, // 닫힘 위치로 이동
+              useNativeDriver: false,
+            }).start();
+          } else {
+            // 열린 상태에서 아래로 충분히 드래그하지 않은 경우
+            Animated.spring(drawerPositionY, {
+              toValue: -open, // 열린 상태 유지
+              useNativeDriver: false,
+            }).start();
+          }
+        } else {
+          if (dy < -100) {
+            // 닫힌 상태에서 위로 충분히 드래그한 경우
+            setDrawerOpen(true);
+            Animated.spring(drawerPositionY, {
+              toValue: -open, // 열린 위치로 이동
+              useNativeDriver: false,
+            }).start();
+          } else {
+            // 위로 충분히 드래그하지 않은 경우
+            Animated.spring(drawerPositionY, {
+              toValue: 0, // 닫힌 상태 유지
+              useNativeDriver: false,
+            }).start();
+          }
+        }
+      },
+    })
+  ).current;
 
-  const onMoveShouldSetPanResponder = (
-    _: GestureResponderEvent,
-    { dy }: PanResponderGestureState
-  ) => {
-    dy < 0 ? setDraggedUp(true) : setDraggedUp(false);
-    return Math.abs(dy) >= 70;
-  };
-
-  const onPanResponderRelease = (
-    _: GestureResponderEvent,
-    { moveY }: PanResponderGestureState
-  ) => {
-    const nextState = getNextState(
-      state._value,
-      openState,
-      CLOSED_STATE,
-      draggedUp
-    );
-    state.setValue(nextState);
-    animateMove(y, nextState, onDrawerStateChange(nextState));
-  };
-
-  const handlePanResponder = () => {
-    if (defaultValue !== 0 && openState !== 0) {
-      const _panResponder = PanResponder.create({
-        onMoveShouldSetPanResponder,
-        onStartShouldSetPanResponderCapture: onMoveShouldSetPanResponder,
-        onPanResponderMove,
-        onPanResponderRelease,
-      });
-      if (_panResponder !== panResponder) {
-        setPanResponder(_panResponder);
-      }
-    }
-  };
-
-  useEffect(() => {
-    handlePanResponder();
-  }, [defaultValue, openState, draggedUp]);
-
-  const theme = useTheme();
-  if (!panResponder) {
-    return <Loader />;
-  }
-
-  const { NOTCH_BOTTOM } = useHeight();
   return (
-    <Animated.View
-      style={[
-        {
-          width: "100%",
-          height: screenHeight,
-          backgroundColor: theme.box,
-          borderRadius: useResponsiveFontSize(20),
-          position: "absolute",
-          bottom:
-            -screenHeight + defaultValue - NOTCH_BOTTOM - 60 - spacing.offset,
-          transform: [{ translateY: y }],
-          shadowColor: "rgba(0, 0, 0, 0.15)",
-          shadowOffset: {
-            width: 0,
-            height: 2,
-          },
-          shadowOpacity: 1,
-          shadowRadius: 15,
-          elevation: 0, // android
-        },
-      ]}
+    <AnimatedBox
       {...panResponder.panHandlers}
+      style={{
+        height: screenHeight - BOTTOM_TAB,
+        top: closedState,
+
+        transform: [{ translateY: drawerPositionY }],
+      }}
     >
       <HorizontalLine />
       {children}
-    </Animated.View>
+    </AnimatedBox>
   );
 };
 
