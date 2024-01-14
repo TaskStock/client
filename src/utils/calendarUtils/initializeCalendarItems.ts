@@ -9,7 +9,7 @@ export const initializeCalendarItems = (
       dayjs(date).format("YYYY-MM") ===
       dayjs(currentDateString).format("YYYY-MM");
 
-    const isSelected = date.toISOString() === currentDateString;
+    const isSelected = date.isSame(currentDateString, "date");
 
     const isToday =
       dayjs(date).format("YYYY-MM-DD") === dayjs().format("YYYY-MM-DD");
