@@ -12,9 +12,14 @@ const BlankImage = styled.View`
   background-color: gray;
 `;
 
-const UserBox = ({ username, rank, value, image }) => {
+const UserBox = ({ username, rank, value, image, strategy }) => {
   const SERVER_URL = getAPIHost();
-  const uri = convertSlash(SERVER_URL + image);
+  let uri;
+  if (strategy === "local") {
+    uri = convertSlash(SERVER_URL + image);
+  } else {
+    uri = convertSlash(image);
+  }
   console.log(uri);
   return (
     <FlexBox>

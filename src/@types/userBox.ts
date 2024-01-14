@@ -4,4 +4,5 @@ export interface IUserBox {
   rank: number;
   cumulative_value: number;
   image: string;
+  strategy: string;
 }
