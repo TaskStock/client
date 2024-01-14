@@ -81,44 +81,43 @@ const TodoContainer = () => {
               </Text>
             </Pressable>
             <Icons
-            type="entypo"
-            name="circle-with-plus"
-            size={28}
-            color={theme.name === "dark" ? theme.text : theme.textDimmer}
-            onPress={() => {
-              dispatch(openAddTodoModal());
-            }}
-          />
-        </FlexBox>
-      </DateContainer>
-      <ProjectsContainer>
-        <ProjectSelectBtn
-          projectName={"전체"}
-          selected={selectedProjectId === null}
-          onPress={() => dispatch(setSelectedProjectId(null))}
-        />
-        {projects.map((project) => (
+              type="entypo"
+              name="circle-with-plus"
+              size={28}
+              color={theme.name === "dark" ? theme.text : theme.textDimmer}
+              onPress={() => {
+                dispatch(openAddTodoModal());
+              }}
+            />
+          </FlexBox>
+        </DateContainer>
+        <ProjectsContainer>
           <ProjectSelectBtn
-            projectName={project.name}
-            key={project.project_id}
-            selected={selectedProjectId === project.project_id}
-            onPress={() => dispatch(setSelectedProjectId(project.project_id))}
+            projectName={"전체"}
+            selected={selectedProjectId === null}
+            onPress={() => dispatch(setSelectedProjectId(null))}
           />
-        ))}
-      </ProjectsContainer>
-      <View
-        style={{
-          flex: 1,
-        }}
-      >
-        <DraggableTodoList selectedProjectId={selectedProjectId} />
-      </View>
-    </BottomDrawer>
+          {projects.map((project) => (
+            <ProjectSelectBtn
+              projectName={project.name}
+              key={project.project_id}
+              selected={selectedProjectId === project.project_id}
+              onPress={() => dispatch(setSelectedProjectId(project.project_id))}
+            />
+          ))}
+        </ProjectsContainer>
+        <View
+          style={{
+            flex: 1,
+          }}
+        >
+          <DraggableTodoList selectedProjectId={selectedProjectId} />
+        </View>
+      </BottomDrawer>
     );
   } else {
     return null;
   }
-
 };
 
 export default TodoContainer;
