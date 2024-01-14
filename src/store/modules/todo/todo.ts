@@ -149,7 +149,7 @@ const todoSlice = createSlice({
       action: {
         payload: {
           name: keyof AddTodoForm;
-          value: string | number | string[];
+          value: string | number | string[] | null;
         };
       }
     ) {

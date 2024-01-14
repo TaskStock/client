@@ -7,6 +7,7 @@ import { useAppSelect } from "../../../store/configureStore.hooks";
 import { setAddTodoForm } from "../../../store/modules/todo/todo";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import Icons from "../../atoms/Icons";
+import { Project } from "../../../@types/project";
 
 const ProjectItemContainer = styled.View<{ height?: number }>`
   flex: 1;
@@ -23,6 +24,7 @@ const ProjectItemContainer = styled.View<{ height?: number }>`
 const ProjectItem = styled.View<{ isSelected?: boolean }>`
   display: inline-flex;
   justify-content: center;
+  box-sizing: border-box;
   align-items: center;
   flex-direction: row;
   padding: 9px 20px;
@@ -72,12 +74,13 @@ export default function ProjectItemList({
   scrollViewRef: React.RefObject<ScrollView>;
 }) {
   const {
-    projectList,
+    projects: projectList,
+    fetchAddProject,
+    setIsAddProject,
+    setNewProjectInput,
     isAddProject,
     newProjectInput,
-    setIsAddProject,
     onChangeNewProjectName,
-    fetchAddProject,
   } = useProject();
 
   const dispatch = useDispatch();
@@ -85,12 +88,21 @@ export default function ProjectItemList({
 
   const addTodoForm = useAppSelect((state) => state.todo.addTodoForm);
 
-  const onPressProjectItem = useCallback(
-    (project) => () => {
-      dispatch(setAddTodoForm({ name: "project_id", value: project.id }));
-    },
-    [addTodoForm]
-  );
+  const onPressProjectItem = (project: Project) => () => {
+    dispatch(setAddTodoForm({ name: "project_id", value: project.project_id }));
+  };
+
+  const onPressAddProjectBtn = () => {
+    console.log("onPressAddProjectBtn");
+    setIsAddProject(!isAddProject);
+    setNewProjectInput("");
+
+    setTimeout(() => {
+      if (textInputRef.current) {
+        textInputRef.current.focus();
+      }
+    }, 300);
+  };
 
   const theme = useTheme();
   const [projectContainerHeight, setProjectContainerHeight] = React.useState(0);
@@ -102,18 +114,6 @@ export default function ProjectItemList({
   };
 
   const projectContainerRef = React.useRef<View>(null);
-
-  const onPressAddProjectBtn = () => {
-    setTimeout(() => {
-      if (textInputRef.current) {
-        textInputRef.current.focus();
-      }
-    }, 300);
-
-    setIsAddProject((prev) => {
-      return !prev;
-    });
-  };
 
   useEffect(() => {
     if (isAddProject) {
@@ -148,7 +148,7 @@ export default function ProjectItemList({
         </ProjectItemText>
       </ProjectItemComponent>
       {projectList.map((project, index) => {
-        const isSelected = project.id === addTodoForm.project_id;
+        const isSelected = project.project_id === addTodoForm.project_id;
 
         const onPress = () => {
           onPressProjectItem(project)();

@@ -1,5 +1,8 @@
 import React, { useCallback } from "react";
 import {
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
   Pressable,
   ScrollView,
   Switch,
@@ -261,167 +264,173 @@ export default function AddTodoModal() {
             }}
             ref={scrollViewRef}
           >
-            <Pressable
-              style={{
-                flex: 1,
-              }}
+            <KeyboardAvoidingView
+              behavior={Platform.OS === "ios" ? "padding" : "height"}
             >
-              <AddTodoContents>
-                <Section
-                  header={
-                    <SectionHeader>
-                      <SectionHeaderText systemTheme="dark">
-                        할 일
-                      </SectionHeaderText>
-                    </SectionHeader>
-                  }
-                >
-                  <TodoInput
-                    placeholder="할 일을 입력해주세요."
-                    placeholderTextColor={theme.textDim}
-                    value={addTodoForm.content}
-                    onChange={(e) => {
-                      dispatch(
-                        setAddTodoForm({
-                          name: "content",
-                          value: e.nativeEvent.text,
-                        })
-                      );
-                    }}
-                  ></TodoInput>
-                </Section>
-                <Section
-                  header={
-                    <SectionHeader>
-                      <SectionHeaderText>가치</SectionHeaderText>
-                      <ValueText>{value}원</ValueText>
-                    </SectionHeader>
-                  }
-                >
-                  <ValueSlider></ValueSlider>
-                </Section>
-                <Section
-                  header={
-                    <SectionHeader>
-                      <SectionHeaderText>반복</SectionHeaderText>
-                      {dayList.map((item) => {
-                        const isSelected =
-                          addTodoForm.repeat_day &&
-                          addTodoForm.repeat_day.includes(item);
-
-                        if (isSelected)
-                          return <ValueText key={item}>{item}</ValueText>;
-                      })}
-                    </SectionHeader>
-                  }
-                  gapSize="lg"
-                >
-                  <FlexBox gap={10}>
-                    {dayList.map((item, index) => {
-                      const onPressDayItem = () => {
+              <Pressable
+                style={{
+                  flex: 1,
+                }}
+              >
+                <AddTodoContents>
+                  <Section
+                    header={
+                      <SectionHeader>
+                        <SectionHeaderText systemTheme="dark">
+                          할 일
+                        </SectionHeaderText>
+                      </SectionHeader>
+                    }
+                  >
+                    <TodoInput
+                      placeholder="할 일을 입력해주세요."
+                      placeholderTextColor={theme.textDim}
+                      value={addTodoForm.content}
+                      onChange={(e) => {
                         dispatch(
                           setAddTodoForm({
-                            name: "repeat_day",
-                            value: getNewRepeatDay(
-                              addTodoForm.repeat_day,
-                              index
-                            ),
+                            name: "content",
+                            value: e.nativeEvent.text,
                           })
                         );
-                      };
+                      }}
+                    ></TodoInput>
+                  </Section>
+                  <Section
+                    header={
+                      <SectionHeader>
+                        <SectionHeaderText>가치</SectionHeaderText>
+                        <ValueText>{value}원</ValueText>
+                      </SectionHeader>
+                    }
+                  >
+                    <ValueSlider></ValueSlider>
+                  </Section>
+                  <Section
+                    header={
+                      <SectionHeader>
+                        <SectionHeaderText>반복</SectionHeaderText>
+                        {dayList.map((item) => {
+                          const isSelected =
+                            addTodoForm.repeat_day &&
+                            addTodoForm.repeat_day.includes(item);
 
-                      const isSelected = addTodoForm.repeat_day[index] === "1";
+                          if (isSelected)
+                            return <ValueText key={item}>{item}</ValueText>;
+                        })}
+                      </SectionHeader>
+                    }
+                    gapSize="lg"
+                  >
+                    <FlexBox gap={10}>
+                      {dayList.map((item, index) => {
+                        const onPressDayItem = () => {
+                          dispatch(
+                            setAddTodoForm({
+                              name: "repeat_day",
+                              value: getNewRepeatDay(
+                                addTodoForm.repeat_day,
+                                index
+                              ),
+                            })
+                          );
+                        };
 
-                      return (
-                        <RepeatDayItem
-                          onLayout={(e) => {
-                            if (dayItemWidth === 0)
-                              setDayItemWidth(e.nativeEvent.layout.width);
-                          }}
-                          key={index + item}
-                          isSelected={isSelected}
-                          onPress={onPressDayItem}
-                          size={dayItemWidth}
-                        >
-                          <Text
-                            size="md"
-                            color={
-                              theme.name == "gray"
-                                ? isSelected
-                                  ? theme.textReverse
-                                  : theme.textDim
-                                : "white"
-                            }
-                          >
-                            {item}
-                          </Text>
-                        </RepeatDayItem>
-                      );
-                    })}
-                  </FlexBox>
-                </Section>
-                <Section
-                  header={
-                    <SectionHeader>
-                      <FlexBox
-                        justifyContent="space-between"
-                        alignItems="center"
-                        styles={{
-                          flex: 1,
-                          minHeight: useResponsiveFontSize(50),
-                        }}
-                      >
-                        <FlexBox
-                          justifyContent="center"
-                          alignItems="center"
-                          gap={10}
-                        >
-                          <SectionHeaderText>반복 종료</SectionHeaderText>
-                          <Switch
-                            onValueChange={toggleIsEndRepeat}
-                            value={isRepeatDateModalOpen}
-                            thumbColor={theme.textReverse}
-                            trackColor={{
-                              false: theme.palette.neutral600_gray,
-                              true:
-                                theme.name == "gray"
-                                  ? theme.palette.neutral500_dark
-                                  : theme.text,
+                        const isSelected =
+                          addTodoForm.repeat_day[index] === "1";
+
+                        return (
+                          <RepeatDayItem
+                            onLayout={(e) => {
+                              if (dayItemWidth === 0)
+                                setDayItemWidth(e.nativeEvent.layout.width);
                             }}
-                          ></Switch>
-                        </FlexBox>
-                        {isRepeatDateModalOpen && (
-                          <DatePickerBox>
-                            <DateTimePicker
-                              value={datePickerInitialDate}
-                              mode="date"
-                              display="default"
-                              onChange={onChangeDate}
-                              style={{
-                                bottom: 0,
+                            key={index + item}
+                            isSelected={isSelected}
+                            onPress={onPressDayItem}
+                            size={dayItemWidth}
+                          >
+                            <Text
+                              size="md"
+                              color={
+                                theme.name == "gray"
+                                  ? isSelected
+                                    ? theme.textReverse
+                                    : theme.textDim
+                                  : "white"
+                              }
+                            >
+                              {item}
+                            </Text>
+                          </RepeatDayItem>
+                        );
+                      })}
+                    </FlexBox>
+                  </Section>
+                  <Section
+                    header={
+                      <SectionHeader>
+                        <FlexBox
+                          justifyContent="space-between"
+                          alignItems="center"
+                          styles={{
+                            flex: 1,
+                            minHeight: useResponsiveFontSize(50),
+                          }}
+                        >
+                          <FlexBox
+                            justifyContent="center"
+                            alignItems="center"
+                            gap={10}
+                          >
+                            <SectionHeaderText>반복 종료</SectionHeaderText>
+                            <Switch
+                              onValueChange={toggleIsEndRepeat}
+                              value={isRepeatDateModalOpen}
+                              thumbColor={theme.textReverse}
+                              trackColor={{
+                                false: theme.palette.neutral600_gray,
+                                true:
+                                  theme.name == "gray"
+                                    ? theme.palette.neutral500_dark
+                                    : theme.text,
                               }}
-                            />
-                          </DatePickerBox>
-                        )}
-                      </FlexBox>
-                    </SectionHeader>
-                  }
-                ></Section>
-                <Section
-                  gapSize="lg"
-                  header={
-                    <SectionHeader>
-                      <SectionHeaderText>프로젝트</SectionHeaderText>
-                    </SectionHeader>
-                  }
-                >
-                  <ProjectItemList
-                    scrollViewRef={scrollViewRef}
-                  ></ProjectItemList>
-                </Section>
-              </AddTodoContents>
-            </Pressable>
+                            ></Switch>
+                          </FlexBox>
+                          {isRepeatDateModalOpen && (
+                            <DatePickerBox>
+                              <DateTimePicker
+                                value={datePickerInitialDate}
+                                mode="date"
+                                display="default"
+                                onChange={onChangeDate}
+                                style={{
+                                  bottom: 0,
+                                }}
+                              />
+                            </DatePickerBox>
+                          )}
+                        </FlexBox>
+                      </SectionHeader>
+                    }
+                  ></Section>
+                  <Section
+                    gapSize="lg"
+                    header={
+                      <SectionHeader>
+                        <SectionHeaderText>프로젝트</SectionHeaderText>
+                      </SectionHeader>
+                    }
+                  >
+                    <ProjectItemList
+                      scrollViewRef={scrollViewRef}
+                    ></ProjectItemList>
+                  </Section>
+                </AddTodoContents>
+              </Pressable>
+            </KeyboardAvoidingView>
           </ScrollView>
+
           <AddTodoBtn onPress={onPressSubmitBtn}>
             <Text size="md">
               {isEditMode ? "투두 수정하기" : "투두 추가하기"}
