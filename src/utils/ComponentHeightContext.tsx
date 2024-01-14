@@ -11,7 +11,6 @@ type ComponentHeightContextType = {
   setContentsHeight: React.Dispatch<React.SetStateAction<number>>;
   DEFAULT_HEIGHT: number;
   OPEN_STATE: number;
-  CLOSED_STATE: number;
 };
 
 export const ComponentHeightContext = createContext<ComponentHeightContextType>(
@@ -22,7 +21,6 @@ export const ComponentHeightContext = createContext<ComponentHeightContextType>(
     setContentsHeight: () => {},
     DEFAULT_HEIGHT: 0,
     OPEN_STATE: 0,
-    CLOSED_STATE: 0,
   }
 );
 
@@ -38,17 +36,10 @@ export const ComponentHeightProvider: React.FC<{
 
   useEffect(() => {
     if (headerHeight !== 0 && contentsHeight !== 0) {
-      const _heightWithoutDrawer = headerHeight + contentsHeight;
-
-      setDEFAULT_HEIGHT(screenHeight - _heightWithoutDrawer);
-
-      const _openState = contentsHeight - spacing.offset;
-      setOPEN_STATE(_openState);
+      setDEFAULT_HEIGHT(headerHeight + contentsHeight + spacing.offset);
+      setOPEN_STATE(headerHeight);
     }
-    console.log(headerHeight, contentsHeight);
   }, [headerHeight, contentsHeight]);
-
-  const CLOSED_STATE = 0;
 
   return (
     <ComponentHeightContext.Provider
@@ -59,7 +50,6 @@ export const ComponentHeightProvider: React.FC<{
         setContentsHeight,
         DEFAULT_HEIGHT,
         OPEN_STATE,
-        CLOSED_STATE,
       }}
     >
       {children}

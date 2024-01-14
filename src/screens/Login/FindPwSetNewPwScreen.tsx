@@ -5,6 +5,7 @@ import LoginContainer from "../../components/molecules/Login/LoginContainer";
 import { spacing } from "../../constants/spacing";
 import { client } from "../../services/api";
 import { checkValidPassword } from "../../utils/checkValidity";
+import * as SecureStore from "expo-secure-store";
 
 const FindPwSetNewPwScreen = ({ route, navigation }) => {
   const [password, setPassword] = useState("");
@@ -33,6 +34,11 @@ const FindPwSetNewPwScreen = ({ route, navigation }) => {
         console.log(response);
         if (response.result === "success") {
           navigation.navigate("EmailLogin");
+          // secure store에도 업데이트
+          await SecureStore.setItemAsync(
+            "userCredentials",
+            JSON.stringify({ email, password })
+          );
         } else {
           alert("비밀번호 변경에 실패했습니다.");
         }

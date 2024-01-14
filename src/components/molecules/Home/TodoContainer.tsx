@@ -26,6 +26,8 @@ import { setTabIndex } from "../../../store/modules/home";
 import DraggableTodoList from "../../organisms/Home/DraggableTodoList";
 import useTodos from "../../../hooks/useTodos";
 import { useTheme } from "styled-components";
+import FixedBottomDrawer from "./FixedBottomDrawer";
+import { ComponentHeightContext } from "../../../utils/ComponentHeightContext";
 
 const DateContainer = styled.View`
   padding: ${spacing.small}px ${spacing.gutter}px 0;
@@ -57,83 +59,106 @@ const TodoContainer = () => {
 
   const headerDate = dayjs(currentDateString).format("MM월 DD일");
 
-  return (
-    <BottomDrawer
-      onDrawerStateChange={(nextState) => {
-        dispatch(setTodoDrawerPosition(nextState));
-      }}
-    >
-      <DateContainer>
-        <FlexBox justifyContent="space-between" alignItems="center">
-          <Pressable
-            onPress={() => {
-              dispatch(setTabIndex(1));
-            }}
-          >
-            <Text size="xl" weight="bold">
-              {headerDate}
-            </Text>
-          </Pressable>
+  const { headerHeight, contentsHeight, DEFAULT_HEIGHT, OPEN_STATE } =
+    useContext(ComponentHeightContext);
+  // final value
+  const [defaultValue, setDefaultValue] = useState(0);
+  const [openState, setOpenState] = useState(0);
 
-          <Icons
-            type="entypo"
-            name="circle-with-plus"
-            size={28}
-            color={theme.name === "dark" ? theme.text : theme.textDimmer}
-            onPress={() => {
-              dispatch(openAddTodoModal());
-            }}
-          />
-        </FlexBox>
-      </DateContainer>
-      <ProjectsContainer>
-        <ProjectSelectBtn
-          projectName={"전체"}
-          selected={selectedProjectId === null}
-          onPress={() => setSelectedProjectId(null)}
-        />
-        {projects.map((project) => (
-          <ProjectSelectBtn
-            projectName={project.name}
-            key={project.id}
-            selected={selectedProjectId === project.id}
-            onPress={() => setSelectedProjectId(project.id)}
-          />
-        ))}
-      </ProjectsContainer>
-      <View
-        style={{
-          flex: 1,
-        }}
+  useEffect(() => {
+    if (DEFAULT_HEIGHT !== defaultValue || OPEN_STATE !== openState) {
+      setDefaultValue(DEFAULT_HEIGHT);
+      setOpenState(OPEN_STATE);
+    }
+  }, [DEFAULT_HEIGHT, OPEN_STATE]);
+  // console.log("DEFAULT_HEIGHT", DEFAULT_HEIGHT);
+  // console.log("OPEN_STATE", OPEN_STATE);
+  // console.log("headerHeight", headerHeight);
+  // console.log("contentsHeight", contentsHeight);
+
+  if (defaultValue !== 0 && openState !== 0) {
+    return (
+      <FixedBottomDrawer
+        openState={openState}
+        closedState={defaultValue}
+        // onDrawerStateChange={(nextState) => {
+        //   dispatch(setTodoDrawerPosition(nextState));
+        // }}
       >
-        {!isLoading ? (
-          !isError ? (
-            todosData && (
-              <DraggableTodoList
-                selectedProjectId={selectedProjectId}
-              ></DraggableTodoList>
+        <DateContainer>
+          <FlexBox justifyContent="space-between" alignItems="center">
+            <Pressable
+              onPress={() => {
+                dispatch(setTabIndex(1));
+              }}
+            >
+              <Text size="xl" weight="bold">
+                {headerDate}
+              </Text>
+            </Pressable>
+
+            <Icons
+              type="entypo"
+              name="circle-with-plus"
+              size={28}
+              color={theme.name === "dark" ? theme.text : theme.textDimmer}
+              onPress={() => {
+                dispatch(openAddTodoModal());
+              }}
+            />
+          </FlexBox>
+        </DateContainer>
+        <ProjectsContainer>
+          <ProjectSelectBtn
+            projectName={"전체"}
+            selected={selectedProjectId === null}
+            onPress={() => setSelectedProjectId(null)}
+          />
+          {projects.map((project) => (
+            <ProjectSelectBtn
+              projectName={project.name}
+              key={project.id}
+              selected={selectedProjectId === project.id}
+              onPress={() => setSelectedProjectId(project.id)}
+            />
+          ))}
+        </ProjectsContainer>
+        <View
+          style={{
+            flex: 1,
+          }}
+        >
+          {!isLoading ? (
+            !isError ? (
+              todosData && (
+                <DraggableTodoList
+                  selectedProjectId={selectedProjectId}
+                ></DraggableTodoList>
+              )
+            ) : (
+              <CenterLayout>
+                <Text size="md">할일을 불러오는 중 에러가 발생했어요</Text>
+                <Margin margin={5} />
+                <Pressable
+                  onPress={() => {
+                    refetch();
+                  }}
+                >
+                  <Text size="md">다시 로드하기</Text>
+                </Pressable>
+              </CenterLayout>
             )
           ) : (
             <CenterLayout>
-              <Text size="md">할일을 불러오는 중 에러가 발생했어요</Text>
-              <Margin margin={5} />
-              <Pressable
-                onPress={() => {
-                  refetch();
-                }}
-              >
-                <Text size="md">다시 로드하기</Text>
-              </Pressable>
+              <LoadingSpinner />
             </CenterLayout>
-          )
-        ) : (
-          <CenterLayout>
-            <LoadingSpinner />
-          </CenterLayout>
-        )}
-      </View>
-    </BottomDrawer>
-  );
+          )}
+        </View>
+      </FixedBottomDrawer>
+    );
+  } else {
+    return null;
+  }
 };
 
 export default TodoContainer;

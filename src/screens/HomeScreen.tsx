@@ -1,16 +1,14 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Dimensions, Modal } from "react-native";
-import { useDispatch } from "react-redux";
+import { Modal } from "react-native";
 import styled from "styled-components/native";
 import { data } from "../../public/home";
 import HeaderTop from "../components/molecules/Home/HeaderTop";
-import AddTodoModal from "../components/organisms/TodoModal/AddTodoModal";
-import GCContainer from "../components/organisms/Home/GCContainer";
-import { useAppDispatch, useAppSelect } from "../store/configureStore.hooks";
-import { ComponentHeightContext } from "../utils/ComponentHeightContext";
 import TodoContainer from "../components/molecules/Home/TodoContainer";
-import { client } from "../services/api";
+import GCContainer from "../components/organisms/Home/GCContainer";
+import AddTodoModal from "../components/organisms/TodoModal/AddTodoModal";
+import { useAppDispatch, useAppSelect } from "../store/configureStore.hooks";
 import { getUserInfoThunk } from "../store/modules/user";
+import { ComponentHeightContext } from "../utils/ComponentHeightContext";
 
 const Container = styled.View`
   background-color: ${({ theme }) => theme.background};

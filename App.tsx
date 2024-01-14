@@ -49,7 +49,6 @@ export default function App() {
   //   removeData("refreshToken");
   //   removeData("accessExp");
   //   removeData("refreshExp");
-  //   removeData("strategy");
   // }, []);
 
   // const [assets] = useAssets([require("./assets/splash.png")]);
