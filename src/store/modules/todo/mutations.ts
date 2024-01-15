@@ -107,6 +107,7 @@ export const addTodoMutation = (builder: TodoApiBuilder) =>
   builder.mutation<
     {
       todo_id: number;
+      index: number;
     },
     {
       form: AddTodoForm;
@@ -186,9 +187,10 @@ export const addTodoMutation = (builder: TodoApiBuilder) =>
 
       try {
         const result = await queryFulfilled;
-        const todo_id = result.data.todo_id;
+        const { todo_id, index } = result.data;
 
         // 임시 아이디를 실제 아이디로 바꿔준다.
+
         dispatch(
           todoApi.util.updateQueryData(
             "getAllTodos",
@@ -199,7 +201,7 @@ export const addTodoMutation = (builder: TodoApiBuilder) =>
               );
               if (todoIndex === -1) return;
               draft.todos[todoIndex].todo_id = todo_id;
-              // draft.todos[todoIndex].index = index;
+              draft.todos[todoIndex].index = index;
             }
           )
         );
