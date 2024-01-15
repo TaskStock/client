@@ -7,7 +7,7 @@ import { spacing } from "../../constants/spacing";
 import { useAppDispatch, useAppSelect } from "../../store/configureStore.hooks";
 import {
   setCurrentDateString,
-  setItemHeight,
+  setItemContainerHeight,
 } from "../../store/modules/calendar";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
 import FlexBox from "../atoms/FlexBox";
@@ -74,7 +74,7 @@ const CalendarItemText = styled.Text<{
 const ListHeaderComponent = () => {
   const DateType = ["일", "월", "화", "수", "목", "금", "토"];
   const themeContext = useTheme();
-  const itemHeight = useAppSelect((state) => state.calendar.itemHeight);
+  const itemHeight = useAppSelect((state) => state.calendar.calendarItemHeight);
 
   return (
     <FlexBox>
@@ -97,7 +97,7 @@ const ListHeaderComponent = () => {
 };
 
 const CalendarItem = memo(({ item }: { item: TCalendarItem }) => {
-  const itemHeight = useAppSelect((state) => state.calendar.itemHeight);
+  const itemHeight = useAppSelect((state) => state.calendar.calendarItemHeight);
   const themeContext = useTheme();
   const dispatch = useAppDispatch();
   const date = item.date.date();
@@ -140,11 +140,12 @@ function HomeCalendar() {
   const renderItem = ({ item }: { item: TCalendarItem }) => {
     return <CalendarItem item={item} />;
   };
+
   const dispatch = useDispatch();
 
   const onLayout = (event: LayoutChangeEvent) => {
     const { height } = event.nativeEvent.layout;
-    dispatch(setItemHeight(height));
+    dispatch(setItemContainerHeight(height));
   };
 
   return (

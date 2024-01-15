@@ -95,6 +95,8 @@ export default function DraggableTodoList({
       return;
     }
 
+    console.log("changedTodos", changedTodos);
+
     changeTodoOrder({
       selectedProjectId: selectedProjectId,
       current_day_todos: currentDayTodos,
