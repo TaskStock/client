@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
-import RankingAll from "../../components/organisms/SNS/RankingAll";
+import RankingAll from "../../components/organisms/SNS/RankingTab";
 import useHeight from "../../hooks/useHeight";
 import { client } from "../../services/api";
 import { useAppSelect } from "../../store/configureStore.hooks";
@@ -8,6 +8,7 @@ import MyInfo from "../../components/organisms/SNS/MyInfo";
 import { BlackBtn } from "../../components/atoms/Buttons";
 import { spacing } from "../../constants/spacing";
 import Icons from "../../components/atoms/Icons";
+import RankingContainer from "../../components/organisms/SNS/RankingContainer";
 
 const Container = styled.View`
   flex: 1;
@@ -50,13 +51,13 @@ const RankingScreen = ({ navigation }) => {
         }}
         text={"프로필 편집"}
       />
-      <Icons
-        type="materialIcons"
-        name="search"
-        size={35}
-        onPress={() => navigation.navigate("Search")}
+
+      {/* <RankingContainer /> */}
+      <RankingContainer
+        rankingAll={rankingAll}
+        rankingFollowing={rankingFollowing}
+        rankingFollower={rankingFollower}
       />
-      <RankingAll data={rankingAll} />
     </Container>
   );
 };

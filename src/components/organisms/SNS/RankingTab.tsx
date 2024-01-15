@@ -13,7 +13,7 @@ import { IUserBox } from "../../../@types/userBox";
 //   user_name: "ㅇㅈㄱ",
 // };
 
-const RankingAll = ({ data }) => {
+const RankingTab = ({ data }) => {
   return (
     <FlatList<IUserBox>
       data={data}
@@ -31,4 +31,4 @@ const RankingAll = ({ data }) => {
   );
 };
 
-export default RankingAll;
+export default RankingTab;
