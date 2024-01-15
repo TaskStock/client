@@ -11,7 +11,8 @@ import convertUTCToLocal from "../../utils/convertUTCtoLocal";
 dayjs.extend(utc);
 
 interface initialState {
-  itemHeight: number;
+  calendarItemHeight: number;
+  calendarItemContainerHeight: number;
   weeksOfMonth: number;
   calendarItems: CalendarItem[];
   currentDateString: IsoString;
@@ -19,7 +20,8 @@ interface initialState {
 }
 
 const initialState: initialState = {
-  itemHeight: 0,
+  calendarItemHeight: 0,
+  calendarItemContainerHeight: 0,
   weeksOfMonth: calculateWeeksOfMonth(dayjs().toISOString()),
   calendarItems: initializeCalendarItems(
     calculateDatesOfMonth(dayjs().toISOString()),
@@ -33,16 +35,21 @@ const calendarSlice = createSlice({
   name: "value",
   initialState,
   reducers: {
-    setItemHeight: (state, action) => {
+    setItemContainerHeight: (state, action) => {
       if (action.payload < 0) {
         return;
       }
 
-      const height = action.payload;
-      const weeksOfMonth = state.weeksOfMonth;
-      const itemHeight = weeksOfMonth > 0 ? height / (weeksOfMonth + 1) : 0;
+      const containerHeight = action.payload;
 
-      state.itemHeight = itemHeight;
+      state.calendarItemContainerHeight = containerHeight;
+
+      const weeksOfMonth = state.weeksOfMonth;
+
+      const itemHeight =
+        weeksOfMonth > 0 ? containerHeight / (weeksOfMonth + 1) : 0;
+
+      state.calendarItemHeight = itemHeight;
     },
     setCurrentDateString: (
       state,
@@ -50,16 +57,14 @@ const calendarSlice = createSlice({
         payload: IsoString;
       }
     ) => {
-      console.log("setCurrentDateString", action.payload);
-
       // 근데, action.payload가 같은 달이라면? 렌더링을 하지 않아도 되는데?
       if (
         dayjs(action.payload).format("YYYY-MM") !==
         dayjs(state.currentDateString).format("YYYY-MM")
       ) {
         state.weeksOfMonth = calculateWeeksOfMonth(action.payload);
-
-        // 오늘날짜인지, 선택된 날짜인지, 이번달인지를 계산해서 넣어준다.
+        state.calendarItemHeight =
+          state.calendarItemContainerHeight / (state.weeksOfMonth + 1);
         state.calendarItems = initializeCalendarItems(
           calculateDatesOfMonth(action.payload),
           action.payload
@@ -131,7 +136,7 @@ const calendarSlice = createSlice({
 export default calendarSlice.reducer;
 
 export const {
-  setItemHeight,
+  setItemContainerHeight,
   setCurrentDateString,
   updateCalendarItemTodoCount,
   updateCalendarItemTodoCountValue,
