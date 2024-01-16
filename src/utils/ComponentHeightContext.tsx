@@ -1,8 +1,5 @@
 import React, { createContext, useEffect, useState } from "react";
-import { Dimensions, Platform } from "react-native";
 import { spacing } from "../constants/spacing";
-
-const { height: screenHeight } = Dimensions.get("window");
 
 type ComponentHeightContextType = {
   headerHeight: number;
