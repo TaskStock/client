@@ -3,29 +3,40 @@ import { IRegisterUser } from "../../screens/Login/EmailRegisterScreen";
 import { client } from "../../services/api";
 import { saveCredentials } from "./autoSignIn";
 import { RootState } from "../../store/configureStore";
+import getDeviceId from "../getDeviceId";
 
 // 회원가입, 로그인
 // accessToken => asyncStorage, redux에 저장
 // refreshToken => asyncStorage에 저장
 // accessExp, refreshExp => asyncStorage, redux에 저장
+// deviceId => asyncStorage, redux에 저장
 // email, password => keyChain에 저장
 export const registerWithEmail = createAsyncThunk(
   "REGISTER_WITH_EMAIL",
   async (data: IRegisterUser, { rejectWithValue }) => {
     try {
-      const responseData = await client.post("account/register", data);
+      const deviceId = await getDeviceId();
+      console.log("registerWithEmail deviceId: ", deviceId);
+      const responseData = await client.post("account/register", {
+        ...data,
+        device_id: deviceId,
+      });
 
       // email, password => secure store에 저장
-      await saveCredentials(data.email, data.password);
+      // await saveCredentials(data.email, data.password);
 
-      return responseData;
+      const result = {
+        ...responseData,
+        deviceId,
+      };
+
+      return result;
     } catch (error) {
       return rejectWithValue(error.response.data);
     }
   }
 );
 
-// 로그인 실패: 가입된 정보가 없을 때 처리
 export const loginWithEmail = createAsyncThunk(
   "LOGIN_WITH_EMAIL",
   async (
@@ -37,15 +48,25 @@ export const loginWithEmail = createAsyncThunk(
     { rejectWithValue }
   ) => {
     try {
-      const responseData = await client.post("account/login/email", data);
+      const deviceId = await getDeviceId();
+      console.log("loginWithEmail deviceId: ", deviceId);
+      const responseData = await client.post("account/login/email", {
+        ...data,
+        device_id: deviceId,
+      });
       // email, password => secure store에 저장
 
       console.log("로그인 시 서버 응답: ", responseData);
 
-      if (responseData.result === "success") {
-        await saveCredentials(data.email, data.password);
-      }
-      return responseData;
+      // if (responseData.result === "success") {
+      //   await saveCredentials(data.email, data.password);
+      // }
+
+      const result = {
+        ...responseData,
+        deviceId,
+      };
+      return result;
     } catch (error) {
       const result = {
         result: "fail",

@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelect } from "../../store/configureStore.hooks";
 import { checkStorage } from "../../utils/asyncStorage";
 import { logout } from "../../utils/authUtils/signInUtils";
 import { resetNavigation } from "../../utils/resetNavigation";
+import getDeviceId from "../../utils/getDeviceId";
 
 const Container = styled.View`
   justify-content: center;
@@ -57,6 +58,7 @@ const SettingsHomeScreen = ({ navigation }) => {
       />
       <Menu text="asyncStorage check" onPress={checkStorage} />
       <Menu text="redux check" onPress={checkRedux} />
+      <Menu text="device id" onPress={getDeviceId} />
       <Menu text="로그아웃" onPress={handleLogout} />
       <Menu text="회원 탈퇴" onPress={() => {}} />
       <Menu text="비밀번호 변경" onPress={() => {}} />

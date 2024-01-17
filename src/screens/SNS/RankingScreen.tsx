@@ -24,12 +24,12 @@ const RankingScreen = ({ navigation }) => {
   const { NOTCH_TOP } = useHeight();
 
   const myInfo = useAppSelect((state) => state.user.user);
-  console.log("내정보: ", myInfo);
+  // console.log("내정보: ", myInfo);
 
   const getRanking = async () => {
     try {
       const res = await client.get("sns/users", { accessToken });
-      console.log(res);
+      // console.log(res);
       setRankingAll(res.rankingAll);
       setRankingFollower(res.rankingFollower);
       setRankingFollowing(res.rankingFollowing);

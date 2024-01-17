@@ -11,6 +11,7 @@ import { useAppDispatch, useAppSelect } from "../../store/configureStore.hooks";
 import { setLoggedIn } from "../../store/modules/auth";
 import { getAPIHost } from "../../utils/getAPIHost";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
+import getDeviceId from "../../utils/getDeviceId";
 
 const EmailLoginScreen = ({ navigation }) => {
   const theme = useTheme();
@@ -30,6 +31,7 @@ const EmailLoginScreen = ({ navigation }) => {
     // server 응답 형식의 차이 때문에 utils와 분리
     const SERVER_URL = getAPIHost();
     const url = `${SERVER_URL}account/login/email`;
+    const deviceId = await getDeviceId();
 
     try {
       const response = await fetch(url, {
@@ -40,6 +42,7 @@ const EmailLoginScreen = ({ navigation }) => {
         body: JSON.stringify({
           email: user.email,
           password: user.password,
+          device_id: deviceId,
         }),
       });
 
@@ -54,8 +57,9 @@ const EmailLoginScreen = ({ navigation }) => {
         });
       }
       console.log("status: ", response.status);
+
       // Redux, asyncStorage에 상태 업데이트
-      dispatch(setLoggedIn(responseData));
+      dispatch(setLoggedIn({ ...responseData, deviceId }));
       return responseData;
     } catch (e) {
       setAlert("이메일 혹은 비밀번호가 일치하지 않습니다.");
