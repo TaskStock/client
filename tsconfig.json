@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
     "types": ["@types/styled-components"],
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "esModuleInterop": true
   },
   "extends": "expo/tsconfig.base"
 }

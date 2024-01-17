@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "expo start -c",
+    "start": "expo start --dev-client",
     "android": "expo run:android",
     "ios": "expo run:ios",
     "web": "expo start --web"
@@ -12,8 +12,6 @@
     "@react-native-async-storage/async-storage": "^1.21.0",
     "@react-native-community/datetimepicker": "7.2.0",
     "@react-native-community/slider": "^4.5.0",
-    "@react-native-google-signin/google-signin": "^11.0.0",
-    "@react-native-seoul/kakao-login": "^5.3.1",
     "@react-navigation/bottom-tabs": "^6.5.11",
     "@react-navigation/material-top-tabs": "^6.6.5",
     "@react-navigation/native": "^6.1.9",
@@ -47,7 +45,8 @@
     "recoil": "^0.7.7",
     "redux": "^5.0.0",
     "styled-components": "^6.1.1",
-    "victory-native": "^36.7.0"
+    "victory-native": "^36.7.0",
+    "expo-updates": "~0.18.19"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
