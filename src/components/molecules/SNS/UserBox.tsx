@@ -4,6 +4,7 @@ import Text from "../../atoms/Text";
 import styled from "styled-components/native";
 import { convertSlash } from "../../../utils/convertSlash";
 import { getAPIHost } from "../../../utils/getAPIHost";
+import ProfilePic from "../../atoms/ProfilePic";
 
 const BlankImage = styled.View`
   width: 50px;
@@ -13,18 +14,11 @@ const BlankImage = styled.View`
 `;
 
 const UserBox = ({ username, rank, value, image, strategy }) => {
-  const SERVER_URL = getAPIHost();
-  let uri;
-  if (strategy === "local") {
-    uri = convertSlash(SERVER_URL + image);
-  } else {
-    uri = convertSlash(image);
-  }
-  console.log(uri);
   return (
     <FlexBox>
       <Text size="sm">{rank}</Text>
-      {image ? (
+      <ProfilePic image={image} strategy={strategy} />
+      {/* {image ? (
         <Image
           style={{ width: 50, height: 50, borderRadius: 50 }}
           source={{
@@ -33,7 +27,7 @@ const UserBox = ({ username, rank, value, image, strategy }) => {
         />
       ) : (
         <BlankImage />
-      )}
+      )} */}
       <View>
         <Text size="lg">{username}</Text>
         <Text size="lg">{value}</Text>

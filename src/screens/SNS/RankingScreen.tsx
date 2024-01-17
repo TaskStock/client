@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
-import RankingAll from "../../components/organisms/SNS/RankingTab";
+import { BlackBtn } from "../../components/atoms/Buttons";
+import MyInfo from "../../components/organisms/SNS/MyInfo";
+import RankingContainer from "../../components/organisms/SNS/RankingContainer";
+import { spacing } from "../../constants/spacing";
 import useHeight from "../../hooks/useHeight";
 import { client } from "../../services/api";
 import { useAppSelect } from "../../store/configureStore.hooks";
-import MyInfo from "../../components/organisms/SNS/MyInfo";
-import { BlackBtn } from "../../components/atoms/Buttons";
-import { spacing } from "../../constants/spacing";
-import Icons from "../../components/atoms/Icons";
-import RankingContainer from "../../components/organisms/SNS/RankingContainer";
 
 const Container = styled.View`
   flex: 1;
