@@ -126,7 +126,6 @@ const userSlice = createSlice({
         state.user.user_name = action.payload.user_name;
         state.user.introduce = action.payload.introduce;
       }
-      console.log("유저 정보: ", action.payload);
     });
   },
 });

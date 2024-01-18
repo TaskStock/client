@@ -3,6 +3,7 @@ import React from "react";
 import EditProfileScreen from "../screens/SNS/EditProfileScreen";
 import RankingScreen from "../screens/SNS/RankingScreen";
 import SearchScreen from "../screens/SNS/SearchScreen";
+import UserDetailScreen from "../screens/SNS/UserDetailScreen";
 
 const NativeStack = createNativeStackNavigator();
 
@@ -21,6 +22,13 @@ const SnsStack = () => (
         headerShown: true,
       }}
       component={SearchScreen}
+    />
+    <NativeStack.Screen
+      name="UserDetail"
+      options={{
+        headerShown: true,
+      }}
+      component={UserDetailScreen}
     />
   </NativeStack.Navigator>
 );

@@ -12,6 +12,7 @@ const Container = styled.View`
   flex: 1;
   padding-left: ${spacing.offset}px;
   padding-right: ${spacing.offset}px;
+  background-color: ${({ theme }) => theme.background};
 `;
 
 const RankingScreen = ({ navigation }) => {
@@ -48,9 +49,8 @@ const RankingScreen = ({ navigation }) => {
           navigation.navigate("EditProfile");
         }}
         text={"프로필 편집"}
+        style={{ marginBottom: spacing.offset }}
       />
-
-      {/* <RankingContainer /> */}
       <RankingContainer
         rankingAll={rankingAll}
         rankingFollowing={rankingFollowing}

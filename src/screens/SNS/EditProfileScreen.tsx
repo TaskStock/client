@@ -8,6 +8,7 @@ import FlexBox from "../../components/atoms/FlexBox";
 import { spacing } from "../../constants/spacing";
 import TextInput from "../../components/atoms/TextInput";
 import { editUserInfoThunk } from "../../store/modules/user";
+import EditImage from "../../components/molecules/SNS/EditImage";
 
 const SaveBtn = ({ onPress }) => (
   <TouchableOpacity onPress={onPress}>
@@ -31,7 +32,6 @@ const EditProfileScreen = ({ navigation }) => {
   };
 
   const handleSaveText = () => {
-    console.log("===== 저장 : ", data);
     dispatch(editUserInfoThunk(data));
     navigation.goBack();
   };
@@ -40,7 +40,7 @@ const EditProfileScreen = ({ navigation }) => {
     <View>
       <PageHeader title="" headerRight={<SaveBtn onPress={handleSaveText} />} />
       <FlexBox direction="column" alignItems="center" gap={spacing.gutter}>
-        <ProfilePic image={myInfo.image} strategy={myInfo.strategy} />
+        <EditImage />
         <FlexBox gap={spacing.offset}>
           <Text size="md">팔로워 {myInfo.follower_count.toString()}</Text>
           <Text size="md">팔로잉 {myInfo.following_count.toString()}</Text>
