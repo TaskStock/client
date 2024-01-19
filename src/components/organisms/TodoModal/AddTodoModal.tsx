@@ -189,6 +189,8 @@ export default function AddTodoModal() {
   const [addTodo, addTodoResult] = useAddTodoMutation();
   const [editTodo, editTodoResult] = useEditTodoMutation();
 
+  const isHomeDrawerOpen = useAppSelect((state) => state.home.isDrawerOpen);
+
   const currentDate = useAppSelect((state) => state.calendar.currentDateString);
 
   const onPressSubmitBtn = () => {
@@ -197,6 +199,7 @@ export default function AddTodoModal() {
         form: addTodoForm,
         todo_date: addTodoForm.todo_date!,
         original_level: addTodoForm.original_level,
+        isHomeDrawerOpen: isHomeDrawerOpen,
         // addTodoForm의 checked는, editModal이 열릴때 들어간다.
         // 그러므로, isEditMode일때는 addTodoForm.checked가 항상 true이다.
         todo_checked: addTodoForm.checked!,
@@ -210,6 +213,7 @@ export default function AddTodoModal() {
       addTodo({
         form: addTodoForm,
         add_date: currentDate as IsoString,
+        isHomeDrawerOpen: isHomeDrawerOpen,
         queryArgs: {
           date: getAllTodoQueryArg.date,
           graph_before_date: startDate,

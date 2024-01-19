@@ -123,6 +123,8 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
   const todoDrawerPosition = useAppSelect(
     (state) => state.todo.todoDrawerPosition
   );
+  const ishomeDrawerOpen = useAppSelect((state) => state.home.isDrawerOpen);
+
   const [changeToNextDayTodo] = useChangeToNextDayTodoMutationMutation();
   const [deleteTodo] = useDeleteTodoMutation();
   const [toggleCheckTodo] = useToggleTodoMutation();
@@ -161,6 +163,7 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
       check: !todo.check,
       todo_date: todo.date,
       level: todo.level,
+      isHomeDrawerOpen: ishomeDrawerOpen,
       queryArgs: {
         current_date: getAllTodoQueryArg.date,
         graph_before_date: startDate,
@@ -176,12 +179,14 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
     startDate,
     endDate,
     toggle,
+    ishomeDrawerOpen,
   ]);
 
   const onPressChangeToNextDayTodo = useCallback(() => {
     changeToNextDayTodo({
       todo_id: todo.todo_id,
       todo_date: todo.date,
+      isHomeDrawerOpen: ishomeDrawerOpen,
       todo_checked: todo.check,
       todo_level: todo.level,
       queryArgs: {
@@ -198,6 +203,7 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
     getAllTodoQueryArg.date,
     startDate,
     endDate,
+    ishomeDrawerOpen,
   ]);
 
   const onPressEditTodo = useCallback(() => {
@@ -220,6 +226,7 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
     deleteTodo({
       todo_id: todo.todo_id,
       todo_date: todo.date,
+      isHomeDrawerOpen: ishomeDrawerOpen,
       value: todo.level * 1000,
       checked: todo.check,
       queryArgs: {
@@ -236,6 +243,7 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
     startDate,
     endDate,
     todo.check,
+    ishomeDrawerOpen,
   ]);
 
   return (

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { memo, useEffect, useRef, useState } from "react";
 import { Animated, Dimensions, PanResponder } from "react-native";
 import styled from "styled-components/native";
 import { spacing } from "../../../constants/spacing";
@@ -31,13 +31,8 @@ const BottomDrawer = ({
   onDrawerStateChange,
 }) => {
   const { BOTTOM_TAB } = useHeight();
-  const [drawerOpen, setDrawerOpen] = useState(false);
+  // const [drawerOpen, setDrawerOpen] = useState(false);
   const drawerPositionY = useRef<any>(new Animated.Value(0)).current;
-
-  useEffect(() => {
-    const nextState = drawerOpen ? "OPEN_STATE" : "CLOSED_STATE";
-    onDrawerStateChange(nextState);
-  }, [drawerOpen]);
 
   const open = closedState - openState;
   const panResponder = useRef(
@@ -57,32 +52,37 @@ const BottomDrawer = ({
         if (drawerPositionY._value < openThreshold) {
           if (dy > 100) {
             // 열린 상태에서 아래로 충분히 드래그한 경우
-            setDrawerOpen(false);
             Animated.spring(drawerPositionY, {
               toValue: 0, // 닫힘 위치로 이동
               useNativeDriver: false,
-            }).start();
+            }).start(() => onDrawerStateChange("CLOSED_STATE"));
           } else {
             // 열린 상태에서 아래로 충분히 드래그하지 않은 경우
             Animated.spring(drawerPositionY, {
               toValue: -open, // 열린 상태 유지
               useNativeDriver: false,
-            }).start();
+            }).start(() => {
+              onDrawerStateChange("OPEN_STATE");
+            });
           }
         } else {
           if (dy < -100) {
             // 닫힌 상태에서 위로 충분히 드래그한 경우
-            setDrawerOpen(true);
             Animated.spring(drawerPositionY, {
               toValue: -open, // 열린 위치로 이동
               useNativeDriver: false,
-            }).start();
+            }).start(() => {
+              onDrawerStateChange("OPEN_STATE");
+            });
           } else {
             // 위로 충분히 드래그하지 않은 경우
+
             Animated.spring(drawerPositionY, {
               toValue: 0, // 닫힌 상태 유지
               useNativeDriver: false,
-            }).start();
+            }).start(() => {
+              onDrawerStateChange("CLOSED_STATE");
+            });
           }
         }
       },
@@ -105,4 +105,4 @@ const BottomDrawer = ({
   );
 };
 
-export default BottomDrawer;
+export default memo(BottomDrawer);

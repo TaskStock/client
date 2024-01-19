@@ -34,7 +34,8 @@ function checkIsWithInCurrentCalcDay(utcString: string): boolean {
       .set("minute", 0)
       .set("second", 0)
       .set("millisecond", 0)
-      .subtract(1, "day");
+      .subtract(1, "day")
+      .subtract(1, "millisecond");
 
     const calcDateEnd = calcDateStart.add(1, "day");
 
@@ -44,7 +45,8 @@ function checkIsWithInCurrentCalcDay(utcString: string): boolean {
       .set("hour", 6)
       .set("minute", 0)
       .set("second", 0)
-      .set("millisecond", 0);
+      .set("millisecond", 0)
+      .subtract(1, "millisecond");
 
     const calcDateEnd = calcDateStart.add(1, "day");
 

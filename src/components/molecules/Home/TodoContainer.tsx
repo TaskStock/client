@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import React, { useContext, useEffect, useState } from "react";
+import React, { memo, useContext, useEffect, useState } from "react";
 import { Pressable, View } from "react-native";
 import styled from "styled-components/native";
 import { spacing } from "../../../constants/spacing";
@@ -7,7 +7,12 @@ import {
   useAppDispatch,
   useAppSelect,
 } from "../../../store/configureStore.hooks";
-import { setTabIndex } from "../../../store/modules/home";
+import {
+  resetSaveValueUpdate,
+  saveValueUpdate,
+  setIsDrawerOpen,
+  setTabIndex,
+} from "../../../store/modules/home";
 import {
   openAddTodoModal,
   setTodoDrawerPosition,
@@ -26,6 +31,9 @@ import useTodos from "../../../hooks/useTodos";
 import { useTheme } from "styled-components";
 import { useProject } from "../../../hooks/useProject";
 import { setSelectedProjectId } from "../../../store/modules/project";
+import { useGetValuesArg } from "../../../hooks/useGetValuesArg";
+import { chartApi } from "../../../store/modules/chart";
+import { checkIsWithInCurrentCalcDay } from "../../../utils/checkIsSameLocalDay";
 
 const DateContainer = styled.View`
   padding: ${spacing.small}px ${spacing.gutter}px 0;
@@ -42,11 +50,10 @@ const TodoContainer = () => {
   const theme = useTheme();
   const { currentDateString } = useAppSelect((state) => state.calendar);
   const dispatch = useAppDispatch();
-
-  const { data: todosData, error, isError, isLoading, refetch } = useTodos();
   const { projects, selectedProjectId } = useProject();
 
   const headerDate = dayjs(currentDateString).format("MM월 DD일");
+  const isHomeDrawerOpen = useAppSelect((state) => state.home.isDrawerOpen);
 
   const { DEFAULT_HEIGHT, OPEN_STATE } = useContext(ComponentHeightContext);
   // final value
@@ -67,6 +74,11 @@ const TodoContainer = () => {
         closedState={defaultValue}
         onDrawerStateChange={(nextState) => {
           dispatch(setTodoDrawerPosition(nextState));
+          dispatch(
+            setIsDrawerOpen({
+              toState: nextState === "OPEN_STATE" ? true : false,
+            })
+          );
         }}
       >
         <DateContainer>
@@ -81,44 +93,43 @@ const TodoContainer = () => {
               </Text>
             </Pressable>
             <Icons
-            type="entypo"
-            name="circle-with-plus"
-            size={28}
-            color={theme.name === "dark" ? theme.text : theme.textDimmer}
-            onPress={() => {
-              dispatch(openAddTodoModal());
-            }}
-          />
-        </FlexBox>
-      </DateContainer>
-      <ProjectsContainer>
-        <ProjectSelectBtn
-          projectName={"전체"}
-          selected={selectedProjectId === null}
-          onPress={() => dispatch(setSelectedProjectId(null))}
-        />
-        {projects.map((project) => (
+              type="entypo"
+              name="circle-with-plus"
+              size={28}
+              color={theme.name === "dark" ? theme.text : theme.textDimmer}
+              onPress={() => {
+                dispatch(openAddTodoModal());
+              }}
+            />
+          </FlexBox>
+        </DateContainer>
+        <ProjectsContainer>
           <ProjectSelectBtn
-            projectName={project.name}
-            key={project.project_id}
-            selected={selectedProjectId === project.project_id}
-            onPress={() => dispatch(setSelectedProjectId(project.project_id))}
+            projectName={"전체"}
+            selected={selectedProjectId === null}
+            onPress={() => dispatch(setSelectedProjectId(null))}
           />
-        ))}
-      </ProjectsContainer>
-      <View
-        style={{
-          flex: 1,
-        }}
-      >
-        <DraggableTodoList selectedProjectId={selectedProjectId} />
-      </View>
-    </BottomDrawer>
+          {projects.map((project) => (
+            <ProjectSelectBtn
+              projectName={project.name}
+              key={project.project_id}
+              selected={selectedProjectId === project.project_id}
+              onPress={() => dispatch(setSelectedProjectId(project.project_id))}
+            />
+          ))}
+        </ProjectsContainer>
+        <View
+          style={{
+            flex: 1,
+          }}
+        >
+          <DraggableTodoList selectedProjectId={selectedProjectId} />
+        </View>
+      </BottomDrawer>
     );
   } else {
     return null;
   }
-
 };
 
-export default TodoContainer;
+export default memo(TodoContainer);
