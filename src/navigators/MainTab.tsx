@@ -7,7 +7,8 @@ import GroupScreen from "../screens/GroupScreen";
 import ProjectScreen from "../screens/ProjectScreen";
 import { ComponentHeightProvider } from "../utils/ComponentHeightContext";
 import HomeStack from "./HomeStack";
-import FriendScreen from "../screens/FriendScreen";
+import FriendScreen from "../screens/SNS/RankingScreen";
+import SnsStack from "./SnsStack";
 
 const Tab = createBottomTabNavigator();
 
@@ -80,8 +81,8 @@ function MainTab() {
           }}
         />
         <Tab.Screen
-          name="Friend"
-          component={FriendScreen}
+          name="SnsStack"
+          component={SnsStack}
           options={{
             headerShown: false,
             tabBarIcon: ({ color, size }) => (
