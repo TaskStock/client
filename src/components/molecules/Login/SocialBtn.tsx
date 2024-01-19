@@ -62,7 +62,7 @@ const SocialBtn = ({
           </Text>
         ) : type === "apple" ? (
           <Text size="md" color={"white"} weight="semibold">
-            애플로 계속하기
+            Apple로 계속하기
           </Text>
         ) : (
           <Text size="md" weight="semibold" color={theme.emailLoginBtn}>

@@ -7,11 +7,14 @@ import {
   registerWithEmail,
 } from "../../utils/authUtils/signInUtils";
 import { checkAndRenewTokens } from "../../utils/authUtils/tokenUtils";
+import getDeviceId from "../../utils/getDeviceId";
+import store from "../configureStore";
 
 interface IInitialUserState {
   accessToken: string;
   accessExp: number;
   refreshExp: number;
+  deviceId: string;
   isLoggedIn: boolean;
   loading: boolean;
   error: any;
@@ -22,6 +25,7 @@ export const initialUserState: IInitialUserState = {
   accessToken: "",
   accessExp: 0,
   refreshExp: 0,
+  deviceId: "",
   isLoggedIn: false,
   loading: false,
   error: null,
@@ -37,12 +41,14 @@ export const checkTokenExistence = createAsyncThunk(
       const accessExp = await getData("accessExp");
       const refreshExp = await getData("refreshExp");
       const strategy = await getData("strategy");
+      const deviceId = await getData("deviceId");
 
       if (accessToken && accessExp && refreshExp) {
         return {
           accessToken,
           accessExp: Number(accessExp),
           refreshExp: Number(refreshExp),
+          deviceId,
           isLoggedIn: true,
           strategy,
         };
@@ -52,6 +58,7 @@ export const checkTokenExistence = createAsyncThunk(
         accessToken: "",
         accessExp: 0,
         refreshExp: 0,
+        deviceId,
         isLoggedIn: false,
         strategy,
       };
@@ -70,7 +77,6 @@ const authSlice = createSlice({
       state.accessToken = action.payload;
     },
     setLoggedIn: (state, action) => {
-      console.log("여기 ", action.payload);
       if (action.payload.accessToken) {
         state.accessToken = action.payload.accessToken;
         state.accessExp = action.payload.accessExp;
@@ -78,6 +84,7 @@ const authSlice = createSlice({
         state.isLoggedIn = true;
         state.loading = false;
         state.error = false;
+        state.deviceId = action.payload.deviceId;
 
         const strategy = getData("strategy");
 
@@ -89,6 +96,7 @@ const authSlice = createSlice({
         storeData("refreshToken", action.payload.refreshToken);
         storeData("accessExp", action.payload.accessExp);
         storeData("refreshExp", action.payload.refreshExp);
+        storeData("deviceId", action.payload.deviceId);
 
         console.log("로그인 성공: ");
       }
@@ -109,12 +117,15 @@ const authSlice = createSlice({
         state.isLoggedIn = true;
         state.loading = false;
         state.strategy = action.payload.strategy;
+        state.deviceId = action.payload.deviceId;
 
         // AsyncStorage에 저장
         storeData("accessToken", action.payload.accessToken);
         storeData("refreshToken", action.payload.refreshToken);
         storeData("accessExp", action.payload.accessExp);
         storeData("refreshExp", action.payload.refreshExp);
+        storeData("deviceId", action.payload.deviceId);
+
         // strategy는 회원가입 시에만 저장
         storeData("strategy", action.payload.strategy);
 
@@ -139,6 +150,7 @@ const authSlice = createSlice({
           state.isLoggedIn = true;
           state.loading = false;
           state.error = false;
+          state.deviceId = action.payload.deviceId;
 
           const strategy = getData("strategy");
 
@@ -150,6 +162,7 @@ const authSlice = createSlice({
           storeData("refreshToken", action.payload.refreshToken);
           storeData("accessExp", action.payload.accessExp);
           storeData("refreshExp", action.payload.refreshExp);
+          storeData("deviceId", action.payload.deviceId);
 
           console.log("로그인 성공: ");
         }
@@ -166,6 +179,7 @@ const authSlice = createSlice({
         state.refreshExp = action.payload.refreshExp;
         state.isLoggedIn = action.payload.isLoggedIn;
         state.strategy = action.payload.strategy;
+        state.deviceId = action.payload.deviceId;
         state.loading = false;
       })
       .addCase(checkTokenExistence.rejected, (state, action) => {
@@ -208,6 +222,7 @@ const authSlice = createSlice({
             action.payload;
           state.accessToken = accessToken;
           state.accessExp = accessExp;
+
           if (refreshExp && refreshExp) {
             state.refreshExp = refreshExp;
             storeData("refreshExp", refreshExp);

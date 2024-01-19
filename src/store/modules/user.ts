@@ -68,6 +68,34 @@ export const getUserInfoThunk = createAsyncThunk(
   }
 );
 
+export const editUserInfoThunk = createAsyncThunk(
+  "user/editUserInfo",
+  async (
+    info: { user_name: string; introduce: string },
+    { rejectWithValue, getState }
+  ) => {
+    const rootState = getState() as RootState;
+    const accessToSend = rootState.auth.accessToken.replace(/^"|"$/g, "");
+    try {
+      const data = await client.patch(
+        "sns/edit/info",
+        { ...info },
+        {
+          accessToken: accessToSend,
+        }
+      );
+      console.log(info, accessToSend);
+
+      if (data.result === "success") {
+        return info;
+      }
+    } catch (error) {
+      console.log("editUserInfoThunk error");
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
 const userSlice = createSlice({
   name: "user",
   initialState: initialUserState,
@@ -84,6 +112,20 @@ const userSlice = createSlice({
     builder.addCase(getUserInfoThunk.fulfilled, (state, action) => {
       state.loading = false;
       state.user = action.payload.userData;
+    });
+    builder.addCase(editUserInfoThunk.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(editUserInfoThunk.rejected, (state, action) => {
+      state.loading = false;
+      state.error = "유저 정보 수정 실패";
+    });
+    builder.addCase(editUserInfoThunk.fulfilled, (state, action) => {
+      state.loading = false;
+      if (action.payload) {
+        state.user.user_name = action.payload.user_name;
+        state.user.introduce = action.payload.introduce;
+      }
     });
   },
 });
