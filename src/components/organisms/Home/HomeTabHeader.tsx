@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { Animated } from "react-native";
 import { NavigationState, SceneRendererProps } from "react-native-tab-view";
 import styled, { useTheme } from "styled-components/native";
@@ -19,6 +19,9 @@ const Tab = styled.Pressable<{ graphSelected: boolean }>`
   border-bottom-color: ${(props) =>
     props.graphSelected ? props.theme.text : "transparent"}; */
   padding-bottom: ${useResponsiveFontSize(10)}px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 const TabText = styled.Text<{ isFocused: boolean }>`
   font-size: ${useResponsiveFontSize(20)}px;
@@ -29,6 +32,7 @@ const TabText = styled.Text<{ isFocused: boolean }>`
 
 export default function HomeTabHeader({
   props,
+  onPressTab,
 }: {
   props: SceneRendererProps & {
     navigationState: NavigationState<{
@@ -36,12 +40,10 @@ export default function HomeTabHeader({
       title: string;
     }>;
   };
+  onPressTab: (index: number) => void;
 }) {
   const theme = useTheme();
-
   const [translateValue] = React.useState(new Animated.Value(0));
-
-  const dispatch = useAppDispatch();
 
   useEffect(() => {
     Animated.timing(translateValue, {
@@ -51,8 +53,12 @@ export default function HomeTabHeader({
     }).start();
   }, [props.navigationState.index]);
 
-  const tabWidth = React.useRef(0);
+  const [tabWidth, setTabWidth] = useState<number>(0);
+  const tabWidthArr = useRef<number[]>([]);
+  const beforeTabWidth = useRef<number>(0);
+
   const { setGCTabHeight } = useContext(ComponentHeightContext);
+
   return (
     <Container
       onLayout={(e) => {
@@ -66,12 +72,18 @@ export default function HomeTabHeader({
           <Tab
             key={props.navigationState.routes[i].title}
             onPress={() => {
-              dispatch(setTabIndex(i));
+              beforeTabWidth.current = tabWidth;
+              onPressTab(i);
+              setTabWidth(tabWidthArr.current[i]);
             }}
             graphSelected={props.navigationState.index === i}
             onLayout={(event) => {
               const { width } = event.nativeEvent.layout;
-              tabWidth.current = width;
+              tabWidthArr.current.push(width);
+              if (i === 0) {
+                beforeTabWidth.current = width;
+                setTabWidth(width);
+              }
             }}
           >
             <TabText isFocused={isFocused}>
@@ -82,7 +94,7 @@ export default function HomeTabHeader({
       })}
       <Animated.View
         style={{
-          width: tabWidth.current,
+          width: tabWidth,
           paddingBottom: useResponsiveFontSize(10),
           borderBottomWidth: useResponsiveFontSize(3),
           borderBottomColor: theme.text,
@@ -93,7 +105,7 @@ export default function HomeTabHeader({
             {
               translateX: translateValue.interpolate({
                 inputRange: [0, 1],
-                outputRange: [0, tabWidth.current + spacing.gutter],
+                outputRange: [0, beforeTabWidth.current + spacing.gutter],
               }),
             },
           ],

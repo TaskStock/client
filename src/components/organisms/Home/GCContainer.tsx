@@ -27,17 +27,6 @@ const renderScene = SceneMap({
   second: SecondRoute,
 });
 
-const renderTabBar = (
-  props: SceneRendererProps & {
-    navigationState: NavigationState<{
-      key: string;
-      title: string;
-    }>;
-  }
-) => {
-  return <HomeTabHeader props={props} />;
-};
-
 const clientHeight = Dimensions.get("window").height;
 
 const GCContainer = ({ myData }) => {
@@ -52,6 +41,24 @@ const GCContainer = ({ myData }) => {
 
   const onChangeIndex = (index: number) => {
     dispatch(setTabIndex(index));
+  };
+
+  const renderTabBar = (
+    props: SceneRendererProps & {
+      navigationState: NavigationState<{
+        key: string;
+        title: string;
+      }>;
+    }
+  ) => {
+    return (
+      <HomeTabHeader
+        onPressTab={(index) => {
+          dispatch(setTabIndex(index));
+        }}
+        props={props}
+      />
+    );
   };
 
   const { setContentsHeight } = useContext(ComponentHeightContext);

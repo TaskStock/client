@@ -9,6 +9,8 @@ import { ComponentHeightProvider } from "../utils/ComponentHeightContext";
 import HomeStack from "./HomeStack";
 import FriendScreen from "../screens/SNS/RankingScreen";
 import SnsStack from "./SnsStack";
+import PageHeader from "../components/molecules/PageHeader";
+import PageMainHeader from "../components/molecules/PageMainHeader";
 
 const Tab = createBottomTabNavigator();
 
@@ -55,6 +57,7 @@ function MainTab() {
           name="Project"
           component={ProjectScreen}
           options={{
+            header: () => <PageMainHeader title="프로젝트" />,
             tabBarIcon: ({ color, size }) => (
               <IconsWithoutFeedBack
                 type="ionicons"
