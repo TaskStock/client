@@ -73,8 +73,8 @@ export default function HomeTabHeader({
             key={props.navigationState.routes[i].title}
             onPress={() => {
               beforeTabWidth.current = tabWidth;
-              onPressTab(i);
               setTabWidth(tabWidthArr.current[i]);
+              onPressTab(i);
             }}
             graphSelected={props.navigationState.index === i}
             onLayout={(event) => {
