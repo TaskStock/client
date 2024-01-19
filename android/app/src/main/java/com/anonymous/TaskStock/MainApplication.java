@@ -1,5 +1,6 @@
 package com.anonymous.TaskStock;
 
+import com.anonymous.TaskStock.BuildConfig;
 import android.app.Application;
 import android.content.res.Configuration;
 import androidx.annotation.NonNull;
@@ -35,7 +36,7 @@ public class MainApplication extends Application implements ReactApplication {
         // packages.add(new MyReactNativePackage());
         return packages;
       }
-
+      
       @Override
       protected String getJSMainModuleName() {
         return ".expo/.virtual-metro-entry";

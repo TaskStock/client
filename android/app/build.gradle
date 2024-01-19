@@ -81,7 +81,7 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.taskstock"
+    namespace "com.anonymous.TaskStock"
     defaultConfig {
         applicationId 'com.anonymous.TaskStock'
         minSdkVersion rootProject.ext.minSdkVersion

@@ -24,6 +24,7 @@ export const palette = {
   candle_bottom_graph_bar: "#9C9C9C",
   kakao: "#FEE500",
   google: "#4285F4",
+  shadow: "rgba(0, 0, 0, 0.10)",
 } as const;
 
 export const grayTheme = {
