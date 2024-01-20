@@ -5,19 +5,19 @@ import Text from "../../components/atoms/Text";
 import PageHeader from "../../components/molecules/PageHeader";
 import { spacing } from "../../constants/spacing";
 import { useAppDispatch, useAppSelect } from "../../store/configureStore.hooks";
-
 import { Shadow } from "react-native-shadow-2";
 import { useTheme } from "styled-components";
 import styled from "styled-components/native";
 import EditImage from "../../components/molecules/SNS/EditImage";
 import { palette } from "../../constants/colors";
-import { editUserInfoThunk } from "../../store/modules/user";
-import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
-import { selectImage } from "../../utils/SnsUtils/selectImage";
+import { editUserInfoThunk } from "../../utils/UserUtils/editUserInfoThunk";
+import { selectImage } from "../../utils/UserUtils/selectImage";
 import {
   setToDefaultImageThunk,
   uploadImageThunk,
-} from "../../utils/SnsUtils/uploadImageThunk";
+} from "../../utils/UserUtils/uploadImageThunk";
+import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
+import imagePermissionCheck from "../../utils/UserUtils/imagePermissionCheck";
 
 const SaveBtn = ({ onPress }) => (
   <TouchableOpacity onPress={onPress}>
@@ -95,6 +95,8 @@ const EditProfileScreen = ({ navigation }) => {
     if (type === "setToDefault") {
       dispatch(setToDefaultImageThunk());
     } else {
+      const permissionGranted = await imagePermissionCheck();
+      console.log("permission granted: ", permissionGranted);
       const imageFile = await selectImage();
       if (imageFile) {
         dispatch(uploadImageThunk(imageFile));

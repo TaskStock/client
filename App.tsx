@@ -2,6 +2,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import * as Font from "expo-font";
 import React, { useEffect, useState } from "react";
 import { StatusBar } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { ThemeProvider } from "styled-components/native";
 import { darkTheme, grayTheme } from "./src/constants/colors";
@@ -11,10 +12,7 @@ import SplashScreen from "./src/screens/Login/SplashScreen";
 import { useAppDispatch, useAppSelect } from "./src/store/configureStore.hooks";
 import { checkTokenExistence } from "./src/store/modules/auth";
 import { startingTheme } from "./src/store/modules/theme";
-import { getData, removeData } from "./src/utils/asyncStorage";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { checkAndRenewTokens } from "./src/utils/authUtils/tokenUtils";
-import { getUserInfoThunk } from "./src/store/modules/user";
 
 const THEME = {
   dark: {
