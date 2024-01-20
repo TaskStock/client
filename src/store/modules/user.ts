@@ -2,7 +2,6 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { client } from "../../services/api";
 import { uploadImageThunk } from "../../utils/SnsUtils/uploadImageThunk";
 import { RootState } from "../configureStore";
-import { Asset } from "react-native-image-picker";
 
 interface initialState {
   user: {

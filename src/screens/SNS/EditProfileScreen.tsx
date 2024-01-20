@@ -89,7 +89,6 @@ const EditProfileScreen = ({ navigation }) => {
   };
 
   const handleUploadImage = async (type) => {
-    setModalVisible(false);
     if (type === "setToDefault")
       return dispatch(
         uploadImageThunk({
@@ -102,6 +101,8 @@ const EditProfileScreen = ({ navigation }) => {
     if (imageFile) {
       dispatch(uploadImageThunk(imageFile));
     }
+
+    setModalVisible(false);
   };
 
   return (
