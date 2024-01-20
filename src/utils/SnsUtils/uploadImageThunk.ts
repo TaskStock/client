@@ -44,3 +44,33 @@ export const uploadImageThunk = createAsyncThunk(
     }
   }
 );
+
+export const setToDefaultImageThunk = createAsyncThunk(
+  "setToDefaultImageThunk",
+  async (_, { getState, rejectWithValue }) => {
+    const state = getState() as RootState;
+    const { accessToken } = state.auth;
+    const SERVER_URL = getAPIHost();
+    const URL = `${SERVER_URL}sns/edit/default`;
+    try {
+      const res = await fetch(URL, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      const data = await res.json();
+      console.log("응답: ", data);
+      if (data.result === "fail") {
+        console.log("서버에서 이미지 업로드 실패");
+        return rejectWithValue(data);
+      }
+
+      return data;
+    } catch (error) {
+      console.log("기본이미지 변경 실패: ", error);
+      return rejectWithValue(error.response.data);
+    }
+  }
+);

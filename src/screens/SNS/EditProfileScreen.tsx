@@ -14,7 +14,10 @@ import { palette } from "../../constants/colors";
 import { editUserInfoThunk } from "../../store/modules/user";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
 import { selectImage } from "../../utils/SnsUtils/selectImage";
-import { uploadImageThunk } from "../../utils/SnsUtils/uploadImageThunk";
+import {
+  setToDefaultImageThunk,
+  uploadImageThunk,
+} from "../../utils/SnsUtils/uploadImageThunk";
 
 const SaveBtn = ({ onPress }) => (
   <TouchableOpacity onPress={onPress}>
@@ -89,17 +92,13 @@ const EditProfileScreen = ({ navigation }) => {
   };
 
   const handleUploadImage = async (type) => {
-    if (type === "setToDefault")
-      return dispatch(
-        uploadImageThunk({
-          uri: "",
-          type: "",
-          fileName: "",
-        })
-      );
-    const imageFile = await selectImage();
-    if (imageFile) {
-      dispatch(uploadImageThunk(imageFile));
+    if (type === "setToDefault") {
+      dispatch(setToDefaultImageThunk());
+    } else {
+      const imageFile = await selectImage();
+      if (imageFile) {
+        dispatch(uploadImageThunk(imageFile));
+      }
     }
 
     setModalVisible(false);
