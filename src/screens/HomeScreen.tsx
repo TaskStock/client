@@ -20,11 +20,6 @@ const Container = styled.View`
 `;
 
 const HomeScreen = ({ navigation }) => {
-  const [myData, setMyData] = useState(data);
-  const { setContentsHeight, setHeaderHeight } = useContext(
-    ComponentHeightContext
-  );
-
   const isAddModalOpen = useAppSelect((state) => state.todo.isAddModalOpen);
   const dispatch = useAppDispatch();
 
@@ -36,9 +31,8 @@ const HomeScreen = ({ navigation }) => {
   const { startDate, endDate } = useGetValuesArg();
   const savedValueUpdate = useAppSelect((state) => state.home.savedValueUpdate);
 
+  // flush savedValueUpdate
   useEffect(() => {
-    console.log("todo container", isHomeDrawerOpen);
-
     if (!isHomeDrawerOpen) {
       console.log("flush savedValueUpdate");
 

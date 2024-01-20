@@ -7,8 +7,8 @@ import {
   TabView,
 } from "react-native-tab-view";
 import { ComponentHeightContext } from "../../../utils/ComponentHeightContext";
-import CalendarContainer from "./CalendarContainer";
-import GraphContainer from "./GraphContainer";
+import HomeCalendar from "./HomeCalendar";
+import HomeGraph from "./HomeGraph";
 import TabHeader from "../../molecules/TabHeader";
 import {
   useAppDispatch,
@@ -16,10 +16,10 @@ import {
 } from "../../../store/configureStore.hooks";
 import { setTabIndex } from "../../../store/modules/home";
 
-const FirstRoute = () => <GraphContainer myData={[]} />;
+const FirstRoute = () => <HomeGraph myData={[]} />;
 
 const SecondRoute = () => {
-  return <CalendarContainer />;
+  return <HomeCalendar />;
 };
 
 const renderScene = SceneMap({

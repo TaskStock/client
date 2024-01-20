@@ -15,6 +15,8 @@ import {
   CalendarItem as TCalendarItem,
   IsoString,
 } from "../../@types/calendar";
+import { Todo } from "../../@types/todo";
+import { useCalculateTodoCount } from "../../hooks/useCalculateTodoCount";
 
 const CalendarContainer = styled.View`
   border-radius: 20px;
@@ -134,8 +136,9 @@ const CalendarItem = memo(({ item }: { item: TCalendarItem }) => {
   );
 });
 
-function HomeCalendar() {
+function Calendar({ todos }: { todos: Todo[] }) {
   const calendarItems = useAppSelect((state) => state.calendar.calendarItems);
+  useCalculateTodoCount({ todos });
 
   const renderItem = ({ item }: { item: TCalendarItem }) => {
     return <CalendarItem item={item} />;
@@ -168,4 +171,4 @@ function HomeCalendar() {
   );
 }
 
-export default memo(HomeCalendar);
+export default memo(Calendar);

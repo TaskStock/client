@@ -48,12 +48,11 @@ const ProjectsContainer = styled.View`
 
 const TodoContainer = () => {
   const theme = useTheme();
-  const { currentDateString } = useAppSelect((state) => state.calendar);
   const dispatch = useAppDispatch();
+  const { currentDateString } = useAppSelect((state) => state.calendar);
   const { projects, selectedProjectId } = useProject();
 
   const headerDate = dayjs(currentDateString).format("MM월 DD일");
-  const isHomeDrawerOpen = useAppSelect((state) => state.home.isDrawerOpen);
 
   const { DEFAULT_HEIGHT, OPEN_STATE } = useContext(ComponentHeightContext);
   // final value

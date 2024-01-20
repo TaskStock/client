@@ -12,6 +12,7 @@ export default function ContentLayout({
       style={{
         paddingHorizontal: spacing.gutter,
         paddingVertical: spacing.offset,
+        flex: 1,
       }}
     >
       {children}
