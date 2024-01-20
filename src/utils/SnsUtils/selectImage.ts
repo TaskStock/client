@@ -18,9 +18,9 @@ export const selectImage = async () => {
     } else if (result.errorCode) {
       console.log("ImagePicker Error: ", result.errorMessage);
     } else {
-      const imageUri = result.assets ? result.assets[0].uri : null;
-      console.log("Selected image URI: ", imageUri);
-      return imageUri;
+      const imageFile = result.assets ? result.assets[0] : null;
+      console.log("Selected image: ", result.assets);
+      return imageFile;
     }
   } catch (error) {
     console.error("이미지 선택 중 에러: ", error);

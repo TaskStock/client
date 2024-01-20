@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { client } from "../../services/api";
 import { uploadImageThunk } from "../../utils/SnsUtils/uploadImageThunk";
 import { RootState } from "../configureStore";
+import { Asset } from "react-native-image-picker";
 
 interface initialState {
   user: {
@@ -130,6 +131,7 @@ const userSlice = createSlice({
     });
     builder.addCase(uploadImageThunk.pending, (state, action) => {
       state.loading = true;
+      console.log("uploadImageThunk pending");
     });
     builder.addCase(uploadImageThunk.rejected, (state, action) => {
       state.loading = false;
@@ -137,7 +139,7 @@ const userSlice = createSlice({
     });
     builder.addCase(uploadImageThunk.fulfilled, (state, action) => {
       state.loading = false;
-      state.user.image = action.payload;
+      state.user.image = action.payload.imagePath;
       console.log("성공", state.user.image);
     });
   },
