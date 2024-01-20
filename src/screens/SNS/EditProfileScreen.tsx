@@ -1,23 +1,23 @@
 import React, { useState } from "react";
-import {
-  Modal,
-  TouchableOpacity,
-  TouchableWithoutFeedback,
-  View,
-} from "react-native";
+import { Modal, TouchableOpacity, View } from "react-native";
 import FlexBox from "../../components/atoms/FlexBox";
 import Text from "../../components/atoms/Text";
 import PageHeader from "../../components/molecules/PageHeader";
 import { spacing } from "../../constants/spacing";
 import { useAppDispatch, useAppSelect } from "../../store/configureStore.hooks";
 
+import { Shadow } from "react-native-shadow-2";
 import { useTheme } from "styled-components";
 import styled from "styled-components/native";
 import EditImage from "../../components/molecules/SNS/EditImage";
+import { palette } from "../../constants/colors";
 import { editUserInfoThunk } from "../../store/modules/user";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
-import { Shadow } from "react-native-shadow-2";
-import { palette } from "../../constants/colors";
+import { selectImage } from "../../utils/SnsUtils/selectImage";
+import {
+  setToDefaultImageThunk,
+  uploadImageThunk,
+} from "../../utils/SnsUtils/uploadImageThunk";
 
 const SaveBtn = ({ onPress }) => (
   <TouchableOpacity onPress={onPress}>
@@ -91,6 +91,19 @@ const EditProfileScreen = ({ navigation }) => {
     navigation.goBack();
   };
 
+  const handleUploadImage = async (type) => {
+    if (type === "setToDefault") {
+      dispatch(setToDefaultImageThunk());
+    } else {
+      const imageFile = await selectImage();
+      if (imageFile) {
+        dispatch(uploadImageThunk(imageFile));
+      }
+    }
+
+    setModalVisible(false);
+  };
+
   return (
     <View style={{ backgroundColor: theme.background, flex: 1 }}>
       <PageHeader title="" headerRight={<SaveBtn onPress={handleSaveText} />} />
@@ -137,10 +150,10 @@ const EditProfileScreen = ({ navigation }) => {
             style={{ borderRadius: 20 }}
           >
             <ModalContainer>
-              <SelectImage>
+              <SelectImage onPress={handleUploadImage}>
                 <Text size="lg">갤러리에서 선택</Text>
               </SelectImage>
-              <SelectImage>
+              <SelectImage onPress={() => handleUploadImage("setToDefault")}>
                 <Text size="lg">기본 이미지로 변경</Text>
               </SelectImage>
             </ModalContainer>

@@ -41,10 +41,12 @@ const SettingsHomeScreen = ({ navigation }) => {
     }
   }, [isLoggedIn, navigation]);
 
-  const redux = useAppSelect((state) => state.auth);
+  const redux_auth = useAppSelect((state) => state.auth);
+  const redux_user = useAppSelect((state) => state.user);
   const checkRedux = () => {
     console.log("=====redux=====");
-    console.log(redux);
+    console.log(redux_auth);
+    console.log(redux_user);
   };
 
   return (

@@ -1,5 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { client } from "../../services/api";
+import {
+  setToDefaultImageThunk,
+  uploadImageThunk,
+} from "../../utils/SnsUtils/uploadImageThunk";
 import { RootState } from "../configureStore";
 
 interface initialState {
@@ -126,6 +130,32 @@ const userSlice = createSlice({
         state.user.user_name = action.payload.user_name;
         state.user.introduce = action.payload.introduce;
       }
+    });
+    builder.addCase(uploadImageThunk.pending, (state, action) => {
+      state.loading = true;
+      console.log("uploadImageThunk pending");
+    });
+    builder.addCase(uploadImageThunk.rejected, (state, action) => {
+      state.loading = false;
+      state.error = "이미지 업로드 실패";
+    });
+    builder.addCase(uploadImageThunk.fulfilled, (state, action) => {
+      state.loading = false;
+      state.user.image = action.payload.imagePath;
+      console.log("성공", state.user.image);
+    });
+    builder.addCase(setToDefaultImageThunk.pending, (state, action) => {
+      state.loading = true;
+      console.log("setToDefaultImageThunk pending");
+    });
+    builder.addCase(setToDefaultImageThunk.rejected, (state, action) => {
+      state.loading = false;
+      state.error = "기본이미지 변경 실패";
+    });
+    builder.addCase(setToDefaultImageThunk.fulfilled, (state, action) => {
+      state.loading = false;
+      state.user.image = action.payload.imagePath;
+      console.log("성공", state.user.image);
     });
   },
 });

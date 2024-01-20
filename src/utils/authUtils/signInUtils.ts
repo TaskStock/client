@@ -83,12 +83,18 @@ export const logout = createAsyncThunk(
   async (_, { getState, rejectWithValue }) => {
     try {
       const state = getState() as RootState;
-      const accessToken = state.auth.accessToken;
+      const { accessToken, deviceId } = state.auth;
       const accessToSend = accessToken.replace(/^"|"$/g, "");
 
-      const data = await client.delete("account/logout", {
-        accessToken: accessToSend,
-      });
+      const data = await client.delete(
+        "account/logout",
+        {
+          device_id: deviceId,
+        },
+        {
+          accessToken: accessToSend,
+        }
+      );
 
       if (data.result !== "success") {
         throw new Error(data.message || "로그아웃 실패");
