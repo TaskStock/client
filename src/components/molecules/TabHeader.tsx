@@ -2,11 +2,11 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { Animated } from "react-native";
 import { NavigationState, SceneRendererProps } from "react-native-tab-view";
 import styled, { useTheme } from "styled-components/native";
-import { spacing } from "../../../constants/spacing";
-import { useAppDispatch } from "../../../store/configureStore.hooks";
-import { setTabIndex } from "../../../store/modules/home";
-import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
-import { ComponentHeightContext } from "../../../utils/ComponentHeightContext";
+import { spacing } from "../../constants/spacing";
+import { useAppDispatch } from "../../store/configureStore.hooks";
+import { setTabIndex } from "../../store/modules/home";
+import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
+import { ComponentHeightContext } from "../../utils/ComponentHeightContext";
 
 const Container = styled.View`
   padding: 0 ${spacing.gutter}px;
@@ -30,7 +30,7 @@ const TabText = styled.Text<{ isFocused: boolean }>`
     props.isFocused ? props.theme.text : props.theme.textDim};
 `;
 
-export default function HomeTabHeader({
+export default function TabHeader({
   props,
   onPressTab,
 }: {

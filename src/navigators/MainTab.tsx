@@ -11,6 +11,7 @@ import FriendScreen from "../screens/SNS/RankingScreen";
 import SnsStack from "./SnsStack";
 import PageHeader from "../components/molecules/PageHeader";
 import PageMainHeader from "../components/molecules/PageMainHeader";
+import ProjectStack from "./ProjectStack";
 
 const Tab = createBottomTabNavigator();
 
@@ -55,9 +56,10 @@ function MainTab() {
         />
         <Tab.Screen
           name="Project"
-          component={ProjectScreen}
+          component={ProjectStack}
           options={{
-            header: () => <PageMainHeader title="프로젝트" />,
+            headerShown: false,
+            // header: () => <PageMainHeader title="프로젝트" />,
             tabBarIcon: ({ color, size }) => (
               <IconsWithoutFeedBack
                 type="ionicons"

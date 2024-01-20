@@ -116,6 +116,7 @@ const CalendarContainer = () => {
   const { data: todos } = useTodos();
   const dispatch = useAppDispatch();
 
+  // 달이 바뀌면 todo count를 다시 계산한다.
   useEffect(() => {
     if (
       todos &&

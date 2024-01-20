@@ -14,6 +14,9 @@ import { WithLocalSvg } from "react-native-svg";
 import ProjectIcon from "../../../../assets/icons/Chart_white.svg";
 import { useProject } from "../../../hooks/useProject";
 import { Project } from "../../../@types/project";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
+import PageMainHeader from "../../molecules/PageMainHeader";
+import { ProjectStackParamList } from "../../../navigators/ProjectStack";
 
 const ProjectBox = styled.View`
   border-radius: ${useResponsiveFontSize(20)}px;
@@ -44,7 +47,7 @@ const MoreBtn = styled.Pressable`
 
 export default function ProjectContainer() {
   const { projects } = useProject();
-
+  const navigation = useNavigation<NavigationProp<ProjectStackParamList>>();
   const renderItem = ({ item }: { item: Project }) => {
     return (
       <ProjectBox>
@@ -104,7 +107,14 @@ export default function ProjectContainer() {
               </View>
             </FlexBox>
           </View>
-          <MoreBtn>
+          <MoreBtn
+            onPress={() => {
+              navigation.navigate("ProjectDetail", {
+                project_id: item.project_id,
+                project_title: item.name,
+              });
+            }}
+          >
             <Text size="sm">프로젝트 더보기</Text>
             <Icons type="entypo" name="chevron-thin-right" size={15} />
           </MoreBtn>
@@ -113,15 +123,17 @@ export default function ProjectContainer() {
     );
   };
   return (
-    <ContentLayout>
-      <FlatList
-        renderItem={renderItem}
-        data={projects}
-        keyExtractor={(item) => item.project_id.toString()}
-        ItemSeparatorComponent={() => {
-          return <Margin margin={useResponsiveFontSize(20)} />;
-        }}
-      ></FlatList>
-    </ContentLayout>
+    <>
+      <ContentLayout>
+        <FlatList
+          renderItem={renderItem}
+          data={projects}
+          keyExtractor={(item) => item.project_id.toString()}
+          ItemSeparatorComponent={() => {
+            return <Margin margin={useResponsiveFontSize(20)} />;
+          }}
+        ></FlatList>
+      </ContentLayout>
+    </>
   );
 }

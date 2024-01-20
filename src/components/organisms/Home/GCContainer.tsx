@@ -9,7 +9,7 @@ import {
 import { ComponentHeightContext } from "../../../utils/ComponentHeightContext";
 import CalendarContainer from "./CalendarContainer";
 import GraphContainer from "./GraphContainer";
-import HomeTabHeader from "./HomeTabHeader";
+import TabHeader from "../../molecules/TabHeader";
 import {
   useAppDispatch,
   useAppSelect,
@@ -29,7 +29,7 @@ const renderScene = SceneMap({
 
 const clientHeight = Dimensions.get("window").height;
 
-const GCContainer = ({ myData }) => {
+const GCContainer = () => {
   const layout = useWindowDimensions();
   const dispatch = useAppDispatch();
   const index = useAppSelect((state) => state.home.tabIndex);
@@ -52,7 +52,7 @@ const GCContainer = ({ myData }) => {
     }
   ) => {
     return (
-      <HomeTabHeader
+      <TabHeader
         onPressTab={(index) => {
           dispatch(setTabIndex(index));
         }}
