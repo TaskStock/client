@@ -10,6 +10,7 @@ export const uploadImageThunk = createAsyncThunk(
     const { accessToken } = state.auth;
 
     const formData = new FormData() as any;
+
     formData.append("image", {
       name: image.fileName,
       type: image.type,

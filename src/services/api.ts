@@ -81,9 +81,10 @@ client.post = function <T = any>(
 // method: 'DELETE'
 client.delete = function <T = any>(
   endpoint: string,
+  body: any,
   customConfig: { [key: string]: any } = {}
 ): Promise<T> {
-  return client<T>(endpoint, { ...customConfig, method: "DELETE" });
+  return client<T>(endpoint, { ...customConfig, body, method: "DELETE" });
 };
 
 // method: 'PATCH' : 리소스의 부분적인 수정
