@@ -2,6 +2,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
 import SettingsHomeScreen from "../screens/Settings/SettingsHomeScreen";
 import ThemeScreen from "../screens/Settings/ThemeScreen";
+import AccountScreen from "../screens/Settings/AccountScreen";
 
 const NativeStack = createNativeStackNavigator();
 
@@ -20,6 +21,11 @@ const SettingsStack = () => (
     <NativeStack.Screen
       name="SettingsTheme"
       component={ThemeScreen}
+      options={{}}
+    />
+    <NativeStack.Screen
+      name="SettingsAccount"
+      component={AccountScreen}
       options={{}}
     />
   </NativeStack.Navigator>
