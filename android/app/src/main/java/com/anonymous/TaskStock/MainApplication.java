@@ -19,6 +19,16 @@ import expo.modules.ReactNativeHostWrapper;
 
 import java.util.List;
 
+import android.app.Activity;
+import android.content.pm.PackageManager;
+import android.Manifest;
+import androidx.core.app.ActivityCompat;
+import android.os.Build;
+import android.os.Environment;
+import android.content.Intent;
+import android.provider.Settings;
+
+
 public class MainApplication extends Application implements ReactApplication {
 
   private final ReactNativeHost mReactNativeHost =
@@ -79,5 +89,32 @@ public class MainApplication extends Application implements ReactApplication {
   public void onConfigurationChanged(@NonNull Configuration newConfig) {
     super.onConfigurationChanged(newConfig);
     ApplicationLifecycleDispatcher.onConfigurationChanged(this, newConfig);
+  }
+
+  // 추가한 코드
+  private static final int REQUEST_EXTERNAL_STORAGE = 1;
+  private static final String[] PERMISSIONS_STORAGE = {
+          Manifest.permission.READ_EXTERNAL_STORAGE
+  };
+
+  public static void verifyStoragePermissions(Activity activity) {
+    // Check if we have write permission
+    int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE);
+
+    if (permission != PackageManager.PERMISSION_GRANTED) {
+        // We don't have permission so prompt the user
+        ActivityCompat.requestPermissions(
+                activity,
+                PERMISSIONS_STORAGE,
+                REQUEST_EXTERNAL_STORAGE
+        );
+    }
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+    if(!Environment.isExternalStorageManager()){
+        Intent intent = new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+        activity.startActivity(intent);
+    }
+  }
   }
 }

@@ -97,9 +97,11 @@ const EditProfileScreen = ({ navigation }) => {
     } else {
       const permissionGranted = await imagePermissionCheck();
       console.log("permission granted: ", permissionGranted);
-      const imageFile = await selectImage();
-      if (imageFile) {
-        dispatch(uploadImageThunk(imageFile));
+      if (permissionGranted === true) {
+        const imageFile = await selectImage();
+        if (imageFile) {
+          dispatch(uploadImageThunk(imageFile));
+        }
       }
     }
 

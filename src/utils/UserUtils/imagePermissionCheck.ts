@@ -1,5 +1,5 @@
-import { PermissionsAndroid, Platform } from "react-native";
-import { check, request, PERMISSIONS, RESULTS } from "react-native-permissions";
+import { Alert, Linking, Platform } from "react-native";
+import { PERMISSIONS, RESULTS, check, request } from "react-native-permissions";
 
 const imagePermissionCheck = async () => {
   let permission;
@@ -9,7 +9,6 @@ const imagePermissionCheck = async () => {
     permission = PERMISSIONS.IOS.PHOTO_LIBRARY;
   } else if (Platform.OS === "android") {
     permission = PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE;
-    // permission = PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE;
   }
 
   try {
@@ -26,8 +25,23 @@ const imagePermissionCheck = async () => {
         console.log(
           "사용자가 권한을 거부했지만, 요청할 수 있음 (Android에서만 해당)"
         );
+        Alert.alert(
+          "권한 요청",
+          "갤러리 접근 권한이 필요합니다. 설정에서 권한을 허용해주세요.",
+          [
+            {
+              text: "나중에",
+              style: "cancel",
+            },
+            {
+              text: "설정으로 이동",
+              onPress: () => Linking.openSettings(),
+            },
+          ]
+        );
         // 권한 요청
         const requestResult = await request(permission);
+        console.log("requestResult: ", requestResult);
         return requestResult === RESULTS.GRANTED;
       case RESULTS.LIMITED:
         console.log("접근 가능하지만, 권한이 제한됨 (iOS에서만 해당)");
