@@ -6,9 +6,11 @@ import { IsoString } from "../@types/calendar";
 export const useCurrentDate = () => {
   const dispatch = useAppDispatch();
 
-  const currentDate = dayjs(
-    useAppSelect((state) => state.calendar.currentDateString)
+  const currentDateString = useAppSelect(
+    (state) => state.calendar.currentDateString
   );
+
+  const currentDate = dayjs(currentDateString);
 
   const subtract1Month = () => {
     dispatch(
@@ -27,6 +29,7 @@ export const useCurrentDate = () => {
   };
 
   return {
+    currentDateString,
     currentDate,
     subtract1Month,
     add1Month,

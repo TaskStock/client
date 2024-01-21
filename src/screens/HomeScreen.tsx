@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
 import { Modal } from "react-native";
 import styled from "styled-components/native";
 import { data } from "../../public/home";
@@ -13,6 +13,8 @@ import { useGetValuesArg } from "../hooks/useGetValuesArg";
 import { chartApi } from "../store/modules/chart";
 import { checkIsWithInCurrentCalcDay } from "../utils/checkIsSameLocalDay";
 import { resetSaveValueUpdate } from "../store/modules/home";
+import { useFlushSavedValues } from "../hooks/useFlushSavedValues";
+import { useFocusEffect } from "@react-navigation/native";
 
 const Container = styled.View`
   background-color: ${({ theme }) => theme.background};
@@ -23,53 +25,18 @@ const HomeScreen = ({ navigation }) => {
   const isAddModalOpen = useAppSelect((state) => state.todo.isAddModalOpen);
   const dispatch = useAppDispatch();
 
+  const { DEFAULT_HEIGHT, OPEN_STATE } = useContext(ComponentHeightContext);
+
   useEffect(() => {
     dispatch(getUserInfoThunk());
   }, []);
 
-  const isHomeDrawerOpen = useAppSelect((state) => state.home.isDrawerOpen);
-  const { startDate, endDate } = useGetValuesArg();
-  const savedValueUpdate = useAppSelect((state) => state.home.savedValueUpdate);
-
-  // flush savedValueUpdate
-  useEffect(() => {
-    if (!isHomeDrawerOpen) {
-      console.log("flush savedValueUpdate");
-
-      dispatch(
-        chartApi.util.updateQueryData(
-          "getValues",
-          {
-            startDate,
-            endDate,
-          },
-          ({ values }) => {
-            if (values.length == 0) return;
-
-            const index = values.findIndex((value) =>
-              checkIsWithInCurrentCalcDay(value.date)
-            );
-
-            if (index == -1) return;
-
-            const targetValue = values[index];
-
-            targetValue.high += savedValueUpdate.dhigh;
-            targetValue.low += savedValueUpdate.dlow;
-            targetValue.start += savedValueUpdate.dstart;
-            targetValue.end += savedValueUpdate.dend;
-
-            dispatch(resetSaveValueUpdate());
-          }
-        )
-      );
-    }
-  }, [isHomeDrawerOpen]);
+  useFlushSavedValues();
 
   return (
     <Container>
       <HeaderTop navigation={navigation} />
-      <GCContainer myData={data} />
+      <GCContainer />
       <TodoContainer />
       {/* <HandleTodoBtnContainer {...handleEdit} /> */}
       {isAddModalOpen && (

@@ -15,6 +15,7 @@ import {
   useAppSelect,
 } from "../../../store/configureStore.hooks";
 import { setTabIndex } from "../../../store/modules/home";
+import { useResizeLayoutOnFocus } from "../../../hooks/useResizeLayoutOnFocus";
 
 const FirstRoute = () => <HomeGraph myData={[]} />;
 
@@ -62,11 +63,14 @@ const GCContainer = () => {
   };
 
   const { setContentsHeight } = useContext(ComponentHeightContext);
+
+  const onLayout = useResizeLayoutOnFocus({
+    resizeFunction: setContentsHeight,
+  });
+
   return (
     <View
-      onLayout={(e) => {
-        setContentsHeight(e.nativeEvent.layout.height);
-      }}
+      onLayout={onLayout}
       style={{
         height: clientHeight * 0.48,
       }}

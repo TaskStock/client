@@ -31,7 +31,6 @@ const BottomDrawer = ({
   onDrawerStateChange,
 }) => {
   const { BOTTOM_TAB } = useHeight();
-  // const [drawerOpen, setDrawerOpen] = useState(false);
   const drawerPositionY = useRef<any>(new Animated.Value(0)).current;
 
   const open = closedState - openState;

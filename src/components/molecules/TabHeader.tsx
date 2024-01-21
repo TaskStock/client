@@ -7,6 +7,7 @@ import { useAppDispatch } from "../../store/configureStore.hooks";
 import { setTabIndex } from "../../store/modules/home";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
 import { ComponentHeightContext } from "../../utils/ComponentHeightContext";
+import { useResizeLayoutOnFocus } from "../../hooks/useResizeLayoutOnFocus";
 
 const Container = styled.View`
   padding: 0 ${spacing.gutter}px;
@@ -59,12 +60,12 @@ export default function TabHeader({
 
   const { setGCTabHeight } = useContext(ComponentHeightContext);
 
+  const onLayout = useResizeLayoutOnFocus({
+    resizeFunction: setGCTabHeight,
+  });
+
   return (
-    <Container
-      onLayout={(e) => {
-        setGCTabHeight(e.nativeEvent.layout.height);
-      }}
-    >
+    <Container onLayout={onLayout}>
       {props.navigationState.routes.map((route, i) => {
         const isFocused = props.navigationState.index === i;
 

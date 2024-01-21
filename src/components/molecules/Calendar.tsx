@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import React, { memo, useMemo } from "react";
+import React, { memo, useMemo, useRef } from "react";
 import { FlatList, LayoutChangeEvent, Pressable, View } from "react-native";
 import { useDispatch } from "react-redux";
 import styled, { useTheme } from "styled-components/native";
@@ -17,6 +17,7 @@ import {
 } from "../../@types/calendar";
 import { Todo } from "../../@types/todo";
 import { useCalculateTodoCount } from "../../hooks/useCalculateTodoCount";
+import { useResizeLayoutOnFocus } from "../../hooks/useResizeLayoutOnFocus";
 
 const CalendarContainer = styled.View`
   border-radius: 20px;
@@ -146,10 +147,9 @@ function Calendar({ todos }: { todos: Todo[] }) {
 
   const dispatch = useDispatch();
 
-  const onLayout = (event: LayoutChangeEvent) => {
-    const { height } = event.nativeEvent.layout;
-    dispatch(setItemContainerHeight(height));
-  };
+  const onLayout = useResizeLayoutOnFocus({
+    resizeFunction: (height) => dispatch(setItemContainerHeight(height)),
+  });
 
   return (
     <CalendarContainer>
