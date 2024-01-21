@@ -83,7 +83,7 @@ const TodoContainer = () => {
               type="entypo"
               name="circle-with-plus"
               size={28}
-              color={theme.name === "dark" ? theme.text : theme.textDimmer}
+              color={theme.text}
               onPress={() => {
                 dispatch(openAddTodoModal());
               }}

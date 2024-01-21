@@ -4,6 +4,7 @@ import useHeight from "../../hooks/useHeight";
 import Text from "../atoms/Text";
 import styled from "styled-components/native";
 import { spacing } from "../../constants/spacing";
+import FlexBox from "../atoms/FlexBox";
 
 const Container = styled.View<{ notchTop: number }>`
   padding: ${(props) => props.notchTop + spacing.offset}px ${spacing.gutter}px
@@ -13,7 +14,13 @@ const Container = styled.View<{ notchTop: number }>`
   flex-direction: row;
 `;
 
-export default function PageMainHeader({ title }: { title: string }) {
+export default function PageMainHeader({
+  title,
+  children,
+}: {
+  title: string;
+  children?: React.ReactNode;
+}) {
   const { NOTCH_TOP } = useHeight();
 
   return (
@@ -21,6 +28,7 @@ export default function PageMainHeader({ title }: { title: string }) {
       <Text size="xl" weight="bold">
         {title}
       </Text>
+      {children}
     </Container>
   );
 }

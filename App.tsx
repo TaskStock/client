@@ -11,10 +11,9 @@ import SplashScreen from "./src/screens/Login/SplashScreen";
 import { useAppDispatch, useAppSelect } from "./src/store/configureStore.hooks";
 import { checkTokenExistence } from "./src/store/modules/auth";
 import { startingTheme } from "./src/store/modules/theme";
-import { getData, removeData } from "./src/utils/asyncStorage";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { checkAndRenewTokens } from "./src/utils/authUtils/tokenUtils";
-import { getUserInfoThunk } from "./src/store/modules/user";
+import { EventProvider } from "react-native-outside-press";
 
 const THEME = {
   dark: {
@@ -66,12 +65,14 @@ export default function App() {
   return (
     <ThemeProvider theme={THEME[theme].theme}>
       <SafeAreaProvider>
-        <NavigationContainer>
-          <GestureHandlerRootView style={{ flex: 1 }}>
-            <Root isLoggedIn={isLoggedIn} />
-          </GestureHandlerRootView>
-        </NavigationContainer>
-        <StatusBar barStyle={THEME[theme].barStyle} />
+        <EventProvider>
+          <NavigationContainer>
+            <GestureHandlerRootView style={{ flex: 1 }}>
+              <Root isLoggedIn={isLoggedIn} />
+            </GestureHandlerRootView>
+          </NavigationContainer>
+          <StatusBar barStyle={THEME[theme].barStyle} />
+        </EventProvider>
       </SafeAreaProvider>
     </ThemeProvider>
   );

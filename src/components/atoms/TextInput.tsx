@@ -77,4 +77,11 @@ const TextInput: React.FC<ITextInput> = ({
   );
 };
 
+export const TextInputWithBorder = styled.TextInput`
+  border-color: ${({ theme }) => theme.textDimmer};
+  border-bottom-width: 1px;
+  padding: 6px 1px;
+  color: ${({ theme }) => theme.text};
+`;
+
 export default TextInput;

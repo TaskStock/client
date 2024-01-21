@@ -18,10 +18,22 @@ const BlackBtnContainer = styled.TouchableOpacity<{ loading: boolean }>`
   border-radius: 6px;
   padding: 15px 0;
 `;
+
+const BlackBtnForProjectContainer = styled(BlackBtnContainer)`
+  width: auto;
+`;
+
+const GrayBtnForProjectContainer = styled(BlackBtnContainer)`
+  width: auto;
+  background-color: ${({ theme }) => theme.textDimmer};
+  border: none;
+`;
+
 const WhiteBtnContainer = styled(BlackBtnContainer)`
   background-color: white;
   border: 1px solid ${grayTheme.text};
 `;
+
 export const BlackBtn = ({
   text,
   onPress,
@@ -52,6 +64,36 @@ export const BlackBtn = ({
   );
 };
 
+export const BlackBtnForProject = ({
+  text,
+  onPress,
+  style,
+  loading = false,
+}: {
+  text: string;
+  onPress: () => void;
+  style?: any;
+  loading?: boolean;
+}) => {
+  const theme = useTheme();
+  return (
+    <BlackBtnForProjectContainer
+      style={style}
+      onPress={onPress}
+      disabled={loading}
+      loading={loading}
+    >
+      {loading ? (
+        <LoadingSpinner background={theme.text} />
+      ) : (
+        <Text size="sm" color={"white"}>
+          {text}
+        </Text>
+      )}
+    </BlackBtnForProjectContainer>
+  );
+};
+
 export const WhiteBtn = ({
   text,
   onPress,
@@ -73,5 +115,33 @@ export const WhiteBtn = ({
         </Text>
       )}
     </WhiteBtnContainer>
+  );
+};
+
+export const GrayBtn = ({
+  text,
+  onPress,
+  style,
+  loading = false,
+}: {
+  text: string;
+  onPress: () => void;
+  style?: any;
+  loading?: boolean;
+}) => {
+  return (
+    <GrayBtnForProjectContainer
+      style={style}
+      onPress={onPress}
+      loading={loading}
+    >
+      {loading ? (
+        <LoadingSpinner background={darkTheme.text} />
+      ) : (
+        <Text size="sm" color={"black"}>
+          {text}
+        </Text>
+      )}
+    </GrayBtnForProjectContainer>
   );
 };

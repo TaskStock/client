@@ -4,12 +4,19 @@ import {
   MaterialCommunityIcons,
   Entypo,
   MaterialIcons,
+  FontAwesome,
 } from "@expo/vector-icons";
 import { Image, TouchableOpacity } from "react-native";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
 
 type IconProps = {
-  type: "material" | "ionicons" | "feather" | "entypo" | "materialIcons";
+  type:
+    | "material"
+    | "ionicons"
+    | "feather"
+    | "entypo"
+    | "materialIcons"
+    | "fontAwesome";
   name: string;
   size?: number;
   color?: string;
@@ -36,6 +43,7 @@ const Icons: React.FC<IconProps> = ({
   else if (type === "feather") IconComponent = Feather;
   else if (type === "entypo") IconComponent = Entypo;
   else if (type === "materialIcons") IconComponent = MaterialIcons;
+  else if (type === "fontAwesome") IconComponent = FontAwesome;
   else return null;
 
   return (

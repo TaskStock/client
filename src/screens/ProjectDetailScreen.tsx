@@ -136,11 +136,7 @@ function ProjectDetailFirst() {
                 <TodoItem key={todo.todo_id} todo={todo}></TodoItem>
               ))}
             </ProjectSection>
-            <ProjectSection title="회고">
-              {currentDayTodos.map((todo) => (
-                <TodoItem key={todo.todo_id} todo={todo}></TodoItem>
-              ))}
-            </ProjectSection>
+            <ProjectSection title="회고"></ProjectSection>
           </FlexBox>
         </DateContainer>
       </BottomDrawer>
