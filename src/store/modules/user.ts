@@ -5,6 +5,7 @@ import {
   setToDefaultImageThunk,
   uploadImageThunk,
 } from "../../utils/UserUtils/uploadImageThunk";
+import { followThunk, unfollowThunk } from "../../utils/UserUtils/followThunk";
 
 interface initialState {
   user: {
@@ -106,6 +107,34 @@ const userSlice = createSlice({
       state.loading = false;
       state.user.image = action.payload.imagePath;
       console.log("성공", state.user.image);
+    });
+    builder.addCase(followThunk.pending, (state, action) => {
+      state.loading = true;
+      console.log("followThunk pending");
+    });
+    builder.addCase(followThunk.rejected, (state, action) => {
+      state.loading = false;
+      state.error = "Rejected: 팔로우 실패";
+      console.log("Rejected: 팔로우 실패");
+    });
+    builder.addCase(followThunk.fulfilled, (state, action) => {
+      state.loading = false;
+      state.user.following_count += 1;
+      console.log("팔로우 성공");
+    });
+    builder.addCase(unfollowThunk.pending, (state, action) => {
+      state.loading = true;
+      console.log("unfollowThunk pending");
+    });
+    builder.addCase(unfollowThunk.rejected, (state, action) => {
+      state.loading = false;
+      state.error = "Rejected: 언팔로우 실패";
+      console.log("Rejected: 언팔로우 실패");
+    });
+    builder.addCase(unfollowThunk.fulfilled, (state, action) => {
+      state.loading = false;
+      state.user.following_count -= 1;
+      console.log("언팔로우 성공");
     });
   },
 });
