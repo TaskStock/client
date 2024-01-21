@@ -4,6 +4,7 @@ import { spacing } from "../../../constants/spacing";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import styled from "styled-components/native";
 import { IconsWithoutFeedBack } from "../../atoms/Icons";
+import { useTheme } from "styled-components";
 
 const Container = styled.View`
   flex: 1;
@@ -29,11 +30,14 @@ const TextInputContainer = ({
   value,
   placeholder,
   onChangeText,
+  onSubmit,
 }: {
   value: string;
   placeholder: string;
   onChangeText: (text: string) => void;
+  onSubmit: () => void;
 }) => {
+  const theme = useTheme();
   return (
     <InputContainer>
       <IconsWithoutFeedBack
@@ -45,18 +49,27 @@ const TextInputContainer = ({
         value={value}
         placeholder={placeholder}
         onChangeText={onChangeText}
+        placeholderTextColor={theme.textDim}
+        returnKeyType="search"
+        onSubmitEditing={() => onSubmit()}
       />
     </InputContainer>
   );
 };
 
-const ContainerWithSearch = ({ searchText, setSearchText, children }) => {
+const ContainerWithSearch = ({
+  searchText,
+  setSearchText,
+  children,
+  onSubmit,
+}) => {
   return (
     <Container>
       <TextInputContainer
         value={searchText}
-        placeholder="검색"
+        placeholder="유저의 닉네임이나 이메일을 검색하세요."
         onChangeText={(text) => setSearchText(text)}
+        onSubmit={onSubmit}
       />
       {children}
     </Container>

@@ -9,6 +9,7 @@ import ProfilePic from "../../atoms/ProfilePic";
 import Text from "../../atoms/Text";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import numberWithCommas from "../../../utils/useNumberWithCommas";
+import { useAppSelect } from "../../../store/configureStore.hooks";
 
 const Container = styled.View`
   padding: ${spacing.offset}px 0;
@@ -30,18 +31,26 @@ const Info = ({ text, iconType, iconName, color }) => {
 
 const MyInfo = ({ data }) => {
   const theme = useTheme();
+  const { private: isPrivate } = useAppSelect((state) => state.user.user);
   return (
     <Container>
       <FlexBox gap={spacing.offset} alignItems="center">
         <ProfilePic image={data.image} strategy={data.strategy} />
         <View>
-          <Text
-            size="lg"
-            weight="semibold"
-            styles={{ paddingBottom: spacing.small }}
-          >
-            {data.user_name}
-          </Text>
+          <FlexBox alignItems="center" gap={spacing.offset}>
+            <Text
+              size="lg"
+              weight="semibold"
+              styles={{ paddingBottom: spacing.small }}
+            >
+              {data.user_name}
+            </Text>
+            {isPrivate ? (
+              <IconsWithoutFeedBack type="materialIcons" name="lock-outline" />
+            ) : (
+              <IconsWithoutFeedBack type="materialIcons" name="lock-open" />
+            )}
+          </FlexBox>
           <Text size="xs" color={theme.textDim}>
             {data.introduce}
           </Text>

@@ -68,7 +68,7 @@ const userSlice = createSlice({
     builder.addCase(getUserInfoThunk.fulfilled, (state, action) => {
       state.loading = false;
       state.user = action.payload.userData;
-      console.log(action.payload.userData);
+      // console.log(action.payload.userData);
     });
     builder.addCase(editUserInfoThunk.pending, (state, action) => {
       state.loading = true;
