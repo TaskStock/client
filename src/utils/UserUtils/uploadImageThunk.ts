@@ -4,7 +4,7 @@ import { RootState } from "../../store/configureStore";
 import { getAPIHost } from "../getAPIHost";
 
 export const uploadImageThunk = createAsyncThunk(
-  "uploadImageThunk",
+  "user/uploadImageThunk",
   async (image: Asset, { getState, rejectWithValue }) => {
     const state = getState() as RootState;
     const { accessToken } = state.auth;
@@ -20,7 +20,7 @@ export const uploadImageThunk = createAsyncThunk(
     const SERVER_URL = getAPIHost();
     const URL = `${SERVER_URL}sns/edit/image`;
 
-    console.log("formData: ", formData);
+    // console.log("formData: ", formData);
     try {
       const res = await fetch(URL, {
         method: "PATCH",
@@ -31,7 +31,7 @@ export const uploadImageThunk = createAsyncThunk(
         body: formData,
       });
       const data = await res.json();
-      console.log("응답: ", data);
+      // console.log("응답: ", data);
       if (data.result === "fail") {
         console.log("서버에서 이미지 업로드 실패");
         return rejectWithValue(data);
@@ -46,7 +46,7 @@ export const uploadImageThunk = createAsyncThunk(
 );
 
 export const setToDefaultImageThunk = createAsyncThunk(
-  "setToDefaultImageThunk",
+  "user/setToDefaultImageThunk",
   async (_, { getState, rejectWithValue }) => {
     const state = getState() as RootState;
     const { accessToken } = state.auth;
@@ -61,7 +61,7 @@ export const setToDefaultImageThunk = createAsyncThunk(
         },
       });
       const data = await res.json();
-      console.log("응답: ", data);
+      // console.log("응답: ", data);
       if (data.result === "fail") {
         console.log("서버에서 이미지 업로드 실패");
         return rejectWithValue(data);

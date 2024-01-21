@@ -7,12 +7,12 @@ import TodoContainer from "../components/molecules/Home/TodoContainer";
 import GCContainer from "../components/organisms/Home/GCContainer";
 import AddTodoModal from "../components/organisms/TodoModal/AddTodoModal";
 import { useAppDispatch, useAppSelect } from "../store/configureStore.hooks";
-import { getUserInfoThunk } from "../store/modules/user";
 import { ComponentHeightContext } from "../utils/ComponentHeightContext";
 import { useGetValuesArg } from "../hooks/useGetValuesArg";
 import { chartApi } from "../store/modules/chart";
 import { checkIsWithInCurrentCalcDay } from "../utils/checkIsSameLocalDay";
 import { resetSaveValueUpdate } from "../store/modules/home";
+import { getUserInfoThunk } from "../utils/UserUtils/getUserInfoThunk";
 
 const Container = styled.View`
   background-color: ${({ theme }) => theme.background};

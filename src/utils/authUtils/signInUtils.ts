@@ -12,7 +12,7 @@ import getDeviceId from "../getDeviceId";
 // deviceId => asyncStorage, redux에 저장
 // email, password => keyChain에 저장
 export const registerWithEmail = createAsyncThunk(
-  "REGISTER_WITH_EMAIL",
+  "auth/registerWithEmail",
   async (data: IRegisterUser, { rejectWithValue }) => {
     try {
       const deviceId = await getDeviceId();
@@ -38,7 +38,7 @@ export const registerWithEmail = createAsyncThunk(
 );
 
 export const loginWithEmail = createAsyncThunk(
-  "LOGIN_WITH_EMAIL",
+  "auth/loginWithEmail",
   async (
     data: {
       email: string;

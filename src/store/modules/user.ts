@@ -1,10 +1,10 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { client } from "../../services/api";
+import { createSlice } from "@reduxjs/toolkit";
+import { editUserInfoThunk } from "../../utils/UserUtils/editUserInfoThunk";
+import { getUserInfoThunk } from "../../utils/UserUtils/getUserInfoThunk";
 import {
   setToDefaultImageThunk,
   uploadImageThunk,
-} from "../../utils/SnsUtils/uploadImageThunk";
-import { RootState } from "../configureStore";
+} from "../../utils/UserUtils/uploadImageThunk";
 
 interface initialState {
   user: {
@@ -49,56 +49,6 @@ const initialUserState: initialState = {
   loading: false,
   error: null,
 };
-
-export const getUserInfoThunk = createAsyncThunk(
-  "user/getUserInfo",
-  async (data, { rejectWithValue, getState }) => {
-    const rootState = getState() as RootState;
-
-    const accessToSend = rootState.auth.accessToken.replace(/^"|"$/g, "");
-
-    try {
-      const data = await client("account/getUserInfo", {
-        accessToken: accessToSend,
-      });
-
-      console.log("getUserInfoThunk success");
-
-      return data;
-    } catch (error) {
-      console.log("getUserInfoThunk error");
-      return rejectWithValue(error.response.data);
-    }
-  }
-);
-
-export const editUserInfoThunk = createAsyncThunk(
-  "user/editUserInfo",
-  async (
-    info: { user_name: string; introduce: string },
-    { rejectWithValue, getState }
-  ) => {
-    const rootState = getState() as RootState;
-    const accessToSend = rootState.auth.accessToken.replace(/^"|"$/g, "");
-    try {
-      const data = await client.patch(
-        "sns/edit/info",
-        { ...info },
-        {
-          accessToken: accessToSend,
-        }
-      );
-      console.log(info, accessToSend);
-
-      if (data.result === "success") {
-        return info;
-      }
-    } catch (error) {
-      console.log("editUserInfoThunk error");
-      return rejectWithValue(error.response.data);
-    }
-  }
-);
 
 const userSlice = createSlice({
   name: "user",
