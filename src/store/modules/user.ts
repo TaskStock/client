@@ -5,13 +5,15 @@ import {
   setToDefaultImageThunk,
   uploadImageThunk,
 } from "../../utils/UserUtils/uploadImageThunk";
+import { followThunk, unfollowThunk } from "../../utils/UserUtils/followThunk";
+import { setPrivateThunk } from "../../utils/UserUtils/setPrivate";
 
 interface initialState {
   user: {
     user_id: number;
     email: string;
     user_name: string;
-    hide: boolean;
+    private: boolean;
     follower_count: number;
     following_count: number;
     premium: number;
@@ -33,7 +35,7 @@ const initialUserState: initialState = {
     user_id: 0,
     email: "",
     user_name: "",
-    hide: false,
+    private: false,
     follower_count: 0,
     following_count: 0,
     premium: 0,
@@ -66,6 +68,7 @@ const userSlice = createSlice({
     builder.addCase(getUserInfoThunk.fulfilled, (state, action) => {
       state.loading = false;
       state.user = action.payload.userData;
+      // console.log(action.payload.userData);
     });
     builder.addCase(editUserInfoThunk.pending, (state, action) => {
       state.loading = true;
@@ -106,6 +109,52 @@ const userSlice = createSlice({
       state.loading = false;
       state.user.image = action.payload.imagePath;
       console.log("성공", state.user.image);
+    });
+    builder.addCase(followThunk.pending, (state, action) => {
+      state.loading = true;
+      console.log("followThunk pending");
+    });
+    builder.addCase(followThunk.rejected, (state, action) => {
+      state.loading = false;
+      state.error = "Rejected: 팔로우 실패";
+      console.log("Rejected: 팔로우 실패");
+    });
+    builder.addCase(followThunk.fulfilled, (state, action) => {
+      state.loading = false;
+      state.user.following_count += 1;
+      console.log("팔로우 성공");
+    });
+    builder.addCase(unfollowThunk.pending, (state, action) => {
+      state.loading = true;
+      console.log("unfollowThunk pending");
+    });
+    builder.addCase(unfollowThunk.rejected, (state, action) => {
+      state.loading = false;
+      state.error = "Rejected: 언팔로우 실패";
+      console.log("Rejected: 언팔로우 실패");
+    });
+    builder.addCase(unfollowThunk.fulfilled, (state, action) => {
+      state.loading = false;
+      state.user.following_count -= 1;
+      console.log("언팔로우 성공");
+    });
+    builder.addCase(setPrivateThunk.pending, (state, action) => {
+      state.loading = true;
+      console.log("setPrivateThunk pending");
+    });
+    builder.addCase(setPrivateThunk.rejected, (state, action) => {
+      state.loading = false;
+      state.error = "Rejected: 비공개 계정 전환 실패";
+      console.log("Rejected: 비공개 계정 전환 실패");
+    });
+    builder.addCase(setPrivateThunk.fulfilled, (state, action) => {
+      state.loading = false;
+      state.user.private = action.payload;
+      if (action.payload === true) {
+        console.log("비공개 계정 전환 성공");
+      } else {
+        console.log("공개 계정 전환 성공");
+      }
     });
   },
 });

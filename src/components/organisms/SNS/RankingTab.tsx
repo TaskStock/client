@@ -43,6 +43,7 @@ const RankingTab = ({ data }) => {
             value={item.cumulative_value}
             image={item.image}
             strategy={item.strategy}
+            userId={item.user_id}
           />
         )}
         keyExtractor={(item) => item.user_id.toString()}

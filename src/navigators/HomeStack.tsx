@@ -15,13 +15,7 @@ const HomeStack = () => (
   >
     <NativeStack.Screen name="Home" component={HomeScreen} />
     <NativeStack.Screen name="Alarm" component={AlarmScreen} />
-    <NativeStack.Screen
-      name="SettingsStack"
-      component={SettingsStack}
-      options={{
-        headerShown: true,
-      }}
-    />
+    <NativeStack.Screen name="SettingsStack" component={SettingsStack} />
   </NativeStack.Navigator>
 );
 

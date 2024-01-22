@@ -8,6 +8,9 @@ import ProfilePic from "../../atoms/ProfilePic";
 import Text from "../../atoms/Text";
 import { useNavigation } from "@react-navigation/native";
 import FlexBox from "../../atoms/FlexBox";
+import { useState } from "react";
+import { useAppDispatch } from "../../../store/configureStore.hooks";
+import { followThunk } from "../../../utils/UserUtils/followThunk";
 
 const Container = styled.TouchableOpacity`
   flex-direction: row;
@@ -21,17 +24,26 @@ const FollowBtnContainer = styled.TouchableOpacity`
   border-radius: ${spacing.small}px;
 `;
 
-const FollowBtn = ({ onPress }) => {
+const FollowBtn = ({ onPress, text }) => {
   return (
     <FollowBtnContainer onPress={onPress}>
-      <Text size="sm">팔로우</Text>
+      <Text size="sm">{text}</Text>
     </FollowBtnContainer>
   );
 };
 
-const UserBox = ({ username, rank, value, image, strategy }) => {
+const UserBox = ({ username, rank, value, image, strategy, userId }) => {
   const theme = useTheme();
   const navigation = useNavigation() as any;
+  const dispatch = useAppDispatch();
+
+  const [followed, setFollowed] = useState(false);
+
+  const handleFollow = () => {
+    dispatch(followThunk(userId));
+    setFollowed((prev) => !prev);
+  };
+
   return (
     <FlexBox
       justifyContent="space-between"
@@ -64,7 +76,7 @@ const UserBox = ({ username, rank, value, image, strategy }) => {
           </Text>
         </View>
       </Container>
-      <FollowBtn onPress={() => {}} />
+      <FollowBtn onPress={handleFollow} text={followed ? "팔로잉" : "팔로우"} />
     </FlexBox>
   );
 };

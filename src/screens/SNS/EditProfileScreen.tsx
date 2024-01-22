@@ -87,7 +87,12 @@ const EditProfileScreen = ({ navigation }) => {
   };
 
   const handleSaveText = () => {
-    dispatch(editUserInfoThunk(data));
+    if (
+      data.user_name !== myInfo.user_name ||
+      data.introduce !== myInfo.introduce
+    ) {
+      dispatch(editUserInfoThunk(data));
+    }
     navigation.goBack();
   };
 
