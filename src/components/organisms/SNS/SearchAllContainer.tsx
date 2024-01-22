@@ -46,6 +46,7 @@ const SearchAllContainer = () => {
             strategy: string;
           }) => (
             <UserBox
+              key={user.user_id.toString()}
               username={user.user_name}
               value={user.cumulative_value}
               image={user.image}
