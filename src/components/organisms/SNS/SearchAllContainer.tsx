@@ -1,11 +1,9 @@
 import React, { useState } from "react";
-import Text from "../../atoms/Text";
-import ContainerWithSearch from "./ContainerWithSearch";
 import { client } from "../../../services/api";
 import { useAppSelect } from "../../../store/configureStore.hooks";
-import FlexBox from "../../atoms/FlexBox";
-import User from "../../../store/modules/user";
+import Text from "../../atoms/Text";
 import UserBox from "../../molecules/SNS/UserBox";
+import ContainerWithSearch from "./ContainerWithSearch";
 
 const SearchAllContainer = () => {
   const [searchText, setSearchText] = useState("");
