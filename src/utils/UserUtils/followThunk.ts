@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { RootState } from "../../store/configureStore";
 import { client } from "../../services/api";
+import { RootState } from "../../store/configureStore";
 
 export const followThunk = createAsyncThunk(
   "user/followThunk",
@@ -20,7 +20,7 @@ export const followThunk = createAsyncThunk(
       );
       console.log("팔로우 response: ", data);
       if (data.result === "success") {
-        return data;
+        return { ...data, followingId };
       } else {
         return rejectWithValue(data.result);
       }
@@ -47,7 +47,20 @@ export const unfollowThunk = createAsyncThunk(
       );
       console.log("언팔로우 response: ", data);
       if (data.result === "success") {
-        return data;
+        console.log("updated following list", rootState.friends.followingList);
+
+        // rootState.friends.followingList.filter((friend) => {
+        //   if (friend.user_id === followingId) {
+        //     friend.button = buttonRender(
+        //       friend.pending,
+        //       friend.private,
+        //       friend.isFollowingMe,
+        //       friend.isFollowingYou
+        //     );
+        //     console.log(friend.user_name, friend.button);
+        //   }
+        // });
+        return followingId;
       } else {
         return rejectWithValue(data.result);
       }

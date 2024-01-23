@@ -1,14 +1,9 @@
-export const buttonRender = ({
+export const buttonRender = (
   isPending,
   isPrivate,
   isFollowingMe,
-  isFollowingYou,
-}: {
-  isPending: boolean;
-  isPrivate: boolean;
-  isFollowingMe: boolean;
-  isFollowingYou: boolean;
-}) => {
+  isFollowingYou
+) => {
   // - **상대가 나를 팔로우하고 있지 않을 때 (`isFollowingMe = false`):**
   //     - 내가 상대를 팔로우하고 있을 때(**`isFollowingYou = true`**):
   //         - **"팔로잉"(언팔로우) 버튼**
@@ -21,12 +16,12 @@ export const buttonRender = ({
   //     - 내가 상대를 팔로우하고 있지 않을 때 (**`isFollowingYou = false`**): **"맞팔로우" 버튼**
   //     - 내가 이미 상대를 팔로우하고 있을 때 (**`isFollowingYou = true`**): “**팔로잉" 버튼**
   let button;
-  if (!isFollowingMe) {
-    if (isFollowingYou) {
+  if (isFollowingMe === false) {
+    if (isFollowingYou === true) {
       button = "팔로잉";
     } else {
-      if (isPrivate) {
-        isPending ? (button = "요청 취소") : (button = "팔로우");
+      if (isPrivate === true) {
+        isPending ? (button = "요청됨") : (button = "팔로우");
       } else {
         button = "팔로우";
       }

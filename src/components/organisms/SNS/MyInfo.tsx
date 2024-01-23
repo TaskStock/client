@@ -10,6 +10,7 @@ import Text from "../../atoms/Text";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import numberWithCommas from "../../../utils/useNumberWithCommas";
 import { useAppSelect } from "../../../store/configureStore.hooks";
+import PrivateLockIcon from "../../atoms/PrivateLockIcon";
 
 const Container = styled.View`
   padding: ${spacing.offset}px 0;
@@ -45,11 +46,7 @@ const MyInfo = ({ data }) => {
             >
               {data.user_name}
             </Text>
-            {isPrivate ? (
-              <IconsWithoutFeedBack type="materialIcons" name="lock-outline" />
-            ) : (
-              <IconsWithoutFeedBack type="materialIcons" name="lock-open" />
-            )}
+            <PrivateLockIcon isPrivate={isPrivate} />
           </FlexBox>
           <Text size="xs" color={theme.textDim}>
             {data.introduce}

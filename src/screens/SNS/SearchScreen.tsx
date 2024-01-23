@@ -1,16 +1,15 @@
 import React, { useState } from "react";
 import { useTheme } from "styled-components";
 import styled from "styled-components/native";
+import FlexBox from "../../components/atoms/FlexBox";
 import { IconsWithoutFeedBack } from "../../components/atoms/Icons";
 import Text from "../../components/atoms/Text";
 import PageHeader from "../../components/molecules/PageHeader";
 import UserBox from "../../components/molecules/SNS/UserBox";
 import { spacing } from "../../constants/spacing";
-import { client } from "../../services/api";
-import { useAppSelect } from "../../store/configureStore.hooks";
+import { useAppDispatch, useAppSelect } from "../../store/configureStore.hooks";
+import { IFriend, searchThunk } from "../../store/modules/getFriends";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
-import { View } from "react-native";
-import FlexBox from "../../components/atoms/FlexBox";
 
 const Container = styled.View`
   flex: 1;
@@ -71,9 +70,10 @@ const TextInputContainer = ({
 const SearchScreen = () => {
   const [searchText, setSearchText] = useState("");
   const { accessToken } = useAppSelect((state) => state.auth);
-  const [searchResult, setSearchResult] = useState([]);
-  const theme = useTheme();
+  const { searchList } = useAppSelect((state) => state.friends);
 
+  const theme = useTheme();
+  const dispatch = useAppDispatch();
   const handleSubmit = async () => {
     console.log(searchText);
     console.log(accessToken);
@@ -81,18 +81,7 @@ const SearchScreen = () => {
       alert("검색어를 입력해주세요.");
       return;
     }
-    try {
-      const response = await client.get(
-        `sns/users/search/?searchScope=global&searchTarget=${searchText}`,
-        { accessToken }
-      );
-      console.log(response);
-      if (response.result === "success") {
-        setSearchResult(response.searchResult);
-      }
-    } catch (e) {
-      console.log("검색 실패: ", e);
-    }
+    dispatch(searchThunk(searchText));
   };
   return (
     <Container>
@@ -104,26 +93,22 @@ const SearchScreen = () => {
           onChangeText={(text) => setSearchText(text)}
           onSubmit={handleSubmit}
         />
-        {searchResult.length > 0 ? (
-          searchResult.map(
-            (user: {
-              user_id: number;
-              user_name: string;
-              image: string;
-              cumulative_value: number;
-              strategy: string;
-            }) => (
-              <UserBox
-                key={user.user_id.toString()}
-                username={user.user_name}
-                value={user.cumulative_value}
-                image={user.image}
-                userId={user.user_id}
-                strategy={user.strategy}
-                rank={1}
-              />
-            )
-          )
+        {searchList.length > 0 ? (
+          searchList.map((user: IFriend) => (
+            <UserBox
+              key={user.user_id.toString()}
+              username={user.user_name}
+              value={user.cumulative_value}
+              image={user.image}
+              userId={user.user_id}
+              strategy={user.strategy}
+              isPrivate={user.private}
+              isPending={user.pending}
+              isFollowingMe={user.isFollowingMe}
+              isFollowingYou={user.isFollowingYou}
+              button={user.button}
+            />
+          ))
         ) : (
           <FlexBox
             justifyContent="center"

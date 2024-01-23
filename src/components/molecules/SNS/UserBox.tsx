@@ -4,7 +4,6 @@ import { useTheme } from "styled-components";
 import styled from "styled-components/native";
 import { spacing } from "../../../constants/spacing";
 import { useAppDispatch } from "../../../store/configureStore.hooks";
-import { buttonRender } from "../../../utils/UserUtils/buttonRender";
 import {
   followThunk,
   unfollowThunk,
@@ -12,6 +11,7 @@ import {
 import numberWithCommas from "../../../utils/useNumberWithCommas";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import FlexBox from "../../atoms/FlexBox";
+import PrivateLockIcon from "../../atoms/PrivateLockIcon";
 import ProfilePic from "../../atoms/ProfilePic";
 import Text from "../../atoms/Text";
 
@@ -45,20 +45,14 @@ const UserBox = ({
   isPending,
   isFollowingMe,
   isFollowingYou,
+  button,
 }) => {
   const theme = useTheme();
   const navigation = useNavigation() as any;
   const dispatch = useAppDispatch();
 
-  const buttonText = buttonRender({
-    isPending,
-    isPrivate,
-    isFollowingMe,
-    isFollowingYou,
-  });
-
   const handleFollow = () => {
-    switch (buttonText) {
+    switch (button) {
       case "팔로우":
       case "맞팔로우":
         dispatch(followThunk(userId));
@@ -66,7 +60,7 @@ const UserBox = ({
       case "팔로잉":
         dispatch(unfollowThunk(userId));
         break;
-      case "요청 취소":
+      case "요청됨":
         // cancel follow request
         break;
     }
@@ -88,7 +82,9 @@ const UserBox = ({
           size={useResponsiveFontSize(36)}
         />
 
-        <View style={{ paddingLeft: useResponsiveFontSize(15) }}>
+        <View
+          style={{ paddingLeft: useResponsiveFontSize(15), paddingRight: 20 }}
+        >
           <Text size="md" weight="bold">
             {username}
           </Text>
@@ -96,8 +92,10 @@ const UserBox = ({
             {numberWithCommas(value)}원
           </Text>
         </View>
+
+        <PrivateLockIcon isPrivate={isPrivate} />
       </Container>
-      <FollowBtn onPress={handleFollow} text={buttonText} />
+      <FollowBtn onPress={handleFollow} text={button} />
     </FlexBox>
   );
 };

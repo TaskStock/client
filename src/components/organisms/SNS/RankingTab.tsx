@@ -1,12 +1,15 @@
 import React from "react";
-import { FlatList, TouchableOpacity } from "react-native";
+import { FlatList, RefreshControl, TouchableOpacity, View } from "react-native";
 import UserBox from "../../molecules/SNS/UserBox";
 import { IUserBox } from "../../../@types/userBox";
 import FlexBox from "../../atoms/FlexBox";
 import { IconsWithoutFeedBack } from "../../atoms/Icons";
 import Text from "../../atoms/Text";
 import { spacing } from "../../../constants/spacing";
-
+import { useRefresh } from "@react-native-community/hooks";
+import { useAppDispatch } from "../../../store/configureStore.hooks";
+import { getFriendsThunk } from "../../../store/modules/getFriends";
+import { IFriend } from "../../../store/modules/getFriends";
 const Filter = ({ onPress }) => (
   <TouchableOpacity onPress={onPress} style={{ marginTop: spacing.padding }}>
     <FlexBox alignItems="center" gap={spacing.small}>
@@ -21,10 +24,14 @@ const Filter = ({ onPress }) => (
 );
 
 const RankingTab = ({ data }) => {
+  const dispatch = useAppDispatch();
+  const { isRefreshing, onRefresh } = useRefresh(() =>
+    dispatch(getFriendsThunk())
+  );
   return (
     <>
       <Filter onPress={() => {}} />
-      <FlatList<IUserBox>
+      <FlatList<IFriend>
         data={data}
         renderItem={({ item }) => (
           <UserBox
@@ -37,19 +44,14 @@ const RankingTab = ({ data }) => {
             isPending={item.pending}
             isFollowingMe={item.isFollowingMe}
             isFollowingYou={item.isFollowingYou}
-
-            // "user_id": 129,
-            // "image": "uploads\\profile\\1705246791372-dog.jpg",
-            // "user_name": "민세원",
-            // "cumulative_value": 0,
-            // "private": false,
-            // "pending": false,
-            // "strategy": "local",
-            // "isFollowingMe": true,
-            // "isFollowingYou": true
+            button={item.button}
           />
         )}
+        style={{ flex: 1 }}
         keyExtractor={(item) => item.user_id.toString()}
+        refreshControl={
+          <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
+        }
       />
     </>
   );

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useWindowDimensions } from "react-native";
 import {
   NavigationState,
@@ -9,21 +9,24 @@ import {
 import styled from "styled-components/native";
 import RankingTab from "./RankingTab";
 import SnsTabHeader from "./SnsTabHeader";
+import { useAppSelect } from "../../../store/configureStore.hooks";
 
 const Container = styled.View`
   flex: 1;
 `;
 
-const RankingContainer = ({ rankingFollowing, rankingFollower }) => {
+const RankingContainer = () => {
   const layout = useWindowDimensions();
   const [index, setIndex] = useState(0);
   const [routes] = useState([
-    { key: "first", title: "팔로잉" },
-    { key: "second", title: "팔로워" },
+    { key: "first", title: "팔로워" },
+    { key: "second", title: "팔로잉" },
   ]);
-
-  const FirstRoute = () => <RankingTab data={rankingFollowing} />;
-  const SecondRoute = () => <RankingTab data={rankingFollower} />;
+  const { followingList, followerList } = useAppSelect(
+    (state) => state.friends
+  );
+  const FirstRoute = () => <RankingTab data={followerList} />;
+  const SecondRoute = () => <RankingTab data={followingList} />;
 
   const renderScene = SceneMap({
     first: FirstRoute,

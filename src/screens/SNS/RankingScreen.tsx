@@ -6,7 +6,8 @@ import RankingContainer from "../../components/organisms/SNS/RankingContainer";
 import { spacing } from "../../constants/spacing";
 import useHeight from "../../hooks/useHeight";
 import { client } from "../../services/api";
-import { useAppSelect } from "../../store/configureStore.hooks";
+import { useAppDispatch, useAppSelect } from "../../store/configureStore.hooks";
+import { getFriendsThunk } from "../../store/modules/getFriends";
 
 const Container = styled.View`
   flex: 1;
@@ -16,27 +17,12 @@ const Container = styled.View`
 `;
 
 const RankingScreen = ({ navigation }) => {
-  const { accessToken } = useAppSelect((state) => state.auth);
-  // 전체는 없애기
-  const [rankingFollower, setRankingFollower] = useState([]);
-  const [rankingFollowing, setRankingFollowing] = useState([]);
+  const dispatch = useAppDispatch();
   const { NOTCH_TOP } = useHeight();
-
   const myInfo = useAppSelect((state) => state.user.user);
-  // console.log("내정보: ", myInfo);
-
-  const getRanking = async () => {
-    try {
-      const res = await client.get("sns/list", { accessToken });
-      setRankingFollower(res.followerList);
-      setRankingFollowing(res.followingList);
-    } catch (e) {
-      console.log("error getting ranking", e);
-    }
-  };
 
   useEffect(() => {
-    getRanking();
+    dispatch(getFriendsThunk());
   }, []);
 
   return (
@@ -49,10 +35,7 @@ const RankingScreen = ({ navigation }) => {
         text={"프로필 편집"}
         style={{ marginBottom: spacing.offset }}
       />
-      <RankingContainer
-        rankingFollowing={rankingFollowing}
-        rankingFollower={rankingFollower}
-      />
+      <RankingContainer />
     </Container>
   );
 };
