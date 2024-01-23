@@ -17,6 +17,7 @@ const Container = styled.View`
 
 const RankingScreen = ({ navigation }) => {
   const { accessToken } = useAppSelect((state) => state.auth);
+  // 전체는 없애기
   const [rankingAll, setRankingAll] = useState([]);
   const [rankingFollower, setRankingFollower] = useState([]);
   const [rankingFollowing, setRankingFollowing] = useState([]);
