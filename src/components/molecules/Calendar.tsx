@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import React, { memo, useMemo, useRef } from "react";
+import React, { memo, useEffect, useMemo, useRef } from "react";
 import { FlatList, LayoutChangeEvent, Pressable, View } from "react-native";
 import { useDispatch } from "react-redux";
 import styled, { useTheme } from "styled-components/native";
@@ -18,6 +18,7 @@ import {
 import { Todo } from "../../@types/todo";
 import { useCalculateTodoCount } from "../../hooks/useCalculateTodoCount";
 import { useResizeLayoutOnFocus } from "../../hooks/useResizeLayoutOnFocus";
+import { useFocusEffect } from "@react-navigation/native";
 
 const CalendarContainer = styled.View`
   border-radius: 20px;
@@ -139,7 +140,12 @@ const CalendarItem = memo(({ item }: { item: TCalendarItem }) => {
 
 function Calendar({ todos }: { todos: Todo[] }) {
   const calendarItems = useAppSelect((state) => state.calendar.calendarItems);
-  useCalculateTodoCount({ todos });
+
+  const { recalculate } = useCalculateTodoCount({ todos });
+
+  useFocusEffect(() => {
+    recalculate();
+  });
 
   const renderItem = ({ item }: { item: TCalendarItem }) => {
     return <CalendarItem item={item} />;

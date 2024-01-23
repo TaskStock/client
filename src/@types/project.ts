@@ -3,5 +3,6 @@ export interface Project {
   name: string;
   ispublic: boolean;
   user_id: number;
-  retrospect: string;
+  todo_count: number;
+  retrospect_count: number;
 }

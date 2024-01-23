@@ -5,7 +5,7 @@ import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
 
 const RoundItem = styled.View<{
   isSelected?: boolean;
-  isPaddingWide?: boolean;
+  size?: "sm" | "md" | "xl";
 }>`
   display: inline-flex;
   justify-content: center;
@@ -13,36 +13,60 @@ const RoundItem = styled.View<{
   align-items: center;
   flex-direction: row;
 
-  padding: ${({ isPaddingWide }) =>
-    isPaddingWide
-      ? `${useResponsiveFontSize(9)}px ${useResponsiveFontSize(20)}px`
-      : `${useResponsiveFontSize(4)}px ${useResponsiveFontSize(17)}px`};
-
+  padding: ${({ size }) => {
+    switch (size) {
+      case "sm":
+        return `${useResponsiveFontSize(4)}px ${useResponsiveFontSize(17)}px;`;
+      case "md":
+        return `${useResponsiveFontSize(9)}px ${useResponsiveFontSize(20)}px;`;
+      case "xl":
+        return `${useResponsiveFontSize(17)}px ${useResponsiveFontSize(36)}px;`;
+    }
+  }}
   background-color: ${({ theme, isSelected }) =>
     theme.name == "gray" && isSelected
       ? theme.mainBtnReversed
       : theme.mainBtnGray};
-  border-radius: 20px;
+  border-radius: ${({ size }) => {
+    switch (size) {
+      case "sm":
+        return `${useResponsiveFontSize(13)}px;`;
+      case "md":
+        return `${useResponsiveFontSize(20)}px;`;
+      case "xl":
+        return `${useResponsiveFontSize(30)}px;`;
+    }
+  }}
   border-color: ${({ theme, isSelected }) =>
     theme.name == "dark" && isSelected ? theme.text : "none"};
-
   border-width: ${({ isSelected }) => (isSelected ? "1px" : "0px")};
+`;
+
+export const RoundItemBtnContainer = styled.View`
+  display: flex;
+  height: auto;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+  gap: 10px;
 `;
 
 export default function RoundItemBtn({
   isSelected,
   onPress,
   children,
-  isPaddingWide,
+  size = "md",
 }: {
   isSelected?: boolean;
   onPress?: () => void;
   children: React.ReactNode;
-  isPaddingWide?: boolean;
+  size?: "sm" | "md" | "xl";
 }) {
   return (
-    <RoundItem isSelected={isSelected} isPaddingWide={isPaddingWide}>
-      {children}
-    </RoundItem>
+    <Pressable onPress={onPress}>
+      <RoundItem isSelected={isSelected} size={size}>
+        {children}
+      </RoundItem>
+    </Pressable>
   );
 }

@@ -59,6 +59,8 @@ function ProjectItem({ item }: { item: Project }) {
 
   const theme = useTheme();
 
+  const publicText = item.ispublic ? "전체공개" : "비공개";
+
   return (
     <ProjectBox>
       <FlexBox
@@ -97,14 +99,17 @@ function ProjectItem({ item }: { item: Project }) {
                 }}
               >
                 <FlexBox gap={spacing.padding}>
-                  <RoundItemBtn isSelected={false}>
-                    <Text size="sm">24개의 할일</Text>
+                  <RoundItemBtn size="sm" isSelected={false}>
+                    <Text size="sm">{item.todo_count + ""}개의 할일</Text>
                   </RoundItemBtn>
-                  <RoundItemBtn isSelected={false}>
-                    <Text size="sm">24개의 회고</Text>
+                  <RoundItemBtn size="sm" isSelected={false}>
+                    <Text size="sm">
+                      {item.retrospect_count + ""}
+                      개의 회고
+                    </Text>
                   </RoundItemBtn>
-                  <RoundItemBtn isSelected={false}>
-                    <Text size="sm">전체공개</Text>
+                  <RoundItemBtn size="sm" isSelected={false}>
+                    <Text size="sm">{publicText}</Text>
                   </RoundItemBtn>
                 </FlexBox>
               </ScrollView>
@@ -183,7 +188,7 @@ export default function ProjectContainer() {
   const { projects } = useProject();
 
   const renderItem = ({ item }: { item: Project }) => {
-    return <ProjectItem key={item.project_id} item={item} />;
+    return <ProjectItem item={item} />;
   };
 
   return (

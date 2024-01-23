@@ -23,8 +23,12 @@ export const useFlushSavedValues = () => {
             startDate,
             endDate,
           },
-          ({ values }) => {
-            if (!values || values.length == 0) return;
+          (draft) => {
+            if (!draft) return;
+
+            const values = draft.values;
+
+            if (values.length == 0) return;
 
             const index = values.findIndex((value) =>
               checkIsWithInCurrentCalcDay(value.date)

@@ -1,27 +1,28 @@
 import { View, Dimensions } from "react-native";
 import React, { useContext, useEffect } from "react";
-import PageHeader from "../components/molecules/PageHeader";
+import PageHeader from "../../components/molecules/PageHeader";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { ProjectStackParamList } from "../navigators/ProjectStack";
-import { useTab } from "../hooks/useTab";
+import { ProjectStackParamList } from "../../navigators/ProjectStack";
+import { useTab } from "../../hooks/useTab";
 import { TabView } from "react-native-tab-view";
-import TabHeader from "../components/molecules/TabHeader";
-import ContentLayout from "../components/atoms/ContentLayout";
-import Calendar from "../components/molecules/Calendar";
-import BottomDrawer from "../components/molecules/Home/BottomDrawer";
-import { ComponentHeightContext } from "../utils/ComponentHeightContext";
-import ItemContainerBox from "../components/molecules/ItemContainerBox";
-import { DateInfo } from "../components/organisms/Home/HomeCalendar";
-import { useCurrentDate } from "../hooks/useCurrentDate";
-import useTodos from "../hooks/useTodos";
-import Text from "../components/atoms/Text";
-import { DateContainer } from "../components/molecules/Home/TodoContainer";
+import TabHeader from "../../components/molecules/TabHeader";
+import ContentLayout from "../../components/atoms/ContentLayout";
+import Calendar from "../../components/molecules/Calendar";
+import BottomDrawer from "../../components/molecules/Home/BottomDrawer";
+import { ComponentHeightContext } from "../../utils/ComponentHeightContext";
+import ItemContainerBox from "../../components/molecules/ItemContainerBox";
+import { DateInfo } from "../../components/organisms/Home/HomeCalendar";
+import { useCurrentDate } from "../../hooks/useCurrentDate";
+import useTodos from "../../hooks/useTodos";
+import Text from "../../components/atoms/Text";
+import { DateContainer } from "../../components/molecules/Home/TodoContainer";
 import styled from "styled-components/native";
-import { spacing } from "../constants/spacing";
-import Margin from "../components/atoms/Margin";
-import FlexBox from "../components/atoms/FlexBox";
-import TodoItem from "../components/molecules/Home/TodoItem";
-import { useResizeLayoutOnFocus } from "../hooks/useResizeLayoutOnFocus";
+import { spacing } from "../../constants/spacing";
+import Margin from "../../components/atoms/Margin";
+import FlexBox from "../../components/atoms/FlexBox";
+import TodoItem from "../../components/molecules/Home/TodoItem";
+import { useResizeLayoutOnFocus } from "../../hooks/useResizeLayoutOnFocus";
+import { checkIsSameLocalDay } from "../../utils/checkIsSameLocalDay";
 
 type Props = NativeStackScreenProps<ProjectStackParamList, "ProjectDetail">;
 
@@ -35,11 +36,6 @@ const routeMap = [
     title: "회고",
   },
 ];
-
-const sceneMap = {
-  first: ProjectDetailFirst,
-  second: ProjectDetailSecond,
-};
 
 const ProjectBox = styled.View`
   padding: ${spacing.padding}px;
@@ -72,21 +68,31 @@ function ProjectDetailSecond() {
   );
 }
 
-function ProjectDetailFirst() {
-  const { currentDate, subtract1Month, add1Month } = useCurrentDate();
+function ProjectDetailFirst({ projectId }: { projectId: number }) {
+  const { currentDate, currentDateString, subtract1Month, add1Month } =
+    useCurrentDate();
   const onPressLeft = subtract1Month;
   const onPressRight = add1Month;
 
-  const { DEFAULT_HEIGHT, OPEN_STATE, headerHeight, tabHeight } = useContext(
-    ComponentHeightContext
-  );
+  const {
+    DEFAULT_HEIGHT,
+    OPEN_STATE,
+    headerHeight,
+    tabHeight,
+    setContentsHeight,
+  } = useContext(ComponentHeightContext);
 
   const { data: todos, currentDayTodos } = useTodos();
 
+  const currentProjectTodos = todos.filter(
+    (todo) => todo.project_id === projectId
+  );
+
+  const currentDayProjectTodos = currentDayTodos.filter((todo) =>
+    checkIsSameLocalDay(todo.date, currentDateString)
+  );
+
   const clientHeight = Dimensions.get("window").height;
-
-  const { setContentsHeight } = useContext(ComponentHeightContext);
-
   const headerDate = currentDate.format("MM월 DD일");
 
   const onLayout = useResizeLayoutOnFocus({
@@ -112,7 +118,7 @@ function ProjectDetailFirst() {
             isShowingInfo={false}
           ></DateInfo>
           <ItemContainerBox>
-            <Calendar todos={todos}></Calendar>
+            <Calendar todos={currentProjectTodos}></Calendar>
           </ItemContainerBox>
         </ContentLayout>
       </View>
@@ -132,11 +138,13 @@ function ProjectDetailFirst() {
               {headerDate}
             </Text>
             <ProjectSection title="할 일">
-              {currentDayTodos.map((todo) => (
+              {currentDayProjectTodos.map((todo) => (
                 <TodoItem key={todo.todo_id} todo={todo}></TodoItem>
               ))}
             </ProjectSection>
-            <ProjectSection title="회고"></ProjectSection>
+            <ProjectSection title="회고">
+              <View></View>
+            </ProjectSection>
           </FlexBox>
         </DateContainer>
       </BottomDrawer>
@@ -145,6 +153,11 @@ function ProjectDetailFirst() {
 }
 
 export default function ProjectDetailScreen({ navigation, route }: Props) {
+  const sceneMap = {
+    first: () => <ProjectDetailFirst projectId={route.params.project_id} />,
+    second: ProjectDetailSecond,
+  };
+
   const { index, onChangeIndex, renderScene, routes } = useTab({
     routeMap,
     sceneMap,

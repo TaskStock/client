@@ -6,6 +6,7 @@ import FlexBox from "../../atoms/FlexBox";
 import { spacing } from "../../../constants/spacing";
 import Text from "../../atoms/Text";
 import Margin from "../../atoms/Margin";
+import RoundItemBtn from "../../atoms/RoundItemBtn";
 
 const Box = styled.View`
   background-color: ${({ theme }) => theme.box};

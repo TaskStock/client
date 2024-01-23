@@ -1,20 +1,20 @@
 import { View, Text } from "react-native";
 import React from "react";
-import PageHeader from "../components/molecules/PageHeader";
-import Section from "../components/molecules/Section";
-import ContentLayout from "../components/atoms/ContentLayout";
-import { TextInputWithBorder } from "../components/atoms/TextInput";
-import FlexBox from "../components/atoms/FlexBox";
-import { spacing } from "../constants/spacing";
-import RoundItemBtn from "../components/atoms/RoundItemBtn";
-import Margin from "../components/atoms/Margin";
+import PageHeader from "../../components/molecules/PageHeader";
+import Section from "../../components/molecules/Section";
+import ContentLayout from "../../components/atoms/ContentLayout";
+import { TextInputWithBorder } from "../../components/atoms/TextInput";
+import FlexBox from "../../components/atoms/FlexBox";
+import { spacing } from "../../constants/spacing";
+import RoundItemBtn from "../../components/atoms/RoundItemBtn";
+import Margin from "../../components/atoms/Margin";
 import {
   BlackBtn,
   BlackBtnForProject,
   GrayBtn,
   WhiteBtn,
-} from "../components/atoms/Buttons";
-import useResponsiveFontSize from "../utils/useResponsiveFontSize";
+} from "../../components/atoms/Buttons";
+import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
 import { useTheme } from "styled-components/native";
 
 export default function ProjectManageScreen() {
@@ -47,13 +47,13 @@ export default function ProjectManageScreen() {
             gapSize="lg"
           >
             <FlexBox direction="row" gap={spacing.padding}>
-              <RoundItemBtn isPaddingWide>
+              <RoundItemBtn>
                 <Text>공개설정</Text>
               </RoundItemBtn>
-              <RoundItemBtn isPaddingWide>
+              <RoundItemBtn>
                 <Text>공개설정</Text>
               </RoundItemBtn>
-              <RoundItemBtn isPaddingWide>
+              <RoundItemBtn>
                 <Text>공개설정</Text>
               </RoundItemBtn>
             </FlexBox>
@@ -67,10 +67,10 @@ export default function ProjectManageScreen() {
             }
           >
             <FlexBox direction="row" gap={spacing.padding}>
-              <RoundItemBtn isPaddingWide>
+              <RoundItemBtn>
                 <Text>진행중</Text>
               </RoundItemBtn>
-              <RoundItemBtn isPaddingWide>
+              <RoundItemBtn>
                 <Text>완료</Text>
               </RoundItemBtn>
             </FlexBox>

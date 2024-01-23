@@ -14,6 +14,7 @@ declare module "styled-components/native" {
     mainBtnGray: string;
     mainBtnReversed: string;
     subBtnGray: string;
+    textInputBorder: string;
     box: string;
     high: string;
     low: string;

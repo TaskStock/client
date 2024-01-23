@@ -4,7 +4,7 @@ import { useTheme } from "styled-components";
 import { IconsWithoutFeedBack } from "../components/atoms/Icons";
 import useHeight from "../hooks/useHeight";
 import GroupScreen from "../screens/GroupScreen";
-import ProjectScreen from "../screens/ProjectScreen";
+import ProjectScreen from "../screens/Project/ProjectScreen";
 import { ComponentHeightProvider } from "../utils/ComponentHeightContext";
 import HomeStack from "./HomeStack";
 import FriendScreen from "../screens/SNS/RankingScreen";

@@ -14,6 +14,7 @@ import { startingTheme } from "./src/store/modules/theme";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { checkAndRenewTokens } from "./src/utils/authUtils/tokenUtils";
 import { EventProvider } from "react-native-outside-press";
+import { removeData } from "./src/utils/asyncStorage";
 
 const THEME = {
   dark: {

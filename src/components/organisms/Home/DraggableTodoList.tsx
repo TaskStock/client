@@ -131,15 +131,18 @@ export default function DraggableTodoList({
             paddingTop: useResponsiveFontSize(15),
           }}
         >
-          <DraggableFlatList
-            data={selectedTodos}
-            renderItem={({ item, getIndex, drag, isActive }) =>
-              renderTodoItem({ item, getIndex, drag, isActive })
-            }
-            keyExtractor={(item: Todo) => item.todo_id.toString()}
-            onDragEnd={onDragEnd}
-          ></DraggableFlatList>
-          {/* <AddTodoItem /> */}
+          {currentDayTodos.length === 0 ? (
+            <Text size="md">해당되는 투두가 없어요</Text>
+          ) : (
+            <DraggableFlatList
+              data={selectedTodos}
+              renderItem={({ item, getIndex, drag, isActive }) =>
+                renderTodoItem({ item, getIndex, drag, isActive })
+              }
+              keyExtractor={(item: Todo) => item.todo_id.toString()}
+              onDragEnd={onDragEnd}
+            ></DraggableFlatList>
+          )}
         </View>
       )
     ) : (
