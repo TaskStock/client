@@ -5,4 +5,8 @@ export interface IUserBox {
   cumulative_value: number;
   image: string;
   strategy: string;
+  private: boolean;
+  isFollowingMe: boolean;
+  isFollowingYou: boolean;
+  pending: boolean;
 }

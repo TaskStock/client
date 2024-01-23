@@ -14,26 +14,20 @@ const Container = styled.View`
   flex: 1;
 `;
 
-const RankingContainer = ({
-  rankingAll,
-  rankingFollowing,
-  rankingFollower,
-}) => {
+const RankingContainer = ({ rankingFollowing, rankingFollower }) => {
   const layout = useWindowDimensions();
   const [index, setIndex] = useState(0);
   const [routes] = useState([
-    { key: "first", title: "전체체" },
-    { key: "second", title: "팔로잉" },
-    { key: "third", title: "팔로워" },
+    { key: "first", title: "팔로잉" },
+    { key: "second", title: "팔로워" },
   ]);
 
-  const FirstRoute = () => <RankingTab data={rankingAll} />;
-  const SecondRoute = () => <RankingTab data={rankingFollowing} />;
-  const ThirdRoute = () => <RankingTab data={rankingFollower} />;
+  const FirstRoute = () => <RankingTab data={rankingFollowing} />;
+  const SecondRoute = () => <RankingTab data={rankingFollower} />;
+
   const renderScene = SceneMap({
     first: FirstRoute,
     second: SecondRoute,
-    third: ThirdRoute,
   });
   const renderTabBar = (
     props: SceneRendererProps & {

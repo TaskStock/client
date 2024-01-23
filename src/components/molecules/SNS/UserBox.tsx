@@ -1,16 +1,19 @@
-import { TouchableOpacity, View } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { View } from "react-native";
 import { useTheme } from "styled-components";
 import styled from "styled-components/native";
 import { spacing } from "../../../constants/spacing";
+import { useAppDispatch } from "../../../store/configureStore.hooks";
+import { buttonRender } from "../../../utils/UserUtils/buttonRender";
+import {
+  followThunk,
+  unfollowThunk,
+} from "../../../utils/UserUtils/followThunk";
 import numberWithCommas from "../../../utils/useNumberWithCommas";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
+import FlexBox from "../../atoms/FlexBox";
 import ProfilePic from "../../atoms/ProfilePic";
 import Text from "../../atoms/Text";
-import { useNavigation } from "@react-navigation/native";
-import FlexBox from "../../atoms/FlexBox";
-import { useState } from "react";
-import { useAppDispatch } from "../../../store/configureStore.hooks";
-import { followThunk } from "../../../utils/UserUtils/followThunk";
 
 const Container = styled.TouchableOpacity`
   flex-direction: row;
@@ -32,16 +35,41 @@ const FollowBtn = ({ onPress, text }) => {
   );
 };
 
-const UserBox = ({ username, rank, value, image, strategy, userId }) => {
+const UserBox = ({
+  username,
+  value,
+  image,
+  strategy,
+  userId,
+  isPrivate,
+  isPending,
+  isFollowingMe,
+  isFollowingYou,
+}) => {
   const theme = useTheme();
   const navigation = useNavigation() as any;
   const dispatch = useAppDispatch();
 
-  const [followed, setFollowed] = useState(false);
+  const buttonText = buttonRender({
+    isPending,
+    isPrivate,
+    isFollowingMe,
+    isFollowingYou,
+  });
 
   const handleFollow = () => {
-    dispatch(followThunk(userId));
-    setFollowed((prev) => !prev);
+    switch (buttonText) {
+      case "팔로우":
+      case "맞팔로우":
+        dispatch(followThunk(userId));
+        break;
+      case "팔로잉":
+        dispatch(unfollowThunk(userId));
+        break;
+      case "요청 취소":
+        // cancel follow request
+        break;
+    }
   };
 
   return (
@@ -54,13 +82,6 @@ const UserBox = ({ username, rank, value, image, strategy, userId }) => {
       }}
     >
       <Container onPress={() => navigation.navigate("UserDetail")}>
-        <Text
-          size="sm"
-          color={theme.textDim}
-          styles={{ paddingRight: spacing.offset }}
-        >
-          {rank}
-        </Text>
         <ProfilePic
           image={image}
           strategy={strategy}
@@ -76,7 +97,7 @@ const UserBox = ({ username, rank, value, image, strategy, userId }) => {
           </Text>
         </View>
       </Container>
-      <FollowBtn onPress={handleFollow} text={followed ? "팔로잉" : "팔로우"} />
+      <FollowBtn onPress={handleFollow} text={buttonText} />
     </FlexBox>
   );
 };

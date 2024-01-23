@@ -18,7 +18,6 @@ const Container = styled.View`
 const RankingScreen = ({ navigation }) => {
   const { accessToken } = useAppSelect((state) => state.auth);
   // 전체는 없애기
-  const [rankingAll, setRankingAll] = useState([]);
   const [rankingFollower, setRankingFollower] = useState([]);
   const [rankingFollowing, setRankingFollowing] = useState([]);
   const { NOTCH_TOP } = useHeight();
@@ -28,11 +27,9 @@ const RankingScreen = ({ navigation }) => {
 
   const getRanking = async () => {
     try {
-      const res = await client.get("sns/users", { accessToken });
-      // console.log(res);
-      setRankingAll(res.rankingAll);
-      setRankingFollower(res.rankingFollower);
-      setRankingFollowing(res.rankingFollowing);
+      const res = await client.get("sns/list", { accessToken });
+      setRankingFollower(res.followerList);
+      setRankingFollowing(res.followingList);
     } catch (e) {
       console.log("error getting ranking", e);
     }
@@ -53,7 +50,6 @@ const RankingScreen = ({ navigation }) => {
         style={{ marginBottom: spacing.offset }}
       />
       <RankingContainer
-        rankingAll={rankingAll}
         rankingFollowing={rankingFollowing}
         rankingFollower={rankingFollower}
       />

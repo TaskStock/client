@@ -1,21 +1,11 @@
 import React from "react";
 import { FlatList, TouchableOpacity } from "react-native";
 import UserBox from "../../molecules/SNS/UserBox";
-
 import { IUserBox } from "../../../@types/userBox";
 import FlexBox from "../../atoms/FlexBox";
 import { IconsWithoutFeedBack } from "../../atoms/Icons";
 import Text from "../../atoms/Text";
 import { spacing } from "../../../constants/spacing";
-
-// const dummy = {
-//   cumulative_value: 4000,
-//   image: null,
-//   rank: "1",
-//   strategy: "local",
-//   user_id: 126,
-//   user_name: "ㅇㅈㄱ",
-// };
 
 const Filter = ({ onPress }) => (
   <TouchableOpacity onPress={onPress} style={{ marginTop: spacing.padding }}>
@@ -39,11 +29,24 @@ const RankingTab = ({ data }) => {
         renderItem={({ item }) => (
           <UserBox
             username={item.user_name}
-            rank={item.rank}
             value={item.cumulative_value}
             image={item.image}
             strategy={item.strategy}
             userId={item.user_id}
+            isPrivate={item.private}
+            isPending={item.pending}
+            isFollowingMe={item.isFollowingMe}
+            isFollowingYou={item.isFollowingYou}
+
+            // "user_id": 129,
+            // "image": "uploads\\profile\\1705246791372-dog.jpg",
+            // "user_name": "민세원",
+            // "cumulative_value": 0,
+            // "private": false,
+            // "pending": false,
+            // "strategy": "local",
+            // "isFollowingMe": true,
+            // "isFollowingYou": true
           />
         )}
         keyExtractor={(item) => item.user_id.toString()}
