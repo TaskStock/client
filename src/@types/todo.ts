@@ -19,6 +19,6 @@ export interface AddTodoForm {
 export interface Todo extends AddTodoForm {
   todo_id: number;
   check: boolean;
-  date: string;
+  date: IsoString;
   index: number;
 }

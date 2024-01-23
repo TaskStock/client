@@ -3,7 +3,6 @@ import { createApi, EndpointBuilder } from "@reduxjs/toolkit/query/react";
 import dayjs from "dayjs";
 import { AddTodoForm } from "../../../@types/todo";
 import {
-  addSimpleTodoMutation,
   addTodoMutation,
   changeTodoOrderMutation,
   changeToNextDayTodoMutation,
@@ -51,7 +50,7 @@ export const todoApi = createApi({
   tagTypes: ["Todos"],
   endpoints: (builder) => ({
     getAllTodos: getAllTodosQuery(builder),
-    addSimpleTodo: addSimpleTodoMutation(builder),
+    // addSimpleTodo: addSimpleTodoMutation(builder),
     addTodo: addTodoMutation(builder),
     editTodo: editTodoMutation(builder),
     toggleTodo: toggleTodoMutation(builder),
@@ -176,7 +175,7 @@ export const {
 export const {
   useGetAllTodosQuery,
   useAddTodoMutation,
-  useAddSimpleTodoMutation,
+  // useAddSimpleTodoMutation,
   useEditTodoMutation,
   useDeleteTodoMutation,
   useToggleTodoMutation,

@@ -19,6 +19,8 @@ import PageMainHeader from "../../molecules/PageMainHeader";
 import { ProjectStackParamList } from "../../../navigators/ProjectStack";
 import { ModalBtn, ModalContainer } from "../../atoms/FloatModal";
 import OutsidePressHandler from "react-native-outside-press";
+import { useAppDispatch } from "../../../store/configureStore.hooks";
+import { editProjectForm } from "../../../store/modules/project/project";
 
 const ProjectBox = styled.View`
   border-radius: ${useResponsiveFontSize(20)}px;
@@ -51,15 +53,32 @@ const MoreBtn = styled.TouchableOpacity`
 function ProjectItem({ item }: { item: Project }) {
   const navigation = useNavigation<NavigationProp<ProjectStackParamList>>();
 
-  const onPressMoreDot = () => {
-    setIsModalOpen(!isModalOpen);
-  };
-
   const [isModalOpen, setIsModalOpen] = React.useState(false);
 
   const theme = useTheme();
 
   const publicText = item.ispublic ? "전체공개" : "비공개";
+
+  const dispatch = useAppDispatch();
+
+  const onPressProjectManageBtn = () => {
+    dispatch(
+      editProjectForm({
+        project_id: item.project_id,
+        name: item.name,
+        isPublic: item.ispublic,
+      })
+    );
+    navigation.navigate("ProjectManage");
+  };
+
+  const onPressProjectCompleteBtn = () => {};
+
+  const onPressProjectDeleteBtn = () => {};
+
+  const onPressMoreDot = () => {
+    setIsModalOpen(!isModalOpen);
+  };
 
   return (
     <ProjectBox>
@@ -151,7 +170,7 @@ function ProjectItem({ item }: { item: Project }) {
                     right: 0,
                   }}
                 >
-                  <ModalBtn isSelected onPress={() => {}}>
+                  <ModalBtn isSelected onPress={onPressProjectManageBtn}>
                     <Text size="sm" color={theme.textReverse}>
                       프로젝트 관리
                     </Text>

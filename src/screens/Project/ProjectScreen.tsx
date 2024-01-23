@@ -22,6 +22,8 @@ import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { ProjectStackParamList } from "../../navigators/ProjectStack";
 import RoundItemBtn from "../../components/atoms/RoundItemBtn";
 import Text from "../../components/atoms/Text";
+import { useAppDispatch } from "../../store/configureStore.hooks";
+import { resetProjectForm } from "../../store/modules/project/project";
 
 const ProjectScreenFirst = () => <ProjectContainer></ProjectContainer>;
 
@@ -125,6 +127,8 @@ const ProjectScreen = () => {
 
   const navigation = useNavigation<NavigationProp<ProjectStackParamList>>();
 
+  const dispatch = useAppDispatch();
+
   return (
     <>
       <PageMainHeader title="프로젝트">
@@ -134,6 +138,7 @@ const ProjectScreen = () => {
           size={28}
           color={theme.text}
           onPress={() => {
+            dispatch(resetProjectForm());
             navigation.navigate("ProjectManage");
           }}
         />

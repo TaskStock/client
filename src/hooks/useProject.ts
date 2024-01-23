@@ -3,7 +3,7 @@ import { useAppSelect } from "../store/configureStore.hooks";
 import {
   useAddProjectMutation,
   useGetAllProjectsQuery,
-} from "../store/modules/project";
+} from "../store/modules/project/project";
 
 export const useProject = () => {
   const { data } = useGetAllProjectsQuery();

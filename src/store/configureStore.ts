@@ -4,7 +4,7 @@ import { themeReducer } from "./modules/theme";
 import calendarReducer from "./modules/calendar";
 import todoReducer, { todoApi } from "./modules/todo/todo";
 import { authReducer } from "./modules/auth";
-import projectReducer, { projectApi } from "./modules/project";
+import projectReducer, { projectApi } from "./modules/project/project";
 import homeReducer from "./modules/home";
 import userReducer from "./modules/user";
 const store = configureStore({

@@ -25,7 +25,7 @@ import ProjectSelectBtn from "./ProjectSelectBtn";
 import useTodos from "../../../hooks/useTodos";
 import { useTheme } from "styled-components";
 import { useProject } from "../../../hooks/useProject";
-import { setSelectedProjectId } from "../../../store/modules/project";
+import { setSelectedProjectId } from "../../../store/modules/project/project";
 import { useGetValuesArg } from "../../../hooks/useGetValuesArg";
 import { chartApi } from "../../../store/modules/chart";
 import { checkIsWithInCurrentCalcDay } from "../../../utils/checkIsSameLocalDay";
