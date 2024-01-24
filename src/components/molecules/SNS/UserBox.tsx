@@ -5,6 +5,7 @@ import styled from "styled-components/native";
 import { spacing } from "../../../constants/spacing";
 import { useAppDispatch } from "../../../store/configureStore.hooks";
 import {
+  cancelRequestThunk,
   followThunk,
   unfollowThunk,
 } from "../../../utils/UserUtils/followThunk";
@@ -61,7 +62,7 @@ const UserBox = ({
         dispatch(unfollowThunk(userId));
         break;
       case "요청됨":
-        // cancel follow request
+        dispatch(cancelRequestThunk(userId));
         break;
     }
   };

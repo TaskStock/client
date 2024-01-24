@@ -2,7 +2,11 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { client } from "../../services/api";
 import { RootState } from "../configureStore";
 import { buttonRender } from "../../utils/UserUtils/buttonRender";
-import { followThunk, unfollowThunk } from "../../utils/UserUtils/followThunk";
+import {
+  cancelRequestThunk,
+  followThunk,
+  unfollowThunk,
+} from "../../utils/UserUtils/followThunk";
 
 export interface IFriend {
   user_id: number;
@@ -73,11 +77,23 @@ export const searchThunk = createAsyncThunk(
   }
 );
 
-const updateFriendStatus = (friend, followingId) => {
+const updateFriendStatus_follow = (friend, followingId) => {
   if (friend.user_id === followingId) {
     friend.private ? (friend.pending = true) : (friend.pending = false);
     friend.isFollowingYou = !friend.pending;
 
+    friend.button = buttonRender(
+      friend.pending,
+      friend.private,
+      friend.isFollowingMe,
+      friend.isFollowingYou
+    );
+  }
+};
+
+const updateFriendStatus_unfollow = (friend, followingId) => {
+  if (friend.user_id === followingId) {
+    friend.isFollowingYou = false;
     friend.button = buttonRender(
       friend.pending,
       friend.private,
@@ -159,7 +175,9 @@ const friendSlice = createSlice({
       const followingId = action.payload.followingId;
       [state.followerList, state.followingList, state.searchList].forEach(
         (list) =>
-          list.forEach((friend) => updateFriendStatus(friend, followingId))
+          list.forEach((friend) =>
+            updateFriendStatus_follow(friend, followingId)
+          )
       );
       console.log("팔로우 성공");
     });
@@ -174,29 +192,42 @@ const friendSlice = createSlice({
     });
     builder.addCase(unfollowThunk.fulfilled, (state, action) => {
       state.loading = false;
-      state.followingList.filter((friend) => {
-        if (friend.user_id === action.payload) {
-          friend.isFollowingYou = false;
-          friend.button = buttonRender(
-            friend.pending,
-            friend.private,
-            friend.isFollowingMe,
-            friend.isFollowingYou
-          );
-        }
-      });
-      state.searchList.filter((friend) => {
-        if (friend.user_id === action.payload) {
-          friend.isFollowingYou = false;
-          friend.button = buttonRender(
-            friend.pending,
-            friend.private,
-            friend.isFollowingMe,
-            friend.isFollowingYou
-          );
-        }
-      });
+      [state.followerList, state.followingList, state.searchList].forEach(
+        (list) =>
+          list.forEach((friend) =>
+            updateFriendStatus_unfollow(friend, action.payload)
+          )
+      );
       console.log("언팔로우 성공");
+    });
+    builder.addCase(cancelRequestThunk.pending, (state, action) => {
+      state.loading = true;
+      console.log("cancelRequestThunk pending");
+    });
+    builder.addCase(cancelRequestThunk.rejected, (state, action) => {
+      state.loading = false;
+      state.error = "Rejected: 요청 취소 실패";
+      console.log("Rejected: 요청 취소 실패");
+    });
+    builder.addCase(cancelRequestThunk.fulfilled, (state, action) => {
+      state.loading = false;
+      [state.followerList, state.followingList, state.searchList].forEach(
+        (list) =>
+          list.forEach((friend) => {
+            if (friend.user_id === action.payload) {
+              friend.pending = false;
+              friend.isFollowingYou = false;
+
+              friend.button = buttonRender(
+                friend.pending,
+                friend.private,
+                friend.isFollowingMe,
+                friend.isFollowingYou
+              );
+            }
+          })
+      );
+      console.log("요청 취소 성공");
     });
   },
 });

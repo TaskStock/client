@@ -48,24 +48,44 @@ export const unfollowThunk = createAsyncThunk(
       console.log("언팔로우 response: ", data);
       if (data.result === "success") {
         console.log("updated following list", rootState.friends.followingList);
-
-        // rootState.friends.followingList.filter((friend) => {
-        //   if (friend.user_id === followingId) {
-        //     friend.button = buttonRender(
-        //       friend.pending,
-        //       friend.private,
-        //       friend.isFollowingMe,
-        //       friend.isFollowingYou
-        //     );
-        //     console.log(friend.user_name, friend.button);
-        //   }
-        // });
         return followingId;
       } else {
         return rejectWithValue(data.result);
       }
     } catch (error) {
       console.log("언팔로우 실패 error");
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const cancelRequestThunk = createAsyncThunk(
+  "user/cancelRequest",
+  async (targetId: Number, { rejectWithValue, getState, dispatch }) => {
+    const rootState = getState() as RootState;
+    const { accessToken } = rootState.auth;
+
+    try {
+      const data = await client.delete(
+        `sns/follow`,
+        { following_id: targetId },
+        {
+          accessToken: accessToken,
+        }
+      );
+      console.log("요청 취소 response: ", data);
+      if (data.result === "success") {
+        console.log("updated following list", rootState.friends.followingList);
+        return targetId;
+      } else if (data.result === "alreadyAccepted") {
+        // unfollowThunk
+        dispatch(unfollowThunk(targetId));
+        return rejectWithValue(data);
+      } else {
+        return rejectWithValue(data.result);
+      }
+    } catch (error) {
+      console.log("요청 취소 실패 error");
       return rejectWithValue(error.response.data);
     }
   }
