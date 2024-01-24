@@ -1,23 +1,23 @@
 import React, { useState } from "react";
 import { Modal, TouchableOpacity, View } from "react-native";
-import FlexBox from "../../components/atoms/FlexBox";
-import Text from "../../components/atoms/Text";
-import PageHeader from "../../components/molecules/PageHeader";
-import { spacing } from "../../constants/spacing";
-import { useAppDispatch, useAppSelect } from "../../store/configureStore.hooks";
 import { Shadow } from "react-native-shadow-2";
 import { useTheme } from "styled-components";
 import styled from "styled-components/native";
+import FlexBox from "../../components/atoms/FlexBox";
+import Text from "../../components/atoms/Text";
+import PageHeader from "../../components/molecules/PageHeader";
 import EditImage from "../../components/molecules/SNS/EditImage";
 import { palette } from "../../constants/colors";
+import { spacing } from "../../constants/spacing";
+import { useAppDispatch, useAppSelect } from "../../store/configureStore.hooks";
 import { editUserInfoThunk } from "../../utils/UserUtils/editUserInfoThunk";
+import imagePermissionCheck from "../../utils/UserUtils/imagePermissionCheck";
 import { selectImage } from "../../utils/UserUtils/selectImage";
 import {
   setToDefaultImageThunk,
   uploadImageThunk,
 } from "../../utils/UserUtils/uploadImageThunk";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
-import imagePermissionCheck from "../../utils/UserUtils/imagePermissionCheck";
 
 const SaveBtn = ({ onPress }) => (
   <TouchableOpacity onPress={onPress}>

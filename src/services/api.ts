@@ -1,4 +1,3 @@
-import { useAppDispatch } from "../store/configureStore.hooks";
 import { checkAndRenewTokens } from "../utils/authUtils/tokenUtils";
 import { getAPIHost } from "../utils/getAPIHost";
 

@@ -1,15 +1,13 @@
+import { useRefresh } from "@react-native-community/hooks";
 import React from "react";
-import { FlatList, RefreshControl, TouchableOpacity, View } from "react-native";
-import UserBox from "../../molecules/SNS/UserBox";
-import { IUserBox } from "../../../@types/userBox";
+import { FlatList, RefreshControl, TouchableOpacity } from "react-native";
+import { spacing } from "../../../constants/spacing";
+import { useAppDispatch } from "../../../store/configureStore.hooks";
+import { IFriend, getFriendsThunk } from "../../../store/modules/getFriends";
 import FlexBox from "../../atoms/FlexBox";
 import { IconsWithoutFeedBack } from "../../atoms/Icons";
 import Text from "../../atoms/Text";
-import { spacing } from "../../../constants/spacing";
-import { useRefresh } from "@react-native-community/hooks";
-import { useAppDispatch } from "../../../store/configureStore.hooks";
-import { getFriendsThunk } from "../../../store/modules/getFriends";
-import { IFriend } from "../../../store/modules/getFriends";
+import UserBox from "../../molecules/SNS/UserBox";
 const Filter = ({ onPress }) => (
   <TouchableOpacity onPress={onPress} style={{ marginTop: spacing.padding }}>
     <FlexBox alignItems="center" gap={spacing.small}>

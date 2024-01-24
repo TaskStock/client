@@ -10,6 +10,9 @@ import { spacing } from "../../constants/spacing";
 import { useAppDispatch, useAppSelect } from "../../store/configureStore.hooks";
 import { IFriend, searchThunk } from "../../store/modules/getFriends";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
+import { useRefresh } from "@react-native-community/hooks";
+import { FlatList } from "react-native";
+import { RefreshControl } from "react-native-gesture-handler";
 
 const Container = styled.View`
   flex: 1;
@@ -72,6 +75,9 @@ const SearchScreen = () => {
   const { accessToken } = useAppSelect((state) => state.auth);
   const { searchList } = useAppSelect((state) => state.friends);
 
+  const { isRefreshing, onRefresh } = useRefresh(() =>
+    dispatch(searchThunk(searchText))
+  );
   const theme = useTheme();
   const dispatch = useAppDispatch();
   const handleSubmit = async () => {
@@ -83,6 +89,19 @@ const SearchScreen = () => {
     }
     dispatch(searchThunk(searchText));
   };
+
+  const NoData = (
+    <FlexBox
+      justifyContent="center"
+      alignItems="center"
+      styles={{ flex: 1, height: 300 }}
+    >
+      <Text size="md" color={theme.textDim}>
+        검색 결과가 없습니다.
+      </Text>
+    </FlexBox>
+  );
+
   return (
     <Container>
       <PageHeader title="검색" />
@@ -93,33 +112,29 @@ const SearchScreen = () => {
           onChangeText={(text) => setSearchText(text)}
           onSubmit={handleSubmit}
         />
-        {searchList.length > 0 ? (
-          searchList.map((user: IFriend) => (
+        <FlatList
+          data={searchList}
+          renderItem={({ item }) => (
             <UserBox
-              key={user.user_id.toString()}
-              username={user.user_name}
-              value={user.cumulative_value}
-              image={user.image}
-              userId={user.user_id}
-              strategy={user.strategy}
-              isPrivate={user.private}
-              isPending={user.pending}
-              isFollowingMe={user.isFollowingMe}
-              isFollowingYou={user.isFollowingYou}
-              button={user.button}
+              username={item.user_name}
+              value={item.cumulative_value}
+              image={item.image}
+              userId={item.user_id}
+              strategy={item.strategy}
+              isPrivate={item.private}
+              isPending={item.pending}
+              isFollowingMe={item.isFollowingMe}
+              isFollowingYou={item.isFollowingYou}
+              button={item.button}
             />
-          ))
-        ) : (
-          <FlexBox
-            justifyContent="center"
-            alignItems="center"
-            styles={{ flex: 1 }}
-          >
-            <Text size="md" color={theme.textDim}>
-              검색 결과가 없습니다.
-            </Text>
-          </FlexBox>
-        )}
+          )}
+          style={{ flex: 1 }}
+          ListEmptyComponent={NoData}
+          keyExtractor={(item) => item.user_id.toString()}
+          refreshControl={
+            <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
+          }
+        />
       </ResultContainer>
     </Container>
   );

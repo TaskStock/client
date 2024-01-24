@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useWindowDimensions } from "react-native";
 import {
   NavigationState,
@@ -7,9 +7,9 @@ import {
   TabView,
 } from "react-native-tab-view";
 import styled from "styled-components/native";
+import { useAppSelect } from "../../../store/configureStore.hooks";
 import RankingTab from "./RankingTab";
 import SnsTabHeader from "./SnsTabHeader";
-import { useAppSelect } from "../../../store/configureStore.hooks";
 
 const Container = styled.View`
   flex: 1;
