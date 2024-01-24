@@ -22,19 +22,12 @@ const Container = styled.TouchableOpacity`
   flex: 1;
 `;
 
-const FollowBtnContainer = styled.TouchableOpacity`
-  background-color: ${({ theme }) => theme.box};
-  padding: ${spacing.small}px ${useResponsiveFontSize(16)}px;
+const FollowBtnContainer = styled.TouchableOpacity<{ color: string }>`
+  background-color: ${({ theme, color }) =>
+    color === "inactive" ? theme.text : theme.subBtnGray};
+  padding: ${useResponsiveFontSize(8)}px ${useResponsiveFontSize(16)}px;
   border-radius: ${spacing.small}px;
 `;
-
-const FollowBtn = ({ onPress, text }) => {
-  return (
-    <FollowBtnContainer onPress={onPress}>
-      <Text size="sm">{text}</Text>
-    </FollowBtnContainer>
-  );
-};
 
 const UserBox = ({
   username,
@@ -51,6 +44,26 @@ const UserBox = ({
   const theme = useTheme();
   const navigation = useNavigation() as any;
   const dispatch = useAppDispatch();
+
+  const FollowBtn = ({ onPress, text }) => {
+    return (
+      <FollowBtnContainer
+        onPress={onPress}
+        color={text === "팔로우" || text === "맞팔로우" ? "inactive" : "active"}
+      >
+        <Text
+          size="sm"
+          color={
+            text === "팔로우" || text === "맞팔로우"
+              ? theme.textReverse
+              : theme.text
+          }
+        >
+          {text}
+        </Text>
+      </FollowBtnContainer>
+    );
+  };
 
   const handleFollow = () => {
     switch (button) {
@@ -86,15 +99,16 @@ const UserBox = ({
         <View
           style={{ paddingLeft: useResponsiveFontSize(15), paddingRight: 20 }}
         >
-          <Text size="md" weight="bold">
-            {username}
-          </Text>
+          <FlexBox gap={spacing.padding} alignItems="center">
+            <Text size="md" weight="bold">
+              {username}
+            </Text>
+            <PrivateLockIcon isPrivate={isPrivate} />
+          </FlexBox>
           <Text size="sm" color={theme.textDim}>
             {numberWithCommas(value)}원
           </Text>
         </View>
-
-        <PrivateLockIcon isPrivate={isPrivate} />
       </Container>
       <FollowBtn onPress={handleFollow} text={button} />
     </FlexBox>
