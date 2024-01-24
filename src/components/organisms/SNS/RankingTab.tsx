@@ -1,22 +1,13 @@
+import { useRefresh } from "@react-native-community/hooks";
 import React from "react";
-import { FlatList, TouchableOpacity } from "react-native";
-import UserBox from "../../molecules/SNS/UserBox";
-
-import { IUserBox } from "../../../@types/userBox";
+import { FlatList, RefreshControl, TouchableOpacity } from "react-native";
+import { spacing } from "../../../constants/spacing";
+import { useAppDispatch } from "../../../store/configureStore.hooks";
+import { IFriend, getFriendsThunk } from "../../../store/modules/getFriends";
 import FlexBox from "../../atoms/FlexBox";
 import { IconsWithoutFeedBack } from "../../atoms/Icons";
 import Text from "../../atoms/Text";
-import { spacing } from "../../../constants/spacing";
-
-// const dummy = {
-//   cumulative_value: 4000,
-//   image: null,
-//   rank: "1",
-//   strategy: "local",
-//   user_id: 126,
-//   user_name: "ㅇㅈㄱ",
-// };
-
+import UserBox from "../../molecules/SNS/UserBox";
 const Filter = ({ onPress }) => (
   <TouchableOpacity onPress={onPress} style={{ marginTop: spacing.padding }}>
     <FlexBox alignItems="center" gap={spacing.small}>
@@ -31,22 +22,34 @@ const Filter = ({ onPress }) => (
 );
 
 const RankingTab = ({ data }) => {
+  const dispatch = useAppDispatch();
+  const { isRefreshing, onRefresh } = useRefresh(() =>
+    dispatch(getFriendsThunk())
+  );
   return (
     <>
       <Filter onPress={() => {}} />
-      <FlatList<IUserBox>
+      <FlatList<IFriend>
         data={data}
         renderItem={({ item }) => (
           <UserBox
             username={item.user_name}
-            rank={item.rank}
             value={item.cumulative_value}
             image={item.image}
             strategy={item.strategy}
             userId={item.user_id}
+            isPrivate={item.private}
+            isPending={item.pending}
+            isFollowingMe={item.isFollowingMe}
+            isFollowingYou={item.isFollowingYou}
+            button={item.button}
           />
         )}
+        style={{ flex: 1 }}
         keyExtractor={(item) => item.user_id.toString()}
+        refreshControl={
+          <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
+        }
       />
     </>
   );

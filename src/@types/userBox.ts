@@ -5,4 +5,9 @@ export interface IUserBox {
   cumulative_value: number;
   image: string;
   strategy: string;
+  private: boolean;
+  isFollowingMe: boolean;
+  isFollowingYou: boolean;
+  pending: boolean;
+  button: "팔로우" | "팔로잉" | "맞팔로우" | "요청됨";
 }

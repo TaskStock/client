@@ -7,6 +7,8 @@ import { authReducer } from "./modules/auth";
 import projectReducer, { projectApi } from "./modules/project";
 import homeReducer from "./modules/home";
 import userReducer from "./modules/user";
+import getFriendsReducer from "./modules/getFriends";
+
 const store = configureStore({
   reducer: {
     [chartApi.reducerPath]: chartApi.reducer,
@@ -20,6 +22,7 @@ const store = configureStore({
     calendar: calendarReducer,
     todo: todoReducer,
     project: projectReducer,
+    friends: getFriendsReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

@@ -1,16 +1,20 @@
-import { TouchableOpacity, View } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { View } from "react-native";
 import { useTheme } from "styled-components";
 import styled from "styled-components/native";
 import { spacing } from "../../../constants/spacing";
+import { useAppDispatch } from "../../../store/configureStore.hooks";
+import {
+  cancelRequestThunk,
+  followThunk,
+  unfollowThunk,
+} from "../../../utils/UserUtils/followThunk";
 import numberWithCommas from "../../../utils/useNumberWithCommas";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
+import FlexBox from "../../atoms/FlexBox";
+import PrivateLockIcon from "../../atoms/PrivateLockIcon";
 import ProfilePic from "../../atoms/ProfilePic";
 import Text from "../../atoms/Text";
-import { useNavigation } from "@react-navigation/native";
-import FlexBox from "../../atoms/FlexBox";
-import { useState } from "react";
-import { useAppDispatch } from "../../../store/configureStore.hooks";
-import { followThunk } from "../../../utils/UserUtils/followThunk";
 
 const Container = styled.TouchableOpacity`
   flex-direction: row;
@@ -18,30 +22,62 @@ const Container = styled.TouchableOpacity`
   flex: 1;
 `;
 
-const FollowBtnContainer = styled.TouchableOpacity`
-  background-color: ${({ theme }) => theme.box};
-  padding: ${spacing.small}px ${useResponsiveFontSize(16)}px;
+const FollowBtnContainer = styled.TouchableOpacity<{ color: string }>`
+  background-color: ${({ theme, color }) =>
+    color === "inactive" ? theme.text : theme.subBtnGray};
+  padding: ${useResponsiveFontSize(8)}px ${useResponsiveFontSize(16)}px;
   border-radius: ${spacing.small}px;
 `;
 
-const FollowBtn = ({ onPress, text }) => {
-  return (
-    <FollowBtnContainer onPress={onPress}>
-      <Text size="sm">{text}</Text>
-    </FollowBtnContainer>
-  );
-};
-
-const UserBox = ({ username, rank, value, image, strategy, userId }) => {
+const UserBox = ({
+  username,
+  value,
+  image,
+  strategy,
+  userId,
+  isPrivate,
+  isPending,
+  isFollowingMe,
+  isFollowingYou,
+  button,
+}) => {
   const theme = useTheme();
   const navigation = useNavigation() as any;
   const dispatch = useAppDispatch();
 
-  const [followed, setFollowed] = useState(false);
+  const FollowBtn = ({ onPress, text }) => {
+    return (
+      <FollowBtnContainer
+        onPress={onPress}
+        color={text === "팔로우" || text === "맞팔로우" ? "inactive" : "active"}
+      >
+        <Text
+          size="sm"
+          color={
+            text === "팔로우" || text === "맞팔로우"
+              ? theme.textReverse
+              : theme.text
+          }
+        >
+          {text}
+        </Text>
+      </FollowBtnContainer>
+    );
+  };
 
   const handleFollow = () => {
-    dispatch(followThunk(userId));
-    setFollowed((prev) => !prev);
+    switch (button) {
+      case "팔로우":
+      case "맞팔로우":
+        dispatch(followThunk(userId));
+        break;
+      case "팔로잉":
+        dispatch(unfollowThunk(userId));
+        break;
+      case "요청됨":
+        dispatch(cancelRequestThunk(userId));
+        break;
+    }
   };
 
   return (
@@ -54,29 +90,27 @@ const UserBox = ({ username, rank, value, image, strategy, userId }) => {
       }}
     >
       <Container onPress={() => navigation.navigate("UserDetail")}>
-        <Text
-          size="sm"
-          color={theme.textDim}
-          styles={{ paddingRight: spacing.offset }}
-        >
-          {rank}
-        </Text>
         <ProfilePic
           image={image}
           strategy={strategy}
           size={useResponsiveFontSize(36)}
         />
 
-        <View style={{ paddingLeft: useResponsiveFontSize(15) }}>
-          <Text size="md" weight="bold">
-            {username}
-          </Text>
+        <View
+          style={{ paddingLeft: useResponsiveFontSize(15), paddingRight: 20 }}
+        >
+          <FlexBox gap={spacing.padding} alignItems="center">
+            <Text size="md" weight="bold">
+              {username}
+            </Text>
+            <PrivateLockIcon isPrivate={isPrivate} />
+          </FlexBox>
           <Text size="sm" color={theme.textDim}>
             {numberWithCommas(value)}원
           </Text>
         </View>
       </Container>
-      <FollowBtn onPress={handleFollow} text={followed ? "팔로잉" : "팔로우"} />
+      <FollowBtn onPress={handleFollow} text={button} />
     </FlexBox>
   );
 };
