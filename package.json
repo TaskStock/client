@@ -13,6 +13,7 @@
     "@react-native-community/datetimepicker": "7.2.0",
     "@react-native-community/hooks": "^3.0.0",
     "@react-native-community/slider": "^4.5.0",
+    "@react-native-google-signin/google-signin": "^11.0.0",
     "@react-navigation/bottom-tabs": "^6.5.11",
     "@react-navigation/material-top-tabs": "^6.6.5",
     "@react-navigation/native": "^6.1.9",

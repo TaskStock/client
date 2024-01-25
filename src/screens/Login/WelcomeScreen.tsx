@@ -10,6 +10,7 @@ import SocialBtn from "../../components/molecules/Login/SocialBtn";
 import { spacing } from "../../constants/spacing";
 import { useAppSelect } from "../../store/configureStore.hooks";
 import { checkStorage } from "../../utils/asyncStorage";
+import { onGoogleButtonPress } from "../../utils/authUtils/socialSignIn";
 
 const Login = styled.View`
   gap: ${spacing.padding}px;
@@ -31,7 +32,7 @@ const WelcomeScreen = ({ navigation }) => {
       <Login>
         <Divider />
         <GoogleBtn
-          onPress={handleGoogleLogin}
+          onPress={onGoogleButtonPress}
           recentlyLoggiedIn={strategy === "google"}
         />
         <SocialBtn
