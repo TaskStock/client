@@ -10,22 +10,12 @@ import PageMainHeader from "../../components/molecules/PageMainHeader";
 import { useTab } from "../../hooks/useTab";
 import Icons from "../../components/atoms/Icons";
 import { useTheme } from "styled-components/native";
-import {
-  NavigationProp,
-  useFocusEffect,
-  useNavigation,
-} from "@react-navigation/native";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { ProjectStackParamList } from "../../navigators/ProjectStack";
 import { useAppDispatch } from "../../store/configureStore.hooks";
 import { resetProjectForm } from "../../store/modules/project/project";
-import {
-  resetRetrospectForm,
-  useGetAllRetrospectQuery,
-} from "../../store/modules/retrospect/retrospect";
+import { resetRetrospectForm } from "../../store/modules/retrospect/retrospect";
 import RetrospectContainer from "../../components/organisms/Project/RetrospectContainer";
-import { Retrospect } from "../../@types/retrospect";
-import { Pressable } from "react-native";
-import Text from "../../components/atoms/Text";
 import _ from "lodash";
 import { useProject } from "../../hooks/useProject";
 import { useRetrospects } from "../../hooks/useRetrospects";
@@ -33,8 +23,6 @@ import { useRetrospects } from "../../hooks/useRetrospects";
 const ProjectScreenFirst = () => <ProjectContainer></ProjectContainer>;
 
 const ProjectScreenSecond = () => {
-  const theme = useTheme();
-
   const navigation = useNavigation<NavigationProp<ProjectStackParamList>>();
 
   const dispatch = useAppDispatch();
@@ -48,15 +36,9 @@ const ProjectScreenSecond = () => {
     searchKeyword,
     selectedFilter,
     onScrollListBottom,
-    setSearchKeywordDebounce,
+    onChangeSearchKeyword,
     onPressFilter,
   } = useRetrospects();
-
-  // useFocusEffect(() => {
-  //   console.log("refetch on focus - retrospect");
-
-  //   onFocus();
-  // });
 
   const onPressWriteProject = () => {
     dispatch(
@@ -74,7 +56,7 @@ const ProjectScreenSecond = () => {
         onScrollListBottom={onScrollListBottom}
         searchKeyword={searchKeyword}
         onPressProjectItem={() => {}}
-        onChangeSearchKeyword={setSearchKeywordDebounce}
+        onChangeSearchKeyword={onChangeSearchKeyword}
         onPressSearchIcon={() => {}}
         isAllRetrospects={true}
         filterIcon={require("../../../assets/icons/orderIcon.svg")}

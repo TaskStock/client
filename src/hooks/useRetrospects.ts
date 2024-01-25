@@ -1,59 +1,85 @@
 import React, { useRef } from "react";
 import {
+  increateAllRetrospectQueriesOffset,
+  increateProjectRetrospectQueriesOffset,
+  setAllRetrospectQueries,
+  setProjectRetrospectQueries,
   useGetAllProjectRetrospectQuery,
   useGetAllRetrospectQuery,
 } from "../store/modules/retrospect/retrospect";
-import { Retrospect } from "../@types/retrospect";
 import _ from "lodash";
+import { useAppDispatch, useAppSelect } from "../store/configureStore.hooks";
 
 export const useProjectRetrospects = ({
   project_id,
 }: {
   project_id: number;
 }) => {
-  const [selectedFilter, setSelectedFilter] = React.useState<
-    "latest" | "earliest"
-  >("latest");
-
-  const [searchKeyword, setSearchKeyword] = React.useState("");
-  const [offset, setOffset] = React.useState(0);
-  const [list, setList] = React.useState<Retrospect[]>([]);
   const limit = 10;
 
+  const dispatch = useAppDispatch();
+
+  const { selectedFilter, searchKeyword, offset, list } = useAppSelect(
+    (state) => state.retrospect.projectRetrospectQueries
+  );
+
   const { data, isLoading, isError } = useGetAllProjectRetrospectQuery({
-    project_id: project_id,
     offset: offset * limit,
+    limit,
     filter: selectedFilter,
     searchKeyword: searchKeyword,
-    limit,
+    project_id,
   });
 
   const setSearchKeywordDebounce = useRef<(value: string) => void>(
     _.debounce((value: string) => {
-      setSearchKeyword(value);
+      dispatch(
+        setProjectRetrospectQueries({
+          searchKeyword: value,
+        })
+      );
     }, 500)
   ).current;
 
+  const onChangeSearchKeyword = (value: string) => {
+    dispatch(
+      setProjectRetrospectQueries({
+        list: [],
+        offset: 0,
+      })
+    );
+    setSearchKeywordDebounce(value);
+  };
+
   const onScrollListBottom = () => {
-    setOffset((prev) => prev + 1);
+    dispatch(increateProjectRetrospectQueriesOffset());
   };
 
   const onPressFilter = () => {
+    dispatch(setProjectRetrospectQueries({ offset: 0, list: [] }));
+
     if (selectedFilter === "latest") {
-      setSelectedFilter("earliest");
+      dispatch(
+        setProjectRetrospectQueries({
+          selectedFilter: "earliest",
+        })
+      );
     } else {
-      setSelectedFilter("latest");
+      dispatch(
+        setProjectRetrospectQueries({
+          selectedFilter: "latest",
+        })
+      );
     }
   };
 
   React.useEffect(() => {
-    setOffset(0);
-    setList([]);
-  }, [selectedFilter, searchKeyword]);
-
-  React.useEffect(() => {
     if (data && data.retrospects && data.retrospects.length > 0) {
-      setList((prev) => [...prev, ...data.retrospects]);
+      dispatch(
+        setProjectRetrospectQueries({
+          list: [...list, ...data.retrospects],
+        })
+      );
     }
   }, [data]);
 
@@ -61,26 +87,24 @@ export const useProjectRetrospects = ({
     list,
     isError,
     isLoading,
-    onPressFilter,
     selectedFilter,
-    setSelectedFilter,
     searchKeyword,
-    setSearchKeywordDebounce,
+    onPressFilter,
+    onChangeSearchKeyword,
     onScrollListBottom,
   };
 };
 
 export const useRetrospects = () => {
-  const [selectedFilter, setSelectedFilter] = React.useState<
-    "latest" | "earliest"
-  >("latest");
-
-  const [searchKeyword, setSearchKeyword] = React.useState("");
-  const [offset, setOffset] = React.useState(0);
-  const [list, setList] = React.useState<Retrospect[]>([]);
   const limit = 10;
 
-  const { data, isLoading, isError, refetch } = useGetAllRetrospectQuery({
+  const dispatch = useAppDispatch();
+
+  const { selectedFilter, searchKeyword, offset, list } = useAppSelect(
+    (state) => state.retrospect.allRetrospectQueries
+  );
+
+  const { data, isLoading, isError } = useGetAllRetrospectQuery({
     offset: offset * limit,
     limit,
     filter: selectedFilter,
@@ -89,36 +113,53 @@ export const useRetrospects = () => {
 
   const setSearchKeywordDebounce = useRef<(value: string) => void>(
     _.debounce((value: string) => {
-      setSearchKeyword(value);
+      dispatch(
+        setAllRetrospectQueries({
+          searchKeyword: value,
+        })
+      );
     }, 500)
   ).current;
 
+  const onChangeSearchKeyword = (value: string) => {
+    dispatch(
+      setAllRetrospectQueries({
+        list: [],
+        offset: 0,
+      })
+    );
+    setSearchKeywordDebounce(value);
+  };
+
   const onScrollListBottom = () => {
-    setOffset((prev) => prev + 1);
+    dispatch(increateAllRetrospectQueriesOffset());
   };
 
   const onPressFilter = () => {
+    dispatch(setAllRetrospectQueries({ offset: 0, list: [] }));
+
     if (selectedFilter === "latest") {
-      setSelectedFilter("earliest");
+      dispatch(
+        setAllRetrospectQueries({
+          selectedFilter: "earliest",
+        })
+      );
     } else {
-      setSelectedFilter("latest");
+      dispatch(
+        setAllRetrospectQueries({
+          selectedFilter: "latest",
+        })
+      );
     }
   };
 
-  const onFocus = () => {
-    setOffset(0);
-    setList([]);
-    refetch();
-  };
-
-  React.useEffect(() => {
-    setOffset(0);
-    setList([]);
-  }, [selectedFilter, searchKeyword]);
-
   React.useEffect(() => {
     if (data && data.retrospects && data.retrospects.length > 0) {
-      setList((prev) => [...prev, ...data.retrospects]);
+      dispatch(
+        setAllRetrospectQueries({
+          list: [...list, ...data.retrospects],
+        })
+      );
     }
   }, [data]);
 
@@ -127,11 +168,9 @@ export const useRetrospects = () => {
     isError,
     isLoading,
     selectedFilter,
-    setSelectedFilter,
     onPressFilter,
-    onFocus,
     searchKeyword,
-    setSearchKeywordDebounce,
+    onChangeSearchKeyword,
     onScrollListBottom,
   };
 };

@@ -8,7 +8,7 @@ import {
 } from "./queries";
 import { DateString } from "../../../@types/calendar";
 import dayjs from "dayjs";
-import { RetrospectForm } from "../../../@types/retrospect";
+import { Retrospect, RetrospectForm } from "../../../@types/retrospect";
 import {
   addRetrospectMutation,
   deleteRetrospectMutation,
@@ -17,6 +17,18 @@ import {
 
 interface InitialState {
   retrospectForm: RetrospectForm;
+  allRetrospectQueries: {
+    offset: number;
+    searchKeyword: string;
+    selectedFilter: "latest" | "earliest";
+    list: Retrospect[];
+  };
+  projectRetrospectQueries: {
+    offset: number;
+    searchKeyword: string;
+    selectedFilter: "latest" | "earliest";
+    list: Retrospect[];
+  };
 }
 
 const initialState: InitialState = {
@@ -24,6 +36,18 @@ const initialState: InitialState = {
     content: "",
     project_id: null,
     date: dayjs().format("YYYY-MM-DD") as DateString,
+  },
+  allRetrospectQueries: {
+    offset: 0,
+    searchKeyword: "",
+    selectedFilter: "latest",
+    list: [],
+  },
+  projectRetrospectQueries: {
+    offset: 0,
+    searchKeyword: "",
+    selectedFilter: "latest",
+    list: [],
   },
 };
 
@@ -91,13 +115,72 @@ const retrospectSlice = createSlice({
         project_id: action.payload.project_id,
       });
     },
+    resetAllRetrospectQueries(state) {
+      state.allRetrospectQueries = {
+        offset: 0,
+        searchKeyword: "",
+        selectedFilter: "latest",
+        list: [],
+      };
+    },
+    setAllRetrospectQueries(
+      state,
+      action: {
+        payload: {
+          offset?: number;
+          searchKeyword?: string;
+          selectedFilter?: "latest" | "earliest";
+          list?: Retrospect[];
+        };
+      }
+    ) {
+      Object.assign(state.allRetrospectQueries, action.payload);
+    },
+    increateAllRetrospectQueriesOffset(state) {
+      state.allRetrospectQueries.offset += 1;
+    },
+    resetProjectRetrospectQueries(state) {
+      state.projectRetrospectQueries = {
+        offset: 0,
+        searchKeyword: "",
+        selectedFilter: "latest",
+        list: [],
+      };
+    },
+    setProjectRetrospectQueries(
+      state,
+      action: {
+        payload: {
+          offset?: number;
+          searchKeyword?: string;
+          selectedFilter?: "latest" | "earliest";
+          list?: Retrospect[];
+        };
+      }
+    ) {
+      console.log("setProjectRetrospectQueries", action.payload);
+
+      Object.assign(state.projectRetrospectQueries, action.payload);
+    },
+    increateProjectRetrospectQueriesOffset(state) {
+      state.projectRetrospectQueries.offset += 1;
+    },
   },
   extraReducers() {},
 });
 
 export default retrospectSlice.reducer;
-export const { resetRetrospectForm, setRetrospectForm, editRetrospectForm } =
-  retrospectSlice.actions;
+export const {
+  resetRetrospectForm,
+  resetAllRetrospectQueries,
+  setAllRetrospectQueries,
+  setRetrospectForm,
+  editRetrospectForm,
+  resetProjectRetrospectQueries,
+  setProjectRetrospectQueries,
+  increateAllRetrospectQueriesOffset,
+  increateProjectRetrospectQueriesOffset,
+} = retrospectSlice.actions;
 export const {
   useGetAllRetrospectQuery,
   useGetAllProjectRetrospectQuery,

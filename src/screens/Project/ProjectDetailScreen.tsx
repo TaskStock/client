@@ -81,11 +81,9 @@ function ProjectDetailSecond({ projectId }: { projectId: number }) {
     isLoading,
     isError,
     searchKeyword,
-    setSelectedFilter,
+    onChangeSearchKeyword,
     onScrollListBottom,
-
     onPressFilter,
-    setSearchKeywordDebounce,
   } = useProjectRetrospects({ project_id: projectId });
 
   const onPressWriteProject = () => {
@@ -111,7 +109,7 @@ function ProjectDetailSecond({ projectId }: { projectId: number }) {
       onPressWriteProject={onPressWriteProject}
       onPressProjectItem={() => {}}
       searchKeyword={searchKeyword}
-      onChangeSearchKeyword={setSearchKeywordDebounce}
+      onChangeSearchKeyword={onChangeSearchKeyword}
       onPressSearchIcon={() => {}}
       onScrollListBottom={onScrollListBottom}
     ></RetrospectContainer>
