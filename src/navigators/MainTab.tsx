@@ -55,7 +55,7 @@ function MainTab() {
           }}
         />
         <Tab.Screen
-          name="Project"
+          name="ProjectStack"
           component={ProjectStack}
           options={{
             headerShown: false,

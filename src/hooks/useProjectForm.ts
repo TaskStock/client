@@ -19,7 +19,7 @@ export const useProjectForm = () => {
   const onChangeProjectPublic = (value) => {
     dispatch(
       setProjectForm({
-        name: "ispublic",
+        name: "public_range",
         value: value,
       })
     );
@@ -44,16 +44,18 @@ export const useProjectForm = () => {
   };
 
   const onSubmit = () => {
+    console.log(form.project_id);
+
     if (isEditMode) {
       updateProject({
         project_id: form.project_id!,
         name: form.name,
-        ispublic: form.ispublic,
+        public_range: form.public_range,
       });
     } else {
       addProject({
         name: form.name,
-        ispublic: form.ispublic,
+        public_range: form.public_range,
       });
     }
   };

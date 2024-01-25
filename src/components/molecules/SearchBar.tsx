@@ -5,6 +5,9 @@ import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
 import { WithLocalSvg } from "react-native-svg";
 import SearchIcon from "../../../assets/icons/search.svg";
 import { spacing } from "../../constants/spacing";
+import { Pressable } from "react-native";
+import React from "react";
+
 const Container = styled.View`
   display: flex;
   flex-direction: row;
@@ -14,16 +17,33 @@ const Container = styled.View`
   background-color: ${({ theme }) => theme.box};
 `;
 
-export const SearchBar = () => {
+export const SearchBar = ({
+  onChangeText,
+  onPressSearchIcon,
+}: {
+  onChangeText: (text: string) => void;
+  onPressSearchIcon: () => void;
+}) => {
   const theme = useTheme();
+
+  const [text, setText] = React.useState("");
+
   return (
     <Container>
-      <WithLocalSvg asset={SearchIcon} width={34} height={34} />
+      <Pressable onPress={onPressSearchIcon}>
+        <WithLocalSvg asset={SearchIcon} width={34} height={34} />
+      </Pressable>
       <TextInput
+        value={text}
         placeholderTextColor={theme.textDim}
         placeholder="내용이나 날짜를 검색하세요."
+        onChangeText={(input) => {
+          onChangeText(input);
+          setText(input);
+        }}
         style={{
           fontSize: useResponsiveFontSize(16),
+          flex: 1,
         }}
       ></TextInput>
     </Container>

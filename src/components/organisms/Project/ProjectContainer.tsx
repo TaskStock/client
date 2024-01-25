@@ -57,7 +57,12 @@ function ProjectItem({ item }: { item: Project }) {
 
   const theme = useTheme();
 
-  const publicText = item.ispublic ? "전체공개" : "비공개";
+  const publicText =
+    item.public_range === "all"
+      ? "전체 공개"
+      : item.public_range === "follow"
+      ? "팔로워"
+      : "비공개";
 
   const dispatch = useAppDispatch();
 
@@ -66,7 +71,7 @@ function ProjectItem({ item }: { item: Project }) {
       editProjectForm({
         project_id: item.project_id,
         name: item.name,
-        isPublic: item.ispublic,
+        public_range: item.public_range,
       })
     );
     navigation.navigate("ProjectManage");
@@ -154,16 +159,7 @@ function ProjectItem({ item }: { item: Project }) {
                 zIndex: 100,
               }}
             >
-              <View
-                style={
-                  {
-                    // position: "absolute",
-                    // top: 0,
-                    // right: 20,
-                    // zIndex: 100,
-                  }
-                }
-              >
+              <View style={{}}>
                 <ModalContainer
                   position={{
                     top: 0,

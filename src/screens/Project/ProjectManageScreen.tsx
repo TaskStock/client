@@ -37,18 +37,18 @@ const ProjectSection = ({
   );
 };
 
-const publicType = [
+const PUBLIC_TYPE = [
   {
     name: "전체공개",
     value: "all",
   },
   {
     name: "팔로워",
-    value: "followers",
+    value: "follow",
   },
   {
     name: "비공개",
-    value: "hidden",
+    value: "none",
   },
 ];
 
@@ -107,16 +107,16 @@ export default function ProjectManageScreen() {
           </ProjectSection>
           <ProjectSection headerText="공개설정">
             <FlexBox direction="row" gap={spacing.padding}>
-              {publicType.map((item) => (
+              {PUBLIC_TYPE.map((item) => (
                 <RoundItemBtn
                   key={item.value}
                   onPress={() => onChangeProjectPublic(item.value)}
-                  isSelected={form.ispublic === item.value ? true : false}
+                  isSelected={form.public_range === item.value ? true : false}
                 >
                   <Text
                     size="md"
                     color={
-                      form.ispublic === item.value
+                      form.public_range === item.value
                         ? theme.textReverse
                         : theme.text
                     }

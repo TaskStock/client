@@ -12,6 +12,13 @@ export const useProject = () => {
 
   const projects = data?.projects || [];
 
+  const findProjectNameById = (project_id: number) => {
+    const project = projects.find(
+      (project) => project.project_id === project_id
+    );
+    return project?.name;
+  };
+
   const [isAddProject, setIsAddProject] = React.useState(false);
   const [newProjectInput, setNewProjectInput] = React.useState("");
 
@@ -25,7 +32,7 @@ export const useProject = () => {
     if (newProjectInput.length > 0) {
       setIsAddProject(false);
 
-      addProject({ name: newProjectInput, ispublic: false });
+      addProject({ name: newProjectInput, public_range: "all" });
     }
   };
 
@@ -34,6 +41,7 @@ export const useProject = () => {
     selectedProjectId,
     isAddProject,
     setIsAddProject,
+    findProjectNameById,
     newProjectInput,
     setNewProjectInput,
     onChangeNewProjectName,

@@ -35,6 +35,7 @@ export default function App() {
   const tokenLoading = useAppSelect((state) => state.auth.loading);
 
   const dispatch = useAppDispatch();
+
   useEffect(() => {
     // asyncstorage에서 엑세스토큰, 만료일, refresh만료일을 가져와서
     dispatch(checkTokenExistence());

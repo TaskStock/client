@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import {
   NavigationState,
   SceneRendererProps,
@@ -8,91 +8,85 @@ import TabHeader from "../../components/molecules/TabHeader";
 import ProjectContainer from "../../components/organisms/Project/ProjectContainer";
 import PageMainHeader from "../../components/molecules/PageMainHeader";
 import { useTab } from "../../hooks/useTab";
-import ContentLayout from "../../components/atoms/ContentLayout";
-import { SearchBar } from "../../components/molecules/SearchBar";
-import FlexBox from "../../components/atoms/FlexBox";
-import { spacing } from "../../constants/spacing";
-import { TextWithIcon } from "../../components/molecules/TextWithIcon";
-import { ScrollView, View } from "react-native";
-import RetrospectList from "../../components/organisms/Project/RetrospectList";
-import { WithLocalSvg } from "react-native-svg";
 import Icons from "../../components/atoms/Icons";
 import { useTheme } from "styled-components/native";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
+import {
+  NavigationProp,
+  useFocusEffect,
+  useNavigation,
+} from "@react-navigation/native";
 import { ProjectStackParamList } from "../../navigators/ProjectStack";
-import RoundItemBtn from "../../components/atoms/RoundItemBtn";
-import Text from "../../components/atoms/Text";
 import { useAppDispatch } from "../../store/configureStore.hooks";
 import { resetProjectForm } from "../../store/modules/project/project";
+import {
+  resetRetrospectForm,
+  useGetAllRetrospectQuery,
+} from "../../store/modules/retrospect/retrospect";
+import RetrospectContainer from "../../components/organisms/Project/RetrospectContainer";
+import { Retrospect } from "../../@types/retrospect";
+import { Pressable } from "react-native";
+import Text from "../../components/atoms/Text";
+import _ from "lodash";
+import { useProject } from "../../hooks/useProject";
+import { useRetrospects } from "../../hooks/useRetrospects";
 
 const ProjectScreenFirst = () => <ProjectContainer></ProjectContainer>;
 
 const ProjectScreenSecond = () => {
   const theme = useTheme();
+
   const navigation = useNavigation<NavigationProp<ProjectStackParamList>>();
 
-  return (
-    <ContentLayout>
-      <FlexBox
-        direction="column"
-        alignItems="stretch"
-        gap={spacing.offset}
-        styles={{
-          flex: 1,
-        }}
-      >
-        <SearchBar></SearchBar>
-        <FlexBox
-          justifyContent="space-between"
-          styles={{
-            paddingHorizontal: spacing.small,
-          }}
-        >
-          <TextWithIcon text="최신순">
-            <WithLocalSvg
-              width={13}
-              height={13}
-              asset={require("../../../assets/icons/orderIcon.svg")}
-            ></WithLocalSvg>
-          </TextWithIcon>
-          <TextWithIcon text="필터">
-            <WithLocalSvg
-              width={13}
-              height={13}
-              asset={require("../../../assets/icons/filterIcon.svg")}
-            ></WithLocalSvg>
-          </TextWithIcon>
-        </FlexBox>
-        <RetrospectList></RetrospectList>
-        <View
-          style={{
-            position: "absolute",
-            bottom: 0,
-            left: 0,
-            right: 0,
-            paddingHorizontal: spacing.small,
-            paddingBottom: spacing.small,
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <RoundItemBtn
-            onPress={() => {
-              console.log("회고 작성하기");
+  const dispatch = useAppDispatch();
 
-              navigation.navigate("RetrospectWrite");
-            }}
-            size="xl"
-            isSelected
-          >
-            <Text size="md" color={theme.textReverse}>
-              회고 작성하기
-            </Text>
-          </RoundItemBtn>
-        </View>
-      </FlexBox>
-    </ContentLayout>
+  const { projects } = useProject();
+
+  const {
+    list,
+    isLoading,
+    isError,
+    searchKeyword,
+    selectedFilter,
+    onScrollListBottom,
+    setSearchKeywordDebounce,
+    onPressFilter,
+  } = useRetrospects();
+
+  // useFocusEffect(() => {
+  //   console.log("refetch on focus - retrospect");
+
+  //   onFocus();
+  // });
+
+  const onPressWriteProject = () => {
+    dispatch(
+      resetRetrospectForm({
+        project_id: 0,
+      })
+    );
+    navigation.navigate("RetrospectWrite");
+  };
+
+  return (
+    <>
+      <RetrospectContainer
+        projects={projects}
+        onScrollListBottom={onScrollListBottom}
+        searchKeyword={searchKeyword}
+        onPressProjectItem={() => {}}
+        onChangeSearchKeyword={setSearchKeywordDebounce}
+        onPressSearchIcon={() => {}}
+        isAllRetrospects={true}
+        filterIcon={require("../../../assets/icons/orderIcon.svg")}
+        ProjectFilterIcon={require("../../../assets/icons/filterIcon.svg")}
+        selectedFilter={selectedFilter}
+        onPressFilter={onPressFilter}
+        onPressWriteProject={onPressWriteProject}
+        data={list}
+        isLoading={isLoading}
+        isError={isError}
+      ></RetrospectContainer>
+    </>
   );
 };
 

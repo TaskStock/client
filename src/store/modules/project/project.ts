@@ -1,4 +1,3 @@
-import { LOCAL_API_HOST_IOS } from "@env";
 import { createSlice } from "@reduxjs/toolkit";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { myFetchFunction } from "../../myFetchFunction";
@@ -28,7 +27,8 @@ const initialState: InitialState = {
   projectForm: {
     project_id: undefined,
     name: "",
-    ispublic: "all",
+    public_range: "all",
+    progress: "inProgress",
   },
 };
 
@@ -60,7 +60,8 @@ const projectSlice = createSlice({
       state.projectForm = {
         project_id: undefined,
         name: "",
-        ispublic: "all",
+        public_range: "all",
+        progress: "inProgress",
       };
     },
     setProjectForm(
@@ -82,14 +83,14 @@ const projectSlice = createSlice({
         payload: {
           project_id: number;
           name: string;
-          isPublic: publicType;
+          public_range: publicType;
         };
       }
     ) {
       Object.assign(state.projectForm, {
         project_id: action.payload.project_id,
         name: action.payload.name,
-        ispublic: action.payload.isPublic,
+        public_range: action.payload.public_range,
       });
     },
   },

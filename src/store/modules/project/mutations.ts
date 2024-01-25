@@ -30,7 +30,7 @@ export const addProjectMutation = (builder: MutationBuilder) =>
     },
     {
       name: string;
-      ispublic: publicType;
+      public_range: publicType;
     }
   >({
     query: (body) => ({
@@ -38,7 +38,7 @@ export const addProjectMutation = (builder: MutationBuilder) =>
       method: "POST",
       body: {
         name: body.name,
-        ispublic: body.ispublic,
+        public_range: body.public_range,
       },
     }),
     invalidatesTags: ["Project"],
@@ -64,7 +64,7 @@ export const updateProjectMutation = (builder: MutationBuilder) =>
     {
       project_id: number;
       name: string;
-      ispublic: publicType;
+      public_range: publicType;
     }
   >({
     query: (body) => ({
@@ -73,7 +73,8 @@ export const updateProjectMutation = (builder: MutationBuilder) =>
       body: {
         project_id: body.project_id,
         name: body.name,
-        ispublic: body.ispublic,
+        public_range: body.public_range,
       },
     }),
+    invalidatesTags: ["Project"],
   });

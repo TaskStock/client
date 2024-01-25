@@ -7,20 +7,21 @@ import { spacing } from "../../constants/spacing";
 import Section from "../../components/molecules/Section";
 import FlexBox from "../../components/atoms/FlexBox";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import TextInput, {
+import {
   TextAreaInput,
   TextInputWithBorder,
 } from "../../components/atoms/TextInput";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
 import Margin from "../../components/atoms/Margin";
 import { BlackBtnForProject, GrayBtn } from "../../components/atoms/Buttons";
-import BorderBox from "../../components/atoms/BorderBox";
-import dayjs from "dayjs";
 import { useProject } from "../../hooks/useProject";
 import RoundItemBtn, {
   RoundItemBtnContainer,
 } from "../../components/atoms/RoundItemBtn";
 import Text from "../../components/atoms/Text";
+import { useRetrospectForm } from "../../hooks/useRetrospectForm";
+import { useNavigation } from "@react-navigation/native";
+import dayjs from "dayjs";
 
 const DatePickerBox = styled.View`
   display: flex;
@@ -46,15 +47,35 @@ const NormalSection = ({ headerText, children }) => {
 export default function RetrospectWriteScreen() {
   const theme = useTheme();
 
-  const datePickerInitialDate = new Date();
+  const { projects } = useProject();
 
-  const onChangeDate = (event: any, selectedDate: any) => {
-    const currentDate = selectedDate;
+  const navigation = useNavigation();
 
-    const formattedDate = dayjs(currentDate).format("YYYY-MM-DD");
+  const {
+    retrospectForm,
+    retrospectDate,
+    isEdit,
+    onChangeDate,
+    onChangeProjectId,
+    onAddRetrospect,
+    onDeleteRetrospect,
+    onUpdateRetrospect,
+    onChangeRetrospectContent,
+  } = useRetrospectForm();
+
+  const onPressSave = () => {
+    if (isEdit) onUpdateRetrospect();
+    else onAddRetrospect();
+
+    navigation.goBack();
   };
 
-  const { projects } = useProject();
+  const onPressDelete = () => {
+    onDeleteRetrospect();
+    navigation.goBack();
+  };
+
+  const retrospectDateFormat = dayjs(retrospectDate).format("YYYY년 MM월 DD일");
 
   return (
     <View
@@ -67,32 +88,42 @@ export default function RetrospectWriteScreen() {
       <ContentLayout>
         <FlexBox direction="column" gap={spacing.offset} alignItems="stretch">
           <NormalSection headerText="회고 날짜">
-            <DatePickerBox>
-              <DateTimePicker
-                value={datePickerInitialDate}
-                mode="date"
-                display="default"
-                onChange={onChangeDate}
-                style={{
-                  bottom: 0,
-                  left: -10,
-                }}
-              ></DateTimePicker>
-            </DatePickerBox>
+            <TextInputWithBorder
+              value={retrospectDateFormat}
+            ></TextInputWithBorder>
           </NormalSection>
           <NormalSection headerText="회고 내용">
             <TextAreaInput
               numberOfLines={50}
               minHeight={useResponsiveFontSize(100)}
               placeholder="회고 내용을 입력해주세요"
+              value={retrospectForm.content}
+              onChangeText={onChangeRetrospectContent}
             ></TextAreaInput>
           </NormalSection>
           <NormalSection headerText="프로젝트">
             <RoundItemBtnContainer>
               {projects.map((project) => {
                 return (
-                  <RoundItemBtn key={project.project_id}>
-                    <Text size="md">{project.name}</Text>
+                  <RoundItemBtn
+                    onPress={() => {
+                      onChangeProjectId(project.project_id);
+                    }}
+                    key={project.project_id}
+                    isSelected={
+                      project.project_id === retrospectForm.project_id
+                    }
+                  >
+                    <Text
+                      size="md"
+                      color={
+                        project.project_id === retrospectForm.project_id
+                          ? theme.textReverse
+                          : theme.text
+                      }
+                    >
+                      {project.name}
+                    </Text>
                   </RoundItemBtn>
                 );
               })}
@@ -103,9 +134,16 @@ export default function RetrospectWriteScreen() {
         <FlexBox gap={spacing.padding}>
           <BlackBtnForProject
             text="저장하기"
-            onPress={() => {}}
+            onPress={onPressSave}
             style={{ flex: 3 }}
           ></BlackBtnForProject>
+          {isEdit && (
+            <GrayBtn
+              text="삭제"
+              onPress={onPressDelete}
+              style={{ flex: 1 }}
+            ></GrayBtn>
+          )}
         </FlexBox>
       </ContentLayout>
     </View>

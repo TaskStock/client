@@ -23,6 +23,16 @@ import FlexBox from "../../components/atoms/FlexBox";
 import TodoItem from "../../components/molecules/Home/TodoItem";
 import { useResizeLayoutOnFocus } from "../../hooks/useResizeLayoutOnFocus";
 import { checkIsSameLocalDay } from "../../utils/checkIsSameLocalDay";
+import RetrospectContainer from "../../components/organisms/Project/RetrospectContainer";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { useAppDispatch } from "../../store/configureStore.hooks";
+import {
+  resetRetrospectForm,
+  useGetAllProjectRetrospectQuery,
+  useGetMonthlyRetrospectQuery,
+} from "../../store/modules/retrospect/retrospect";
+import { DateStringYYYYMM } from "../../@types/calendar";
+import { useProjectRetrospects } from "../../hooks/useRetrospects";
 
 type Props = NativeStackScreenProps<ProjectStackParamList, "ProjectDetail">;
 
@@ -60,11 +70,51 @@ function ProjectSection({
   );
 }
 
-function ProjectDetailSecond() {
+function ProjectDetailSecond({ projectId }: { projectId: number }) {
+  const navigation = useNavigation<NavigationProp<ProjectStackParamList>>();
+
+  const dispatch = useAppDispatch();
+
+  const {
+    selectedFilter,
+    list,
+    isLoading,
+    isError,
+    searchKeyword,
+    setSelectedFilter,
+    onScrollListBottom,
+
+    onPressFilter,
+    setSearchKeywordDebounce,
+  } = useProjectRetrospects({ project_id: projectId });
+
+  const onPressWriteProject = () => {
+    dispatch(
+      resetRetrospectForm({
+        project_id: projectId,
+      })
+    );
+    navigation.navigate("RetrospectWrite");
+  };
+
   return (
-    <ContentLayout>
-      <Text size="md">회고</Text>
-    </ContentLayout>
+    <RetrospectContainer
+      selectedFilter={selectedFilter}
+      projects={[]}
+      isAllRetrospects={false}
+      filterIcon={require("../../../assets/icons/orderIcon.svg")}
+      ProjectFilterIcon={require("../../../assets/icons/filterIcon.svg")}
+      data={list}
+      isLoading={isLoading}
+      isError={isError}
+      onPressFilter={onPressFilter}
+      onPressWriteProject={onPressWriteProject}
+      onPressProjectItem={() => {}}
+      searchKeyword={searchKeyword}
+      onChangeSearchKeyword={setSearchKeywordDebounce}
+      onPressSearchIcon={() => {}}
+      onScrollListBottom={onScrollListBottom}
+    ></RetrospectContainer>
   );
 }
 
@@ -101,6 +151,16 @@ function ProjectDetailFirst({ projectId }: { projectId: number }) {
       setContentsHeight(resizedHeight);
     },
   });
+
+  const { data, isLoading, isError } = useGetMonthlyRetrospectQuery({
+    date: currentDate.format("YYYY-MM") as DateStringYYYYMM,
+  });
+
+  const currentProjectRetrospects = data?.retrospects
+    .filter((retrospect) => retrospect.project_id === projectId)
+    .filter((retrospect) =>
+      checkIsSameLocalDay(retrospect.created_date, currentDateString)
+    );
 
   return (
     <>
@@ -143,7 +203,31 @@ function ProjectDetailFirst({ projectId }: { projectId: number }) {
               ))}
             </ProjectSection>
             <ProjectSection title="회고">
-              <View></View>
+              {
+                isLoading ? (
+                  <Text size="md">loading...</Text>
+                ) : isError ? (
+                  <Text size="md">회고를 불러오는중 에러가 발생했습니다.</Text>
+                ) : (
+                  <Text size="md">
+                    {currentProjectRetrospects && currentProjectRetrospects[0]
+                      ? currentProjectRetrospects[0].content.length > 10
+                        ? currentProjectRetrospects[0].content.slice(0, 10) +
+                          "..."
+                        : currentProjectRetrospects[0].content
+                      : "회고가 없습니다."}
+                  </Text>
+                )
+                //   currentProjectRetrospects &&
+                //   currentProjectRetrospects[0] &&
+                //   currentProjectRetrospects[0].content.length > 10 && (
+                //   <Text size="md">{currentProjectRetrospects[0].content.slice(0, 10)}...</Text>
+                //   ) : (
+                //     <Text size="md">{currentProjectRetrospects[0].content}</Text>
+                //   )
+
+                // )}
+              }
             </ProjectSection>
           </FlexBox>
         </DateContainer>
@@ -155,7 +239,7 @@ function ProjectDetailFirst({ projectId }: { projectId: number }) {
 export default function ProjectDetailScreen({ navigation, route }: Props) {
   const sceneMap = {
     first: () => <ProjectDetailFirst projectId={route.params.project_id} />,
-    second: ProjectDetailSecond,
+    second: () => <ProjectDetailSecond projectId={route.params.project_id} />,
   };
 
   const { index, onChangeIndex, renderScene, routes } = useTab({
