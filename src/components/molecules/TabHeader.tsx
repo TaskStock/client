@@ -80,7 +80,7 @@ export default function TabHeader({
             graphSelected={props.navigationState.index === i}
             onLayout={(event) => {
               const { width } = event.nativeEvent.layout;
-              tabWidthArr.current.push(width);
+              tabWidthArr.current[i] = width;
               if (i === 0) {
                 beforeTabWidth.current = width;
                 setTabWidth(width);
