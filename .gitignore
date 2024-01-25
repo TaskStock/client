@@ -75,3 +75,6 @@ yarn-error.*
 *.tsbuildinfo
 
 # @end expo-cli
+
+# social login clientid files
+/android/app/google-services.json

@@ -1,11 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "../../store/configureStore";
+import { useAppDispatch } from "../../store/configureStore.hooks";
 import { getData } from "../asyncStorage";
-import { getSavedCredentials, loginWithCredentials } from "./autoSignIn";
 import { getAPIHost } from "../getAPIHost";
 import getDeviceId from "../getDeviceId";
 import { logout } from "./signInUtils";
-import { useAppDispatch } from "../../store/configureStore.hooks";
 
 // 토큰 갱신을 위한 서버 요청 함수
 const requestNewTokens = async (accessToken: string, refreshToken: string) => {
@@ -84,7 +83,8 @@ export const checkAndRenewTokens = createAsyncThunk(
     ) {
       // 새 accessToken 요청
       console.log("=====accessToken 만료, refreshToken 유효=====");
-      return requestNewTokens(accessToken, refreshToken);
+      const newTokens = await requestNewTokens(accessToken, refreshToken);
+      return newTokens;
     }
 
     // CASE 2: accessToken, refreshToken 둘 다 만료 => logout

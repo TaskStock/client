@@ -7,8 +7,6 @@ import {
   registerWithEmail,
 } from "../../utils/authUtils/signInUtils";
 import { checkAndRenewTokens } from "../../utils/authUtils/tokenUtils";
-import getDeviceId from "../../utils/getDeviceId";
-import store from "../configureStore";
 
 interface IInitialUserState {
   accessToken: string;
