@@ -20,13 +20,18 @@ import { ProjectStackParamList } from "../../../navigators/ProjectStack";
 import { ModalBtn, ModalContainer } from "../../atoms/FloatModal";
 import OutsidePressHandler from "react-native-outside-press";
 import { useAppDispatch } from "../../../store/configureStore.hooks";
-import { editProjectForm } from "../../../store/modules/project/project";
+import {
+  editProjectForm,
+  useDeleteProjectMutation,
+  useUpdateProjectMutation,
+} from "../../../store/modules/project/project";
 import { resetProjectRetrospectQueries } from "../../../store/modules/retrospect/retrospect";
 
-const ProjectBox = styled.View`
+const ProjectBox = styled.View<{ isFinished: boolean }>`
   border-radius: ${useResponsiveFontSize(20)}px;
   height: ${useResponsiveFontSize(179)}px;
-  background-color: ${(props) => props.theme.box};
+  background-color: ${(props) =>
+    props.isFinished ? props.theme.background : props.theme.box};
   padding: ${useResponsiveFontSize(20)}px;
 `;
 
@@ -55,6 +60,8 @@ function ProjectItem({ item }: { item: Project }) {
   const navigation = useNavigation<NavigationProp<ProjectStackParamList>>();
 
   const [isModalOpen, setIsModalOpen] = React.useState(false);
+  const [deleteProject] = useDeleteProjectMutation();
+  const [updateProject] = useUpdateProjectMutation();
 
   const theme = useTheme();
 
@@ -73,12 +80,14 @@ function ProjectItem({ item }: { item: Project }) {
         project_id: item.project_id,
         name: item.name,
         public_range: item.public_range,
+        finished: item.finished,
       })
     );
     navigation.navigate("ProjectManage");
   };
 
   const onPressProjectDetailBtn = () => {
+    setIsModalOpen(false);
     dispatch(resetProjectRetrospectQueries());
     navigation.navigate("ProjectDetail", {
       project_id: item.project_id,
@@ -86,16 +95,29 @@ function ProjectItem({ item }: { item: Project }) {
     });
   };
 
-  const onPressProjectCompleteBtn = () => {};
+  const onPressProjectCompleteBtn = () => {
+    setIsModalOpen(false);
+    updateProject({
+      project_id: item.project_id,
+      name: item.name,
+      public_range: item.public_range,
+      finished: true,
+    });
+  };
 
-  const onPressProjectDeleteBtn = () => {};
+  const onPressProjectDeleteBtn = () => {
+    setIsModalOpen(false);
+    deleteProject({
+      project_id: item.project_id,
+    });
+  };
 
   const onPressMoreDot = () => {
     setIsModalOpen(!isModalOpen);
   };
 
   return (
-    <ProjectBox>
+    <ProjectBox isFinished={item.finished}>
       <FlexBox
         gap={spacing.padding}
         styles={{
@@ -163,7 +185,7 @@ function ProjectItem({ item }: { item: Project }) {
               }}
               style={{
                 position: "absolute",
-                top: 0,
+                top: -10,
                 right: 0,
                 zIndex: 100,
               }}
@@ -180,10 +202,13 @@ function ProjectItem({ item }: { item: Project }) {
                       프로젝트 관리
                     </Text>
                   </ModalBtn>
-                  <ModalBtn onPress={() => {}}>
-                    <Text size="sm">완료로 이동</Text>
-                  </ModalBtn>
-                  <ModalBtn onPress={() => {}}>
+                  {!item.finished && (
+                    <ModalBtn onPress={onPressProjectCompleteBtn}>
+                      <Text size="sm">완료로 이동</Text>
+                    </ModalBtn>
+                  )}
+
+                  <ModalBtn onPress={onPressProjectDeleteBtn}>
                     <Text size="sm">삭제하기</Text>
                   </ModalBtn>
                 </ModalContainer>
@@ -208,12 +233,16 @@ export default function ProjectContainer() {
     return <ProjectItem item={item} />;
   };
 
+  const sortedProjects = [...projects].sort((a, b) => {
+    return a.finished === b.finished ? 0 : a.finished ? 1 : -1;
+  });
+
   return (
     <>
       <ContentLayout>
         <FlatList
           renderItem={renderItem}
-          data={projects}
+          data={sortedProjects}
           keyExtractor={(item) => item.project_id.toString()}
           ItemSeparatorComponent={() => {
             return <Margin margin={useResponsiveFontSize(20)} />;

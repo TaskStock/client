@@ -28,7 +28,7 @@ const initialState: InitialState = {
     project_id: undefined,
     name: "",
     public_range: "all",
-    progress: "inProgress",
+    finished: false,
   },
 };
 
@@ -61,7 +61,7 @@ const projectSlice = createSlice({
         project_id: undefined,
         name: "",
         public_range: "all",
-        progress: "inProgress",
+        finished: false,
       };
     },
     setProjectForm(
@@ -84,6 +84,7 @@ const projectSlice = createSlice({
           project_id: number;
           name: string;
           public_range: publicType;
+          finished: boolean;
         };
       }
     ) {
@@ -91,6 +92,7 @@ const projectSlice = createSlice({
         project_id: action.payload.project_id,
         name: action.payload.name,
         public_range: action.payload.public_range,
+        finished: action.payload.finished,
       });
     },
   },

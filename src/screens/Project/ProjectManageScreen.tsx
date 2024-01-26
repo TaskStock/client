@@ -55,11 +55,11 @@ const PUBLIC_TYPE = [
 const progressType = [
   {
     name: "진행중",
-    value: "progress",
+    value: false,
   },
   {
     name: "완료",
-    value: "complete",
+    value: true,
   },
 ];
 
@@ -127,21 +127,30 @@ export default function ProjectManageScreen() {
               ))}
             </FlexBox>
           </ProjectSection>
-          <ProjectSection headerText="완료여부">
-            <FlexBox direction="row" gap={spacing.padding}>
-              {progressType.map((item) => (
-                <RoundItemBtn
-                  key={item.value}
-                  onPress={() => onChangeProjectProgress(item.value)}
-                  isSelected={false}
-                >
-                  <Text size="md" color={theme.text}>
-                    {item.name}
-                  </Text>
-                </RoundItemBtn>
-              ))}
-            </FlexBox>
-          </ProjectSection>
+          {isEditMode && (
+            <ProjectSection headerText="완료여부">
+              <FlexBox direction="row" gap={spacing.padding}>
+                {progressType.map((item) => (
+                  <RoundItemBtn
+                    key={item.name}
+                    onPress={() => onChangeProjectProgress(item.value)}
+                    isSelected={form.finished === item.value}
+                  >
+                    <Text
+                      size="md"
+                      color={
+                        form.finished === item.value
+                          ? theme.textReverse
+                          : theme.text
+                      }
+                    >
+                      {item.name}
+                    </Text>
+                  </RoundItemBtn>
+                ))}
+              </FlexBox>
+            </ProjectSection>
+          )}
         </FlexBox>
         <Margin margin={useResponsiveFontSize(100)} />
         <FlexBox gap={spacing.padding}>

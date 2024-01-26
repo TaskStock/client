@@ -37,7 +37,7 @@ export const useProjectForm = () => {
   const onChangeProjectProgress = (value) => {
     dispatch(
       setProjectForm({
-        name: "progress",
+        name: "finished",
         value: value,
       })
     );
@@ -51,6 +51,7 @@ export const useProjectForm = () => {
         project_id: form.project_id!,
         name: form.name,
         public_range: form.public_range,
+        finished: form.finished,
       });
     } else {
       addProject({

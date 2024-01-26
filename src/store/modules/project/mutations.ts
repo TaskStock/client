@@ -65,6 +65,7 @@ export const updateProjectMutation = (builder: MutationBuilder) =>
       project_id: number;
       name: string;
       public_range: publicType;
+      finished: boolean;
     }
   >({
     query: (body) => ({
@@ -74,6 +75,7 @@ export const updateProjectMutation = (builder: MutationBuilder) =>
         project_id: body.project_id,
         name: body.name,
         public_range: body.public_range,
+        finished: body.finished,
       },
     }),
     invalidatesTags: ["Project"],
