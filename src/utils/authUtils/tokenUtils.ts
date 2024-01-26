@@ -1,8 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "../../store/configureStore";
+import { useAppDispatch } from "../../store/configureStore.hooks";
 import { getData } from "../asyncStorage";
-import { getSavedCredentials, loginWithCredentials } from "./autoSignIn";
 import { getAPIHost } from "../getAPIHost";
+import getDeviceId from "../getDeviceId";
+import { logout } from "./signInUtils";
 
 // 토큰 갱신을 위한 서버 요청 함수
 const requestNewTokens = async (accessToken: string, refreshToken: string) => {
@@ -19,13 +21,14 @@ const requestNewTokens = async (accessToken: string, refreshToken: string) => {
 
     // 종속성 문제를 위해 api.ts에서 분리
     const SERVER_URL = getAPIHost();
+    const deviceId = await getDeviceId();
     const response = await fetch(`${SERVER_URL}account/refresh`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${accessToken}`,
       },
-      body: JSON.stringify({ refreshToken }),
+      body: JSON.stringify({ refreshToken, device_id: deviceId }),
     });
 
     if (!response.ok) {
@@ -50,7 +53,7 @@ export const checkAndRenewTokens = createAsyncThunk(
     const {
       auth: { accessToken, accessExp, refreshExp },
     } = state;
-    // 15분으로 다시 변경해야함
+
     const fifteenMinInSec = 15 * 60;
 
     // refreshToken => asyncStorage에서 가져옴, 만료 7일 전 갱신
@@ -80,23 +83,18 @@ export const checkAndRenewTokens = createAsyncThunk(
     ) {
       // 새 accessToken 요청
       console.log("=====accessToken 만료, refreshToken 유효=====");
-      return requestNewTokens(accessToken, refreshToken);
+      const newTokens = await requestNewTokens(accessToken, refreshToken);
+      return newTokens;
     }
 
-    // CASE 2: accessToken, refreshToken 둘 다 만료 || refreshToken 만료 7일 전 자동로그인으로 재발급
+    // CASE 2: accessToken, refreshToken 둘 다 만료 => logout
     if (
       (accessToken && refreshToken && currentTime > refreshExp) ||
       refreshExp - currentTime < sevenDaysInSec
     ) {
-      const savedCredentials = await getSavedCredentials();
-      if (savedCredentials) {
-        const { email, password } = savedCredentials;
-        // 자동로그인으로 accessToken, refreshToken 재발급
-        console.log("=====자동로그인으로 토큰 재발급=====", email, password);
-        return loginWithCredentials(email, password);
-      } else {
-        return rejectWithValue("No saved credentials");
-      }
+      const dispatch = useAppDispatch();
+      console.log("=====토큰들 만료됨=====");
+      return dispatch(logout());
     }
   }
 );

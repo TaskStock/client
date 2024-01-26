@@ -38,6 +38,7 @@ export const checkStorage = async () => {
     const refreshExp = await AsyncStorage.getItem("refreshExp");
     const theme = await AsyncStorage.getItem("theme");
     const strategy = await AsyncStorage.getItem("strategy");
+    const deviceId = await AsyncStorage.getItem("deviceId");
     // const language = await AsyncStorage.getItem("language");
     console.log("===== AsyncStorage Check =====");
     console.log("accessToken: ", accessToken);
@@ -46,6 +47,7 @@ export const checkStorage = async () => {
     console.log("refreshExp: ", refreshExp);
     console.log("theme: ", theme);
     console.log("strategy: ", strategy);
+    console.log("deviceId: ", deviceId);
   } catch (error) {
     console.error("Error reading values from AsyncStorage", error);
   }

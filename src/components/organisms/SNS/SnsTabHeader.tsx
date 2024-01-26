@@ -6,6 +6,7 @@ import { spacing } from "../../../constants/spacing";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import FlexBox from "../../atoms/FlexBox";
 import Icons from "../../atoms/Icons";
+import { useNavigation } from "@react-navigation/native";
 
 const Container = styled.View`
   padding: 0;
@@ -36,7 +37,7 @@ export default function SnsTabHeader({
   setIndex: (index: number) => void;
 }) {
   const theme = useTheme();
-
+  const navigation = useNavigation() as any;
   const [translateValue] = React.useState(new Animated.Value(0));
 
   useEffect(() => {
@@ -50,7 +51,7 @@ export default function SnsTabHeader({
   const tabWidth = useRef(0);
 
   return (
-    <FlexBox>
+    <FlexBox justifyContent="space-between" alignItems="center">
       <Container>
         {props.navigationState.routes.map((route, i) => {
           const isFocused = props.navigationState.index === i;
@@ -91,7 +92,12 @@ export default function SnsTabHeader({
           }}
         ></Animated.View>
       </Container>
-      <Icons type="materialIcons" name="search" size={35} onPress={() => {}} />
+      <Icons
+        type="materialIcons"
+        name="search"
+        size={useResponsiveFontSize(36)}
+        onPress={() => navigation.navigate("Search")}
+      />
     </FlexBox>
   );
 }

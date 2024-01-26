@@ -7,6 +7,7 @@ import {
   TabView,
 } from "react-native-tab-view";
 import styled from "styled-components/native";
+import { useAppSelect } from "../../../store/configureStore.hooks";
 import RankingTab from "./RankingTab";
 import SnsTabHeader from "./SnsTabHeader";
 
@@ -14,26 +15,22 @@ const Container = styled.View`
   flex: 1;
 `;
 
-const RankingContainer = ({
-  rankingAll,
-  rankingFollowing,
-  rankingFollower,
-}) => {
+const RankingContainer = () => {
   const layout = useWindowDimensions();
   const [index, setIndex] = useState(0);
   const [routes] = useState([
-    { key: "first", title: "전체체" },
+    { key: "first", title: "팔로워" },
     { key: "second", title: "팔로잉" },
-    { key: "third", title: "팔로워" },
   ]);
+  const { followingList, followerList } = useAppSelect(
+    (state) => state.friends
+  );
+  const FirstRoute = () => <RankingTab data={followerList} />;
+  const SecondRoute = () => <RankingTab data={followingList} />;
 
-  const FirstRoute = () => <RankingTab data={rankingAll} />;
-  const SecondRoute = () => <RankingTab data={rankingFollowing} />;
-  const ThirdRoute = () => <RankingTab data={rankingFollower} />;
   const renderScene = SceneMap({
     first: FirstRoute,
     second: SecondRoute,
-    third: ThirdRoute,
   });
   const renderTabBar = (
     props: SceneRendererProps & {

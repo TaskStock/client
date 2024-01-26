@@ -1,46 +1,83 @@
-import { View } from "react-native";
 import React from "react";
-import Text from "../../atoms/Text";
-import { Image } from "react-native";
-import { getAPIHost } from "../../../utils/getAPIHost";
-import { convertSlash } from "../../../utils/convertSlash";
+import { View } from "react-native";
+import { useTheme } from "styled-components";
 import styled from "styled-components/native";
+import { spacing } from "../../../constants/spacing";
 import FlexBox from "../../atoms/FlexBox";
+import { IconsWithoutFeedBack } from "../../atoms/Icons";
+import ProfilePic from "../../atoms/ProfilePic";
+import Text from "../../atoms/Text";
+import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
+import numberWithCommas from "../../../utils/useNumberWithCommas";
+import { useAppSelect } from "../../../store/configureStore.hooks";
+import PrivateLockIcon from "../../atoms/PrivateLockIcon";
 
-const BlankImage = styled.View`
-  width: 70px;
-  height: 70px;
-  border-radius: 50px;
-  background-color: gray;
+const Container = styled.View`
+  padding: ${spacing.offset}px 0;
 `;
 
-const MyInfo = ({ data }) => {
-  const SERVER_URL = getAPIHost();
-  const uri = convertSlash(SERVER_URL + data.image);
+const Info = ({ text, iconType, iconName, color }) => {
   return (
-    <View>
-      <FlexBox>
-        {data.image ? (
-          <Image
-            style={{ width: 50, height: 50, borderRadius: 50 }}
-            source={{
-              uri: uri,
-            }}
-          />
-        ) : (
-          <BlankImage />
-        )}
+    <FlexBox alignItems="center" gap={spacing.padding}>
+      <IconsWithoutFeedBack
+        name={iconName}
+        type={iconType}
+        size={17}
+        color={color}
+      />
+      <Text size="xs">{text}</Text>
+    </FlexBox>
+  );
+};
+
+const MyInfo = ({ data }) => {
+  const theme = useTheme();
+  const { private: isPrivate } = useAppSelect((state) => state.user.user);
+  return (
+    <Container>
+      <FlexBox gap={spacing.offset} alignItems="center">
+        <ProfilePic image={data.image} strategy={data.strategy} />
         <View>
-          <Text size="md">{data.user_name}</Text>
-          <Text size="md">{data.introduce}</Text>
+          <FlexBox alignItems="center" gap={spacing.offset}>
+            <Text
+              size="lg"
+              weight="semibold"
+              styles={{ paddingBottom: spacing.small }}
+            >
+              {data.user_name}
+            </Text>
+            <PrivateLockIcon isPrivate={isPrivate} />
+          </FlexBox>
+          <Text size="xs" color={theme.textDim}>
+            {data.introduce}
+          </Text>
         </View>
       </FlexBox>
-      <FlexBox gap={20}>
-        <Text size="md">follower: {data.follower_count}</Text>
-        <Text size="md">following: {data.following_count}</Text>
+      <FlexBox
+        direction="column"
+        gap={useResponsiveFontSize(2)}
+        styles={{ paddingTop: spacing.padding, paddingLeft: spacing.small }}
+      >
+        <Info
+          text={`현재 가치 ${numberWithCommas(data.cumulative_value)}원`}
+          iconName={"line-graph"}
+          iconType={"entypo"}
+          color={theme.text}
+        />
+        <Info
+          text={`${data.follower_count} 팔로워 · ${data.following_count} 팔로잉`}
+          iconName={"person-outline"}
+          iconType={"materialIcons"}
+          color={theme.text}
+        />
+        <Info
+          text={`뱃지`}
+          iconName={"trophy-award"}
+          iconType={"material"}
+          color={theme.text}
+        />
       </FlexBox>
-      <Text size="md">{data.cumulative_value}원</Text>
-    </View>
+    </Container>
   );
 };
 

@@ -1,7 +1,6 @@
 import React, { forwardRef, useRef } from "react";
 import { TextInput as RNTextInput, TextInputProps, View } from "react-native";
 import styled, { useTheme } from "styled-components/native";
-import { grayTheme } from "../../constants/colors";
 import { spacing } from "../../constants/spacing";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
 import Text from "./Text";

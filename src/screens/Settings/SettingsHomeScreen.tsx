@@ -6,12 +6,11 @@ import { useAppDispatch, useAppSelect } from "../../store/configureStore.hooks";
 import { checkStorage } from "../../utils/asyncStorage";
 import { logout } from "../../utils/authUtils/signInUtils";
 import { resetNavigation } from "../../utils/resetNavigation";
+import getDeviceId from "../../utils/getDeviceId";
+import PageHeader from "../../components/molecules/PageHeader";
 
 const Container = styled.View`
-  justify-content: center;
-  align-items: center;
   flex: 1;
-  padding: ${spacing.padding}px;
 `;
 
 const MenuContainer = styled.TouchableOpacity`
@@ -23,7 +22,7 @@ const MenuContainer = styled.TouchableOpacity`
   background-color: ${({ theme }) => theme.box};
 `;
 
-const Menu = ({ text, onPress }) => (
+export const Menu = ({ text, onPress }) => (
   <MenuContainer onPress={onPress}>
     <Text size="md">{text}</Text>
   </MenuContainer>
@@ -40,23 +39,28 @@ const SettingsHomeScreen = ({ navigation }) => {
     }
   }, [isLoggedIn, navigation]);
 
-  const redux = useAppSelect((state) => state.auth);
+  const redux_auth = useAppSelect((state) => state.auth);
+  const redux_user = useAppSelect((state) => state.user);
   const checkRedux = () => {
     console.log("=====redux=====");
-    console.log(redux);
+    console.log(redux_auth);
+    console.log(redux_user);
   };
 
   return (
     <Container>
-      <Menu text="계정 설정 =>" onPress={() => {}} />
+      <PageHeader title="설정" />
+      <Menu
+        text="계정 설정 =>"
+        onPress={() => navigation.navigate("SettingsAccount")}
+      />
       <Menu
         text="테마 변경 =>"
-        onPress={() => {
-          navigation.navigate("SettingsTheme");
-        }}
+        onPress={() => navigation.navigate("SettingsTheme")}
       />
       <Menu text="asyncStorage check" onPress={checkStorage} />
       <Menu text="redux check" onPress={checkRedux} />
+      <Menu text="device id" onPress={getDeviceId} />
       <Menu text="로그아웃" onPress={handleLogout} />
       <Menu text="회원 탈퇴" onPress={() => {}} />
       <Menu text="비밀번호 변경" onPress={() => {}} />

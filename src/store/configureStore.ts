@@ -9,6 +9,7 @@ import homeReducer from "./modules/home";
 import userReducer from "./modules/user";
 import retrospectReducer from "./modules/retrospect/retrospect";
 import { retrospectApi } from "./modules/retrospect/retrospect";
+import getFriendsReducer from "./modules/getFriends";
 
 const store = configureStore({
   reducer: {
@@ -25,6 +26,7 @@ const store = configureStore({
     todo: todoReducer,
     project: projectReducer,
     retrospect: retrospectReducer,
+    friends: getFriendsReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
