@@ -21,6 +21,7 @@ interface InitialState {
     offset: number;
     searchKeyword: string;
     selectedFilter: "latest" | "earliest";
+    selectedProjectId: number | null;
     list: Retrospect[];
   };
   projectRetrospectQueries: {
@@ -41,6 +42,7 @@ const initialState: InitialState = {
     offset: 0,
     searchKeyword: "",
     selectedFilter: "latest",
+    selectedProjectId: null,
     list: [],
   },
   projectRetrospectQueries: {
@@ -116,11 +118,14 @@ const retrospectSlice = createSlice({
       });
     },
     resetAllRetrospectQueries(state) {
+      console.log("resetAllRetrospectQueries reset reset");
+
       state.allRetrospectQueries = {
         offset: 0,
         searchKeyword: "",
         selectedFilter: "latest",
         list: [],
+        selectedProjectId: null,
       };
     },
     setAllRetrospectQueries(
@@ -130,11 +135,24 @@ const retrospectSlice = createSlice({
           offset?: number;
           searchKeyword?: string;
           selectedFilter?: "latest" | "earliest";
+          selectedProjectId?: number;
           list?: Retrospect[];
         };
       }
     ) {
       Object.assign(state.allRetrospectQueries, action.payload);
+    },
+    addAllRetrospectListItem(state, action: { payload: Retrospect[] }) {
+      state.allRetrospectQueries.list = [
+        ...state.allRetrospectQueries.list,
+        ...action.payload,
+      ];
+    },
+    addProjectRetrospectListItem(state, action: { payload: Retrospect[] }) {
+      state.projectRetrospectQueries.list = [
+        ...state.projectRetrospectQueries.list,
+        ...action.payload,
+      ];
     },
     increateAllRetrospectQueriesOffset(state) {
       state.allRetrospectQueries.offset += 1;
@@ -177,6 +195,8 @@ export const {
   setRetrospectForm,
   editRetrospectForm,
   resetProjectRetrospectQueries,
+  addAllRetrospectListItem,
+  addProjectRetrospectListItem,
   setProjectRetrospectQueries,
   increateAllRetrospectQueriesOffset,
   increateProjectRetrospectQueriesOffset,

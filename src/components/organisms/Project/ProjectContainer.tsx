@@ -21,6 +21,7 @@ import { ModalBtn, ModalContainer } from "../../atoms/FloatModal";
 import OutsidePressHandler from "react-native-outside-press";
 import { useAppDispatch } from "../../../store/configureStore.hooks";
 import { editProjectForm } from "../../../store/modules/project/project";
+import { resetProjectRetrospectQueries } from "../../../store/modules/retrospect/retrospect";
 
 const ProjectBox = styled.View`
   border-radius: ${useResponsiveFontSize(20)}px;
@@ -75,6 +76,14 @@ function ProjectItem({ item }: { item: Project }) {
       })
     );
     navigation.navigate("ProjectManage");
+  };
+
+  const onPressProjectDetailBtn = () => {
+    dispatch(resetProjectRetrospectQueries());
+    navigation.navigate("ProjectDetail", {
+      project_id: item.project_id,
+      project_title: item.name,
+    });
   };
 
   const onPressProjectCompleteBtn = () => {};
@@ -182,14 +191,7 @@ function ProjectItem({ item }: { item: Project }) {
             </OutsidePressHandler>
           )}
 
-          <MoreBtn
-            onPress={() => {
-              navigation.navigate("ProjectDetail", {
-                project_id: item.project_id,
-                project_title: item.name,
-              });
-            }}
-          >
+          <MoreBtn onPress={onPressProjectDetailBtn}>
             <Text size="sm">프로젝트 더보기</Text>
             <Icons type="entypo" name="chevron-thin-right" size={15} />
           </MoreBtn>

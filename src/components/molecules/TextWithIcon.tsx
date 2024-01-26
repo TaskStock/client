@@ -8,14 +8,18 @@ import React from "react";
 export const TextWithIcon = ({
   text,
   children,
+  textColor,
 }: {
   text: string;
   children: React.ReactNode;
+  textColor?: string;
 }) => {
   return (
     <FlexBox gap={spacing.small} alignItems="center">
       {children}
-      <Text size="md">{text}</Text>
+      <Text size="md" color={textColor ? textColor : undefined}>
+        {text}
+      </Text>
     </FlexBox>
   );
 };

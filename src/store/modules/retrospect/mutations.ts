@@ -1,6 +1,11 @@
 import { EndpointBuilder } from "@reduxjs/toolkit/query";
 import { RetrospectForm } from "../../../@types/retrospect";
 import { projectApi } from "../project/project";
+import {
+  resetAllRetrospectQueries,
+  resetProjectRetrospectQueries,
+  setAllRetrospectQueries,
+} from "./retrospect";
 
 type Builder = EndpointBuilder<
   (
@@ -39,6 +44,10 @@ export const addRetrospectMutation = (builder: Builder) =>
     invalidatesTags: ["retrospect", "monthlyRetrospect", "projectRetrospect"],
     onQueryStarted: async ({ form }, { dispatch, queryFulfilled }) => {
       let patchUpdateProjectCount;
+
+      dispatch(resetAllRetrospectQueries());
+      dispatch(resetProjectRetrospectQueries());
+
       patchUpdateProjectCount = dispatch(
         projectApi.util.updateQueryData(
           "getAllProjects",
@@ -78,6 +87,16 @@ export const updateRetrospectMutation = (builder: Builder) =>
       body: body,
     }),
     invalidatesTags: ["retrospect", "monthlyRetrospect", "projectRetrospect"],
+    onQueryStarted: async ({ retrospect_id }, { dispatch, queryFulfilled }) => {
+      dispatch(resetAllRetrospectQueries());
+      dispatch(resetProjectRetrospectQueries());
+
+      try {
+        await queryFulfilled;
+      } catch (e) {
+        console.error(e);
+      }
+    },
   });
 
 export const deleteRetrospectMutation = (builder: Builder) =>
@@ -95,6 +114,9 @@ export const deleteRetrospectMutation = (builder: Builder) =>
     }),
     invalidatesTags: ["retrospect", "monthlyRetrospect", "projectRetrospect"],
     onQueryStarted: async ({ project_id }, { dispatch, queryFulfilled }) => {
+      dispatch(resetAllRetrospectQueries());
+      dispatch(resetProjectRetrospectQueries());
+
       let patchUpdateProjectCount;
       patchUpdateProjectCount = dispatch(
         projectApi.util.updateQueryData(

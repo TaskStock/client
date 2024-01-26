@@ -57,7 +57,6 @@ function RetrospectItem({
         <Text size="xs">{formattedDate}</Text>
       </FlexBox>
       <Margin margin={spacing.small}></Margin>
-      <Text size="md">{item.created_date}</Text>
       <Text size="md">
         {item.content.length > 100
           ? item.content.slice(0, 100) + "..."
@@ -94,7 +93,7 @@ export default function RetrospectList({
 
   const handleScroll = (event) => {
     const { contentOffset, contentSize, layoutMeasurement } = event.nativeEvent;
-    const paddingToBottom = 20; // Adjust this value based on your needs
+    const paddingToBottom = 10; // Adjust this value based on your needs
 
     if (
       layoutMeasurement.height + contentOffset.y >=
@@ -147,7 +146,7 @@ export default function RetrospectList({
             return (
               <RetrospectItem
                 item={item}
-                key={item.retrospect_id}
+                key={item.retrospect_id + "retrospect"}
                 projectName={projectName || ""}
                 onPressItem={onPressRetrospectItem(item)}
               ></RetrospectItem>

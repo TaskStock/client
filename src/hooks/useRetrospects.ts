@@ -1,5 +1,7 @@
 import React, { useRef } from "react";
 import {
+  addAllRetrospectListItem,
+  addProjectRetrospectListItem,
   increateAllRetrospectQueriesOffset,
   increateProjectRetrospectQueriesOffset,
   setAllRetrospectQueries,
@@ -75,11 +77,7 @@ export const useProjectRetrospects = ({
 
   React.useEffect(() => {
     if (data && data.retrospects && data.retrospects.length > 0) {
-      dispatch(
-        setProjectRetrospectQueries({
-          list: [...list, ...data.retrospects],
-        })
-      );
+      dispatch(addProjectRetrospectListItem(data.retrospects));
     }
   }, [data]);
 
@@ -100,9 +98,8 @@ export const useRetrospects = () => {
 
   const dispatch = useAppDispatch();
 
-  const { selectedFilter, searchKeyword, offset, list } = useAppSelect(
-    (state) => state.retrospect.allRetrospectQueries
-  );
+  const { selectedFilter, searchKeyword, offset, list, selectedProjectId } =
+    useAppSelect((state) => state.retrospect.allRetrospectQueries);
 
   const { data, isLoading, isError } = useGetAllRetrospectQuery({
     offset: offset * limit,
@@ -131,7 +128,29 @@ export const useRetrospects = () => {
     setSearchKeywordDebounce(value);
   };
 
+  const onPressProjectItem = (project_id: number) => {
+    dispatch(
+      setAllRetrospectQueries({
+        selectedProjectId: project_id,
+      })
+    );
+  };
+
+  const onPressSelectedProjectFilter = () => {
+    dispatch(
+      setAllRetrospectQueries({
+        selectedProjectId: undefined,
+        offset: 0,
+        searchKeyword: "",
+        selectedFilter: "latest",
+        list: [],
+      })
+    );
+  };
+
   const onScrollListBottom = () => {
+    console.log("onScrollListBottom");
+
     dispatch(increateAllRetrospectQueriesOffset());
   };
 
@@ -155,21 +174,36 @@ export const useRetrospects = () => {
 
   React.useEffect(() => {
     if (data && data.retrospects && data.retrospects.length > 0) {
-      dispatch(
-        setAllRetrospectQueries({
-          list: [...list, ...data.retrospects],
-        })
-      );
+      dispatch(addAllRetrospectListItem(data.retrospects));
     }
   }, [data]);
 
+  // 문제점: 회고가 추가되면 -> list를 한번 reset해야함. offset도 그렇고.
+  // 그렇게 안하면, list에 중복된 회고가 들어감.
+  // 문제는 그렇게 reset하면, query가 다시 시작되는데,
+  // 그 다음 invalidate tags를 통해서 또 data를 가져오게 됨.
+  // 그래서, data가 두번 들어가게 됨.
+
+  const filteredList = React.useMemo(() => {
+    if (selectedProjectId) {
+      return list.filter((retrospect) => {
+        return retrospect.project_id === selectedProjectId;
+      });
+    }
+    return list;
+  }, [list, selectedProjectId]);
+
   return {
     list,
+    filteredList,
+    selectedProjectId,
     isError,
     isLoading,
     selectedFilter,
-    onPressFilter,
     searchKeyword,
+    onPressProjectItem,
+    onPressSelectedProjectFilter,
+    onPressFilter,
     onChangeSearchKeyword,
     onScrollListBottom,
   };

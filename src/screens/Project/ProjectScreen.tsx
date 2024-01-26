@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import {
   NavigationState,
   SceneRendererProps,
@@ -14,63 +14,9 @@ import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { ProjectStackParamList } from "../../navigators/ProjectStack";
 import { useAppDispatch } from "../../store/configureStore.hooks";
 import { resetProjectForm } from "../../store/modules/project/project";
-import { resetRetrospectForm } from "../../store/modules/retrospect/retrospect";
-import RetrospectContainer from "../../components/organisms/Project/RetrospectContainer";
-import _ from "lodash";
-import { useProject } from "../../hooks/useProject";
-import { useRetrospects } from "../../hooks/useRetrospects";
+import ProjectScreenSecond from "../../components/pages/project/ProjectScreenSecond";
 
 const ProjectScreenFirst = () => <ProjectContainer></ProjectContainer>;
-
-const ProjectScreenSecond = () => {
-  const navigation = useNavigation<NavigationProp<ProjectStackParamList>>();
-
-  const dispatch = useAppDispatch();
-
-  const { projects } = useProject();
-
-  const {
-    list,
-    isLoading,
-    isError,
-    searchKeyword,
-    selectedFilter,
-    onScrollListBottom,
-    onChangeSearchKeyword,
-    onPressFilter,
-  } = useRetrospects();
-
-  const onPressWriteProject = () => {
-    dispatch(
-      resetRetrospectForm({
-        project_id: 0,
-      })
-    );
-    navigation.navigate("RetrospectWrite");
-  };
-
-  return (
-    <>
-      <RetrospectContainer
-        projects={projects}
-        onScrollListBottom={onScrollListBottom}
-        searchKeyword={searchKeyword}
-        onPressProjectItem={() => {}}
-        onChangeSearchKeyword={onChangeSearchKeyword}
-        onPressSearchIcon={() => {}}
-        isAllRetrospects={true}
-        filterIcon={require("../../../assets/icons/orderIcon.svg")}
-        ProjectFilterIcon={require("../../../assets/icons/filterIcon.svg")}
-        selectedFilter={selectedFilter}
-        onPressFilter={onPressFilter}
-        onPressWriteProject={onPressWriteProject}
-        data={list}
-        isLoading={isLoading}
-        isError={isError}
-      ></RetrospectContainer>
-    </>
-  );
-};
 
 const sceneMap = {
   first: ProjectScreenFirst,

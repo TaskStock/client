@@ -1,4 +1,4 @@
-import { View, Pressable } from "react-native";
+import { View, Pressable, Modal } from "react-native";
 import React from "react";
 import CenterLayout from "../../atoms/CenterLayout";
 import FlexBox from "../../atoms/FlexBox";
@@ -12,10 +12,9 @@ import { useTheme } from "styled-components/native";
 import ContentLayout from "../../atoms/ContentLayout";
 import Text from "../../atoms/Text";
 import { Retrospect } from "../../../@types/retrospect";
-import { useProject } from "../../../hooks/useProject";
 import { Project } from "../../../@types/project";
 import OutsidePressHandler from "react-native-outside-press";
-import { ModalContainer } from "../../atoms/FloatModal";
+import _ from "lodash";
 
 export default function RetrospectContainer({
   selectedFilter,
@@ -26,31 +25,39 @@ export default function RetrospectContainer({
   filterIcon,
   ProjectFilterIcon,
   onChangeSearchKeyword,
+  onPressProjectItem,
   onPressSearchIcon,
+  onPressSelectedProjectFilter,
   data,
   isLoading,
+  selectedProjectId,
   onScrollListBottom,
   isError,
 }: {
   selectedFilter: "latest" | "earliest";
-  onPressFilter: () => void;
-  onPressWriteProject: () => void;
   searchKeyword: string;
-  onChangeSearchKeyword: (text: string) => void;
-  onPressProjectItem: (id: number) => void | undefined;
-  onPressSearchIcon: () => void;
   filterIcon: any;
+  selectedProjectId: number | null;
   isAllRetrospects: boolean;
   ProjectFilterIcon: any;
   data: Retrospect[] | undefined;
-  onScrollListBottom: () => void;
   isLoading: boolean;
   isError: boolean;
   projects: Project[];
+  onPressFilter: () => void;
+  onPressWriteProject: () => void;
+  onChangeSearchKeyword: (text: string) => void;
+  onPressProjectItem: (id: number) => void | undefined;
+  onPressSearchIcon: () => void;
+  onPressSelectedProjectFilter?: () => void;
+  onScrollListBottom: () => void;
 }) {
   const theme = useTheme();
 
   const [isProjectFilterOpen, setIsProjectFilterOpen] = React.useState(false);
+  const selectedProjectName = _.find(projects, {
+    project_id: selectedProjectId,
+  })?.name;
 
   return (
     <ContentLayout>
@@ -83,37 +90,70 @@ export default function RetrospectContainer({
               ></WithLocalSvg>
             </TextWithIcon>
           </Pressable>
-          {isAllRetrospects && (
-            <Pressable
-              onPress={() => {
-                setIsProjectFilterOpen((prev) => !prev);
-              }}
-            >
-              <TextWithIcon text="프로젝트">
-                <WithLocalSvg
-                  width={13}
-                  height={13}
-                  asset={ProjectFilterIcon}
-                ></WithLocalSvg>
-              </TextWithIcon>
+          {isAllRetrospects &&
+            (!selectedProjectId ? (
+              <Pressable
+                onPress={() => {
+                  setIsProjectFilterOpen((prev) => !prev);
+                }}
+              >
+                <TextWithIcon text="프로젝트">
+                  <WithLocalSvg
+                    width={13}
+                    height={13}
+                    asset={ProjectFilterIcon}
+                  ></WithLocalSvg>
+                </TextWithIcon>
+                {isProjectFilterOpen && (
+                  <Modal transparent>
+                    <OutsidePressHandler
+                      onOutsidePress={() => {
+                        setIsProjectFilterOpen(false);
+                      }}
+                      style={{
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
 
-              {/* {isProjectFilterOpen && (
-                <OutsidePressHandler
-                  onOutsidePress={() => {
-                    setIsProjectFilterOpen(false);
-                  }}
+                        backgroundColor: "rgba(0,0,0,0.5)",
+                      }}
+                    >
+                      <CenterLayout>
+                        <Text size="md">프로젝트</Text>
+                        <View>
+                          {projects.map((project) => (
+                            <Pressable
+                              key={project.project_id + "project"}
+                              onPress={() => {
+                                onPressProjectItem(project.project_id);
+                                setIsProjectFilterOpen(false);
+                              }}
+                            >
+                              <Text size="md">{project.name}</Text>
+                            </Pressable>
+                          ))}
+                        </View>
+                      </CenterLayout>
+                    </OutsidePressHandler>
+                  </Modal>
+                )}
+              </Pressable>
+            ) : (
+              <Pressable onPress={onPressSelectedProjectFilter}>
+                <TextWithIcon
+                  text={selectedProjectName || ""}
+                  textColor={theme.palette.red}
                 >
-                  <ModalContainer position={{ top: 0, left: 0, right: 0 }}>
-                    {projects.map((project) => (
-                      <View>
-                        <Text size="md">{project.name}</Text>
-                      </View>
-                    ))}
-                  </ModalContainer>
-                </OutsidePressHandler>
-              )} */}
-            </Pressable>
-          )}
+                  <WithLocalSvg
+                    width={13}
+                    height={13}
+                    asset={ProjectFilterIcon}
+                  ></WithLocalSvg>
+                </TextWithIcon>
+              </Pressable>
+            ))}
         </FlexBox>
         <RetrospectList
           onScrollBottom={onScrollListBottom}
@@ -121,25 +161,28 @@ export default function RetrospectContainer({
           isLoading={isLoading}
           isError={isError}
         ></RetrospectList>
-        <View
-          style={{
-            position: "absolute",
-            bottom: 0,
-            left: 0,
-            right: 0,
-            paddingHorizontal: spacing.small,
-            paddingBottom: spacing.small,
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <RoundItemBtn onPress={onPressWriteProject} size="xl" isSelected>
-            <Text size="md" color={theme.textReverse}>
-              회고 작성하기
-            </Text>
-          </RoundItemBtn>
-        </View>
+
+        {((isAllRetrospects && projects.length != 0) || !isAllRetrospects) && (
+          <View
+            style={{
+              position: "absolute",
+              bottom: 0,
+              left: 0,
+              right: 0,
+              paddingHorizontal: spacing.small,
+              paddingBottom: spacing.small,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <RoundItemBtn onPress={onPressWriteProject} size="xl" isSelected>
+              <Text size="md" color={theme.textReverse}>
+                회고 작성하기
+              </Text>
+            </RoundItemBtn>
+          </View>
+        )}
       </FlexBox>
     </ContentLayout>
   );

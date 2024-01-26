@@ -50,8 +50,6 @@ export const useRetrospectForm = () => {
       return;
     }
 
-    dispatch(resetAllRetrospectQueries());
-
     // add, update, delete mutation이 실행되면
     // offset과 list, searchKeyword, selectedFilter가 초기화되어야 한다.
 
@@ -72,8 +70,6 @@ export const useRetrospectForm = () => {
   const onDeleteRetrospect = () => {
     if (!retrospectForm.retrospect_id) return;
 
-    dispatch(resetAllRetrospectQueries());
-
     deleteRetrospect({
       retrospect_id: retrospectForm.retrospect_id,
       project_id: retrospectForm.project_id,
@@ -90,8 +86,6 @@ export const useRetrospectForm = () => {
       console.log("project_id is undefined");
       return;
     }
-
-    dispatch(resetAllRetrospectQueries());
 
     updateRetrospect({
       retrospect_id: retrospectForm.retrospect_id,

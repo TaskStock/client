@@ -1,6 +1,11 @@
 import { EndpointBuilder } from "@reduxjs/toolkit/query";
 import { Retrospect } from "../../../@types/retrospect";
 import { DateStringYYYYMM } from "../../../@types/calendar";
+import {
+  addAllRetrospectListItem,
+  addProjectRetrospectListItem,
+  setAllRetrospectQueries,
+} from "./retrospect";
 
 type Builder = EndpointBuilder<
   (
@@ -42,6 +47,19 @@ export const getAllRetrospectQuery = (builder: Builder) =>
       }${searchKeyword ? `&search=${searchKeyword}` : ""}`,
     }),
     providesTags: ["retrospect"],
+    onQueryStarted: async ({ offset }, { dispatch, queryFulfilled }) => {
+      try {
+        const result = await queryFulfilled;
+        if (offset === 0)
+          dispatch(
+            setAllRetrospectQueries({
+              list: [],
+            })
+          );
+      } catch (error) {
+        console.log(error);
+      }
+    },
   });
 
 export const getAllProjectRetrospectQuery = (builder: Builder) =>
@@ -65,6 +83,20 @@ export const getAllProjectRetrospectQuery = (builder: Builder) =>
       `,
     }),
     providesTags: ["projectRetrospect"],
+    onQueryStarted: async ({ offset }, { dispatch, queryFulfilled }) => {
+      try {
+        if (offset === 0)
+          dispatch(
+            setAllRetrospectQueries({
+              list: [],
+            })
+          );
+
+        const result = await queryFulfilled;
+      } catch (error) {
+        console.log(error);
+      }
+    },
   });
 
 export const getMonthlyRetrospectQuery = (builder: Builder) =>
