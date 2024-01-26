@@ -1,5 +1,5 @@
 import React from "react";
-import { Dimensions, View } from "react-native";
+import { View } from "react-native";
 import styled from "styled-components/native";
 import { spacing } from "../../../constants/spacing";
 import HomeUserInfo from "../../molecules/Home/HomeUserInfo";

@@ -1,20 +1,23 @@
-import * as React from 'react';
-import { Svg, SvgProps } from 'react-native-svg';
+import * as React from "react";
+import { Line, Svg, SvgProps } from "react-native-svg";
 
-import { CandlestickChartDimensionsContext } from './Chart';
-import { CandlestickChartCandle, CandlestickChartCandleProps } from './Candle';
-import { useCandlestickChart } from './useCandlestickChart';
+import { CandlestickChartDimensionsContext } from "./Chart";
+import { CandlestickChartCandle, CandlestickChartCandleProps } from "./Candle";
+import { useCandlestickChart } from "./useCandlestickChart";
+import { interpolate } from "react-native-reanimated";
 
 type CandlestickChartCandlesProps = SvgProps & {
   width?: number;
   height?: number;
-  margin?: CandlestickChartCandleProps['margin'];
-  positiveColor?: CandlestickChartCandleProps['positiveColor'];
-  negativeColor?: CandlestickChartCandleProps['negativeColor'];
-  renderRect?: CandlestickChartCandleProps['renderRect'];
-  renderLine?: CandlestickChartCandleProps['renderLine'];
-  rectProps?: CandlestickChartCandleProps['rectProps'];
-  lineProps?: CandlestickChartCandleProps['lineProps'];
+  margin?: CandlestickChartCandleProps["margin"];
+  positiveColor?: CandlestickChartCandleProps["positiveColor"];
+  negativeColor?: CandlestickChartCandleProps["negativeColor"];
+  lineColor?: CandlestickChartCandleProps["lineColor"];
+  domainDividerColor?: string;
+  renderRect?: CandlestickChartCandleProps["renderRect"];
+  renderLine?: CandlestickChartCandleProps["renderLine"];
+  rectProps?: CandlestickChartCandleProps["rectProps"];
+  lineProps?: CandlestickChartCandleProps["lineProps"];
   candleProps?: Partial<CandlestickChartCandleProps>;
   useAnimations?: boolean;
 };
@@ -24,6 +27,8 @@ export function CandlestickChartCandles({
   negativeColor,
   rectProps,
   lineProps,
+  lineColor,
+  domainDividerColor = "#CCCCCF",
   margin,
   useAnimations = true,
   renderRect,
@@ -34,10 +39,36 @@ export function CandlestickChartCandles({
   const { width, height } = React.useContext(CandlestickChartDimensionsContext);
   const { data, domain, step } = useCandlestickChart();
 
+  const oneThirdDomainValue = domain[0] + (domain[1] - domain[0]) / 3;
+  const oneThirdLineHeight = interpolate(oneThirdDomainValue, domain, [
+    height,
+    0,
+  ]);
+
+  const twoThirdDomainValue = domain[0] + ((domain[1] - domain[0]) * 2) / 3;
+  const twoThirdLineHeight = interpolate(twoThirdDomainValue, domain, [
+    height,
+    0,
+  ]);
+
   ////////////////////////////////////////////////
 
   return (
     <Svg width={width} height={height} {...props}>
+      <Line
+        x1={0}
+        x2={width}
+        y1={oneThirdLineHeight}
+        y2={oneThirdLineHeight}
+        stroke={domainDividerColor}
+      />
+      <Line
+        x1={0}
+        x2={width}
+        y1={twoThirdLineHeight}
+        y2={twoThirdLineHeight}
+        stroke={domainDividerColor}
+      />
       {step > 0 &&
         data.map((candle, index) => (
           <CandlestickChartCandle
@@ -48,6 +79,7 @@ export function CandlestickChartCandles({
             width={step}
             positiveColor={positiveColor}
             negativeColor={negativeColor}
+            lineColor={lineColor}
             renderRect={renderRect}
             renderLine={renderLine}
             rectProps={rectProps}

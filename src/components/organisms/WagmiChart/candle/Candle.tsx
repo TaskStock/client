@@ -21,6 +21,7 @@ export type CandlestickChartCandleProps = {
   positiveColor?: string;
   negativeColor?: string;
   index: number;
+  lineColor?: string;
   width: number;
   rectProps?: RectProps;
   lineProps?: LineProps;
@@ -64,6 +65,7 @@ export const CandlestickChartCandle = ({
   margin = 2,
   positiveColor = "#10b981",
   negativeColor = "#ef4444",
+  lineColor = "#6b7280",
   rectProps: overrideRectProps,
   lineProps: overrideLineProps,
   index,
@@ -83,7 +85,7 @@ export const CandlestickChartCandle = ({
 
   const lineProps = React.useMemo(
     () => ({
-      stroke: fill,
+      stroke: lineColor,
       strokeWidth: 1,
       direction: isPositive ? "positive" : "negative",
       x1: x + width / 2,
@@ -140,15 +142,13 @@ export const CandlestickChartCandle = ({
     height: withTiming(getHeight({ maxHeight, value: max - min, domain })),
   }));
 
-  const theme = useTheme();
-
   return (
     <>
       {renderLine({
         ...lineProps,
         useAnimations,
         ...(useAnimations ? { animatedProps: animatedLineProps } : {}),
-        stroke: theme.palette.neutral600_gray,
+        stroke: lineColor,
       })}
       {renderRect({
         ...rectProps,

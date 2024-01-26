@@ -26,39 +26,18 @@ export function CandlestickChart({
 }: CandlestickChartProps) {
   const { setWidth, setHeight } = useCandlestickChart();
 
-  const { width: contextWidth, height: contextHeight } =
-    React.useContext(sizeContext);
-
-  const contextWidthWithPadding = React.useMemo(
-    () => contextWidth - spacing.padding,
-    [contextWidth]
-  );
-
-  const contextHeightWithPadding = React.useMemo(
-    () => contextHeight - spacing.padding,
-    [contextHeight]
-  );
-
   React.useEffect(() => {
-    setWidth(contextWidthWithPadding);
-    setHeight(contextHeightWithPadding);
+    setWidth(width);
+    setHeight(height);
   }, [height, setHeight, setWidth, width]);
 
   const contextValue = React.useMemo(
     () => ({
-      width: contextWidthWithPadding,
-      height: contextHeightWithPadding,
+      width: width,
+      height: height,
     }),
-    [contextHeightWithPadding, contextWidthWithPadding]
+    [width, height]
   );
-
-  // const contextValue = React.useMemo(
-  //   () => ({
-  //     width,
-  //     height,
-  //   }),
-  //   [height, width]
-  // );
 
   return (
     <CandlestickChartDimensionsContext.Provider value={contextValue}>

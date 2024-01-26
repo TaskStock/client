@@ -1,17 +1,11 @@
 import React, { memo, useContext, useEffect, useState } from "react";
-
-import { Animated, Pressable } from "react-native";
+import { Pressable } from "react-native";
 import styled, { ThemeContext } from "styled-components/native";
-import { Value } from "../../../@types/chart";
 import FlexBox from "../../atoms/FlexBox";
 import LoadingSpinner from "../../atoms/LoadingSpinner";
 import Text from "../../atoms/Text";
-import CandleStickValueChart from "../../molecules/CandleStickValueChart";
 import LineValueChart from "../../molecules/LineValueChart";
-import { createMockData } from "../../../utils/createMockData";
 import CenterLayout from "../../atoms/CenterLayout";
-import dayjs from "dayjs";
-import { useAppSelect } from "../../../store/configureStore.hooks";
 import useValue from "../../../hooks/useValue";
 import WagmiChart from "../../molecules/WagmiChart";
 

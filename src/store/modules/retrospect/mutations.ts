@@ -4,7 +4,6 @@ import { projectApi } from "../project/project";
 import {
   resetAllRetrospectQueries,
   resetProjectRetrospectQueries,
-  setAllRetrospectQueries,
 } from "./retrospect";
 
 type Builder = EndpointBuilder<
