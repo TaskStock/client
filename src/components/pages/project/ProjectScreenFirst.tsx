@@ -15,7 +15,6 @@ import ProjectIcon from "../../../../assets/icons/Chart_white.svg";
 import { useProject } from "../../../hooks/useProject";
 import { Project } from "../../../@types/project";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
-import PageMainHeader from "../../molecules/PageMainHeader";
 import { ProjectStackParamList } from "../../../navigators/ProjectStack";
 import { ModalBtn, ModalContainer } from "../../atoms/FloatModal";
 import OutsidePressHandler from "react-native-outside-press";
@@ -226,7 +225,7 @@ function ProjectItem({ item }: { item: Project }) {
   );
 }
 
-export default function ProjectContainer() {
+export default function ProjectScreenFirst() {
   const { projects } = useProject();
 
   const renderItem = ({ item }: { item: Project }) => {

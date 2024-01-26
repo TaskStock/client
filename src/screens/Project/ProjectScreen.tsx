@@ -5,7 +5,6 @@ import {
   TabView,
 } from "react-native-tab-view";
 import TabHeader from "../../components/molecules/TabHeader";
-import ProjectContainer from "../../components/organisms/Project/ProjectContainer";
 import PageMainHeader from "../../components/molecules/PageMainHeader";
 import { useTab } from "../../hooks/useTab";
 import Icons from "../../components/atoms/Icons";
@@ -15,8 +14,7 @@ import { ProjectStackParamList } from "../../navigators/ProjectStack";
 import { useAppDispatch } from "../../store/configureStore.hooks";
 import { resetProjectForm } from "../../store/modules/project/project";
 import ProjectScreenSecond from "../../components/pages/project/ProjectScreenSecond";
-
-const ProjectScreenFirst = () => <ProjectContainer></ProjectContainer>;
+import ProjectScreenFirst from "../../components/pages/project/ProjectScreenFirst";
 
 const sceneMap = {
   first: ProjectScreenFirst,
