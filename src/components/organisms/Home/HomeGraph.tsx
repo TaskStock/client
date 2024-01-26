@@ -3,7 +3,7 @@ import { Dimensions, View } from "react-native";
 import styled from "styled-components/native";
 import { spacing } from "../../../constants/spacing";
 import HomeUserInfo from "../../molecules/Home/HomeUserInfo";
-import HomeChart from "../HomeChart";
+import HomeChart from "./HomeChart";
 import CandleStickIcon from "../../../../assets/icons/CandleStickIcon.svg";
 import LineChartIcon from "../../../../assets/icons/lineChartIcon.svg";
 import { WithLocalSvg } from "react-native-svg";

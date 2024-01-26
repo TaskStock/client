@@ -6,6 +6,7 @@ type ComponentHeightContextType = {
   setHeaderHeight: React.Dispatch<React.SetStateAction<number>>;
   contentsHeight: number;
   setContentsHeight: React.Dispatch<React.SetStateAction<number>>;
+  tabHeight: number;
   setGCTabHeight: React.Dispatch<React.SetStateAction<number>>;
   DEFAULT_HEIGHT: number;
   OPEN_STATE: number;
@@ -17,6 +18,7 @@ export const ComponentHeightContext = createContext<ComponentHeightContextType>(
     setHeaderHeight: () => {},
     contentsHeight: 0,
     setContentsHeight: () => {},
+    tabHeight: 0,
     setGCTabHeight: () => {},
     DEFAULT_HEIGHT: 0,
     OPEN_STATE: 0,
@@ -48,6 +50,7 @@ export const ComponentHeightProvider: React.FC<{
         setHeaderHeight,
         contentsHeight,
         setContentsHeight,
+        tabHeight: GCTabHeight,
         setGCTabHeight,
         DEFAULT_HEIGHT,
         OPEN_STATE,

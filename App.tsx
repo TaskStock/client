@@ -13,6 +13,7 @@ import { useAppDispatch, useAppSelect } from "./src/store/configureStore.hooks";
 import { checkTokenExistence } from "./src/store/modules/auth";
 import { startingTheme } from "./src/store/modules/theme";
 import { checkAndRenewTokens } from "./src/utils/authUtils/tokenUtils";
+import { EventProvider } from "react-native-outside-press";
 import { removeData } from "./src/utils/asyncStorage";
 
 const THEME = {
@@ -34,6 +35,7 @@ export default function App() {
   const tokenLoading = useAppSelect((state) => state.auth.loading);
 
   const dispatch = useAppDispatch();
+
   useEffect(() => {
     // asyncstorage에서 엑세스토큰, 만료일, refresh만료일을 가져와서
     dispatch(checkTokenExistence());
@@ -65,12 +67,14 @@ export default function App() {
   return (
     <ThemeProvider theme={THEME[theme].theme}>
       <SafeAreaProvider>
-        <NavigationContainer>
-          <GestureHandlerRootView style={{ flex: 1 }}>
-            <Root isLoggedIn={isLoggedIn} />
-          </GestureHandlerRootView>
-        </NavigationContainer>
-        <StatusBar barStyle={THEME[theme].barStyle} />
+        <EventProvider>
+          <NavigationContainer>
+            <GestureHandlerRootView style={{ flex: 1 }}>
+              <Root isLoggedIn={isLoggedIn} />
+            </GestureHandlerRootView>
+          </NavigationContainer>
+          <StatusBar barStyle={THEME[theme].barStyle} />
+        </EventProvider>
       </SafeAreaProvider>
     </ThemeProvider>
   );

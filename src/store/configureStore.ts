@@ -4,9 +4,11 @@ import { themeReducer } from "./modules/theme";
 import calendarReducer from "./modules/calendar";
 import todoReducer, { todoApi } from "./modules/todo/todo";
 import { authReducer } from "./modules/auth";
-import projectReducer, { projectApi } from "./modules/project";
+import projectReducer, { projectApi } from "./modules/project/project";
 import homeReducer from "./modules/home";
 import userReducer from "./modules/user";
+import retrospectReducer from "./modules/retrospect/retrospect";
+import { retrospectApi } from "./modules/retrospect/retrospect";
 import getFriendsReducer from "./modules/getFriends";
 
 const store = configureStore({
@@ -14,6 +16,7 @@ const store = configureStore({
     [chartApi.reducerPath]: chartApi.reducer,
     [todoApi.reducerPath]: todoApi.reducer,
     [projectApi.reducerPath]: projectApi.reducer,
+    [retrospectApi.reducerPath]: retrospectApi.reducer,
     user: userReducer,
     auth: authReducer,
     chart: chartReducer,
@@ -22,6 +25,7 @@ const store = configureStore({
     calendar: calendarReducer,
     todo: todoReducer,
     project: projectReducer,
+    retrospect: retrospectReducer,
     friends: getFriendsReducer,
   },
   middleware: (getDefaultMiddleware) =>
@@ -30,7 +34,8 @@ const store = configureStore({
     })
       .concat(chartApi.middleware)
       .concat(todoApi.middleware)
-      .concat(projectApi.middleware),
+      .concat(projectApi.middleware)
+      .concat(retrospectApi.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

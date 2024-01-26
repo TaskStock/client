@@ -9,6 +9,7 @@ import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import FlexBox from "../../atoms/FlexBox";
 import Icons, { IconsPic } from "../../atoms/Icons";
 import { useTheme } from "styled-components";
+import { useResizeLayoutOnFocus } from "../../../hooks/useResizeLayoutOnFocus";
 
 const Container = styled.View<{ notchTop: number }>`
   background-color: ${({ theme }) => theme.background};
@@ -32,13 +33,13 @@ function HeaderTop({ navigation }) {
   const { NOTCH_TOP } = useHeight();
   const theme = useAppSelect((state) => state.theme.value);
   const styledTheme = useTheme();
+
+  const onLayout = useResizeLayoutOnFocus({
+    resizeFunction: setHeaderHeight,
+  });
+
   return (
-    <Container
-      notchTop={NOTCH_TOP}
-      onLayout={(e) => {
-        setHeaderHeight(e.nativeEvent.layout.height);
-      }}
-    >
+    <Container notchTop={NOTCH_TOP} onLayout={onLayout}>
       <FlexBox
         justifyContent="space-between"
         alignItems="center"

@@ -7,12 +7,7 @@ import {
   useAppDispatch,
   useAppSelect,
 } from "../../../store/configureStore.hooks";
-import {
-  resetSaveValueUpdate,
-  saveValueUpdate,
-  setIsDrawerOpen,
-  setTabIndex,
-} from "../../../store/modules/home";
+import { setIsDrawerOpen, setTabIndex } from "../../../store/modules/home";
 import {
   openAddTodoModal,
   setTodoDrawerPosition,
@@ -30,15 +25,15 @@ import ProjectSelectBtn from "./ProjectSelectBtn";
 import useTodos from "../../../hooks/useTodos";
 import { useTheme } from "styled-components";
 import { useProject } from "../../../hooks/useProject";
-import { setSelectedProjectId } from "../../../store/modules/project";
+import { setSelectedProjectId } from "../../../store/modules/project/project";
 import { useGetValuesArg } from "../../../hooks/useGetValuesArg";
 import { chartApi } from "../../../store/modules/chart";
 import { checkIsWithInCurrentCalcDay } from "../../../utils/checkIsSameLocalDay";
 
-const DateContainer = styled.View`
+export const DateContainer = styled.View`
   padding: ${spacing.small}px ${spacing.gutter}px 0;
 `;
-const ProjectsContainer = styled.View`
+export const Projects = styled.View`
   padding-left: ${spacing.gutter}px;
   border-bottom-width: 1px;
   border-bottom-color: ${({ theme }) => theme.textDimmer};
@@ -48,24 +43,16 @@ const ProjectsContainer = styled.View`
 
 const TodoContainer = () => {
   const theme = useTheme();
-  const { currentDateString } = useAppSelect((state) => state.calendar);
   const dispatch = useAppDispatch();
+  const { currentDateString } = useAppSelect((state) => state.calendar);
   const { projects, selectedProjectId } = useProject();
 
   const headerDate = dayjs(currentDateString).format("MM월 DD일");
-  const isHomeDrawerOpen = useAppSelect((state) => state.home.isDrawerOpen);
 
   const { DEFAULT_HEIGHT, OPEN_STATE } = useContext(ComponentHeightContext);
-  // final value
-  const [defaultValue, setDefaultValue] = useState(0);
-  const [openState, setOpenState] = useState(0);
 
-  useEffect(() => {
-    if (DEFAULT_HEIGHT !== defaultValue || OPEN_STATE !== openState) {
-      setDefaultValue(DEFAULT_HEIGHT);
-      setOpenState(OPEN_STATE);
-    }
-  }, [DEFAULT_HEIGHT, OPEN_STATE]);
+  const defaultValue = DEFAULT_HEIGHT;
+  const openState = OPEN_STATE;
 
   if (defaultValue !== 0 && openState !== 0) {
     return (
@@ -96,14 +83,14 @@ const TodoContainer = () => {
               type="entypo"
               name="circle-with-plus"
               size={28}
-              color={theme.name === "dark" ? theme.text : theme.textDimmer}
+              color={theme.text}
               onPress={() => {
                 dispatch(openAddTodoModal());
               }}
             />
           </FlexBox>
         </DateContainer>
-        <ProjectsContainer>
+        <Projects>
           <ProjectSelectBtn
             projectName={"전체"}
             selected={selectedProjectId === null}
@@ -117,7 +104,7 @@ const TodoContainer = () => {
               onPress={() => dispatch(setSelectedProjectId(project.project_id))}
             />
           ))}
-        </ProjectsContainer>
+        </Projects>
         <View
           style={{
             flex: 1,
