@@ -353,8 +353,6 @@ export const toggleTodoMutation = (builder: TodoApiBuilder) =>
           ? body.level * upValue
           : -body.level * downValue;
 
-        console.log("isHomeDrawerOpen", body.isHomeDrawerOpen);
-
         if (body.isHomeDrawerOpen === false) {
           patchUpdateGraphValue = dispatch(
             chartApi.util.updateQueryData(
