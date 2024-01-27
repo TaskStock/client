@@ -18,7 +18,6 @@ import TextWithRadio from "../../molecules/TextWithRadioBtn";
 import { ScrollView } from "react-native-gesture-handler";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import Margin from "../../atoms/Margin";
-import { setSelectedProjectId } from "../../../store/modules/project/project";
 
 export default function RetrospectContainer({
   selectedFilter,

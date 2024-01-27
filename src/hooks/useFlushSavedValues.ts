@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useAppDispatch, useAppSelect } from "../store/configureStore.hooks";
 import { useGetValuesArg } from "./useGetValuesArg";
 import { chartApi } from "../store/modules/chart";
-import { checkIsWithInCurrentCalcDay } from "../utils/checkIsSameLocalDay";
+import { checkValueWithinCurrentCalcDay } from "../utils/checkIsSameLocalDay";
 import { resetSaveValueUpdate } from "../store/modules/home";
 
 export const useFlushSavedValues = () => {
@@ -24,17 +24,26 @@ export const useFlushSavedValues = () => {
             endDate,
           },
           (draft) => {
-            if (!draft) return;
+            if (!draft) {
+              console.log("draft is null");
+              return;
+            }
 
             const values = draft.values;
 
-            if (values.length == 0) return;
+            if (values.length == 0) {
+              console.log("values is empty");
+              return;
+            }
 
             const index = values.findIndex((value) =>
-              checkIsWithInCurrentCalcDay(value.date)
+              checkValueWithinCurrentCalcDay(value.date)
             );
 
-            if (index == -1) return;
+            if (index == -1) {
+              console.log("flushedvalues index is -1");
+              return;
+            }
 
             const targetValue = values[index];
 

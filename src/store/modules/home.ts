@@ -1,8 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { chartApi } from "./chart";
-import { checkIsWithInCurrentCalcDay } from "../../utils/checkIsSameLocalDay";
-import { Value } from "../../@types/chart";
-import { DateString } from "../../@types/calendar";
 
 //drawer 혹은 tab을 통해 화면을 전환할 때 사용하는 state
 
