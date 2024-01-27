@@ -96,6 +96,8 @@ const GraphContainer = ({ myData }) => {
             value_month_ago: user.value_month_ago,
             nickname: user.user_name,
           }}
+          isLoading={loading}
+          error={error}
         />
         <IconContainer>
           <IconBox

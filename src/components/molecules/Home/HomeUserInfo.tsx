@@ -1,19 +1,24 @@
 import React from "react";
-import { View } from "react-native";
+import { Pressable, View } from "react-native";
 import { useTheme } from "styled-components";
 import { spacing } from "../../../constants/spacing";
 import numberWithCommas from "../../../utils/useNumberWithCommas";
 import FlexBox from "../../atoms/FlexBox";
 import Text from "../../atoms/Text";
+import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 
 const HomeUserInfo = ({
   data,
+  isLoading,
+  error,
 }: {
   data: {
     cumulative_value: number;
     value_month_ago: number;
     nickname: string;
   };
+  isLoading: boolean;
+  error: string | null;
 }) => {
   const theme = useTheme();
   const diff = data.cumulative_value - data.value_month_ago;
@@ -25,29 +30,55 @@ const HomeUserInfo = ({
 
   return (
     <FlexBox alignItems="flex-end">
-      <View>
-        <Text size="xl" weight="bold">
-          {data.nickname}님
-        </Text>
-        <Text size="xl" weight="bold">
-          {numberWithCommas(data.cumulative_value)}원
-        </Text>
-        <FlexBox
-          gap={spacing.padding / 2}
-          styles={{ paddingTop: spacing.small }}
-        >
-          <Text size="sm" weight="regular" color={theme.textDim}>
-            1개월 전보다
+      {isLoading || error ? (
+        <SkeletonPlaceholder>
+          <SkeletonPlaceholder.Item>
+            <SkeletonPlaceholder.Item
+              width={100}
+              height={22}
+              borderRadius={4}
+              marginBottom={4}
+            />
+            <SkeletonPlaceholder.Item
+              width={100}
+              height={22}
+              borderRadius={4}
+              marginBottom={4}
+            />
+            <SkeletonPlaceholder.Item
+              width={200}
+              height={20}
+              borderRadius={4}
+              marginBottom={4}
+            />
+          </SkeletonPlaceholder.Item>
+        </SkeletonPlaceholder>
+      ) : (
+        <View>
+          <Text size="xl" weight="bold">
+            {data.nickname}님
           </Text>
-          <Text
-            size="sm"
-            weight="regular"
-            color={diff > 0 ? theme.high : theme.low}
+
+          <Text size="xl" weight="bold">
+            {numberWithCommas(data.cumulative_value)}원
+          </Text>
+          <FlexBox
+            gap={spacing.padding / 2}
+            styles={{ paddingTop: spacing.small }}
           >
-            {numberWithCommas(diff)}원 ({renderDiffRate.toString()}%)
-          </Text>
-        </FlexBox>
-      </View>
+            <Text size="sm" weight="regular" color={theme.textDim}>
+              1개월 전보다
+            </Text>
+            <Text
+              size="sm"
+              weight="regular"
+              color={diff > 0 ? theme.high : theme.low}
+            >
+              {numberWithCommas(diff)}원 ({renderDiffRate.toString()}%)
+            </Text>
+          </FlexBox>
+        </View>
+      )}
     </FlexBox>
   );
 };

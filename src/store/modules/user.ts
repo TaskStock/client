@@ -54,7 +54,11 @@ const initialUserState: initialState = {
 const userSlice = createSlice({
   name: "user",
   initialState: initialUserState,
-  reducers: {},
+  reducers: {
+    updateUserValue: (state, action) => {
+      state.user.cumulative_value += action.payload;
+    },
+  },
 
   extraReducers: (builder) => {
     builder.addCase(getUserInfoThunk.pending, (state, action) => {
@@ -67,7 +71,6 @@ const userSlice = createSlice({
     builder.addCase(getUserInfoThunk.fulfilled, (state, action) => {
       state.loading = false;
       state.user = action.payload.userData;
-      // console.log(action.payload.userData);
     });
     builder.addCase(editUserInfoThunk.pending, (state, action) => {
       state.loading = true;
@@ -132,3 +135,4 @@ const userSlice = createSlice({
 });
 
 export default userSlice.reducer;
+export const { updateUserValue } = userSlice.actions;

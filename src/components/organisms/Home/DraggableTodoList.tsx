@@ -17,8 +17,49 @@ import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import useTodos from "../../../hooks/useTodos";
 import Text from "../../atoms/Text";
 import Margin from "../../atoms/Margin";
-import CenterLayout from "../../atoms/CenterLayout";
-import LoadingSpinner from "../../atoms/LoadingSpinner";
+import SkeletonPlaceholder from "react-native-skeleton-placeholder";
+import FlexBox from "../../atoms/FlexBox";
+import CheckBox from "../../atoms/CheckBox";
+import { useTheme } from "styled-components";
+
+const SkeletonTodoItem = () => {
+  const theme = useTheme();
+
+  const checkBoxSrc =
+    theme.name === "dark"
+      ? require("../../../../assets/icons/unchecked-dark.png")
+      : require("../../../../assets/icons/unchecked-light.png");
+
+  return (
+    <FlexBox
+      direction="row"
+      alignItems="center"
+      styles={{ paddingBottom: spacing.padding }}
+      gap={spacing.small}
+    >
+      <CheckBox src={checkBoxSrc} onPress={() => {}}></CheckBox>
+      <SkeletonPlaceholder>
+        <SkeletonPlaceholder.Item
+          width={250}
+          height={useResponsiveFontSize(17)}
+        />
+      </SkeletonPlaceholder>
+    </FlexBox>
+  );
+};
+
+const ListContainer = ({ children }) => {
+  return (
+    <View
+      style={{
+        paddingHorizontal: spacing.gutter,
+        paddingTop: useResponsiveFontSize(15),
+      }}
+    >
+      {children}
+    </View>
+  );
+};
 
 export default function DraggableTodoList({
   selectedProjectId,
@@ -122,45 +163,47 @@ export default function DraggableTodoList({
     );
   };
 
-  return !isLoading ? (
-    !isError ? (
-      todos && (
-        <View
-          style={{
-            paddingHorizontal: spacing.gutter,
-            paddingTop: useResponsiveFontSize(15),
-          }}
-        >
-          {selectedTodos.length === 0 ? (
-            <Text size="md">여기에는 투두가 없어요</Text>
-          ) : (
-            <DraggableFlatList
-              data={selectedTodos}
-              renderItem={({ item, getIndex, drag, isActive }) =>
-                renderTodoItem({ item, getIndex, drag, isActive })
-              }
-              keyExtractor={(item: Todo) => item.todo_id.toString()}
-              onDragEnd={onDragEnd}
-            ></DraggableFlatList>
-          )}
-        </View>
-      )
-    ) : (
-      <CenterLayout>
-        <Text size="md">할일을 불러오는 중 에러가 발생했어요</Text>
-        <Margin margin={5} />
-        <Pressable
-          onPress={() => {
-            refetch();
-          }}
-        >
-          <Text size="md">다시 로드하기</Text>
-        </Pressable>
-      </CenterLayout>
-    )
-  ) : (
-    <CenterLayout>
-      <LoadingSpinner />
-    </CenterLayout>
+  if (isLoading) {
+    return (
+      <ListContainer>
+        <SkeletonTodoItem />
+        <SkeletonTodoItem />
+      </ListContainer>
+    );
+  }
+
+  if (isError) {
+    return (
+      <ListContainer>
+        <FlexBox direction="column" alignItems="center">
+          <Text size="md">할일을 불러오는 중 에러가 발생했어요</Text>
+          <Margin margin={5} />
+          <Pressable
+            onPress={() => {
+              refetch();
+            }}
+          >
+            <Text size="md">다시 로드하기</Text>
+          </Pressable>
+        </FlexBox>
+      </ListContainer>
+    );
+  }
+
+  return (
+    <ListContainer>
+      {todos && selectedTodos.length === 0 ? (
+        <Text size="md">여기에는 투두가 없어요</Text>
+      ) : (
+        <DraggableFlatList
+          data={selectedTodos}
+          renderItem={({ item, getIndex, drag, isActive }) =>
+            renderTodoItem({ item, getIndex, drag, isActive })
+          }
+          keyExtractor={(item: Todo) => item.todo_id.toString()}
+          onDragEnd={onDragEnd}
+        ></DraggableFlatList>
+      )}
+    </ListContainer>
   );
 }
