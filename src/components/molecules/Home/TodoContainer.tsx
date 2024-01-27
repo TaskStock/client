@@ -13,16 +13,12 @@ import {
   setTodoDrawerPosition,
 } from "../../../store/modules/todo/todo";
 import { ComponentHeightContext } from "../../../utils/ComponentHeightContext";
-import CenterLayout from "../../atoms/CenterLayout";
 import FlexBox from "../../atoms/FlexBox";
 import Icons from "../../atoms/Icons";
-import LoadingSpinner from "../../atoms/LoadingSpinner";
-import Margin from "../../atoms/Margin";
 import Text from "../../atoms/Text";
 import DraggableTodoList from "../../organisms/Home/DraggableTodoList";
 import BottomDrawer from "./BottomDrawer";
 import ProjectSelectBtn from "./ProjectSelectBtn";
-import useTodos from "../../../hooks/useTodos";
 import { useTheme } from "styled-components";
 import { useProject } from "../../../hooks/useProject";
 import { setSelectedProjectId } from "../../../store/modules/project/project";

@@ -279,7 +279,7 @@ export default function AddTodoModal() {
                   >
                     <ValueSlider></ValueSlider>
                   </Section>
-                  <Section
+                  {/* <Section
                     header={
                       <Section.Header>
                         <Section.HeaderText systemTheme="dark">
@@ -388,7 +388,7 @@ export default function AddTodoModal() {
                         </FlexBox>
                       </Section.Header>
                     }
-                  ></Section>
+                  ></Section> */}
                   <Section
                     gapSize="lg"
                     header={
