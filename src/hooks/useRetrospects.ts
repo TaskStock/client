@@ -76,9 +76,6 @@ export const useProjectRetrospects = ({
   };
 
   React.useEffect(() => {
-    if (data) {
-      console.log(data);
-    }
     if (data && data.retrospects && data.retrospects.length > 0) {
       dispatch(addProjectRetrospectListItem(data.retrospects));
     }
