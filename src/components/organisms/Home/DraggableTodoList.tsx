@@ -131,8 +131,8 @@ export default function DraggableTodoList({
             paddingTop: useResponsiveFontSize(15),
           }}
         >
-          {currentDayTodos.length === 0 ? (
-            <Text size="md">해당되는 투두가 없어요</Text>
+          {selectedTodos.length === 0 ? (
+            <Text size="md">여기에는 투두가 없어요</Text>
           ) : (
             <DraggableFlatList
               data={selectedTodos}
