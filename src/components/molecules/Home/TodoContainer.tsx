@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import React, { memo, useContext, useEffect, useState } from "react";
-import { Pressable, View } from "react-native";
+import { Pressable, ScrollView, View } from "react-native";
 import styled from "styled-components/native";
 import { spacing } from "../../../constants/spacing";
 import {
@@ -87,21 +87,32 @@ const TodoContainer = () => {
             />
           </FlexBox>
         </DateContainer>
-        <Projects>
-          <ProjectSelectBtn
-            projectName={"전체"}
-            selected={selectedProjectId === null}
-            onPress={() => dispatch(setSelectedProjectId(null))}
-          />
-          {projects.map((project) => (
+        <ScrollView
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+          style={{
+            flexGrow: 0,
+          }}
+        >
+          <Projects>
             <ProjectSelectBtn
-              projectName={project.name}
-              key={project.project_id}
-              selected={selectedProjectId === project.project_id}
-              onPress={() => dispatch(setSelectedProjectId(project.project_id))}
+              projectName={"전체"}
+              selected={selectedProjectId === null}
+              onPress={() => dispatch(setSelectedProjectId(null))}
             />
-          ))}
-        </Projects>
+            {projects.map((project) => (
+              <ProjectSelectBtn
+                projectName={project.name}
+                key={project.project_id}
+                selected={selectedProjectId === project.project_id}
+                onPress={() =>
+                  dispatch(setSelectedProjectId(project.project_id))
+                }
+              />
+            ))}
+          </Projects>
+        </ScrollView>
+
         <View
           style={{
             flex: 1,
