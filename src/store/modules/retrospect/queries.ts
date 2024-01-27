@@ -5,6 +5,7 @@ import {
   addAllRetrospectListItem,
   addProjectRetrospectListItem,
   setAllRetrospectQueries,
+  setProjectRetrospectQueries,
 } from "./retrospect";
 
 type Builder = EndpointBuilder<
@@ -85,7 +86,7 @@ export const getAllProjectRetrospectQuery = (builder: Builder) =>
       try {
         if (offset === 0)
           dispatch(
-            setAllRetrospectQueries({
+            setProjectRetrospectQueries({
               list: [],
             })
           );
