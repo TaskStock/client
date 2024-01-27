@@ -1,6 +1,5 @@
-import { View, Pressable, Modal } from "react-native";
+import { View, Pressable } from "react-native";
 import React from "react";
-import CenterLayout from "../../atoms/CenterLayout";
 import FlexBox from "../../atoms/FlexBox";
 import { spacing } from "../../../constants/spacing";
 import { SearchBar } from "../../molecules/SearchBar";
@@ -13,8 +12,13 @@ import ContentLayout from "../../atoms/ContentLayout";
 import Text from "../../atoms/Text";
 import { Retrospect } from "../../../@types/retrospect";
 import { Project } from "../../../@types/project";
-import OutsidePressHandler from "react-native-outside-press";
 import _ from "lodash";
+import CenterModal from "../../molecules/CenterModal";
+import TextWithRadio from "../../molecules/TextWithRadioBtn";
+import { ScrollView } from "react-native-gesture-handler";
+import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
+import Margin from "../../atoms/Margin";
+import { setSelectedProjectId } from "../../../store/modules/project/project";
 
 export default function RetrospectContainer({
   selectedFilter,
@@ -55,6 +59,9 @@ export default function RetrospectContainer({
   const theme = useTheme();
 
   const [isProjectFilterOpen, setIsProjectFilterOpen] = React.useState(false);
+  const [selectedTempId, setSelectedTempId] = React.useState<number | null>(
+    null
+  );
   const selectedProjectName = _.find(projects, {
     project_id: selectedProjectId,
   })?.name;
@@ -104,44 +111,13 @@ export default function RetrospectContainer({
                     asset={ProjectFilterIcon}
                   ></WithLocalSvg>
                 </TextWithIcon>
-                {isProjectFilterOpen && (
-                  <Modal transparent>
-                    <OutsidePressHandler
-                      onOutsidePress={() => {
-                        setIsProjectFilterOpen(false);
-                      }}
-                      style={{
-                        position: "absolute",
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        bottom: 0,
-
-                        backgroundColor: "rgba(0,0,0,0.5)",
-                      }}
-                    >
-                      <CenterLayout>
-                        <Text size="md">프로젝트</Text>
-                        <View>
-                          {projects.map((project) => (
-                            <Pressable
-                              key={project.project_id + "project"}
-                              onPress={() => {
-                                onPressProjectItem(project.project_id);
-                                setIsProjectFilterOpen(false);
-                              }}
-                            >
-                              <Text size="md">{project.name}</Text>
-                            </Pressable>
-                          ))}
-                        </View>
-                      </CenterLayout>
-                    </OutsidePressHandler>
-                  </Modal>
-                )}
               </Pressable>
             ) : (
-              <Pressable onPress={onPressSelectedProjectFilter}>
+              <Pressable
+                onPress={() => {
+                  setIsProjectFilterOpen(true);
+                }}
+              >
                 <TextWithIcon
                   text={selectedProjectName || ""}
                   textColor={theme.palette.red}
@@ -154,6 +130,62 @@ export default function RetrospectContainer({
                 </TextWithIcon>
               </Pressable>
             ))}
+          {isProjectFilterOpen && (
+            <CenterModal
+              onPressOutside={() => {
+                setIsProjectFilterOpen(false);
+              }}
+            >
+              <ScrollView
+                style={{
+                  height: useResponsiveFontSize(200),
+                }}
+              >
+                <TextWithRadio
+                  value={"전체"}
+                  id={null}
+                  selectedId={selectedTempId}
+                  onPressRadio={() => {
+                    setSelectedTempId(null);
+                  }}
+                ></TextWithRadio>
+                {projects.map((project) => (
+                  <TextWithRadio
+                    key={project.project_id + "project"}
+                    id={project.project_id}
+                    selectedId={selectedTempId}
+                    value={project.name}
+                    onPressRadio={() => {
+                      setSelectedTempId(project.project_id);
+                    }}
+                  ></TextWithRadio>
+                ))}
+              </ScrollView>
+              <Margin margin={spacing.offset}></Margin>
+              <FlexBox
+                justifyContent="flex-end"
+                styles={{
+                  paddingHorizontal: spacing.offset,
+                }}
+              >
+                <Pressable
+                  onPress={() => {
+                    setIsProjectFilterOpen(false);
+
+                    if (!selectedTempId) {
+                      onPressSelectedProjectFilter?.();
+                    } else {
+                      onPressProjectItem(selectedTempId);
+                    }
+                  }}
+                >
+                  <Text weight={"medium"} size="md" color={theme.text}>
+                    확인
+                  </Text>
+                </Pressable>
+              </FlexBox>
+            </CenterModal>
+          )}
         </FlexBox>
         <RetrospectList
           onScrollBottom={onScrollListBottom}

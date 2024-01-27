@@ -76,10 +76,9 @@ export const getAllProjectRetrospectQuery = (builder: Builder) =>
     }
   >({
     query: ({ project_id, offset, filter, searchKeyword, limit }) => ({
-      url: `/retrospect/project/${project_id}?offset=${offset}&limit=${limit}
-        ${filter ? `&filter=${filter}` : ""}${
-        searchKeyword ? `&search=${searchKeyword}` : ""
-      }
+      url: `/retrospect/project/${project_id}?offset=${offset}&limit=${limit}${
+        filter ? `&filter=${filter}` : ""
+      }${searchKeyword ? `&search=${searchKeyword}` : ""}
       `,
     }),
     providesTags: ["projectRetrospect"],

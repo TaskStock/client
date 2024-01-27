@@ -140,12 +140,17 @@ export const useRetrospects = () => {
     dispatch(
       setAllRetrospectQueries({
         selectedProjectId: undefined,
-        offset: 0,
-        searchKeyword: "",
-        selectedFilter: "latest",
-        list: [],
       })
     );
+    // dispatch(
+    //   setAllRetrospectQueries({
+    //     selectedProjectId: undefined,
+    //     offset: 0,
+    //     searchKeyword: "",
+    //     selectedFilter: "latest",
+    //     list: [],
+    //   })
+    // );
   };
 
   const onScrollListBottom = () => {
