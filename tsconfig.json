@@ -2,7 +2,8 @@
   "compilerOptions": {
     "types": ["@types/styled-components"],
     "strictNullChecks": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "jsx": "react-native"
   },
   "extends": "expo/tsconfig.base"
 }

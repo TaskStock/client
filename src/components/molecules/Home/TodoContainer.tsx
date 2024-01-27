@@ -78,7 +78,11 @@ const TodoContainer = () => {
               size={28}
               color={theme.text}
               onPress={() => {
-                dispatch(openAddTodoModal());
+                dispatch(
+                  openAddTodoModal({
+                    project_id: selectedProjectId,
+                  })
+                );
               }}
             />
           </FlexBox>

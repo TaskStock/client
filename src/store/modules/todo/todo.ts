@@ -78,13 +78,18 @@ const todoSlice = createSlice({
         repeat_end_date: null,
       };
     },
-    openAddTodoModal(state) {
+    openAddTodoModal(
+      state,
+      action: PayloadAction<{
+        project_id: number | null;
+      }>
+    ) {
       state.isAddModalOpen = true;
       state.addTodoForm = {
         todo_id: null,
         content: "",
         level: 0,
-        project_id: null,
+        project_id: action.payload.project_id || null,
         repeat_day: "0000000",
         repeat_end_date: null,
       };
