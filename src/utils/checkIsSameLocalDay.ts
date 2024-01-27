@@ -87,13 +87,13 @@ function checkValueWithinCurrentCalcDay(utcString: string) {
 // 1월 23일 변경으로 이제, value_date는 정산시간으로 들어옴.
 // todo_date는 todo 생성시간으로 들어옴.
 function checkIsWithInOneDay(value_date: string, todo_date: string) {
-  const dateA = dayjs.utc(value_date);
-  const dateB = dayjs.utc(todo_date);
+  const dateA = dayjs(value_date).subtract(1, "day");
+  const dateB = dayjs(todo_date);
 
   // Calculate the difference in hours between inputA and inputB
   // const hoursDifference = Math.abs(dateA.diff(dateB, "hour"));
 
-  const hoursDifference = dateA.diff(dateB, "hour");
+  const hoursDifference = dateB.diff(dateA, "hour");
 
   // Check if the difference is within 24 hours
   return hoursDifference <= 24 && hoursDifference >= 0;

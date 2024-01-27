@@ -18,6 +18,7 @@ import { updateCalendarItemTodoCountValue } from "../calendar";
 import { saveValueUpdate, savedValueUpdate } from "../home";
 import { projectApi } from "../project/project";
 import { Project } from "../../../@types/project";
+import { updateUserValue } from "../user";
 
 const upValue = 1000;
 const downValue = 1000;
@@ -235,7 +236,6 @@ export const editTodoMutation = (builder: TodoApiBuilder) =>
           console.log("original level is undefined");
           return;
         }
-
         const diffLevel = body.form.level - body.original_level;
 
         if (body.isHomeDrawerOpen === false) {
@@ -302,6 +302,16 @@ export const editTodoMutation = (builder: TodoApiBuilder) =>
 
       try {
         const result = await queryFulfilled;
+
+        if (body.todo_date && checkIsWithInCurrentCalcDay(body.todo_date)) {
+          if (body.original_level === undefined) return;
+
+          if (body.todo_checked == true) {
+            const diffLevel = body.form.level - body.original_level;
+            const updateValue = diffLevel * upValue;
+            dispatch(updateUserValue(updateValue));
+          }
+        }
       } catch (error) {
         console.log(error);
         patchUpdateTodo.undo();
@@ -395,6 +405,13 @@ export const toggleTodoMutation = (builder: TodoApiBuilder) =>
 
       try {
         const result = await queryFulfilled;
+        if (checkIsWithInCurrentCalcDay(body.todo_date)) {
+          dispatch(
+            updateUserValue(
+              body.check ? body.level * upValue : -body.level * downValue
+            )
+          );
+        }
       } catch (error) {
         console.log(error);
         patchResult.undo();
@@ -525,6 +542,9 @@ export const deleteTodoMutation = (builder: TodoApiBuilder) =>
 
       try {
         await queryFulfilled;
+        if (checkIsWithInCurrentCalcDay(body.todo_date) && body.checked) {
+          dispatch(updateUserValue(-body.value));
+        }
       } catch (error) {
         console.log(error);
         patchResult.undo();

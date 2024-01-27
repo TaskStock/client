@@ -59,7 +59,6 @@ const userSlice = createSlice({
       state.user.cumulative_value += action.payload;
     },
   },
-
   extraReducers: (builder) => {
     builder.addCase(getUserInfoThunk.pending, (state, action) => {
       state.loading = true;
