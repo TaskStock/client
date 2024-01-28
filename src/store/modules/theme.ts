@@ -7,11 +7,11 @@ export const startingTheme = createAsyncThunk(
   async () => {
     const pickedTheme = await getData("theme");
     if (pickedTheme === null) {
-      // console.log("시스템 테마 가져옴");
+      console.log("시스템 테마 가져옴");
 
       return Appearance.getColorScheme() === "dark" ? "dark" : "gray";
     } else {
-      // console.log("설정 테마: ", pickedTheme);
+      console.log("설정 테마: ", pickedTheme);
       // console.log(
       //   "시스템 테마: ",
       //   Appearance.getColorScheme() === "dark" ? "dark" : "gray"

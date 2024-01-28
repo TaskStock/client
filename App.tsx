@@ -48,6 +48,7 @@ export default function App() {
   //   removeData("refreshToken");
   //   removeData("accessExp");
   //   removeData("refreshExp");
+  //   removeData("deviceId");
   // }, []);
 
   // const [assets] = useAssets([require("./assets/splash.png")]);

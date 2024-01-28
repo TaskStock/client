@@ -7,6 +7,7 @@ import {
   registerWithEmail,
 } from "../../utils/authUtils/signInUtils";
 import { checkAndRenewTokens } from "../../utils/authUtils/tokenUtils";
+import store from "../configureStore";
 
 interface IInitialUserState {
   accessToken: string;
@@ -98,6 +99,25 @@ const authSlice = createSlice({
 
         console.log("로그인 성공: ");
       }
+    },
+    setSocialLoggedIn: (state, action) => {
+      state.accessToken = action.payload.accessToken;
+      state.accessExp = action.payload.accessExp;
+      state.refreshExp = action.payload.refreshExp;
+      state.isLoggedIn = true;
+      state.loading = false;
+      state.error = false;
+      state.deviceId = action.payload.deviceId;
+      state.strategy = action.payload.strategy;
+
+      storeData("accessToken", action.payload.accessToken);
+      storeData("refreshToken", action.payload.refreshToken);
+      storeData("accessExp", action.payload.accessExp);
+      storeData("refreshExp", action.payload.refreshExp);
+      storeData("deviceId", action.payload.deviceId);
+      storeData("strategy", action.payload.strategy);
+
+      console.log("소셜로그인 성공");
     },
   },
   extraReducers: (builder) => {
@@ -237,6 +257,7 @@ const authSlice = createSlice({
   },
 });
 
-export const { setAccessToken, setLoggedIn } = authSlice.actions;
+export const { setAccessToken, setLoggedIn, setSocialLoggedIn } =
+  authSlice.actions;
 
 export const authReducer = authSlice.reducer;
