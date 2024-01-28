@@ -10,11 +10,12 @@ import SocialBtn from "../../components/molecules/Login/SocialBtn";
 import { spacing } from "../../constants/spacing";
 import { useAppDispatch, useAppSelect } from "../../store/configureStore.hooks";
 import { checkStorage } from "../../utils/asyncStorage";
-import { onGoogleButtonPress } from "../../utils/authUtils/socialSignIn";
+import { onGoogleButtonPress } from "../../utils/authUtils/googleSignIn";
 import { client } from "../../services/api";
 import { startingTheme } from "../../store/modules/theme";
 import { getDeviceId } from "react-native-device-info";
 import { setSocialLoggedIn } from "../../store/modules/auth";
+import { onKakaoButtonPress } from "../../utils/authUtils/kakaoSignIn";
 
 const Login = styled.View`
   gap: ${spacing.padding}px;
@@ -57,6 +58,14 @@ const WelcomeScreen = ({ navigation }) => {
       console.log("구글로그인 실패", e);
     }
   };
+  const handleKakaoLogin = async () => {
+    try {
+      const response = await onKakaoButtonPress();
+      console.log("카카오 프로필: ", response);
+    } catch (e) {
+      console.log("카카오로그인 실패", e);
+    }
+  };
   const theme = useTheme();
 
   return (
@@ -69,7 +78,7 @@ const WelcomeScreen = ({ navigation }) => {
         />
         <SocialBtn
           type="kakao"
-          onPress={() => {}}
+          onPress={handleKakaoLogin}
           recentlyLoggiedIn={strategy === "kakao"}
         />
         {Platform.OS === "ios" && (
