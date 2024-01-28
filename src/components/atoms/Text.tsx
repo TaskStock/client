@@ -52,7 +52,7 @@ interface TextProps {
 
 const Text: React.FC<TextProps> = ({
   children,
-  size,
+  size = "md",
   weight = "regular",
   color = "#000",
   styles,

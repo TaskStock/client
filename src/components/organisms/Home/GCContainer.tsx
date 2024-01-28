@@ -7,19 +7,20 @@ import {
   TabView,
 } from "react-native-tab-view";
 import { ComponentHeightContext } from "../../../utils/ComponentHeightContext";
-import CalendarContainer from "./CalendarContainer";
-import GraphContainer from "./GraphContainer";
-import HomeTabHeader from "./HomeTabHeader";
+import HomeCalendar from "./HomeCalendar";
+import HomeGraph from "./HomeGraph";
+import TabHeader from "../../molecules/TabHeader";
 import {
   useAppDispatch,
   useAppSelect,
 } from "../../../store/configureStore.hooks";
 import { setTabIndex } from "../../../store/modules/home";
+import { useResizeLayoutOnFocus } from "../../../hooks/useResizeLayoutOnFocus";
 
-const FirstRoute = () => <GraphContainer myData={[]} />;
+const FirstRoute = () => <HomeGraph myData={[]} />;
 
 const SecondRoute = () => {
-  return <CalendarContainer />;
+  return <HomeCalendar />;
 };
 
 const renderScene = SceneMap({
@@ -27,20 +28,9 @@ const renderScene = SceneMap({
   second: SecondRoute,
 });
 
-const renderTabBar = (
-  props: SceneRendererProps & {
-    navigationState: NavigationState<{
-      key: string;
-      title: string;
-    }>;
-  }
-) => {
-  return <HomeTabHeader props={props} />;
-};
-
 const clientHeight = Dimensions.get("window").height;
 
-const GCContainer = ({ myData }) => {
+const GCContainer = () => {
   const layout = useWindowDimensions();
   const dispatch = useAppDispatch();
   const index = useAppSelect((state) => state.home.tabIndex);
@@ -54,12 +44,33 @@ const GCContainer = ({ myData }) => {
     dispatch(setTabIndex(index));
   };
 
+  const renderTabBar = (
+    props: SceneRendererProps & {
+      navigationState: NavigationState<{
+        key: string;
+        title: string;
+      }>;
+    }
+  ) => {
+    return (
+      <TabHeader
+        onPressTab={(index) => {
+          dispatch(setTabIndex(index));
+        }}
+        props={props}
+      />
+    );
+  };
+
   const { setContentsHeight } = useContext(ComponentHeightContext);
+
+  const onLayout = useResizeLayoutOnFocus({
+    resizeFunction: setContentsHeight,
+  });
+
   return (
     <View
-      onLayout={(e) => {
-        setContentsHeight(e.nativeEvent.layout.height);
-      }}
+      onLayout={onLayout}
       style={{
         height: clientHeight * 0.48,
       }}

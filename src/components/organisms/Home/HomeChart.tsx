@@ -2,18 +2,18 @@ import React, { memo, useContext, useEffect, useState } from "react";
 
 import { Animated, Pressable } from "react-native";
 import styled, { ThemeContext } from "styled-components/native";
-import { Value } from "../../@types/chart";
-import FlexBox from "../atoms/FlexBox";
-import LoadingSpinner from "../atoms/LoadingSpinner";
-import Text from "../atoms/Text";
-import CandleStickValueChart from "./CandleStickValueChart";
-import LineValueChart from "./LineValueChart";
-import { createMockData } from "../../utils/createMockData";
-import CenterLayout from "../atoms/CenterLayout";
+import { Value } from "../../../@types/chart";
+import FlexBox from "../../atoms/FlexBox";
+import LoadingSpinner from "../../atoms/LoadingSpinner";
+import Text from "../../atoms/Text";
+import CandleStickValueChart from "../../molecules/CandleStickValueChart";
+import LineValueChart from "../../molecules/LineValueChart";
+import { createMockData } from "../../../utils/createMockData";
+import CenterLayout from "../../atoms/CenterLayout";
 import dayjs from "dayjs";
-import { useAppSelect } from "../../store/configureStore.hooks";
-import useValue from "../../hooks/useValue";
-import WagmeChart from "./WagmiChart";
+import { useAppSelect } from "../../../store/configureStore.hooks";
+import useValue from "../../../hooks/useValue";
+import WagmiChart from "../../molecules/WagmiChart";
 
 const Container = styled.View`
   width: 100%;
@@ -217,7 +217,7 @@ function HomeChart({ isCandleStick }: { isCandleStick: boolean }) {
         {containerSize && !isLoading ? (
           !error ? (
             isCandleStick ? (
-              <WagmeChart></WagmeChart>
+              <WagmiChart></WagmiChart>
             ) : (
               // <CandleStickValueChart
               //   height={containerSize.height}

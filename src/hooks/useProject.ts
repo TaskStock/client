@@ -3,7 +3,7 @@ import { useAppSelect } from "../store/configureStore.hooks";
 import {
   useAddProjectMutation,
   useGetAllProjectsQuery,
-} from "../store/modules/project";
+} from "../store/modules/project/project";
 
 export const useProject = () => {
   const { data } = useGetAllProjectsQuery();
@@ -11,6 +11,13 @@ export const useProject = () => {
   const { selectedProjectId } = useAppSelect((state) => state.project);
 
   const projects = data?.projects || [];
+
+  const findProjectNameById = (project_id: number) => {
+    const project = projects.find(
+      (project) => project.project_id === project_id
+    );
+    return project?.name;
+  };
 
   const [isAddProject, setIsAddProject] = React.useState(false);
   const [newProjectInput, setNewProjectInput] = React.useState("");
@@ -25,7 +32,7 @@ export const useProject = () => {
     if (newProjectInput.length > 0) {
       setIsAddProject(false);
 
-      addProject({ name: newProjectInput, ispublic: false });
+      addProject({ name: newProjectInput, public_range: "all" });
     }
   };
 
@@ -34,6 +41,7 @@ export const useProject = () => {
     selectedProjectId,
     isAddProject,
     setIsAddProject,
+    findProjectNameById,
     newProjectInput,
     setNewProjectInput,
     onChangeNewProjectName,

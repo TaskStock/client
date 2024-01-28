@@ -226,6 +226,7 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
     deleteTodo({
       todo_id: todo.todo_id,
       todo_date: todo.date,
+      project_id: todo.project_id,
       isHomeDrawerOpen: ishomeDrawerOpen,
       value: todo.level * 1000,
       checked: todo.check,

@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/core";
-import React from "react";
+import React, { useContext } from "react";
 import { useTheme } from "styled-components";
 import styled from "styled-components/native";
 import { spacing } from "../../constants/spacing";
@@ -7,6 +7,8 @@ import useHeight from "../../hooks/useHeight";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
 import Icons from "../atoms/Icons";
 import Text from "../atoms/Text";
+import { ComponentHeightContext } from "../../utils/ComponentHeightContext";
+import { useResizeLayoutOnFocus } from "../../hooks/useResizeLayoutOnFocus";
 
 const Container = styled.View<{ notchTop: number }>`
   padding: ${(props) => props.notchTop + spacing.padding}px ${spacing.offset}px
@@ -48,9 +50,14 @@ const PageHeader = ({
       }}
     />
   );
+  const { setHeaderHeight } = useContext(ComponentHeightContext);
+
+  const onLayout = useResizeLayoutOnFocus({
+    resizeFunction: setHeaderHeight,
+  });
 
   return (
-    <Container notchTop={NOTCH_TOP}>
+    <Container notchTop={NOTCH_TOP} onLayout={onLayout}>
       {headerLeftShown ? <HeaderLeft /> : <Blank />}
       {title && (
         <Title>

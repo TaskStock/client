@@ -6,8 +6,8 @@ import {
   CandlestickChartCrosshair,
   CandlestickChartCrosshairTooltip,
   CandlestickChartProvider,
-} from "./WagmiChart/candle";
-import { CandlestickChart } from "./WagmiChart/candle/Chart";
+} from "../organisms/WagmiChart/candle";
+import { CandlestickChart } from "../organisms/WagmiChart/candle/Chart";
 
 const mockData = [
   {

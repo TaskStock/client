@@ -16,93 +16,95 @@ import { useGetAllTodosQueryDate } from "./queries";
 import dayjs from "dayjs";
 import { updateCalendarItemTodoCountValue } from "../calendar";
 import { saveValueUpdate, savedValueUpdate } from "../home";
+import { projectApi } from "../project/project";
+import { Project } from "../../../@types/project";
 
 const upValue = 1000;
 const downValue = 1000;
 
-export const addSimpleTodoMutation = (builder: TodoApiBuilder) =>
-  builder.mutation<
-    {
-      todo_id: number;
-    },
-    {
-      content: string;
-      add_date: string;
-      queryArgs: {
-        date: useGetAllTodosQueryDate;
-      };
-    }
-  >({
-    query: (body) => {
-      const simpleTodoForm: AddTodoForm = {
-        todo_id: null,
-        content: body.content,
-        level: 0,
-        project_id: null,
-        repeat_day: "0000000",
-        repeat_end_date: null,
-      };
+// export const addSimpleTodoMutation = (builder: TodoApiBuilder) =>
+//   builder.mutation<
+//     {
+//       todo_id: number;
+//     },
+//     {
+//       content: string;
+//       add_date: string;
+//       queryArgs: {
+//         date: useGetAllTodosQueryDate;
+//       };
+//     }
+//   >({
+//     query: (body) => {
+//       const simpleTodoForm: AddTodoForm = {
+//         todo_id: null,
+//         content: body.content,
+//         level: 0,
+//         project_id: null,
+//         repeat_day: "0000000",
+//         repeat_end_date: null,
+//       };
 
-      return {
-        url: "/todo/new",
-        method: "POST",
-        body: { ...simpleTodoForm, nowUTC: body.add_date },
-      };
-    },
+//       return {
+//         url: "/todo/new",
+//         method: "POST",
+//         body: { ...simpleTodoForm, nowUTC: body.add_date },
+//       };
+//     },
 
-    async onQueryStarted(body, { dispatch, queryFulfilled }) {
-      const temp_todo_id = Math.random();
+//     async onQueryStarted(body, { dispatch, queryFulfilled }) {
+//       const temp_todo_id = Math.random();
 
-      const todo_replica: Todo = {
-        content: body.content,
-        todo_id: temp_todo_id,
-        check: false,
-        date: body.add_date,
-        index: 0,
-        project_id: null,
-        level: 0,
-        repeat_day: "0000000",
-        repeat_end_date: null,
-      };
+//       const todo_replica: Todo = {
+//         content: body.content,
+//         todo_id: temp_todo_id,
+//         check: false,
+//         date: body.add_date,
+//         index: 0,
+//         project_id: null,
+//         level: 0,
+//         repeat_day: "0000000",
+//         repeat_end_date: null,
+//       };
 
-      const patchAddTodo = dispatch(
-        todoApi.util.updateQueryData(
-          "getAllTodos",
-          { date: body.queryArgs.date },
-          (draft: { todos: Todo[] }) => {
-            draft.todos.push(todo_replica);
-          }
-        )
-      );
+//       const patchAddTodo = dispatch(
+//         todoApi.util.updateQueryData(
+//           "getAllTodos",
+//           { date: body.queryArgs.date },
+//           (draft: { todos: Todo[] }) => {
+//             draft.todos.push(todo_replica);
+//           }
+//         )
+//       );
 
-      try {
-        const result = await queryFulfilled;
+//       try {
+//         const result = await queryFulfilled;
 
-        const todo_id = result.data.todo_id;
+//         const todo_id = result.data.todo_id;
 
-        // 임시 아이디를 실제 아이디로 바꿔준다.
-        dispatch(
-          todoApi.util.updateQueryData(
-            "getAllTodos",
-            { date: body.queryArgs.date },
-            (draft: { todos: Todo[] }) => {
-              const todoIndex = draft.todos.findIndex(
-                (todo) => todo.todo_id === temp_todo_id
-              );
-              if (todoIndex === -1) return;
-              draft.todos[todoIndex].todo_id = todo_id;
-              // draft.todos[todoIndex].index = index;
-            }
-          )
-        );
+//         // 임시 아이디를 실제 아이디로 바꿔준다.
+//         dispatch(
+//           todoApi.util.updateQueryData(
+//             "getAllTodos",
+//             { date: body.queryArgs.date },
+//             (draft: { todos: Todo[] }) => {
+//               const todoIndex = draft.todos.findIndex(
+//                 (todo) => todo.todo_id === temp_todo_id
+//               );
+//               if (todoIndex === -1) return;
+//               draft.todos[todoIndex].todo_id = todo_id;
+//               // draft.todos[todoIndex].index = index;
+//             }
+//           )
+//         );
 
-        // index랑 date의 경우.
-      } catch (error) {
-        console.log(error);
-        patchAddTodo.undo();
-      }
-    },
-  });
+//         // index랑 date의 경우.
+//       } catch (error) {
+//         console.log(error);
+//         patchAddTodo.undo();
+//       }
+//     },
+//   });
 
 export const addTodoMutation = (builder: TodoApiBuilder) =>
   builder.mutation<
@@ -155,6 +157,7 @@ export const addTodoMutation = (builder: TodoApiBuilder) =>
       let patchUpdateHighLowValue;
       let patchSaveValueUpdate;
       let patchUpdateCalendarItemTodoCount;
+      let patchUpdateProjectTodoCount;
 
       if (checkIsWithInCurrentCalcDay(body.add_date)) {
         if (body.isHomeDrawerOpen === false) {
@@ -204,6 +207,23 @@ export const addTodoMutation = (builder: TodoApiBuilder) =>
         updateCalendarItemTodoCountValue({ date: body.add_date, value: 1 })
       );
 
+      if (body.form.project_id !== null)
+        patchUpdateProjectTodoCount = dispatch(
+          projectApi.util.updateQueryData(
+            "getAllProjects",
+            undefined,
+            (draft: { projects: Project[] }) => {
+              const index = draft.projects.findIndex(
+                (project) => project.project_id === body.form.project_id
+              );
+
+              if (index === -1) return;
+
+              draft.projects[index].todo_count += 1;
+            }
+          )
+        );
+
       try {
         const result = await queryFulfilled;
         const { todo_id, index } = result.data;
@@ -229,7 +249,9 @@ export const addTodoMutation = (builder: TodoApiBuilder) =>
         patchAddTodo.undo();
         if (patchUpdateHighLowValue) patchUpdateHighLowValue.undo();
         if (patchSaveValueUpdate) patchSaveValueUpdate.undo();
-        patchUpdateCalendarItemTodoCount.undo();
+        if (patchUpdateCalendarItemTodoCount)
+          patchUpdateCalendarItemTodoCount.undo();
+        if (patchUpdateProjectTodoCount) patchUpdateProjectTodoCount.undo();
       }
     },
 
@@ -475,6 +497,7 @@ export const deleteTodoMutation = (builder: TodoApiBuilder) =>
       todo_date: IsoString;
       value: number;
       checked: boolean;
+      project_id: number | null;
       isHomeDrawerOpen: boolean;
       queryArgs: {
         date: useGetAllTodosQueryDate;
@@ -506,6 +529,8 @@ export const deleteTodoMutation = (builder: TodoApiBuilder) =>
       );
 
       let patchUpdateGraphEndValue;
+      let patchUpdateProjectTodoCount;
+      let patchUpdateCalendarItemTodoCount;
 
       if (checkIsWithInCurrentCalcDay(body.todo_date)) {
         if (body.isHomeDrawerOpen === false) {
@@ -563,9 +588,26 @@ export const deleteTodoMutation = (builder: TodoApiBuilder) =>
         }
       }
 
-      dispatch(
+      patchUpdateCalendarItemTodoCount = dispatch(
         updateCalendarItemTodoCountValue({ date: body.todo_date, value: -1 })
       );
+
+      if (body.project_id !== null)
+        patchUpdateProjectTodoCount = dispatch(
+          projectApi.util.updateQueryData(
+            "getAllProjects",
+            undefined,
+            (draft: { projects: Project[] }) => {
+              const index = draft.projects.findIndex(
+                (project) => project.project_id === body.project_id
+              );
+
+              if (index === -1) return;
+
+              draft.projects[index].todo_count -= 1;
+            }
+          )
+        );
 
       try {
         await queryFulfilled;
@@ -573,6 +615,9 @@ export const deleteTodoMutation = (builder: TodoApiBuilder) =>
         console.log(error);
         patchResult.undo();
         if (patchUpdateGraphEndValue) patchUpdateGraphEndValue.undo();
+        if (patchUpdateProjectTodoCount) patchUpdateProjectTodoCount.undo();
+        if (patchUpdateCalendarItemTodoCount)
+          patchUpdateCalendarItemTodoCount.undo();
       }
     },
   });
@@ -702,7 +747,7 @@ export const changeToNextDayTodoMutation = (builder: TodoApiBuilder) =>
 
             const nextDate = dayjs(body.todo_date).add(1, "day");
 
-            draft.todos[index].date = nextDate.toISOString();
+            draft.todos[index].date = nextDate.toISOString() as IsoString;
           }
         )
       );

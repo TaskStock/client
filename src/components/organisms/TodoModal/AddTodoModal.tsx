@@ -34,6 +34,7 @@ import { getNewRepeatDay } from "../../../utils/getNewRepeatDay";
 import { IsoString } from "../../../@types/calendar";
 import useTodos from "../../../hooks/useTodos";
 import useValue from "../../../hooks/useValue";
+import Section from "../../molecules/Section";
 
 const AddTodoOverlay = styled.Pressable`
   position: absolute;
@@ -89,21 +90,7 @@ const CloseBox = styled.View`
   align-items: flex-end;
 `;
 
-const SectionHeader = styled.View`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 7px;
-  z-index: 2;
-`;
-
-const SectionHeaderText = styled.Text<{ systemTheme?: string }>`
-  font-size: ${useResponsiveFontSize(18)}px;
-  color: ${({ theme, systemTheme }) =>
-    systemTheme === "dark" ? theme.textDimReverse : theme.textDim};
-`;
-
-const ValueText = styled(SectionHeaderText)`
+const ValueText = styled(Section.HeaderText)`
   color: ${({ theme }) => theme.palette.red};
 `;
 
@@ -139,26 +126,6 @@ const DatePickerBox = styled.Pressable`
   border-color: ${({ theme }) => theme.text};
   padding: 6px 4px;
 `;
-
-const Section = ({
-  header,
-  children,
-  gapSize = "md",
-}: {
-  header: React.ReactNode;
-  children?: React.ReactNode;
-  gapSize?: "md" | "lg" | "xl";
-}) => {
-  const margin = gapSize === "md" ? 5 : gapSize === "lg" ? 10 : 15;
-
-  return (
-    <View>
-      {header}
-      <Margin margin={margin}></Margin>
-      {children}
-    </View>
-  );
-};
 
 const dayList = ["월", "화", "수", "목", "금", "토", "일"];
 
@@ -279,11 +246,11 @@ export default function AddTodoModal() {
                 <AddTodoContents>
                   <Section
                     header={
-                      <SectionHeader>
-                        <SectionHeaderText systemTheme="dark">
+                      <Section.Header>
+                        <Section.HeaderText systemTheme="dark">
                           할 일
-                        </SectionHeaderText>
-                      </SectionHeader>
+                        </Section.HeaderText>
+                      </Section.Header>
                     }
                   >
                     <TodoInput
@@ -302,18 +269,22 @@ export default function AddTodoModal() {
                   </Section>
                   <Section
                     header={
-                      <SectionHeader>
-                        <SectionHeaderText>가치</SectionHeaderText>
+                      <Section.Header>
+                        <Section.HeaderText systemTheme="dark">
+                          가치
+                        </Section.HeaderText>
                         <ValueText>{value}원</ValueText>
-                      </SectionHeader>
+                      </Section.Header>
                     }
                   >
                     <ValueSlider></ValueSlider>
                   </Section>
                   <Section
                     header={
-                      <SectionHeader>
-                        <SectionHeaderText>반복</SectionHeaderText>
+                      <Section.Header>
+                        <Section.HeaderText systemTheme="dark">
+                          반복
+                        </Section.HeaderText>
                         {dayList.map((item) => {
                           const isSelected =
                             addTodoForm.repeat_day &&
@@ -322,7 +293,7 @@ export default function AddTodoModal() {
                           if (isSelected)
                             return <ValueText key={item}>{item}</ValueText>;
                         })}
-                      </SectionHeader>
+                      </Section.Header>
                     }
                     gapSize="lg"
                   >
@@ -373,7 +344,7 @@ export default function AddTodoModal() {
                   </Section>
                   <Section
                     header={
-                      <SectionHeader>
+                      <Section.Header>
                         <FlexBox
                           justifyContent="space-between"
                           alignItems="center"
@@ -387,7 +358,7 @@ export default function AddTodoModal() {
                             alignItems="center"
                             gap={10}
                           >
-                            <SectionHeaderText>반복 종료</SectionHeaderText>
+                            <Section.HeaderText>반복 종료</Section.HeaderText>
                             <Switch
                               onValueChange={toggleIsEndRepeat}
                               value={isRepeatDateModalOpen}
@@ -415,15 +386,15 @@ export default function AddTodoModal() {
                             </DatePickerBox>
                           )}
                         </FlexBox>
-                      </SectionHeader>
+                      </Section.Header>
                     }
                   ></Section>
                   <Section
                     gapSize="lg"
                     header={
-                      <SectionHeader>
-                        <SectionHeaderText>프로젝트</SectionHeaderText>
-                      </SectionHeader>
+                      <Section.Header>
+                        <Section.HeaderText>프로젝트</Section.HeaderText>
+                      </Section.Header>
                     }
                   >
                     <ProjectItemList

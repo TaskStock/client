@@ -48,6 +48,7 @@ export const grayTheme = {
   alert: palette.alert_red,
   loadingBtn: palette.neutral500_gray,
   emailLoginBtn: palette.neutral500_dark,
+  projectIconBg: palette.neutral500_dark,
 };
 
 export const darkTheme = {
@@ -71,4 +72,5 @@ export const darkTheme = {
   alert: palette.red,
   loadingBtn: palette.neutral400_dark,
   emailLoginBtn: palette.neutral200_dark,
+  projectIconBg: palette.neutral500_dark,
 };

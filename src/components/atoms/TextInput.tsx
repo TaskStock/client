@@ -10,9 +10,16 @@ interface ITextInput extends TextInputProps {
   placeholder: string;
   alert?: boolean;
   alertText?: any;
+  numberOfLines?: number;
+  minHeight?: number;
 }
 
-const Container = styled.Pressable<{ alert: boolean; onPress: () => void }>`
+const Container = styled.Pressable<{
+  alert: boolean;
+  onPress: () => void;
+  minHeight?: number;
+}>`
+  min-height: ${(props) => (props.minHeight ? props.minHeight : 0)}px;
   border: 1px solid
     ${(props) =>
       props.alert ? props.theme.alert : props.theme.textInputBorder};
@@ -40,13 +47,19 @@ const TextInput: React.FC<ITextInput> = ({
   onChangeText,
   alert = false,
   alertText,
+  numberOfLines = 1,
+  minHeight,
   ...props
 }) => {
   const theme = useTheme();
   const inputRef = useRef<RNTextInput>(null);
   return (
     <>
-      <Container alert={alert} onPress={() => inputRef.current?.focus()}>
+      <Container
+        minHeight={minHeight}
+        alert={alert}
+        onPress={() => inputRef.current?.focus()}
+      >
         <Text size="xs" color={theme.textDim}>
           {subText}
         </Text>
@@ -55,6 +68,7 @@ const TextInput: React.FC<ITextInput> = ({
           placeholder={placeholder}
           placeholderTextColor={theme.textDim}
           value={value}
+          numberOfLines={numberOfLines}
           onChangeText={onChangeText}
           autoCapitalize="none"
           {...props}
@@ -75,5 +89,59 @@ const TextInput: React.FC<ITextInput> = ({
     </>
   );
 };
+
+export const TextAreaInput = ({
+  subText,
+  placeholder,
+  value,
+  onChangeText,
+  alert = false,
+  alertText,
+  numberOfLines = 1,
+  minHeight,
+  ...props
+}: ITextInput) => {
+  const theme = useTheme();
+  const inputRef = useRef<RNTextInput>(null);
+  return (
+    <>
+      <Container
+        minHeight={minHeight}
+        alert={alert}
+        onPress={() => inputRef.current?.focus()}
+      >
+        <Input
+          ref={inputRef}
+          placeholder={placeholder}
+          placeholderTextColor={theme.textDim}
+          value={value}
+          numberOfLines={numberOfLines}
+          onChangeText={onChangeText}
+          autoCapitalize="none"
+          {...props}
+        />
+      </Container>
+      {alert && (
+        <View
+          style={{
+            paddingVertical: useResponsiveFontSize(3),
+            width: "100%",
+          }}
+        >
+          <Text size="xs" color={theme.alert}>
+            {alertText}
+          </Text>
+        </View>
+      )}
+    </>
+  );
+};
+
+export const TextInputWithBorder = styled.TextInput`
+  border-color: ${({ theme }) => theme.textDimmer};
+  border-bottom-width: 1px;
+  padding: 6px 1px;
+  color: ${({ theme }) => theme.text};
+`;
 
 export default TextInput;

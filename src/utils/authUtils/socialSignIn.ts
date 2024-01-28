@@ -9,6 +9,8 @@ import { startingTheme } from "../../store/modules/theme";
 import { client } from "../../services/api";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
+console.log("GOOGLE_AUTH_IOS_CLIENT_ID: ", GOOGLE_AUTH_IOS_CLIENT_ID);
+
 GoogleSignin.configure({
   // webClientId: '', // idToken을 얻기 위해 필요한 값임
   iosClientId: GOOGLE_AUTH_IOS_CLIENT_ID,
