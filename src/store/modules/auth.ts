@@ -117,7 +117,7 @@ const authSlice = createSlice({
       storeData("deviceId", action.payload.deviceId);
       storeData("strategy", action.payload.strategy);
 
-      console.log("소셜로그인 성공");
+      console.log("소셜로그인 성공: ", state);
     },
   },
   extraReducers: (builder) => {
