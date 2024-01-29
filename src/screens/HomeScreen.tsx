@@ -17,6 +17,8 @@ const Container = styled.View`
 
 const HomeScreen = ({ navigation }) => {
   const isAddModalOpen = useAppSelect((state) => state.todo.isAddModalOpen);
+  const isLoggedIn = useAppSelect((state) => state.auth.isLoggedIn);
+
   const dispatch = useAppDispatch();
 
   const { DEFAULT_HEIGHT, OPEN_STATE } = useContext(ComponentHeightContext);

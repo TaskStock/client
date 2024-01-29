@@ -1,7 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { IRegisterUser } from "../../screens/Login/EmailRegisterScreen";
 import { client } from "../../services/api";
-import { saveCredentials } from "./autoSignIn";
 import { RootState } from "../../store/configureStore";
 import getDeviceId from "../getDeviceId";
 
