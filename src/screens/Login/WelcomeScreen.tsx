@@ -15,6 +15,8 @@ import { client } from "../../services/api";
 import { startingTheme } from "../../store/modules/theme";
 import { getDeviceId } from "react-native-device-info";
 import { setSocialLoggedIn } from "../../store/modules/auth";
+import { _IOS_API_HOST } from "../../utils/getAPIHost";
+import { LOCAL_API_HOST_ANDROID } from "@env";
 
 const Login = styled.View`
   gap: ${spacing.padding}px;
