@@ -1,8 +1,14 @@
-import { getProfile as getKakaoProfile } from "@react-native-seoul/kakao-login";
+import {
+  getProfile as getKakaoProfile,
+  login,
+} from "@react-native-seoul/kakao-login";
 
 export async function onKakaoButtonPress() {
+  console.log("kakao login button pressed");
   try {
+    const token = await login();
     const user = await getKakaoProfile();
+
     const kakaoUser = {
       email: user.email,
       userName: user.nickname,
@@ -13,6 +19,6 @@ export async function onKakaoButtonPress() {
 
     return kakaoUser;
   } catch (e) {
-    console.log(e);
+    console.log(e.message);
   }
 }
