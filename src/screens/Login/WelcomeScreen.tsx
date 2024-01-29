@@ -15,6 +15,7 @@ import { checkStorage } from "../../utils/asyncStorage";
 import { onGoogleButtonPress } from "../../utils/authUtils/googleSignIn";
 import { onKakaoButtonPress } from "../../utils/authUtils/kakaoSignIn";
 import getDeviceId from "../../utils/getDeviceId";
+import { onAppleButtonPress } from "../../utils/authUtils/appleSignIn";
 
 const Login = styled.View`
   gap: ${spacing.padding}px;
@@ -78,7 +79,9 @@ const WelcomeScreen = ({ navigation }) => {
         {Platform.OS === "ios" && (
           <SocialBtn
             type="apple"
-            onPress={() => {}}
+            onPress={() => {
+              handleSocialLogin(onAppleButtonPress);
+            }}
             recentlyLoggiedIn={strategy === "apple"}
           />
         )}

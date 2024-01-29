@@ -92,7 +92,10 @@ export const IconsPic = ({
   onPress?: () => void;
 }) => {
   return (
-    <TouchableOpacity onPress={onPress}>
+    <TouchableOpacity
+      onPress={onPress ? onPress : undefined}
+      disabled={!onPress}
+    >
       <Image
         source={source}
         style={{
