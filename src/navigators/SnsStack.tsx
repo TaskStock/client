@@ -21,13 +21,7 @@ const SnsStack = () => {
       <NativeStack.Screen name="Ranking" component={RankingScreen} />
       <NativeStack.Screen name="EditProfile" component={EditProfileScreen} />
       <NativeStack.Screen name="Search" component={SearchScreen} />
-      <NativeStack.Screen
-        name="UserDetail"
-        options={{
-          headerShown: true,
-        }}
-        component={UserDetailScreen}
-      />
+      <NativeStack.Screen name="UserDetail" component={UserDetailScreen} />
     </NativeStack.Navigator>
   );
 };
