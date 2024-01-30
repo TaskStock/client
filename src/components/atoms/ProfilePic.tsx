@@ -23,7 +23,7 @@ const ProfilePic = ({
 }) => {
   const SERVER_URL = getAPIHost();
   let uri;
-  if (strategy === "local") {
+  if (strategy === "local" || strategy === "apple") {
     uri = convertSlash(SERVER_URL + image);
   } else {
     uri = convertSlash(image);

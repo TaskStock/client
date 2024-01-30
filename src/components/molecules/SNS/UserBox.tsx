@@ -15,18 +15,12 @@ import FlexBox from "../../atoms/FlexBox";
 import PrivateLockIcon from "../../atoms/PrivateLockIcon";
 import ProfilePic from "../../atoms/ProfilePic";
 import Text from "../../atoms/Text";
+import FollowBtn from "../../atoms/FollowBtn";
 
 const Container = styled.TouchableOpacity`
   flex-direction: row;
   align-items: center;
   flex: 1;
-`;
-
-const FollowBtnContainer = styled.TouchableOpacity<{ color: string }>`
-  background-color: ${({ theme, color }) =>
-    color === "inactive" ? theme.text : theme.subBtnGray};
-  padding: ${useResponsiveFontSize(8)}px ${useResponsiveFontSize(16)}px;
-  border-radius: ${spacing.small}px;
 `;
 
 const UserBox = ({
@@ -44,26 +38,6 @@ const UserBox = ({
   const theme = useTheme();
   const navigation = useNavigation() as any;
   const dispatch = useAppDispatch();
-
-  const FollowBtn = ({ onPress, text }) => {
-    return (
-      <FollowBtnContainer
-        onPress={onPress}
-        color={text === "팔로우" || text === "맞팔로우" ? "inactive" : "active"}
-      >
-        <Text
-          size="sm"
-          color={
-            text === "팔로우" || text === "맞팔로우"
-              ? theme.textReverse
-              : theme.text
-          }
-        >
-          {text}
-        </Text>
-      </FollowBtnContainer>
-    );
-  };
 
   const handleFollow = () => {
     switch (button) {
@@ -89,7 +63,7 @@ const UserBox = ({
         paddingHorizontal: useResponsiveFontSize(15),
       }}
     >
-      <Container onPress={() => navigation.navigate("UserDetail")}>
+      <Container onPress={() => navigation.navigate("UserDetail", { userId })}>
         <ProfilePic
           image={image}
           strategy={strategy}
