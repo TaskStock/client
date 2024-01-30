@@ -5,6 +5,7 @@ import ThemeScreen from "../screens/Settings/ThemeScreen";
 import AccountScreen from "../screens/Settings/AccountScreen";
 import { useTheme } from "styled-components";
 import InfoScreen from "../screens/Settings/InfoScreen";
+import CustomerServiceScreen from "../screens/Settings/CustomerServiceScreen";
 
 const NativeStack = createNativeStackNavigator();
 
@@ -22,6 +23,10 @@ const SettingsStack = () => {
       <NativeStack.Screen name="SettingsTheme" component={ThemeScreen} />
       <NativeStack.Screen name="SettingsAccount" component={AccountScreen} />
       <NativeStack.Screen name="SettingsInfo" component={InfoScreen} />
+      <NativeStack.Screen
+        name="SettingsCustomerService"
+        component={CustomerServiceScreen}
+      />
     </NativeStack.Navigator>
   );
 };

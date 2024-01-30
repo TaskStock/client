@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelect } from "../../store/configureStore.hooks";
 import { checkStorage } from "../../utils/asyncStorage";
 import { logout } from "../../utils/authUtils/signInUtils";
 import { resetNavigation } from "../../utils/resetNavigation";
+import { Alert } from "react-native";
 
 const Container = styled.View`
   flex: 1;
@@ -18,9 +19,28 @@ const SettingsHomeScreen = ({ navigation }) => {
   const dispatch = useAppDispatch();
   const isLoggedIn = useAppSelect((state) => state.auth.isLoggedIn);
 
-  const handleLogout = async () => {
-    await dispatch(logout());
+  // 로그아웃
+  const askLogout = () => {
+    Alert.alert(
+      "로그아웃",
+      "정말로 로그아웃 하시겠습니까?", // 메시지
+      [
+        {
+          text: "취소",
+          style: "cancel",
+        },
+        {
+          text: "확인",
+          onPress: async () => {
+            await dispatch(logout());
+            // 로그아웃 처리 로직
+          },
+        },
+      ],
+      { cancelable: false }
+    );
   };
+
   useEffect(() => {
     if (isLoggedIn === false) {
       resetNavigation(navigation);
@@ -62,7 +82,7 @@ const SettingsHomeScreen = ({ navigation }) => {
         />
         <Menu
           text="고객센터"
-          onPress={() => {}}
+          onPress={() => navigation.navigate("SettingsCustomerService")}
           icon={{ type: "material", name: "headset" }}
         />
         <Menu
@@ -70,7 +90,7 @@ const SettingsHomeScreen = ({ navigation }) => {
           onPress={() => navigation.navigate("SettingsInfo")}
           icon={{ type: "ionicons", name: "information-circle" }}
         />
-        <Menu text="로그아웃" onPress={handleLogout} textColor={palette.red} />
+        <Menu text="로그아웃" onPress={askLogout} textColor={palette.red} />
         <Menu text="asyncStorage check" onPress={checkStorage} />
         <Menu text="redux check" onPress={checkRedux} />
       </Container>
