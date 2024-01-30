@@ -50,10 +50,7 @@ const EmailLoginScreen = ({ navigation }) => {
       console.log("이메일 응답", responseData);
       if (responseData.result === "success") {
         navigation.navigate("MainTab", {
-          screen: "HomeStack",
-          params: {
-            screen: "HomeScreen",
-          },
+          screen: "Home",
         });
       }
       console.log("status: ", response.status);

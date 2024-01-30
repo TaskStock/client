@@ -1,13 +1,13 @@
 import React from "react";
 import { useTheme } from "styled-components";
 import styled from "styled-components/native";
-import FlexBox from "../components/atoms/FlexBox";
-import Text from "../components/atoms/Text";
-import PageHeader from "../components/molecules/PageHeader";
-import { spacing } from "../constants/spacing";
+import FlexBox from "../../components/atoms/FlexBox";
+import Text from "../../components/atoms/Text";
+import PageHeader from "../../components/molecules/PageHeader";
+import { spacing } from "../../constants/spacing";
 import { FlatList } from "react-native";
-import { IconsWithoutFeedBack } from "../components/atoms/Icons";
-import useResponsiveFontSize from "../utils/useResponsiveFontSize";
+import { IconsWithoutFeedBack } from "../../components/atoms/Icons";
+import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
 
 const Container = styled.View`
   flex: 1;

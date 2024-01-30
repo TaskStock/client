@@ -65,6 +65,9 @@ const TextInputContainer = ({
         placeholderTextColor={theme.textDim}
         returnKeyType="search"
         onSubmitEditing={() => onSubmit()}
+        autoCorrect={false}
+        autoCapitalize="none" // iOS only
+        autoComplete="off" // Android only
       />
     </InputContainer>
   );
