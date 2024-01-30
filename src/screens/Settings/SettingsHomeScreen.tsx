@@ -1,38 +1,46 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components/native";
-import Text from "../../components/atoms/Text";
+import PageHeader from "../../components/molecules/PageHeader";
+import Menu from "../../components/molecules/Settings/Menu";
+import { palette } from "../../constants/colors";
 import { spacing } from "../../constants/spacing";
 import { useAppDispatch, useAppSelect } from "../../store/configureStore.hooks";
 import { checkStorage } from "../../utils/asyncStorage";
 import { logout } from "../../utils/authUtils/signInUtils";
 import { resetNavigation } from "../../utils/resetNavigation";
-import getDeviceId from "../../utils/getDeviceId";
-import PageHeader from "../../components/molecules/PageHeader";
+import { Alert } from "react-native";
 
 const Container = styled.View`
   flex: 1;
+  padding: 0 ${spacing.offset}px;
 `;
 
-const MenuContainer = styled.TouchableOpacity`
-  width: 100%;
-  height: 50px;
-  justify-content: center;
-  padding-left: 20px;
-  margin-bottom: 10px;
-  background-color: ${({ theme }) => theme.box};
-`;
-
-export const Menu = ({ text, onPress }) => (
-  <MenuContainer onPress={onPress}>
-    <Text size="md">{text}</Text>
-  </MenuContainer>
-);
 const SettingsHomeScreen = ({ navigation }) => {
   const dispatch = useAppDispatch();
   const isLoggedIn = useAppSelect((state) => state.auth.isLoggedIn);
-  const handleLogout = async () => {
-    await dispatch(logout());
+
+  // 로그아웃
+  const askLogout = () => {
+    Alert.alert(
+      "로그아웃",
+      "정말로 로그아웃 하시겠습니까?", // 메시지
+      [
+        {
+          text: "취소",
+          style: "cancel",
+        },
+        {
+          text: "확인",
+          onPress: async () => {
+            await dispatch(logout());
+            // 로그아웃 처리 로직
+          },
+        },
+      ],
+      { cancelable: false }
+    );
   };
+
   useEffect(() => {
     if (isLoggedIn === false) {
       resetNavigation(navigation);
@@ -47,24 +55,46 @@ const SettingsHomeScreen = ({ navigation }) => {
     console.log(redux_user);
   };
 
+  // 푸시알림
+  const [isEnabled, setIsEnabled] = useState<boolean>(false);
+  const toggleSwitch = () => {
+    // dispatch 푸시알림
+  };
+
   return (
-    <Container>
+    <>
       <PageHeader title="설정" />
-      <Menu
-        text="계정 설정 =>"
-        onPress={() => navigation.navigate("SettingsAccount")}
-      />
-      <Menu
-        text="테마 변경 =>"
-        onPress={() => navigation.navigate("SettingsTheme")}
-      />
-      <Menu text="asyncStorage check" onPress={checkStorage} />
-      <Menu text="redux check" onPress={checkRedux} />
-      <Menu text="device id" onPress={getDeviceId} />
-      <Menu text="로그아웃" onPress={handleLogout} />
-      <Menu text="회원 탈퇴" onPress={() => {}} />
-      <Menu text="비밀번호 변경" onPress={() => {}} />
-    </Container>
+      <Container>
+        <Menu
+          text="계정 설정"
+          onPress={() => navigation.navigate("SettingsAccount")}
+          icon={{ type: "materialIcons", name: "account-circle" }}
+        />
+        <Menu
+          text="푸시알림 켜기"
+          icon={{ type: "material", name: "bell" }}
+          toggle={{ isEnabled, setIsEnabled, toggleSwitch }}
+        />
+        <Menu
+          text="테마 변경"
+          onPress={() => navigation.navigate("SettingsTheme")}
+          icon={{ type: "ionicons", name: "color-palette" }}
+        />
+        <Menu
+          text="고객센터"
+          onPress={() => navigation.navigate("SettingsCustomerService")}
+          icon={{ type: "material", name: "headset" }}
+        />
+        <Menu
+          text="정보"
+          onPress={() => navigation.navigate("SettingsInfo")}
+          icon={{ type: "ionicons", name: "information-circle" }}
+        />
+        <Menu text="로그아웃" onPress={askLogout} textColor={palette.red} />
+        <Menu text="asyncStorage check" onPress={checkStorage} />
+        <Menu text="redux check" onPress={checkRedux} />
+      </Container>
+    </>
   );
 };
 
