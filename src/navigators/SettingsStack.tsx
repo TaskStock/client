@@ -4,6 +4,7 @@ import SettingsHomeScreen from "../screens/Settings/SettingsHomeScreen";
 import ThemeScreen from "../screens/Settings/ThemeScreen";
 import AccountScreen from "../screens/Settings/AccountScreen";
 import { useTheme } from "styled-components";
+import InfoScreen from "../screens/Settings/InfoScreen";
 
 const NativeStack = createNativeStackNavigator();
 
@@ -17,21 +18,10 @@ const SettingsStack = () => {
         contentStyle: { backgroundColor: theme.background },
       }}
     >
-      <NativeStack.Screen
-        name="Settings"
-        component={SettingsHomeScreen}
-        options={{}}
-      />
-      <NativeStack.Screen
-        name="SettingsTheme"
-        component={ThemeScreen}
-        options={{}}
-      />
-      <NativeStack.Screen
-        name="SettingsAccount"
-        component={AccountScreen}
-        options={{}}
-      />
+      <NativeStack.Screen name="Settings" component={SettingsHomeScreen} />
+      <NativeStack.Screen name="SettingsTheme" component={ThemeScreen} />
+      <NativeStack.Screen name="SettingsAccount" component={AccountScreen} />
+      <NativeStack.Screen name="SettingsInfo" component={InfoScreen} />
     </NativeStack.Navigator>
   );
 };

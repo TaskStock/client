@@ -12,7 +12,7 @@ const Container = styled.TouchableOpacity`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  height: 60px;
+  height: ${useResponsiveFontSize(60)}px;
 `;
 
 const Menu = ({

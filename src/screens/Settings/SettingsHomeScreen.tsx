@@ -67,7 +67,7 @@ const SettingsHomeScreen = ({ navigation }) => {
         />
         <Menu
           text="정보"
-          onPress={() => {}}
+          onPress={() => navigation.navigate("SettingsInfo")}
           icon={{ type: "ionicons", name: "information-circle" }}
         />
         <Menu text="로그아웃" onPress={handleLogout} textColor={palette.red} />
