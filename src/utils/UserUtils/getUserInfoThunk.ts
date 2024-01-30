@@ -8,7 +8,7 @@ export const getUserInfoThunk = createAsyncThunk(
     const rootState = getState() as RootState;
 
     const accessToSend = rootState.auth.accessToken.replace(/^"|"$/g, "");
-
+    console.log("getUserInfoThunk accessToken: ", accessToSend);
     try {
       const data = await client("account/getUserInfo", {
         accessToken: accessToSend,

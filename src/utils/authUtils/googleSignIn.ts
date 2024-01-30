@@ -4,8 +4,6 @@ import {
   statusCodes,
 } from "@react-native-google-signin/google-signin";
 
-console.log("GOOGLE_AUTH_IOS_CLIENT_ID: ", GOOGLE_AUTH_IOS_CLIENT_ID);
-
 GoogleSignin.configure({
   // webClientId: '', // idToken을 얻기 위해 필요한 값임
   iosClientId: GOOGLE_AUTH_IOS_CLIENT_ID,
@@ -17,17 +15,17 @@ export async function onGoogleButtonPress() {
     const userInfo = await GoogleSignin.signIn();
     const user = userInfo.user; // Google로부터 받은 유저 정보
     console.log("google: ", user);
-    // {
-    //   email: "",
-    //   familyName: null,
-    //   givenName: "",
-    //   id: "",
-    //   name: "",
-    //   photo: "",
-    // }
 
-    // 서버로 토큰 전송
-    //   sendTokenToServer(token);
+    const googleUser = {
+      email: user.email,
+      userName: user.name,
+      userPicture: user.photo,
+      isAgree: 1,
+      strategy: "google",
+    };
+    console.log("googleUser: ", googleUser);
+
+    return googleUser;
   } catch (error) {
     if (error.code === statusCodes.SIGN_IN_CANCELLED) {
       // 사용자가 로그인을 취소함
@@ -44,5 +42,3 @@ export async function onGoogleButtonPress() {
     }
   }
 }
-
-export async function onKakaoButtonPress() {}

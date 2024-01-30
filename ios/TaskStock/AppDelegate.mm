@@ -2,6 +2,7 @@
 
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTLinkingManager.h>
+#import <RNKakaoLogins.h>
 
 @implementation AppDelegate
 
@@ -25,10 +26,10 @@
 #endif
 }
 
-// Linking API
-- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
-  return [super application:application openURL:url options:options] || [RCTLinkingManager application:application openURL:url options:options];
-}
+// // Linking API
+// - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
+//   return [super application:application openURL:url options:options] || [RCTLinkingManager application:application openURL:url options:options];
+// }
 
 // Universal Links
 - (BOOL)application:(UIApplication *)application continueUserActivity:(nonnull NSUserActivity *)userActivity restorationHandler:(nonnull void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler {
@@ -52,6 +53,29 @@
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
   return [super application:application didReceiveRemoteNotification:userInfo fetchCompletionHandler:completionHandler];
+}
+
+
+// // Kakao Login
+// - (BOOL)application:(UIApplication *)app
+//      openURL:(NSURL *)url
+//      options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
+//  if([RNKakaoLogins isKakaoTalkLoginUrl:url]) {
+//     return [RNKakaoLogins handleOpenUrl: url];
+//  }
+
+//  return NO;
+// }
+
+// Linking API와 Kakao Login을 위한 통합된 application:openURL:options: 메서드
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
+  // Kakao Login 처리
+  if ([RNKakaoLogins isKakaoTalkLoginUrl:url]) {
+    return [RNKakaoLogins handleOpenUrl:url];
+  }
+
+  // React Native의 Linking API 처리
+  return [RCTLinkingManager application:application openURL:url options:options];
 }
 
 @end

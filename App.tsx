@@ -50,6 +50,8 @@ export default function App() {
   //   removeData("refreshToken");
   //   removeData("accessExp");
   //   removeData("refreshExp");
+  //   removeData("deviceId");
+  //   removeData("strategy");
   // }, []);
 
   // const [assets] = useAssets([require("./assets/splash.png")]);

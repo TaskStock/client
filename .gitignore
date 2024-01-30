@@ -17,6 +17,7 @@ web-build/
 *.key
 *.mobileprovision
 
+
 # Metro
 .metro-health-check*
 
@@ -78,3 +79,5 @@ yarn-error.*
 
 # social login clientid files
 /android/app/google-services.json
+
+*.keystore. 

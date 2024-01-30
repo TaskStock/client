@@ -65,6 +65,7 @@ const userSlice = createSlice({
     });
     builder.addCase(getUserInfoThunk.rejected, (state, action) => {
       state.loading = false;
+
       state.error = "유저 정보 받아오기 실패";
     });
     builder.addCase(getUserInfoThunk.fulfilled, (state, action) => {
