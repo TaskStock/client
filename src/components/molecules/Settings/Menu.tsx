@@ -4,7 +4,7 @@ import styled from "styled-components/native";
 import { spacing } from "../../../constants/spacing";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import FlexBox from "../../atoms/FlexBox";
-import { IconsWithoutFeedBack } from "../../atoms/Icons";
+import { IconProps, IconsWithoutFeedBack } from "../../atoms/Icons";
 import Text from "../../atoms/Text";
 import ToggleSwitch from "../../atoms/ToggleSwitch";
 
@@ -26,13 +26,7 @@ const Menu = ({
   textColor?: string;
   onPress?: () => void;
   icon?: {
-    type:
-      | "materialIcons"
-      | "material"
-      | "ionicons"
-      | "feather"
-      | "entypo"
-      | "fontAwesome";
+    type: IconProps["type"];
     name: string;
   };
   toggle?: {

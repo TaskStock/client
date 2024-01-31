@@ -1,11 +1,19 @@
-import { View, Text } from "react-native";
 import React from "react";
+import PageHeader from "../../components/molecules/PageHeader";
+import Text from "../../components/atoms/Text";
 
-const AlarmDetailScreen = () => {
+const AlarmDetailScreen = ({ route }) => {
+  const { detail, title, createdAt } = route.params;
+
   return (
-    <View>
-      <Text>AlarmDetailScreen</Text>
-    </View>
+    <>
+      <PageHeader title="알림 상세페이지" />
+      <Text size="lg" weight="bold">
+        {title}
+      </Text>
+      <Text size="md">{createdAt}</Text>
+      <Text size="md">{detail}</Text>
+    </>
   );
 };
 

@@ -21,7 +21,7 @@ export interface IFriend {
   introduce?: string;
   follower_count?: number;
   following_count?: number;
-  button: "팔로우" | "팔로잉" | "맞팔로우" | "요청됨";
+  button: "팔로우" | "팔로잉" | "맞팔로우" | "요청됨" | "수락";
 }
 
 interface initialState {
@@ -34,7 +34,7 @@ interface initialState {
   follower_count?: number;
   following_count?: number;
   error: string | null;
-  button?: "팔로우" | "팔로잉" | "맞팔로우" | "요청됨";
+  button?: "팔로우" | "팔로잉" | "맞팔로우" | "요청됨" | "수락";
 }
 
 const initialFriendState: initialState = {

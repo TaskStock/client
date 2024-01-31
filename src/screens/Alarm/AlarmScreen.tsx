@@ -1,107 +1,73 @@
-import React from "react";
-import { useTheme } from "styled-components";
-import styled from "styled-components/native";
-import FlexBox from "../../components/atoms/FlexBox";
-import Text from "../../components/atoms/Text";
-import PageHeader from "../../components/molecules/PageHeader";
-import { spacing } from "../../constants/spacing";
+import React, { useEffect, useState } from "react";
 import { FlatList } from "react-native";
-import { IconsWithoutFeedBack } from "../../components/atoms/Icons";
-import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
+import styled from "styled-components/native";
+import AlarmBox from "../../components/molecules/Alarm/AlarmBox";
+import PageHeader from "../../components/molecules/PageHeader";
+import { client } from "../../services/api";
+import { useAppSelect } from "../../store/configureStore.hooks";
 
 const Container = styled.View`
   flex: 1;
   background-color: ${({ theme }) => theme.box};
 `;
-const IconContainer = styled.View`
-  width: ${useResponsiveFontSize(48)}px;
-  height: ${useResponsiveFontSize(48)}px;
-  align-items: center;
-  justify-content: center;
-`;
-const AlarmContainer = styled.TouchableOpacity<{ read: boolean }>`
-  flex-direction: row;
-  align-items: center;
-  width: 100%;
-  padding: ${spacing.offset}px ${spacing.offset}px;
-  background-color: ${({ theme, read }) =>
-    read ? theme.background : theme.box};
-`;
 
-const Icon = ({ theme }) => {
-  return (
-    <IconContainer>
-      <IconsWithoutFeedBack
-        type="feather"
-        name="trending-up"
-        size={useResponsiveFontSize(30)}
-        color={theme.high}
-      />
-    </IconContainer>
-  );
-};
+export interface IAlarmData {
+  content: string;
+  created_time: string;
+  info: any;
+  is_read: boolean;
+  notice_id: number;
+  type: "sns" | "general" | "admin";
+}
 
-const AlarmBox = ({
-  title,
-  createdAt,
-  read = false,
-  onPress,
-}: {
-  title: string;
-  createdAt: string;
-  read: boolean;
-  onPress: () => void;
-}) => {
-  const theme = useTheme();
-  return (
-    <AlarmContainer read={read} onPress={onPress}>
-      <Icon theme={theme} />
-      <FlexBox
-        direction="column"
-        gap={spacing.padding}
-        styles={{ paddingLeft: spacing.offset }}
-      >
-        <Text size="md">{title}</Text>
-        <Text size="sm" color={theme.textDim}>
-          {createdAt}
-        </Text>
-      </FlexBox>
-    </AlarmContainer>
-  );
-};
-
-const data = [
+const dummyDatas = [
   {
-    alarm_id: 1,
-    user_id: 46,
-    content: "test content",
-    isread: false,
-    created_date: "2023-12-28T18:28:20.718Z",
+    content: "sewon님이 팔로우 요청을 보냈습니다.",
+    created_time: "2024-01-30T17:44:33.356Z",
+    info: {
+      follower_id: 149,
+      isFollowingMe: false,
+      isFollowingYou: false,
+      pending: true,
+    },
+    is_read: true,
+    notice_id: 21,
+    type: "sns",
   },
   {
-    alarm_id: 2,
-    user_id: 46,
-    content: "test content",
-    isread: true,
-    created_date: "2023-12-28T18:28:20.718Z",
+    content: "가입 인사",
+    created_time: "2024-01-25T20:25:43.236Z",
+    info: { detail: "태스팀입니당", title: "안녕하세요" },
+    is_read: true,
+    notice_id: 1,
+    type: "admin",
   },
 ];
 
 const AlarmScreen = ({ navigation }) => {
+  const { accessToken } = useAppSelect((state) => state.auth);
+  const [alarmDatas, setAlarmDatas] = useState([]);
+  const getData = async () => {
+    try {
+      const res = await client.get("notice/all", {
+        accessToken,
+      });
+      setAlarmDatas(res.noticeList);
+      console.log(res.noticeList);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  useEffect(() => {
+    getData();
+  }, []);
   return (
     <Container>
       <PageHeader title="알림" />
-      <FlatList
-        data={data}
-        renderItem={({ item }) => (
-          <AlarmBox
-            title={item.content}
-            createdAt={item.created_date}
-            read={item.isread}
-            onPress={() => {}}
-          />
-        )}
-        keyExtractor={(item, index) => item.alarm_id.toString()}
+      <FlatList<IAlarmData>
+        data={alarmDatas}
+        renderItem={({ item }) => <AlarmBox item={item} />}
+        keyExtractor={(item, index) => item.notice_id.toString()}
       />
     </Container>
   );
