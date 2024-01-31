@@ -1,5 +1,5 @@
 import { View, ScrollView, Dimensions } from "react-native";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   NavigationState,
   SceneRendererProps,
@@ -20,7 +20,10 @@ import {
 import { spacing } from "../../constants/spacing";
 import Text from "../../components/atoms/Text";
 import HorizontalProjectList from "../../components/organisms/HorizontalProjectList";
-import { useGetFriendInfoQuery } from "../../store/modules/getFriends";
+import {
+  getTargetUserThunk,
+  useGetFriendInfoQuery,
+} from "../../store/modules/getFriends";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { SnsStackParamList } from "../../navigators/SnsStack";
 import CenterLayout from "../../components/atoms/CenterLayout";
@@ -28,6 +31,8 @@ import LoadingSpinner from "../../components/atoms/LoadingSpinner";
 import { useCurrentDate } from "../../hooks/useCurrentDate";
 import TodoItem from "../../components/molecules/Home/TodoItem";
 import { useTheme } from "styled-components/native";
+import UserInfo from "../../components/organisms/SNS/UserInfo";
+import { useAppDispatch } from "../../store/configureStore.hooks";
 
 const routeMap = [
   { key: "first", title: "그래프" },
@@ -46,6 +51,12 @@ const UserDetailScreen = ({ route, navigation }: UserDetailScreenProps) => {
   const { data, isLoading, isError, error, refetch } = useGetFriendInfoQuery({
     userId,
   });
+
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(getTargetUserThunk(userId));
+  }, [userId]);
 
   const projects = data?.projects.filter((project) => {
     if (project.public_range == "all") return true;
@@ -164,8 +175,11 @@ const UserDetailScreen = ({ route, navigation }: UserDetailScreenProps) => {
           <Icons type="entypo" name="share" size={28} color="black" />
         }
       />
+
       {!isPrivate ? (
         <ScrollView>
+          <UserInfo />
+          <Margin margin={spacing.offset} />
           <TabView
             navigationState={{ index, routes }}
             renderScene={renderScene}

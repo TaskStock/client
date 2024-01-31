@@ -1,24 +1,41 @@
-import React from "react";
+import React, { useState } from "react";
 import { View } from "react-native";
 import PageHeader from "../../components/molecules/PageHeader";
-import SetPrivate from "../../components/molecules/Settings/SetPrivate";
-import { Menu } from "./SettingsHomeScreen";
 import styled from "styled-components/native";
+import Menu from "../../components/molecules/Settings/Menu";
 import { spacing } from "../../constants/spacing";
+import { useAppDispatch, useAppSelect } from "../../store/configureStore.hooks";
+import { setPrivateThunk } from "../../utils/UserUtils/setPrivate";
+import { palette } from "../../constants/colors";
 
 const Container = styled.View`
   padding: ${spacing.offset}px;
 `;
 
 const AccountScreen = () => {
+  const { private: isPrivate } = useAppSelect((state) => state.user.user);
+  const dispatch = useAppDispatch();
+  const [isEnabled, setIsEnabled] = useState<boolean>(isPrivate);
+
+  const toggleSwitch = () => {
+    dispatch(setPrivateThunk(!isEnabled));
+  };
   return (
     <View>
       <PageHeader title="계정 설정" />
       <Container>
-        <SetPrivate />
+        <Menu
+          text="비공개 계정"
+          icon={{ type: "ionicons", name: "lock-closed-outline" }}
+          toggle={{ isEnabled, setIsEnabled, toggleSwitch }}
+        />
 
-        <Menu text="비밀번호 재설정 =>" onPress={() => {}} />
-        <Menu text="회원 탈퇴 =>" onPress={() => {}} />
+        <Menu
+          text="비밀번호 재설정"
+          icon={{ type: "ionicons", name: "shield-checkmark-outline" }}
+          onPress={() => {}}
+        />
+        <Menu text="회원 탈퇴" onPress={() => {}} textColor={palette.red} />
       </Container>
     </View>
   );

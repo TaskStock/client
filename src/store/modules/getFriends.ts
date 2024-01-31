@@ -24,6 +24,9 @@ export interface IFriend {
   pending: boolean;
   isFollowingMe: boolean;
   isFollowingYou: boolean;
+  introduce?: string;
+  follower_count?: number;
+  following_count?: number;
   button: "팔로우" | "팔로잉" | "맞팔로우" | "요청됨";
 }
 
@@ -31,15 +34,37 @@ interface initialState {
   followingList: IFriend[];
   followerList: IFriend[];
   searchList: IFriend[];
+  targetUser: IFriend;
   loading: boolean;
+  introduce?: string;
+  follower_count?: number;
+  following_count?: number;
   error: string | null;
+  button?: "팔로우" | "팔로잉" | "맞팔로우" | "요청됨";
 }
 
 const initialFriendState: initialState = {
   followingList: [],
   followerList: [],
   searchList: [],
+  targetUser: {
+    user_id: 0,
+    user_name: "",
+    image: "",
+    cumulative_value: 0,
+    strategy: "",
+    private: false,
+    pending: false,
+    introduce: "",
+    isFollowingMe: false,
+    isFollowingYou: false,
+    follower_count: 0,
+    following_count: 0,
+    button: "팔로우",
+  },
   loading: false,
+  follower_count: 0,
+  following_count: 0,
   error: null,
 };
 
@@ -76,7 +101,7 @@ export const getFriendsThunk = createAsyncThunk(
 
     try {
       const res = await client.get("sns/list", { accessToken });
-      console.log(res); // res.followerList, res.followingList
+      // console.log(res); // res.followerList, res.followingList
       return res;
     } catch (error) {
       console.log(error);
@@ -98,6 +123,26 @@ export const searchThunk = createAsyncThunk(
 
       if (response.result === "success") {
         return response.searchResult;
+      } else {
+        return rejectWithValue(response.result);
+      }
+    } catch (error) {
+      console.log("검색 실패: ", error);
+      rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const getTargetUserThunk = createAsyncThunk(
+  "sns/getTargetUserThunk",
+  async (userId: number, { rejectWithValue, getState }) => {
+    const rootState = getState() as RootState;
+    const { accessToken } = rootState.auth;
+    try {
+      const response = await client.get(`sns/users/${userId}`, { accessToken });
+      // console.log(response);
+      if (response.result === "success") {
+        return response.targetData;
       } else {
         return rejectWithValue(response.result);
       }
@@ -210,6 +255,20 @@ const friendSlice = createSlice({
             updateFriendStatus_follow(friend, followingId)
           )
       );
+
+      // targetUser 수정
+      state.targetUser.private
+        ? (state.targetUser.pending = true)
+        : (state.targetUser.pending = false);
+      state.targetUser.isFollowingYou = !state.targetUser.pending;
+
+      state.targetUser.button = buttonRender(
+        state.targetUser.pending,
+        state.targetUser.private,
+        state.targetUser.isFollowingMe,
+        state.targetUser.isFollowingYou
+      );
+
       console.log("팔로우 성공");
     });
     builder.addCase(unfollowThunk.pending, (state, action) => {
@@ -228,6 +287,14 @@ const friendSlice = createSlice({
           list.forEach((friend) =>
             updateFriendStatus_unfollow(friend, action.payload)
           )
+      );
+      // targetUser 수정
+      state.targetUser.isFollowingYou = false;
+      state.targetUser.button = buttonRender(
+        state.targetUser.pending,
+        state.targetUser.private,
+        state.targetUser.isFollowingMe,
+        state.targetUser.isFollowingYou
       );
       console.log("언팔로우 성공");
     });
@@ -259,6 +326,27 @@ const friendSlice = createSlice({
           })
       );
       console.log("요청 취소 성공");
+    });
+    builder.addCase(getTargetUserThunk.pending, (state, action) => {
+      state.loading = true;
+      console.log("getTargetUserThunk pending");
+    });
+    builder.addCase(getTargetUserThunk.rejected, (state, action) => {
+      state.loading = false;
+      state.error = "Rejected: 타켓 유저 정보 가져오기 실패";
+      console.log("Rejected: 타켓 유저 정보 가져오기 실패");
+    });
+    builder.addCase(getTargetUserThunk.fulfilled, (state, action) => {
+      state.loading = false;
+      state.targetUser = action.payload;
+      state.error = null;
+      state.targetUser.button = buttonRender(
+        action.payload.pending,
+        action.payload.private,
+        action.payload.isFollowingMe,
+        action.payload.isFollowingYou
+      );
+      console.log("타켓 유저 정보 가져오기 성공");
     });
   },
 });
