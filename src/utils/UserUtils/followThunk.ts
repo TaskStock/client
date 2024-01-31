@@ -90,8 +90,3 @@ export const cancelRequestThunk = createAsyncThunk(
     }
   }
 );
-
-export const acceptRequestThunk = createAsyncThunk(
-  "user/acceptRequest",
-  async (targetId: Number, { rejectWithValue, getState, dispatch }) => {}
-);

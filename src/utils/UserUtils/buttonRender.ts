@@ -29,5 +29,6 @@ export const buttonRender = (
   } else {
     isFollowingYou ? (button = "팔로잉") : (button = "맞팔로우");
   }
+
   return button;
 };

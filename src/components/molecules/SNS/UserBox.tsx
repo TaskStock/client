@@ -51,9 +51,6 @@ const UserBox = ({
       case "요청됨":
         dispatch(cancelRequestThunk(userId));
         break;
-      case "수락":
-        // dispatch(acceptRequestThunk(userId));
-        break;
     }
   };
 
