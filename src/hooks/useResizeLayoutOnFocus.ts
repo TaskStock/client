@@ -9,6 +9,8 @@ export const useResizeLayoutOnFocus = ({
   const size = useRef(0);
 
   useFocusEffect(() => {
+    console.log("useResizeLayoutOnFocus");
+
     resizeFunction(size.current);
   });
 

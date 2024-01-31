@@ -8,7 +8,16 @@ import Icons from "../components/atoms/Icons";
 import { useTheme } from "styled-components";
 import { View } from "react-native";
 
-const NativeStack = createNativeStackNavigator();
+export type SnsStackParamList = {
+  Ranking: undefined;
+  EditProfile: undefined;
+  Search: undefined;
+  UserDetail: {
+    userId: number;
+  };
+};
+
+const NativeStack = createNativeStackNavigator<SnsStackParamList>();
 
 const SnsStack = () => {
   return (
@@ -21,13 +30,7 @@ const SnsStack = () => {
       <NativeStack.Screen name="Ranking" component={RankingScreen} />
       <NativeStack.Screen name="EditProfile" component={EditProfileScreen} />
       <NativeStack.Screen name="Search" component={SearchScreen} />
-      <NativeStack.Screen
-        name="UserDetail"
-        options={{
-          headerShown: true,
-        }}
-        component={UserDetailScreen}
-      />
+      <NativeStack.Screen name="UserDetail" component={UserDetailScreen} />
     </NativeStack.Navigator>
   );
 };

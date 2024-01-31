@@ -17,11 +17,8 @@ const Container = styled.View`
 
 const HomeScreen = ({ navigation }) => {
   const isAddModalOpen = useAppSelect((state) => state.todo.isAddModalOpen);
-  const isLoggedIn = useAppSelect((state) => state.auth.isLoggedIn);
 
   const dispatch = useAppDispatch();
-
-  const { DEFAULT_HEIGHT, OPEN_STATE } = useContext(ComponentHeightContext);
 
   useEffect(() => {
     dispatch(getUserInfoThunk());
@@ -34,7 +31,6 @@ const HomeScreen = ({ navigation }) => {
       <HeaderTop navigation={navigation} />
       <GCContainer />
       <TodoContainer />
-      {/* <HandleTodoBtnContainer {...handleEdit} /> */}
       {isAddModalOpen && (
         <Modal visible={isAddModalOpen} transparent={true}>
           <AddTodoModal></AddTodoModal>

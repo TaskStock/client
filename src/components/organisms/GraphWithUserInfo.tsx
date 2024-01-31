@@ -1,17 +1,17 @@
 import React from "react";
 import { View } from "react-native";
 import styled from "styled-components/native";
-import { spacing } from "../../../constants/spacing";
-import HomeUserInfo from "../../molecules/Home/HomeUserInfo";
-import HomeChart from "./HomeChart";
-import CandleStickIcon from "../../../../assets/icons/CandleStickIcon.svg";
-import LineChartIcon from "../../../../assets/icons/lineChartIcon.svg";
+import { spacing } from "../../constants/spacing";
+import HomeUserInfo from "../molecules/Home/HomeUserInfo";
+import HomeChart from "./Home/HomeChart";
+import CandleStickIcon from "../../../assets/icons/CandleStickIcon.svg";
+import LineChartIcon from "../../../assets/icons/lineChartIcon.svg";
 import { WithLocalSvg } from "react-native-svg";
-import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
-import FlexBox from "../../atoms/FlexBox";
+import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
+import FlexBox from "../atoms/FlexBox";
 import { LinearGradient } from "expo-linear-gradient";
-import useUser from "../../../hooks/useUser";
-import { useAppSelect } from "../../../store/configureStore.hooks";
+import { useAppSelect } from "../../store/configureStore.hooks";
+import { Value } from "../../@types/chart";
 
 const Container = styled.View`
   width: 100%;
@@ -51,19 +51,30 @@ const Divider = styled.View`
   background-color: ${({ theme }) => theme.textDimmer};
 `;
 
-const ContainerSize = React.createContext({
-  width: 0,
-  height: 0,
-});
-
 export const sizeContext = React.createContext({
   width: 0,
   height: 0,
 });
 
-const GraphContainer = ({ myData }) => {
-  const [isCandleStick, setIsCandleStick] = React.useState(true);
-
+const GraphWithUserInfo = ({
+  userInfo,
+  value,
+}: {
+  userInfo: {
+    cumulative_value?: number;
+    value_month_ago?: number;
+    nickname?: string;
+    loading: boolean;
+    error: any;
+  };
+  value: {
+    data?: Value[];
+    isLoading: boolean;
+    isError: boolean;
+    error: any;
+    refetch: () => void;
+  };
+}) => {
   const theme = useAppSelect((state) => state.theme);
   const gradient =
     theme.value === "dark"
@@ -74,7 +85,7 @@ const GraphContainer = ({ myData }) => {
         ]
       : ["rgba(255, 255, 255, 0.00)", "rgba(255, 255, 255, 0.47)", "#FFFFFF"];
 
-  const { user, error, loading } = useUser();
+  const [isCandleStick, setIsCandleStick] = React.useState(true);
 
   const [size, setSize] = React.useState({
     width: 0,
@@ -92,12 +103,12 @@ const GraphContainer = ({ myData }) => {
       <FlexBox alignItems="flex-end" justifyContent="space-between">
         <HomeUserInfo
           data={{
-            cumulative_value: user.cumulative_value,
-            value_month_ago: user.value_month_ago,
-            nickname: user.user_name,
+            cumulative_value: userInfo.cumulative_value || 0,
+            value_month_ago: userInfo.value_month_ago || 0,
+            nickname: userInfo.nickname || "",
           }}
-          isLoading={loading}
-          error={error}
+          isLoading={userInfo.loading}
+          error={userInfo.error}
         />
         <IconContainer>
           <IconBox
@@ -154,7 +165,16 @@ const GraphContainer = ({ myData }) => {
           }}
         >
           <sizeContext.Provider value={size}>
-            <HomeChart isCandleStick={isCandleStick} />
+            <HomeChart
+              value={{
+                data: value.data,
+                isLoading: value.isLoading,
+                isError: value.isError,
+                error: value.error,
+                refetch: value.refetch,
+              }}
+              isCandleStick={isCandleStick}
+            />
           </sizeContext.Provider>
         </InnerContent>
       </Container>
@@ -162,4 +182,4 @@ const GraphContainer = ({ myData }) => {
   );
 };
 
-export default GraphContainer;
+export default GraphWithUserInfo;

@@ -138,7 +138,7 @@ const CalendarItem = memo(({ item }: { item: TCalendarItem }) => {
   );
 });
 
-function Calendar({ todos }: { todos: Todo[] }) {
+function Calendar({ todos }: { todos: Todo[] | undefined }) {
   const calendarItems = useAppSelect((state) => state.calendar.calendarItems);
 
   const { recalculate } = useCalculateTodoCount({ todos });

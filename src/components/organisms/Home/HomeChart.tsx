@@ -8,6 +8,8 @@ import LineValueChart from "../../molecules/LineValueChart";
 import CenterLayout from "../../atoms/CenterLayout";
 import useValue from "../../../hooks/useValue";
 import WagmiChart from "../../molecules/WagmiChart";
+import useWagmiCandleStick from "../../../hooks/useWagmiCandleStick";
+import { Value } from "../../../@types/chart";
 
 const Container = styled.View`
   width: 100%;
@@ -185,17 +187,47 @@ export const chartDateType = [
   },
 ];
 
-function HomeChart({ isCandleStick }: { isCandleStick: boolean }) {
-  const themeContext = useContext(ThemeContext);
+function HomeChart({
+  isCandleStick,
+  value: { data, isLoading, isError, error, refetch },
+}: {
+  isCandleStick: boolean;
+  value: {
+    data: Value[] | undefined;
+    isLoading: boolean;
+    isError: boolean;
+    error: any;
+    refetch: () => void;
+  };
+}) {
   const [index, setIndex] = React.useState(1);
   const [containerSize, setContainerSize] = useState<{
     width: number;
     height: number;
   } | null>(null);
 
-  const { data, isLoading, isError, error, refetch } = useValue();
+  if (isLoading || !data) {
+    return (
+      <FlexBox justifyContent="center" alignItems="center" styles={{ flex: 1 }}>
+        <LoadingSpinner />
+      </FlexBox>
+    );
+  }
 
-  if (isError) console.log(error);
+  if (isError) {
+    return (
+      <CenterLayout>
+        <Text size="md">에러가 발생했습니다.</Text>
+        <Pressable onPress={refetch}>
+          <Text size="md">다시 시도해주세요.</Text>
+        </Pressable>
+      </CenterLayout>
+    );
+  }
+
+  const { data: wagmiData } = useWagmiCandleStick({
+    data: data,
+  });
 
   return (
     <Container>
@@ -208,93 +240,18 @@ function HomeChart({ isCandleStick }: { isCandleStick: boolean }) {
           });
         }}
       >
-        {containerSize && !isLoading ? (
-          !error ? (
-            isCandleStick ? (
-              <WagmiChart></WagmiChart>
-            ) : (
-              // <CandleStickValueChart
-              //   height={containerSize.height}
-              //   width={containerSize.width}
-              //   data={data}
-              //   theme={themeContext}
-              // ></CandleStickValueChart>
-              <LineValueChart
-                height={containerSize.height}
-                width={containerSize.width}
-                data={data}
-                maxLength={chartDateType[index].counts}
-              ></LineValueChart>
-            )
+        {containerSize &&
+          (isCandleStick ? (
+            <WagmiChart data={wagmiData}></WagmiChart>
           ) : (
-            <CenterLayout>
-              <Text size="md">에러가 발생했습니다.</Text>
-              <Pressable onPress={refetch}>
-                <Text size="md">다시 시도해주세요.</Text>
-              </Pressable>
-            </CenterLayout>
-          )
-        ) : (
-          <FlexBox
-            justifyContent="center"
-            alignItems="center"
-            styles={{ flex: 1 }}
-          >
-            <LoadingSpinner />
-          </FlexBox>
-        )}
+            <LineValueChart
+              height={containerSize.height}
+              width={containerSize.width}
+              data={data}
+              maxLength={chartDateType[index].counts}
+            ></LineValueChart>
+          ))}
       </GraphContainer>
-      {/* <BottomController
-        onLayout={(event) => {
-          const { width, height } = event.nativeEvent.layout;
-          bottomControllerWidth.current = width;
-        }}
-      >
-        <Animated.View
-          style={{
-            position: "absolute",
-            width: "20%",
-            height: "100%",
-            backgroundColor: themeContext.background,
-            borderRadius: 8,
-            left: leftValue.current,
-            top: BottomControllerPaddingVertical,
-          }}
-        ></Animated.View>
-        {chartDateType.map((item, index) => (
-          <BottomControllerItem key={item.name}>
-            <Pressable
-              onPress={() => {
-                setIndex(index);
-                moveBtnBackground(index);
-                // mockApiCall(item.name, index);
-              }}
-              style={{
-                width: "100%",
-                height: "100%",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              <Text size="xs">{item.name}</Text>
-            </Pressable>
-          </BottomControllerItem>
-        ))}
-        <BottomControllerItem>
-          <Pressable
-            onPress={() => {
-              setIsCandleStick(!isCandleStick);
-            }}
-          >
-            {isCandleStick ? (
-              <WithLocalSvg width={18} height={18} asset={LineChartIcon} />
-            ) : (
-              <WithLocalSvg width={18} height={18} asset={CandleStickIcon} />
-            )}
-          </Pressable>
-        </BottomControllerItem>
-      </BottomController> */}
     </Container>
   );
 }

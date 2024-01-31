@@ -9,7 +9,7 @@ import homeReducer from "./modules/home";
 import userReducer from "./modules/user";
 import retrospectReducer from "./modules/retrospect/retrospect";
 import { retrospectApi } from "./modules/retrospect/retrospect";
-import getFriendsReducer from "./modules/getFriends";
+import getFriendsReducer, { getFriendsApi } from "./modules/getFriends";
 
 const store = configureStore({
   reducer: {
@@ -17,6 +17,7 @@ const store = configureStore({
     [todoApi.reducerPath]: todoApi.reducer,
     [projectApi.reducerPath]: projectApi.reducer,
     [retrospectApi.reducerPath]: retrospectApi.reducer,
+    [getFriendsApi.reducerPath]: getFriendsApi.reducer,
     user: userReducer,
     auth: authReducer,
     chart: chartReducer,
@@ -35,7 +36,8 @@ const store = configureStore({
       .concat(chartApi.middleware)
       .concat(todoApi.middleware)
       .concat(projectApi.middleware)
-      .concat(retrospectApi.middleware),
+      .concat(retrospectApi.middleware)
+      .concat(getFriendsApi.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

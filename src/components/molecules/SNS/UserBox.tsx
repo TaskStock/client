@@ -1,4 +1,4 @@
-import { useNavigation } from "@react-navigation/native";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { View } from "react-native";
 import { useTheme } from "styled-components";
 import styled from "styled-components/native";
@@ -15,6 +15,8 @@ import FlexBox from "../../atoms/FlexBox";
 import PrivateLockIcon from "../../atoms/PrivateLockIcon";
 import ProfilePic from "../../atoms/ProfilePic";
 import Text from "../../atoms/Text";
+import { SnsStackParamList } from "../../../navigators/SnsStack";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 const Container = styled.TouchableOpacity`
   flex-direction: row;
@@ -42,7 +44,8 @@ const UserBox = ({
   button,
 }) => {
   const theme = useTheme();
-  const navigation = useNavigation() as any;
+  const navigation =
+    useNavigation<NativeStackNavigationProp<SnsStackParamList>>();
   const dispatch = useAppDispatch();
 
   const FollowBtn = ({ onPress, text }) => {
@@ -89,7 +92,15 @@ const UserBox = ({
         paddingHorizontal: useResponsiveFontSize(15),
       }}
     >
-      <Container onPress={() => navigation.navigate("UserDetail")}>
+      <Container
+        onPress={() => {
+          console.log("userId", userId);
+
+          navigation.navigate("UserDetail", {
+            userId: userId,
+          });
+        }}
+      >
         <ProfilePic
           image={image}
           strategy={strategy}

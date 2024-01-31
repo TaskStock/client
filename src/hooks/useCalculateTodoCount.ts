@@ -3,8 +3,13 @@ import { useAppDispatch, useAppSelect } from "../store/configureStore.hooks";
 import React, { useEffect } from "react";
 import { updateCalendarItemTodoCount } from "../store/modules/calendar";
 import { getAllTodosQuery } from "../store/modules/todo/queries";
+import { Todo } from "../@types/todo";
 
-export const useCalculateTodoCount = ({ todos }) => {
+export const useCalculateTodoCount = ({
+  todos,
+}: {
+  todos: Todo[] | undefined;
+}) => {
   const currentDate = dayjs(
     useAppSelect((state) => state.calendar.currentDateString)
   );
@@ -17,7 +22,7 @@ export const useCalculateTodoCount = ({ todos }) => {
 
   const recalculate = React.useCallback(() => {
     memorizedCurrentDate.current = dayjs(currentDate).format("YYYY-MM");
-    dispatch(updateCalendarItemTodoCount({ todos }));
+    dispatch(updateCalendarItemTodoCount({ todos: todos || [] }));
   }, [dispatch, todos]);
 
   useEffect(() => {

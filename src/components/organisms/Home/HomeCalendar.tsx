@@ -13,6 +13,7 @@ import useUser from "../../../hooks/useUser";
 import useTodos from "../../../hooks/useTodos";
 import ItemContainerBox from "../../molecules/ItemContainerBox";
 import { useCurrentDate } from "../../../hooks/useCurrentDate";
+import { Todo } from "../../../@types/todo";
 
 export const DateInfo = ({
   currentDate,
@@ -91,9 +92,7 @@ export const DateInfo = ({
   );
 };
 
-const HomeCalendar = () => {
-  const { data: todos } = useTodos();
-
+const HomeCalendar = ({ data }: { data: Todo[] | undefined }) => {
   const { currentDate, subtract1Month, add1Month } = useCurrentDate();
 
   const onPressLeft = subtract1Month;
@@ -113,7 +112,7 @@ const HomeCalendar = () => {
         onPressRight={onPressRight}
       />
       <ItemContainerBox>
-        <Calendar todos={todos} />
+        <Calendar todos={data} />
       </ItemContainerBox>
     </View>
   );

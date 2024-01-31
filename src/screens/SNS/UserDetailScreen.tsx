@@ -1,10 +1,226 @@
-import { View, Text } from "react-native";
-import React from "react";
+import { View, ScrollView, Dimensions } from "react-native";
+import React, { useMemo, useState } from "react";
+import {
+  NavigationState,
+  SceneRendererProps,
+  TabView,
+} from "react-native-tab-view";
+import TabHeader from "../../components/molecules/TabHeader";
+import { useTab } from "../../hooks/useTab";
+import PageHeader from "../../components/molecules/PageHeader";
+import Icons from "../../components/atoms/Icons";
+import UserDetailFirst from "../../components/pages/sns/UserDetailFirst";
+import UserDetailSecond from "../../components/pages/sns/UserDetailSecond";
+import UserDetailThird from "../../components/pages/sns/UserDetailThird";
+import Margin from "../../components/atoms/Margin";
+import {
+  DrawerContent,
+  DrawerHeader,
+} from "../../components/molecules/DrawerParts";
+import { spacing } from "../../constants/spacing";
+import Text from "../../components/atoms/Text";
+import HorizontalProjectList from "../../components/organisms/HorizontalProjectList";
+import { useGetFriendInfoQuery } from "../../store/modules/getFriends";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { SnsStackParamList } from "../../navigators/SnsStack";
+import CenterLayout from "../../components/atoms/CenterLayout";
+import LoadingSpinner from "../../components/atoms/LoadingSpinner";
+import { useCurrentDate } from "../../hooks/useCurrentDate";
+import TodoItem from "../../components/molecules/Home/TodoItem";
+import { useTheme } from "styled-components/native";
 
-const UserDetailScreen = () => {
+const routeMap = [
+  { key: "first", title: "그래프" },
+  { key: "second", title: "캘린더" },
+  { key: "third", title: "프로젝트" },
+];
+
+type UserDetailScreenProps = NativeStackScreenProps<
+  SnsStackParamList,
+  "UserDetail"
+>;
+
+const UserDetailScreen = ({ route, navigation }: UserDetailScreenProps) => {
+  const { userId } = route.params;
+
+  const { data, isLoading, isError, error, refetch } = useGetFriendInfoQuery({
+    userId,
+  });
+
+  const projects = data?.projects.filter((project) => {
+    if (project.public_range == "all") return true;
+
+    if (project.public_range == "follow") {
+      if (data.targetData.isFollowingYou) return true;
+      else return false;
+    }
+
+    return false;
+  });
+
+  const isPrivate = data?.targetData.private;
+
+  const todos = data?.todos;
+  const values = data?.values;
+  const userInfo = data?.targetData;
+
+  const { currentDate } = useCurrentDate();
+
+  const headerDate = useMemo(() => {
+    return currentDate.format("MM월 DD일");
+  }, [currentDate]);
+
+  const sceneMap = useMemo(() => {
+    return {
+      first: () => (
+        <UserDetailFirst
+          userInfo={{
+            cumulative_value: userInfo?.cumulative_value,
+            value_month_ago: 0,
+            nickname: userInfo?.user_name,
+            error: error,
+            loading: isLoading,
+          }}
+          value={{
+            data: values,
+            isLoading: isLoading,
+            isError: isError,
+            error: error,
+            refetch: refetch,
+          }}
+        ></UserDetailFirst>
+      ),
+      second: () => (
+        <UserDetailSecond
+          todos={{
+            data: todos,
+            isLoading: isLoading,
+            isError: isError,
+          }}
+        ></UserDetailSecond>
+      ),
+      third: () => (
+        <UserDetailThird
+          projects={{
+            data: projects,
+            isLoading: isLoading,
+            isError: isError,
+          }}
+        ></UserDetailThird>
+      ),
+    };
+  }, [data]);
+
+  const theme = useTheme();
+
+  const { index, onChangeIndex, renderScene, routes } = useTab({
+    routeMap,
+    sceneMap,
+  });
+
+  const clientHeight = Dimensions.get("window").height;
+
+  const minHeight = index <= 1 ? clientHeight * 0.48 : clientHeight * 0.7;
+
+  const renderTabBar = (
+    props: SceneRendererProps & {
+      navigationState: NavigationState<{
+        key: string;
+        title: string;
+      }>;
+    }
+  ) => {
+    return (
+      <TabHeader
+        props={props}
+        onPressTab={(index) => {
+          onChangeIndex(index);
+        }}
+      />
+    );
+  };
+
+  const [selectedProjectId, setSelectedProjectId] = useState(null);
+
+  if (isLoading || isError || !data) {
+    return (
+      <View style={{ flex: 1 }}>
+        <PageHeader
+          headerRight={
+            <Icons type="entypo" name="share" size={28} color="black" />
+          }
+        />
+        <CenterLayout>
+          <LoadingSpinner></LoadingSpinner>
+        </CenterLayout>
+      </View>
+    );
+  }
+
   return (
-    <View>
-      <Text>UserDetailScreen</Text>
+    <View style={{ flex: 1 }}>
+      <PageHeader
+        headerRight={
+          <Icons type="entypo" name="share" size={28} color="black" />
+        }
+      />
+      {!isPrivate ? (
+        <ScrollView>
+          <TabView
+            navigationState={{ index, routes }}
+            renderScene={renderScene}
+            onIndexChange={onChangeIndex}
+            renderTabBar={(props) => renderTabBar(props)}
+            onSwipeEnd={() => {}}
+            swipeEnabled={false}
+            style={{
+              minHeight: minHeight,
+            }}
+          ></TabView>
+          {index <= 1 && (
+            <>
+              <Margin margin={spacing.padding} />
+              <View
+                style={{
+                  backgroundColor: "white",
+                  height: 1000,
+                }}
+              >
+                <DrawerHeader>
+                  <Text size="xl" weight="bold">
+                    {headerDate}
+                  </Text>
+                </DrawerHeader>
+                <HorizontalProjectList
+                  selectedProjectId={selectedProjectId}
+                  projects={projects}
+                  onPressProject={(id) => {}}
+                ></HorizontalProjectList>
+                <DrawerContent>
+                  {todos &&
+                    todos.map((todo) => (
+                      <View
+                        style={{
+                          pointerEvents: "none",
+                        }}
+                      >
+                        <TodoItem key={todo.todo_id} todo={todo} />
+                      </View>
+                    ))}
+                </DrawerContent>
+              </View>
+            </>
+          )}
+        </ScrollView>
+      ) : (
+        <CenterLayout>
+          <Icons type="AntDesign" name="lock" size={70} color="black" />
+          <Margin margin={spacing.offset} />
+          <Text size="lg" weight="medium" color={theme.textDim}>
+            비공개 계정입니다.
+          </Text>
+        </CenterLayout>
+      )}
     </View>
   );
 };

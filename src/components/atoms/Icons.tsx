@@ -5,6 +5,7 @@ import {
   Entypo,
   MaterialIcons,
   FontAwesome,
+  AntDesign,
 } from "@expo/vector-icons";
 import { Image, TouchableOpacity } from "react-native";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
@@ -16,7 +17,8 @@ type IconProps = {
     | "feather"
     | "entypo"
     | "materialIcons"
-    | "fontAwesome";
+    | "fontAwesome"
+    | "AntDesign";
   name: string;
   size?: number;
   color?: string;
@@ -44,6 +46,7 @@ const Icons: React.FC<IconProps> = ({
   else if (type === "entypo") IconComponent = Entypo;
   else if (type === "materialIcons") IconComponent = MaterialIcons;
   else if (type === "fontAwesome") IconComponent = FontAwesome;
+  else if (type === "AntDesign") IconComponent = AntDesign;
   else return null;
 
   return (
