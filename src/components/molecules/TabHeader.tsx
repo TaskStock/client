@@ -8,6 +8,7 @@ import { setTabIndex } from "../../store/modules/home";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
 import { ComponentHeightContext } from "../../utils/ComponentHeightContext";
 import { useResizeLayoutOnFocus } from "../../hooks/useResizeLayoutOnFocus";
+import { useFocusEffect } from "@react-navigation/native";
 
 const Container = styled.View`
   padding: 0 ${spacing.gutter}px;

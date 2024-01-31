@@ -92,8 +92,9 @@ export const DateInfo = ({
   );
 };
 
-const HomeCalendar = ({ data }: { data: Todo[] | undefined }) => {
+const HomeCalendar = () => {
   const { currentDate, subtract1Month, add1Month } = useCurrentDate();
+  const { data: todos } = useTodos();
 
   const onPressLeft = subtract1Month;
   const onPressRight = add1Month;
@@ -112,7 +113,7 @@ const HomeCalendar = ({ data }: { data: Todo[] | undefined }) => {
         onPressRight={onPressRight}
       />
       <ItemContainerBox>
-        <Calendar todos={data} />
+        <Calendar todos={todos} />
       </ItemContainerBox>
     </View>
   );

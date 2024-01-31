@@ -1,4 +1,4 @@
-import React, { useContext, useMemo } from "react";
+import React, { useContext, useEffect, useMemo } from "react";
 import { Dimensions, View, useWindowDimensions } from "react-native";
 import {
   NavigationState,
@@ -32,7 +32,6 @@ const GCContainer = () => {
     { key: "second", title: "캘린더" },
   ]);
 
-  const { data: todos } = useTodos();
   const { user, loading: userInfoLoading, error: userInfoError } = useUser();
   const { data: values, error, isError, isLoading, refetch } = useValue();
 
@@ -56,9 +55,9 @@ const GCContainer = () => {
           }}
         />
       ),
-      second: () => <HomeCalendar data={todos} />,
+      second: () => <HomeCalendar />,
     };
-  }, []);
+  }, [user, values]);
 
   const renderScene = SceneMap(sceneMap);
 

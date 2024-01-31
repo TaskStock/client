@@ -143,6 +143,8 @@ function Calendar({ todos }: { todos: Todo[] | undefined }) {
 
   const { recalculate } = useCalculateTodoCount({ todos });
 
+  const dispatch = useDispatch();
+
   useFocusEffect(() => {
     recalculate();
   });
@@ -150,8 +152,6 @@ function Calendar({ todos }: { todos: Todo[] | undefined }) {
   const renderItem = ({ item }: { item: TCalendarItem }) => {
     return <CalendarItem item={item} />;
   };
-
-  const dispatch = useDispatch();
 
   const onLayout = useResizeLayoutOnFocus({
     resizeFunction: (height) => dispatch(setItemContainerHeight(height)),

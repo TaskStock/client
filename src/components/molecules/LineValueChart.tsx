@@ -9,7 +9,6 @@ import {
 } from "victory-native";
 import { useTheme } from "styled-components/native";
 import { Value } from "../../@types/chart";
-import { View } from "react-native";
 import { Circle, Svg } from "react-native-svg";
 import { palette } from "../../constants/colors";
 
@@ -67,14 +66,6 @@ export default function LineValueChart({
     <VictoryChart
       width={width}
       height={height}
-      padding={
-        {
-          // left: 30,
-          // right: 30,
-          // top: 10,
-          // bottom: 10,
-        }
-      }
       containerComponent={
         <VictoryZoomContainer zoomDimension="x"></VictoryZoomContainer>
       }

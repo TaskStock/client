@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { View } from "react-native";
 import styled from "styled-components/native";
 import { spacing } from "../../constants/spacing";
@@ -75,6 +75,8 @@ const GraphWithUserInfo = ({
     refetch: () => void;
   };
 }) => {
+  console.log("graphwithuserinfo rerendered");
+
   const theme = useAppSelect((state) => state.theme);
   const gradient =
     theme.value === "dark"
@@ -182,4 +184,4 @@ const GraphWithUserInfo = ({
   );
 };
 
-export default GraphWithUserInfo;
+export default memo(GraphWithUserInfo);

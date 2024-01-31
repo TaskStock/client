@@ -6,19 +6,19 @@ import {
 } from "../store/modules/chart";
 import { DateString } from "../@types/calendar";
 
-const useValue = () => {
-  const getDates = () => {
-    const startDate = dayjs()
-      .local()
-      .subtract(29, "day")
-      .format("YYYY-MM-DD") as DateString;
-    const endDate = dayjs()
-      .local()
-      .add(1, "day")
-      .format("YYYY-MM-DD") as DateString;
-    return { startDate, endDate };
-  };
+const getDates = () => {
+  const startDate = dayjs()
+    .local()
+    .subtract(29, "day")
+    .format("YYYY-MM-DD") as DateString;
+  const endDate = dayjs()
+    .local()
+    .add(1, "day")
+    .format("YYYY-MM-DD") as DateString;
+  return { startDate, endDate };
+};
 
+const useValue = () => {
   const { startDate, endDate } = getDates();
 
   const queryArg: useGetValuesQueryArg = {
