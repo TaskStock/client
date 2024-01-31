@@ -11,6 +11,7 @@ import { useTheme } from "styled-components/native";
 import { Value } from "../../@types/chart";
 import { Circle, Svg } from "react-native-svg";
 import { palette } from "../../constants/colors";
+import { View } from "react-native";
 
 const DotDataComponent = (props: any) => {
   const { x, y, datum } = props;
@@ -38,12 +39,10 @@ export default function LineValueChart({
   width,
   height,
   data,
-  maxLength,
 }: {
   data: Value[];
   width: number;
   height: number;
-  maxLength: number;
 }) {
   const theme = useTheme();
 
@@ -74,7 +73,8 @@ export default function LineValueChart({
         theme={VictoryTheme.material}
         domain={{
           y: [minYWithPadding, maxYWithPadding],
-          x: [-1, maxLength],
+          // x: [-1, maxLength],
+          x: [-1, 30],
         }}
         style={{
           data: {

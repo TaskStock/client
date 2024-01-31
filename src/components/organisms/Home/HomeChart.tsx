@@ -234,6 +234,13 @@ function HomeChart({
       <GraphContainer
         onLayout={(event) => {
           const { width, height } = event.nativeEvent.layout;
+
+          if (
+            containerSize?.width === width &&
+            containerSize?.height === height
+          )
+            return;
+
           setContainerSize({
             width,
             height,
@@ -248,7 +255,6 @@ function HomeChart({
               height={containerSize.height}
               width={containerSize.width}
               data={data}
-              maxLength={chartDateType[index].counts}
             ></LineValueChart>
           ))}
       </GraphContainer>

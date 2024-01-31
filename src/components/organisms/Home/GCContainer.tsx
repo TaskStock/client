@@ -41,7 +41,7 @@ const GCContainer = () => {
         <HomeGraph
           userInfo={{
             cumulative_value: user?.cumulative_value,
-            value_month_ago: user?.value_month_ago,
+            value_month_ago: user?.value_yesterday_ago,
             nickname: user?.user_name,
             error: userInfoError,
             loading: userInfoLoading,

@@ -87,7 +87,7 @@ const UserDetailScreen = ({ route, navigation }: UserDetailScreenProps) => {
         <UserDetailFirst
           userInfo={{
             cumulative_value: userInfo?.cumulative_value,
-            value_month_ago: 0,
+            value_yesterday_ago: userInfo?.value_yesterday_ago,
             nickname: userInfo?.user_name,
             error: error,
             loading: isLoading,

@@ -32,7 +32,7 @@ export const DateInfo = ({
 
   const data = {
     cumulative_value: user.cumulative_value,
-    value_month_ago: user.value_month_ago,
+    value_month_ago: user.value_yesterday_ago,
   };
 
   const diff = data.cumulative_value - data.value_month_ago;

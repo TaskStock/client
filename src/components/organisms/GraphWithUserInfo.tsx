@@ -62,7 +62,7 @@ const GraphWithUserInfo = ({
 }: {
   userInfo: {
     cumulative_value?: number;
-    value_month_ago?: number;
+    value_yesterday_ago?: number;
     nickname?: string;
     loading: boolean;
     error: any;
@@ -75,8 +75,6 @@ const GraphWithUserInfo = ({
     refetch: () => void;
   };
 }) => {
-  console.log("graphwithuserinfo rerendered");
-
   const theme = useAppSelect((state) => state.theme);
   const gradient =
     theme.value === "dark"
@@ -106,7 +104,7 @@ const GraphWithUserInfo = ({
         <HomeUserInfo
           data={{
             cumulative_value: userInfo.cumulative_value || 0,
-            value_month_ago: userInfo.value_month_ago || 0,
+            value_yesterday_ago: userInfo.value_yesterday_ago || 0,
             nickname: userInfo.nickname || "",
           }}
           isLoading={userInfo.loading}

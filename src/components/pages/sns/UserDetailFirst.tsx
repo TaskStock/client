@@ -9,7 +9,7 @@ export default function UserDetailFirst({
 }: {
   userInfo: {
     cumulative_value?: number;
-    value_month_ago?: number;
+    value_yesterday_ago?: number;
     nickname?: string;
     error: any;
     loading: boolean;
@@ -27,7 +27,7 @@ export default function UserDetailFirst({
       <GraphWithUserInfo
         userInfo={{
           cumulative_value: userInfo?.cumulative_value,
-          value_month_ago: userInfo?.value_month_ago,
+          value_yesterday_ago: userInfo?.value_yesterday_ago,
           nickname: userInfo?.nickname,
           error: userInfo?.error,
           loading: userInfo?.loading,
