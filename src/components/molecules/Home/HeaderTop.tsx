@@ -61,14 +61,24 @@ function HeaderTop({ navigation }) {
           <IconsPic
             source={THEME_SOURCES[theme]?.bell}
             size={30}
-            onPress={() => navigation.navigate("Alarm")}
+            onPress={() =>
+              navigation.navigate("StackWithoutTab", {
+                screen: "AlarmStack",
+                params: {
+                  screen: "Alarm",
+                },
+              })
+            }
           />
           <Icons
             type="feather"
             name="settings"
             size={26}
             onPress={() => {
-              navigation.navigate("SettingsStack", { screen: "Settings" });
+              navigation.navigate("StackWithoutTab", {
+                screen: "SettingsStack",
+                params: { screen: "Settings" },
+              });
             }}
             color={styledTheme.text}
           />

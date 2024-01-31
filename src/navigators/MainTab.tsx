@@ -4,14 +4,10 @@ import { useTheme } from "styled-components";
 import { IconsWithoutFeedBack } from "../components/atoms/Icons";
 import useHeight from "../hooks/useHeight";
 import GroupScreen from "../screens/GroupScreen";
-import ProjectScreen from "../screens/Project/ProjectScreen";
+import HomeScreen from "../screens/HomeScreen";
 import { ComponentHeightProvider } from "../utils/ComponentHeightContext";
-import HomeStack from "./HomeStack";
-import FriendScreen from "../screens/SNS/RankingScreen";
-import SnsStack from "./SnsStack";
-import PageHeader from "../components/molecules/PageHeader";
-import PageMainHeader from "../components/molecules/PageMainHeader";
 import ProjectStack from "./ProjectStack";
+import SnsStack from "./SnsStack";
 
 const Tab = createBottomTabNavigator();
 
@@ -40,8 +36,8 @@ function MainTab() {
         }}
       >
         <Tab.Screen
-          name="HomeStack"
-          component={HomeStack}
+          name="Home"
+          component={HomeScreen}
           options={{
             headerShown: false,
             tabBarIcon: ({ color, size }) => (
@@ -54,6 +50,7 @@ function MainTab() {
             ),
           }}
         />
+
         <Tab.Screen
           name="ProjectStack"
           component={ProjectStack}
