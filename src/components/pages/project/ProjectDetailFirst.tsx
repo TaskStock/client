@@ -19,6 +19,7 @@ import Margin from "../../atoms/Margin";
 import { spacing } from "../../../constants/spacing";
 import TodoItem from "../../molecules/Home/TodoItem";
 import styled from "styled-components/native";
+import useUser from "../../../hooks/useUser";
 
 const ProjectBox = styled.View`
   padding: ${spacing.padding}px;
@@ -56,6 +57,8 @@ function ProjectDetailFirst({ projectId }: { projectId: number }) {
     tabHeight,
     setContentsHeight,
   } = useContext(ComponentHeightContext);
+
+  const { user } = useUser();
 
   const { data: todos, currentDayTodos } = useTodos();
 
@@ -97,6 +100,10 @@ function ProjectDetailFirst({ projectId }: { projectId: number }) {
       >
         <ContentLayout>
           <DateInfo
+            user={{
+              cumulative_value: user.cumulative_value,
+              value_yesterday_ago: user.value_yesterday_ago,
+            }}
             currentDate={currentDate}
             onPressLeft={onPressLeft}
             onPressRight={onPressRight}
