@@ -1,15 +1,7 @@
+import React from "react";
 import { View } from "react-native";
-import React, { useEffect, useState } from "react";
 import styled, { useTheme } from "styled-components/native";
 import { spacing } from "../../../constants/spacing";
-import FlexBox from "../../atoms/FlexBox";
-import { IconsWithoutFeedBack } from "../../atoms/Icons";
-import Text from "../../atoms/Text";
-import PrivateLockIcon from "../../atoms/PrivateLockIcon";
-import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
-import numberWithCommas from "../../../utils/useNumberWithCommas";
-import ProfilePic from "../../atoms/ProfilePic";
-import FollowBtn from "../../atoms/FollowBtn";
 import {
   useAppDispatch,
   useAppSelect,
@@ -19,6 +11,14 @@ import {
   followThunk,
   unfollowThunk,
 } from "../../../utils/UserUtils/followThunk";
+import numberWithCommas from "../../../utils/useNumberWithCommas";
+import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
+import FlexBox from "../../atoms/FlexBox";
+import FollowBtn from "../../atoms/FollowBtn";
+import { IconsWithoutFeedBack } from "../../atoms/Icons";
+import PrivateLockIcon from "../../atoms/PrivateLockIcon";
+import ProfilePic from "../../atoms/ProfilePic";
+import Text from "../../atoms/Text";
 
 const Container = styled.View`
   padding: ${spacing.padding}px ${spacing.offset}px ${spacing.offset}px;

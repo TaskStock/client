@@ -71,6 +71,8 @@ const TextInput: React.FC<ITextInput> = ({
           numberOfLines={numberOfLines}
           onChangeText={onChangeText}
           autoCapitalize="none"
+          autoCorrect={false} // iOS only
+          autoComplete="off" // Android only
           {...props}
         />
       </Container>

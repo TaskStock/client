@@ -10,3 +10,13 @@ function convertUTCToLocal(utcString: string) {
 }
 
 export default convertUTCToLocal;
+
+export const formatToLocalMonthDay = (utcString: string) => {
+  const date = new Date(utcString);
+
+  // 로컬 시간대로 날짜 정보 얻기
+  const day = date.getDate();
+  const month = date.getMonth() + 1;
+
+  return `${month}월 ${day}일`;
+};

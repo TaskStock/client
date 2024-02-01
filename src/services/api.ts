@@ -12,8 +12,12 @@ export async function client<T = any>(
   { body, accessToken, ...customConfig }: IClient = {}
 ): Promise<T> {
   // 토큰 유효한지 확인
-
-  await checkAndRenewTokens();
+  const res = (await checkAndRenewTokens()) as any;
+  // AT가 만료되어 갱신한 경우 새 AT로 교체
+  if (res.accessToken) {
+    accessToken = res.accessToken;
+    console.log("새 AT로 교체: ", accessToken);
+  }
 
   const SERVER_URL = getAPIHost();
 

@@ -10,7 +10,7 @@ import {
 import { Image, TouchableOpacity } from "react-native";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
 
-type IconProps = {
+export type IconProps = {
   type:
     | "material"
     | "ionicons"
