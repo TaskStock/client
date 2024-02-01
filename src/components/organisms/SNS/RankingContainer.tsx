@@ -25,6 +25,7 @@ const RankingContainer = () => {
   const { followingList, followerList } = useAppSelect(
     (state) => state.friends
   );
+
   const FirstRoute = () => <RankingTab data={followerList} />;
   const SecondRoute = () => <RankingTab data={followingList} />;
 

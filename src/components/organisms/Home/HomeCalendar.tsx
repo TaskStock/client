@@ -14,13 +14,20 @@ import useTodos from "../../../hooks/useTodos";
 import ItemContainerBox from "../../molecules/ItemContainerBox";
 import { useCurrentDate } from "../../../hooks/useCurrentDate";
 import { Todo } from "../../../@types/todo";
+import { calculateUserDiffRate } from "../../../utils/calculateUserDiffRate";
+import { IUserBox } from "../../../@types/userBox";
 
 export const DateInfo = ({
   currentDate,
   onPressLeft,
   onPressRight,
   isShowingInfo = true,
+  user,
 }: {
+  user: {
+    value_yesterday_ago: IUserBox["value_yesterday_ago"];
+    cumulative_value: IUserBox["cumulative_value"];
+  };
   currentDate: dayjs.Dayjs;
   onPressLeft: () => void;
   onPressRight: () => void;
@@ -28,19 +35,8 @@ export const DateInfo = ({
 }) => {
   const theme = useTheme();
 
-  const { user } = useUser();
+  const { diff, renderDiffRate } = calculateUserDiffRate(user);
 
-  const data = {
-    cumulative_value: user.cumulative_value,
-    value_month_ago: user.value_yesterday_ago,
-  };
-
-  const diff = data.cumulative_value - data.value_month_ago;
-  const diff_rate =
-    ((data.cumulative_value - data.value_month_ago) * 100) /
-    data.cumulative_value;
-
-  const renderDiffRate = diff_rate.toFixed(2);
   const formattedDate = currentDate.format("YYYY년 MM월");
 
   return (
@@ -92,9 +88,21 @@ export const DateInfo = ({
   );
 };
 
-const HomeCalendar = () => {
+const HomeCalendar = ({
+  user: { value_yesterday_ago, cumulative_value },
+  todos,
+}: {
+  todos: {
+    data: Todo[] | undefined;
+    isLoading: boolean;
+    isError: boolean;
+  };
+  user: {
+    value_yesterday_ago: IUserBox["value_yesterday_ago"];
+    cumulative_value: IUserBox["cumulative_value"];
+  };
+}) => {
   const { currentDate, subtract1Month, add1Month } = useCurrentDate();
-  const { data: todos } = useTodos();
 
   const onPressLeft = subtract1Month;
   const onPressRight = add1Month;
@@ -108,12 +116,16 @@ const HomeCalendar = () => {
       }}
     >
       <DateInfo
+        user={{
+          value_yesterday_ago,
+          cumulative_value,
+        }}
         currentDate={currentDate}
         onPressLeft={onPressLeft}
         onPressRight={onPressRight}
       />
       <ItemContainerBox>
-        <Calendar todos={todos} />
+        <Calendar todos={todos.data} />
       </ItemContainerBox>
     </View>
   );

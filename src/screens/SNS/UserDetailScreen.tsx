@@ -108,6 +108,10 @@ const UserDetailScreen = ({ route, navigation }: UserDetailScreenProps) => {
             isLoading: isLoading,
             isError: isError,
           }}
+          user={{
+            value_yesterday_ago: userInfo?.value_yesterday_ago,
+            cumulative_value: userInfo?.cumulative_value,
+          }}
         ></UserDetailSecond>
       ),
       third: () => (

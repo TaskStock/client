@@ -18,6 +18,7 @@ import { setTabIndex } from "../../../store/modules/home";
 import { useResizeLayoutOnFocus } from "../../../hooks/useResizeLayoutOnFocus";
 import useUser from "../../../hooks/useUser";
 import useValue from "../../../hooks/useValue";
+import useTodos from "../../../hooks/useTodos";
 
 const clientHeight = Dimensions.get("window").height;
 
@@ -33,6 +34,11 @@ const GCContainer = () => {
 
   const { user, loading: userInfoLoading, error: userInfoError } = useUser();
   const { data: values, error, isError, isLoading, refetch } = useValue();
+  const {
+    data: todos,
+    isLoading: todosIsLoading,
+    isError: todosIsError,
+  } = useTodos();
 
   const sceneMap = useMemo(() => {
     return {
@@ -54,7 +60,19 @@ const GCContainer = () => {
           }}
         />
       ),
-      second: () => <HomeCalendar />,
+      second: () => (
+        <HomeCalendar
+          user={{
+            value_yesterday_ago: user?.value_yesterday_ago,
+            cumulative_value: user?.cumulative_value,
+          }}
+          todos={{
+            data: todos,
+            isLoading: todosIsLoading,
+            isError: todosIsError,
+          }}
+        />
+      ),
     };
   }, [user, values]);
 
