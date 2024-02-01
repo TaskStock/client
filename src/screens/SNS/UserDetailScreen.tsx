@@ -33,6 +33,7 @@ import TodoItem from "../../components/molecules/Home/TodoItem";
 import { useTheme } from "styled-components/native";
 import UserInfo from "../../components/organisms/SNS/UserInfo";
 import { useAppDispatch } from "../../store/configureStore.hooks";
+import { checkIsSameLocalDay } from "../../utils/checkIsSameLocalDay";
 
 const routeMap = [
   { key: "first", title: "그래프" },
@@ -52,6 +53,8 @@ const UserDetailScreen = ({ route, navigation }: UserDetailScreenProps) => {
     userId,
   });
 
+  const [selectedProjectId, setSelectedProjectId] = useState(null);
+
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -60,7 +63,6 @@ const UserDetailScreen = ({ route, navigation }: UserDetailScreenProps) => {
 
   const projects = data?.projects.filter((project) => {
     if (project.public_range == "all") return true;
-
     if (project.public_range == "follow") {
       if (data.targetData.isFollowingYou) return true;
       else return false;
@@ -72,10 +74,20 @@ const UserDetailScreen = ({ route, navigation }: UserDetailScreenProps) => {
   const isPrivate = data?.targetData.private;
 
   const todos = data?.todos;
+
+  const { currentDate, currentDateString } = useCurrentDate();
+
+  const currentDaySelectedProjectTodos = todos
+    ? todos
+        .filter((todo) => checkIsSameLocalDay(todo.date, currentDateString))
+        .filter((todo) => {
+          if (selectedProjectId == null) return true;
+          else return todo.project_id == selectedProjectId;
+        })
+    : [];
+
   const values = data?.values;
   const userInfo = data?.targetData;
-
-  const { currentDate } = useCurrentDate();
 
   const headerDate = useMemo(() => {
     return currentDate.format("MM월 DD일");
@@ -126,17 +138,6 @@ const UserDetailScreen = ({ route, navigation }: UserDetailScreenProps) => {
     };
   }, [data]);
 
-  const theme = useTheme();
-
-  const { index, onChangeIndex, renderScene, routes } = useTab({
-    routeMap,
-    sceneMap,
-  });
-
-  const clientHeight = Dimensions.get("window").height;
-
-  const minHeight = index <= 2 ? clientHeight * 0.48 : clientHeight * 0.7;
-
   const renderTabBar = (
     props: SceneRendererProps & {
       navigationState: NavigationState<{
@@ -155,7 +156,15 @@ const UserDetailScreen = ({ route, navigation }: UserDetailScreenProps) => {
     );
   };
 
-  const [selectedProjectId, setSelectedProjectId] = useState(null);
+  const theme = useTheme();
+
+  const { index, onChangeIndex, renderScene, routes } = useTab({
+    routeMap,
+    sceneMap,
+  });
+
+  const clientHeight = Dimensions.get("window").height;
+  const minHeight = index <= 2 ? clientHeight * 0.48 : clientHeight * 0.7;
 
   if (isLoading || isError || !data) {
     return (
@@ -215,8 +224,8 @@ const UserDetailScreen = ({ route, navigation }: UserDetailScreenProps) => {
                   onPressProject={(id) => {}}
                 ></HorizontalProjectList>
                 <DrawerContent>
-                  {todos &&
-                    todos.map((todo) => (
+                  {currentDaySelectedProjectTodos.length > 0 ? (
+                    currentDaySelectedProjectTodos.map((todo) => (
                       <View
                         style={{
                           pointerEvents: "none",
@@ -224,7 +233,10 @@ const UserDetailScreen = ({ route, navigation }: UserDetailScreenProps) => {
                       >
                         <TodoItem key={todo.todo_id} todo={todo} />
                       </View>
-                    ))}
+                    ))
+                  ) : (
+                    <Text size="md">등록된 투두가 없습니다.</Text>
+                  )}
                 </DrawerContent>
               </View>
             </>

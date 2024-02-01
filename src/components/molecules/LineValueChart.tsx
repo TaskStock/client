@@ -58,8 +58,13 @@ export default function LineValueChart({
   const twoThirds = minY + ((maxY - minY) * 2) / 3;
   const oneThird = minY + ((maxY - minY) * 1) / 3;
 
-  const maxYWithPadding = maxY + (maxY - minY) / 3;
-  const minYWithPadding = minY - (maxY - minY) / 3;
+  let maxYWithPadding = maxY + (maxY - minY) / 3;
+  let minYWithPadding = minY - (maxY - minY) / 3;
+
+  if (maxYWithPadding === minYWithPadding) {
+    maxYWithPadding = maxYWithPadding + 1;
+    minYWithPadding = minYWithPadding - 1;
+  }
 
   return (
     <VictoryChart
