@@ -65,16 +65,17 @@ export default function LineValueChart({
     <VictoryChart
       width={width}
       height={height}
+      padding={{}}
       containerComponent={
         <VictoryZoomContainer zoomDimension="x"></VictoryZoomContainer>
       }
+      style={{}}
     >
       <VictoryLine
         theme={VictoryTheme.material}
         domain={{
           y: [minYWithPadding, maxYWithPadding],
-          // x: [-1, maxLength],
-          x: [-1, 30],
+          x: [-1, 31],
         }}
         style={{
           data: {

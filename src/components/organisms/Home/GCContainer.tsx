@@ -8,7 +8,7 @@ import {
 } from "react-native-tab-view";
 import { ComponentHeightContext } from "../../../utils/ComponentHeightContext";
 import HomeCalendar from "./HomeCalendar";
-import HomeGraph from "../GraphWithUserInfo";
+import GraphWithUserInfo from "../GraphWithUserInfo";
 import TabHeader from "../../molecules/TabHeader";
 import {
   useAppDispatch,
@@ -18,7 +18,6 @@ import { setTabIndex } from "../../../store/modules/home";
 import { useResizeLayoutOnFocus } from "../../../hooks/useResizeLayoutOnFocus";
 import useUser from "../../../hooks/useUser";
 import useValue from "../../../hooks/useValue";
-import useTodos from "../../../hooks/useTodos";
 
 const clientHeight = Dimensions.get("window").height;
 
@@ -38,10 +37,10 @@ const GCContainer = () => {
   const sceneMap = useMemo(() => {
     return {
       first: () => (
-        <HomeGraph
+        <GraphWithUserInfo
           userInfo={{
             cumulative_value: user?.cumulative_value,
-            value_month_ago: user?.value_yesterday_ago,
+            value_yesterday_ago: user?.value_yesterday_ago,
             nickname: user?.user_name,
             error: userInfoError,
             loading: userInfoLoading,

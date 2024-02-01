@@ -67,7 +67,7 @@ const HomeUserInfo = ({
             styles={{ paddingTop: spacing.small }}
           >
             <Text size="sm" weight="regular" color={theme.textDim}>
-              1개월 전보다
+              어제보다
             </Text>
             <Text
               size="sm"
