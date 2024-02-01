@@ -3,12 +3,9 @@ import { Animated } from "react-native";
 import { NavigationState, SceneRendererProps } from "react-native-tab-view";
 import styled, { useTheme } from "styled-components/native";
 import { spacing } from "../../constants/spacing";
-import { useAppDispatch } from "../../store/configureStore.hooks";
-import { setTabIndex } from "../../store/modules/home";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
 import { ComponentHeightContext } from "../../utils/ComponentHeightContext";
 import { useResizeLayoutOnFocus } from "../../hooks/useResizeLayoutOnFocus";
-import { useFocusEffect } from "@react-navigation/native";
 
 const Container = styled.View`
   padding: 0 ${spacing.gutter}px;
@@ -25,6 +22,7 @@ const Tab = styled.Pressable<{ graphSelected: boolean }>`
   align-items: center;
   justify-content: center;
 `;
+
 const TabText = styled.Text<{ isFocused: boolean }>`
   font-size: ${useResponsiveFontSize(20)}px;
   font-family: ${(props) => (props.isFocused ? "bold" : "regular")};
@@ -64,6 +62,13 @@ export default function TabHeader({
   const onLayout = useResizeLayoutOnFocus({
     resizeFunction: setGCTabHeight,
   });
+
+  const tabLength = props.navigationState.routes.length || 1;
+
+  const maxTabPosition =
+    (tabLength - 1) * spacing.gutter +
+      tabWidthArr.current.reduce((acc, cur) => acc + cur, 0) -
+      tabWidthArr.current[tabWidthArr.current.length - 1] || 0;
 
   return (
     <Container onLayout={onLayout}>
@@ -106,8 +111,8 @@ export default function TabHeader({
           transform: [
             {
               translateX: translateValue.interpolate({
-                inputRange: [0, 1],
-                outputRange: [0, beforeTabWidth.current + spacing.gutter],
+                inputRange: [0, tabLength - 1],
+                outputRange: [0, maxTabPosition],
               }),
             },
           ],

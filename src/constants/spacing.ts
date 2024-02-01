@@ -5,6 +5,5 @@ export const spacing = {
   offset: useResponsiveFontSize(20),
   padding: useResponsiveFontSize(10),
   small: useResponsiveFontSize(4),
-
   lineHeight: useResponsiveFontSize(20),
 };

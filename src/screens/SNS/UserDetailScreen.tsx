@@ -135,7 +135,7 @@ const UserDetailScreen = ({ route, navigation }: UserDetailScreenProps) => {
 
   const clientHeight = Dimensions.get("window").height;
 
-  const minHeight = index <= 1 ? clientHeight * 0.48 : clientHeight * 0.7;
+  const minHeight = index <= 2 ? clientHeight * 0.48 : clientHeight * 0.7;
 
   const renderTabBar = (
     props: SceneRendererProps & {
@@ -195,7 +195,7 @@ const UserDetailScreen = ({ route, navigation }: UserDetailScreenProps) => {
               minHeight: minHeight,
             }}
           ></TabView>
-          {index <= 1 && (
+          {index <= 2 && (
             <>
               <Margin margin={spacing.padding} />
               <View
