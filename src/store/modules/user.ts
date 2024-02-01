@@ -17,7 +17,7 @@ interface initialState {
     following_count: number;
     premium: number;
     cumulative_value: number;
-    value_month_ago: number;
+    value_yesterday_ago: number;
     created_time: string;
     image: string;
     introduce: string;

@@ -3,6 +3,7 @@ export interface IUserBox {
   user_name: string;
   rank: number;
   cumulative_value: number;
+  value_yesterday_ago: number;
   image: string;
   strategy: string;
   private: boolean;

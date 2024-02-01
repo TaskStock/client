@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import React, { memo, useContext, useEffect, useState } from "react";
+import React, { memo, useContext } from "react";
 import { Pressable, ScrollView, View } from "react-native";
 import styled from "styled-components/native";
 import { spacing } from "../../../constants/spacing";
@@ -18,20 +18,13 @@ import Icons from "../../atoms/Icons";
 import Text from "../../atoms/Text";
 import DraggableTodoList from "../../organisms/Home/DraggableTodoList";
 import BottomDrawer from "./BottomDrawer";
-import ProjectSelectBtn from "./ProjectSelectBtn";
 import { useTheme } from "styled-components";
 import { useProject } from "../../../hooks/useProject";
 import { setSelectedProjectId } from "../../../store/modules/project/project";
+import HorizontalProjectList from "../../organisms/HorizontalProjectList";
 
 export const DateContainer = styled.View`
   padding: ${spacing.small}px ${spacing.gutter}px 0;
-`;
-export const Projects = styled.View`
-  padding-left: ${spacing.gutter}px;
-  border-bottom-width: 1px;
-  border-bottom-color: ${({ theme }) => theme.textDimmer};
-  flex-direction: row;
-  gap: ${spacing.offset}px;
 `;
 
 const TodoContainer = () => {
@@ -87,31 +80,13 @@ const TodoContainer = () => {
             />
           </FlexBox>
         </DateContainer>
-        <ScrollView
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-          style={{
-            flexGrow: 0,
+        <HorizontalProjectList
+          selectedProjectId={selectedProjectId}
+          onPressProject={(id) => {
+            dispatch(setSelectedProjectId(id));
           }}
-        >
-          <Projects>
-            <ProjectSelectBtn
-              projectName={"전체"}
-              selected={selectedProjectId === null}
-              onPress={() => dispatch(setSelectedProjectId(null))}
-            />
-            {projects.map((project) => (
-              <ProjectSelectBtn
-                projectName={project.name}
-                key={project.project_id}
-                selected={selectedProjectId === project.project_id}
-                onPress={() =>
-                  dispatch(setSelectedProjectId(project.project_id))
-                }
-              />
-            ))}
-          </Projects>
-        </ScrollView>
+          projects={projects}
+        ></HorizontalProjectList>
 
         <View
           style={{

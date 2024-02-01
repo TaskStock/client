@@ -1,105 +1,257 @@
-import React, { useEffect, useState } from "react";
-import Icons from "../../components/atoms/Icons";
+import { View, ScrollView, Dimensions } from "react-native";
+import React, { useEffect, useMemo, useState } from "react";
+import {
+  NavigationState,
+  SceneRendererProps,
+  TabView,
+} from "react-native-tab-view";
+import TabHeader from "../../components/molecules/TabHeader";
+import { useTab } from "../../hooks/useTab";
 import PageHeader from "../../components/molecules/PageHeader";
+import Icons from "../../components/atoms/Icons";
+import UserDetailFirst from "../../components/pages/sns/UserDetailFirst";
+import UserDetailSecond from "../../components/pages/sns/UserDetailSecond";
+import UserDetailThird from "../../components/pages/sns/UserDetailThird";
+import Margin from "../../components/atoms/Margin";
+import {
+  DrawerContent,
+  DrawerHeader,
+} from "../../components/molecules/DrawerParts";
 import { spacing } from "../../constants/spacing";
+import Text from "../../components/atoms/Text";
+import HorizontalProjectList from "../../components/organisms/HorizontalProjectList";
+import {
+  getTargetUserThunk,
+  useGetFriendInfoQuery,
+} from "../../store/modules/getFriends";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { SnsStackParamList } from "../../navigators/SnsStack";
+import CenterLayout from "../../components/atoms/CenterLayout";
+import LoadingSpinner from "../../components/atoms/LoadingSpinner";
+import { useCurrentDate } from "../../hooks/useCurrentDate";
+import TodoItem from "../../components/molecules/Home/TodoItem";
+import { useTheme } from "styled-components/native";
 import UserInfo from "../../components/organisms/SNS/UserInfo";
-import styled from "styled-components/native";
-import { client } from "../../services/api";
-import { useAppDispatch, useAppSelect } from "../../store/configureStore.hooks";
-import { getTargetUserThunk } from "../../store/modules/getFriends";
+import { useAppDispatch } from "../../store/configureStore.hooks";
+import { checkIsSameLocalDay } from "../../utils/checkIsSameLocalDay";
 
-// const data = {
-//   result: "success",
-//   targetData: {
-//     user_id: 132,
-//     user_name: "민세원",
-//     image: "public/images/ic_profile.png",
-//     cumulative_value: 0,
-//     strategy: "local",
-//     private: false,
-//     pending: false,
-//     follower_count: 2,
-//     following_count: 9,
-//     introduce: null,
-//     isFollowingMe: false,
-//     isFollowingYou: false,
-//   },
-//   values: [
-//     {
-//       value_id: 84,
-//       date: "2024-01-16T21:00:00.000Z",
-//       start: 50000,
-//       end: 50000,
-//       low: 50000,
-//       high: 50000,
-//       user_id: 132,
-//     },
-//   ],
-//   todos: [
-//     {
-//       todo_id: 684,
-//       content: "ㅎㅇ",
-//       check: false,
-//       date: "2024-01-30T02:01:26.124Z",
-//       level: 3,
-//       index: 1,
-//       user_id: 132,
-//       project_id: 23,
-//     },
-//   ],
-//   projects: [
-//     {
-//       project_id: 23,
-//       name: "이이잉",
-//       public_range: "all",
-//       user_id: 132,
-//       finished: false,
-//     },
-//   ],
-// };
+const routeMap = [
+  { key: "first", title: "그래프" },
+  { key: "second", title: "캘린더" },
+  { key: "third", title: "프로젝트" },
+];
 
-const Container = styled.View`
-  flex: 1;
-  padding: 0 ${spacing.offset}px;
-`;
+type UserDetailScreenProps = NativeStackScreenProps<
+  SnsStackParamList,
+  "UserDetail"
+>;
 
-const UserDetailScreen = ({ route }) => {
-  const userId = route.params.userId;
+const UserDetailScreen = ({ route, navigation }: UserDetailScreenProps) => {
+  const { userId } = route.params;
+
+  const { data, isLoading, isError, error, refetch } = useGetFriendInfoQuery({
+    userId,
+  });
+
+  const [selectedProjectId, setSelectedProjectId] = useState(null);
+
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     dispatch(getTargetUserThunk(userId));
-  }, []);
+  }, [userId]);
 
-  // const getUserInfo = async () => {
-  //   try {
-  //     const res = await client.get(`sns/users/${userId}`, {
-  //       accessToken,
-  //     });
-  //     if (res.result === "success") {
-  //       console.log("성공", res.targetData);
-  //       setUserInfo(res.targetData);
-  //       return res;
-  //     } else {
-  //       console.log("서버에서 타겟유저 정보 불러오기 실패: ", res);
-  //     }
-  //   } catch (e) {
-  //     console.log("타겟유저 정보 불러오기 실패: ", e);
-  //   }
-  // };
-  // useEffect(() => {
-  //   getUserInfo();
-  // }, []);
-  return (
-    <>
-      <PageHeader
-        title=""
-        headerRight={<Icons name="share" type="entypo" size={spacing.gutter} />}
+  const projects = data?.projects.filter((project) => {
+    if (project.public_range == "all") return true;
+    if (project.public_range == "follow") {
+      if (data.targetData.isFollowingYou) return true;
+      else return false;
+    }
+
+    return false;
+  });
+
+  const isPrivate = data?.targetData.private;
+
+  const todos = data?.todos;
+
+  const { currentDate, currentDateString } = useCurrentDate();
+
+  const currentDaySelectedProjectTodos = todos
+    ? todos
+        .filter((todo) => checkIsSameLocalDay(todo.date, currentDateString))
+        .filter((todo) => {
+          if (selectedProjectId == null) return true;
+          else return todo.project_id == selectedProjectId;
+        })
+    : [];
+
+  const values = data?.values;
+  const userInfo = data?.targetData;
+
+  const headerDate = useMemo(() => {
+    return currentDate.format("MM월 DD일");
+  }, [currentDate]);
+
+  const sceneMap = useMemo(() => {
+    return {
+      first: () => (
+        <UserDetailFirst
+          userInfo={{
+            cumulative_value: userInfo?.cumulative_value,
+            value_yesterday_ago: userInfo?.value_yesterday_ago,
+            nickname: userInfo?.user_name,
+            error: error,
+            loading: isLoading,
+          }}
+          value={{
+            data: values,
+            isLoading: isLoading,
+            isError: isError,
+            error: error,
+            refetch: refetch,
+          }}
+        ></UserDetailFirst>
+      ),
+      second: () => (
+        <UserDetailSecond
+          todos={{
+            data: todos,
+            isLoading: isLoading,
+            isError: isError,
+          }}
+          user={{
+            value_yesterday_ago: userInfo?.value_yesterday_ago,
+            cumulative_value: userInfo?.cumulative_value,
+          }}
+        ></UserDetailSecond>
+      ),
+      third: () => (
+        <UserDetailThird
+          projects={{
+            data: projects,
+            isLoading: isLoading,
+            isError: isError,
+          }}
+        ></UserDetailThird>
+      ),
+    };
+  }, [data]);
+
+  const renderTabBar = (
+    props: SceneRendererProps & {
+      navigationState: NavigationState<{
+        key: string;
+        title: string;
+      }>;
+    }
+  ) => {
+    return (
+      <TabHeader
+        props={props}
+        onPressTab={(index) => {
+          onChangeIndex(index);
+        }}
       />
-      <UserInfo />
+    );
+  };
 
-      <Container>{/* 여기에 추가 */}</Container>
-    </>
+  const theme = useTheme();
+
+  const { index, onChangeIndex, renderScene, routes } = useTab({
+    routeMap,
+    sceneMap,
+  });
+
+  const clientHeight = Dimensions.get("window").height;
+  const minHeight = index <= 2 ? clientHeight * 0.48 : clientHeight * 0.7;
+
+  if (isLoading || isError || !data) {
+    return (
+      <View style={{ flex: 1 }}>
+        <PageHeader
+          headerRight={
+            <Icons type="entypo" name="share" size={28} color="black" />
+          }
+        />
+        <CenterLayout>
+          <LoadingSpinner></LoadingSpinner>
+        </CenterLayout>
+      </View>
+    );
+  }
+
+  return (
+    <View style={{ flex: 1 }}>
+      <PageHeader
+        headerRight={
+          <Icons type="entypo" name="share" size={28} color="black" />
+        }
+      />
+
+      {!isPrivate ? (
+        <ScrollView>
+          <UserInfo />
+          <Margin margin={spacing.offset} />
+          <TabView
+            navigationState={{ index, routes }}
+            renderScene={renderScene}
+            onIndexChange={onChangeIndex}
+            renderTabBar={(props) => renderTabBar(props)}
+            onSwipeEnd={() => {}}
+            swipeEnabled={false}
+            style={{
+              minHeight: minHeight,
+            }}
+          ></TabView>
+          {index <= 2 && (
+            <>
+              <Margin margin={spacing.padding} />
+              <View
+                style={{
+                  backgroundColor: "white",
+                  height: 1000,
+                }}
+              >
+                <DrawerHeader>
+                  <Text size="xl" weight="bold">
+                    {headerDate}
+                  </Text>
+                </DrawerHeader>
+                <HorizontalProjectList
+                  selectedProjectId={selectedProjectId}
+                  projects={projects}
+                  onPressProject={(id) => {}}
+                ></HorizontalProjectList>
+                <DrawerContent>
+                  {currentDaySelectedProjectTodos.length > 0 ? (
+                    currentDaySelectedProjectTodos.map((todo) => (
+                      <View
+                        style={{
+                          pointerEvents: "none",
+                        }}
+                      >
+                        <TodoItem key={todo.todo_id} todo={todo} />
+                      </View>
+                    ))
+                  ) : (
+                    <Text size="md">등록된 투두가 없습니다.</Text>
+                  )}
+                </DrawerContent>
+              </View>
+            </>
+          )}
+        </ScrollView>
+      ) : (
+        <CenterLayout>
+          <Icons type="AntDesign" name="lock" size={70} color="black" />
+          <Margin margin={spacing.offset} />
+          <Text size="lg" weight="medium" color={theme.textDim}>
+            비공개 계정입니다.
+          </Text>
+        </CenterLayout>
+      )}
+    </View>
   );
 };
 

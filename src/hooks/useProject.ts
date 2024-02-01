@@ -6,7 +6,7 @@ import {
 } from "../store/modules/project/project";
 
 export const useProject = () => {
-  const { data } = useGetAllProjectsQuery();
+  const { data, isLoading, isError } = useGetAllProjectsQuery();
 
   const { selectedProjectId } = useAppSelect((state) => state.project);
 
@@ -37,6 +37,8 @@ export const useProject = () => {
   };
 
   return {
+    isLoading,
+    isError,
     projects,
     selectedProjectId,
     isAddProject,

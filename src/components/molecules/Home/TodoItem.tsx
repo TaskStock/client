@@ -129,8 +129,6 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
   const [deleteTodo] = useDeleteTodoMutation();
   const [toggleCheckTodo] = useToggleTodoMutation();
 
-  console.log("todoItem rerendered", todo.content);
-
   const getAllTodoQueryArg = useGetAllTodoArgs();
   const { startDate, endDate } = useGetValuesArg();
 

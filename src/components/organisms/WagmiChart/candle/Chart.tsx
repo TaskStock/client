@@ -2,7 +2,7 @@ import * as React from "react";
 import { Dimensions, View, ViewProps } from "react-native";
 
 import { useCandlestickChart } from "./useCandlestickChart";
-import { sizeContext } from "../../Home/HomeGraph";
+import { sizeContext } from "../../GraphWithUserInfo";
 import { spacing } from "../../../../constants/spacing";
 
 export const CandlestickChartDimensionsContext = React.createContext({

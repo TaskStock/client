@@ -8,15 +8,16 @@ import {
   CandlestickChartProvider,
 } from "../organisms/WagmiChart/candle";
 import { CandlestickChart } from "../organisms/WagmiChart/candle/Chart";
-import { sizeContext } from "../organisms/Home/HomeGraph";
+import { sizeContext } from "../organisms/GraphWithUserInfo";
+import { WagmiData } from "../../@types/chart";
 
 export const CustomWidthContext = React.createContext({
   width: 0,
   height: 0,
 });
 
-export default function WagmiChart() {
-  const { data } = useWagmiCandleStick();
+export default function WagmiChart({ data }: { data: WagmiData[] }) {
+  // const { data } = useWagmiCandleStick();
   const theme = useTheme();
 
   const { width: contextWidth, height: contextHeight } =
