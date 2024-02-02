@@ -1,6 +1,6 @@
 import messaging from "@react-native-firebase/messaging";
 import { Alert, Platform } from "react-native";
-import { setPushOn } from "../../store/modules/pushNoti";
+import { toggleStateThunk } from "./pushNotiThunk";
 
 class FCMService {
   register = (onRegister, onNotification, onOpenNotification, dispatch) => {
@@ -24,7 +24,7 @@ class FCMService {
       .then((enabled) => {
         this.getToken(onRegister);
         if (enabled) {
-          dispatch(setPushOn(true));
+          dispatch(toggleStateThunk(true));
         } else {
           this.requestPermission(onRegister);
         }
@@ -73,15 +73,16 @@ class FCMService {
     onNotification,
     onOpenNotification
   ) => {
+    // 백그라운드에서 알림을 클릭했을 때의 처리 로직
     messaging().onNotificationOpenedApp((remoteMessage) => {
       if (remoteMessage) {
-        const notification = remoteMessage.notification;
-        onOpenNotification(notification);
-      }
+        console.log(remoteMessage.data.target_id);
 
-      Alert.alert(remoteMessage.body);
+        onOpenNotification(remoteMessage);
+      }
     });
 
+    // 앱이 종료된 상태에서 사용자가 알림을 클릭하여 앱이 시작될 때
     messaging()
       .getInitialNotification()
       .then((remoteMessage) => {
@@ -94,18 +95,31 @@ class FCMService {
         console.log("quit state notification error : ", error);
       });
 
+    // 포그라운드 상태
     this.messageListener = messaging().onMessage(async (remoteMessage) => {
       if (remoteMessage) {
-        let notification = null;
         if (Platform.OS === "ios") {
-          notification = remoteMessage.data.notification;
+          const notification =
+            remoteMessage.notification || remoteMessage.data.notification;
+
+          // 포그라운드 상태에서 메시지가 도착했을 때의 처리 로직
+          if (notification) {
+            console.log(
+              "Notification while app is in foreground:",
+              notification
+            );
+            onNotification(notification);
+          }
         } else {
-          notification = remoteMessage.notification;
+          // Android
+          if (remoteMessage.notification) {
+            onNotification(remoteMessage.notification);
+          }
         }
-        onNotification(notification);
       }
     });
 
+    // 토큰 갱신
     messaging().onTokenRefresh((fcmToken) => {
       console.log("New fcm token refresh: ", fcmToken);
       onRegister(fcmToken);
@@ -121,10 +135,9 @@ class FCMService {
     if (isPushOn) {
       // 푸시 알림 on
       this.checkPermission(onRegister, dispatch);
-      dispatch(setPushOn(true));
     } else {
       // 푸시 알림 off
-      dispatch(setPushOn(false));
+      dispatch(toggleStateThunk(false));
     }
   };
 }
