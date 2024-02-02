@@ -3,13 +3,14 @@ import { Alert } from "react-native";
 import { fcmService } from "./push.fcm";
 import { localNotificationService } from "./push.noti";
 import { client } from "../../services/api";
-import { useAppSelect } from "../../store/configureStore.hooks";
+import { useAppDispatch, useAppSelect } from "../../store/configureStore.hooks";
+import { setFcmToken } from "../../store/modules/pushNoti";
 
 export default function usePushNotification() {
   const { accessToken } = useAppSelect((state) => state.auth);
+  const { isPushOn, fcmToken } = useAppSelect((state) => state.pushNoti);
 
-  const [fcmToken, setFcmToken] = useState("");
-  const [isPushOn, setIsPushOn] = useState(false);
+  const dispatch = useAppDispatch();
 
   const sendTokenToServer = async (fcmToken, isPushOn) => {
     if (accessToken === "") return;
@@ -41,14 +42,14 @@ export default function usePushNotification() {
       onRegister,
       onNotification,
       onOpenNotification,
-      setIsPushOn
+      dispatch
     );
     localNotificationService.configure(onOpenNotification);
   }, []);
 
   const onRegister = (tk) => {
     console.log("[App] onRegister : fcmToken :", tk);
-    if (tk) setFcmToken(tk);
+    if (tk) dispatch(setFcmToken(tk));
   };
 
   const onNotification = (notify) => {

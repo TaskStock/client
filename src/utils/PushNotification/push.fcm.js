@@ -1,9 +1,10 @@
 import messaging from "@react-native-firebase/messaging";
 import { Alert, Platform } from "react-native";
+import { setPushOn } from "../../store/modules/pushNoti";
 
 class FCMService {
-  register = (onRegister, onNotification, onOpenNotification, setIsPushOn) => {
-    this.checkPermission(onRegister, setIsPushOn);
+  register = (onRegister, onNotification, onOpenNotification, dispatch) => {
+    this.checkPermission(onRegister, dispatch);
     this.createNotificationListeners(
       onRegister,
       onNotification,
@@ -17,13 +18,13 @@ class FCMService {
     }
   };
 
-  checkPermission = (onRegister, setIsPushOn) => {
+  checkPermission = (onRegister, dispatch) => {
     messaging()
       .hasPermission()
       .then((enabled) => {
         this.getToken(onRegister);
         if (enabled) {
-          setIsPushOn(true);
+          dispatch(setPushOn(true));
         } else {
           this.requestPermission(onRegister);
         }
@@ -106,12 +107,25 @@ class FCMService {
     });
 
     messaging().onTokenRefresh((fcmToken) => {
+      console.log("New fcm token refresh: ", fcmToken);
       onRegister(fcmToken);
     });
   };
 
   unRegister = () => {
     this.messageListener();
+  };
+
+  // 푸시 알림 토글
+  togglePushNotifications = (isPushOn, onRegister, dispatch) => {
+    if (isPushOn) {
+      // 푸시 알림 on
+      this.checkPermission(onRegister, dispatch);
+      dispatch(setPushOn(true));
+    } else {
+      // 푸시 알림 off
+      dispatch(setPushOn(false));
+    }
   };
 }
 

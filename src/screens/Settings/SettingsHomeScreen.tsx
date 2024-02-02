@@ -9,6 +9,8 @@ import { checkStorage } from "../../utils/asyncStorage";
 import { logout } from "../../utils/authUtils/signInUtils";
 import { resetNavigation } from "../../utils/resetNavigation";
 import { Alert } from "react-native";
+import { fcmService } from "../../utils/PushNotification/push.fcm";
+import { setFcmToken, setPushOn } from "../../store/modules/pushNoti";
 
 const Container = styled.View`
   flex: 1;
@@ -56,9 +58,17 @@ const SettingsHomeScreen = ({ navigation }) => {
   };
 
   // 푸시알림
-  const [isEnabled, setIsEnabled] = useState<boolean>(false);
+  const { isPushOn } = useAppSelect((state) => state.pushNoti);
+  const [isEnabled, setIsEnabled] = useState<boolean>(isPushOn);
+
+  const onRegister = (tk) => {
+    if (tk) dispatch(setFcmToken(tk));
+  };
+
   const toggleSwitch = () => {
-    // dispatch 푸시알림
+    fcmService.togglePushNotifications(!isPushOn, onRegister, dispatch);
+    dispatch(setPushOn(!isPushOn));
+    setIsEnabled(!isPushOn);
   };
 
   return (
