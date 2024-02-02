@@ -7,7 +7,6 @@ import {
   registerWithEmail,
 } from "../../utils/authUtils/signInUtils";
 import { checkAndRenewTokens } from "../../utils/authUtils/tokenUtils";
-import store from "../configureStore";
 
 interface IInitialUserState {
   accessToken: string;
@@ -231,6 +230,7 @@ const authSlice = createSlice({
       // 토큰 갱신
       .addCase(checkAndRenewTokens.pending, (state) => {
         state.loading = true;
+        console.log("토큰 갱신 진행중");
       })
       .addCase(checkAndRenewTokens.fulfilled, (state, action) => {
         state.loading = false;
@@ -248,11 +248,14 @@ const authSlice = createSlice({
           }
           storeData("accessToken", accessToken);
           storeData("accessExp", accessExp);
+          console.log("토큰 갱신 성공 ", action.payload);
         }
+        console.log("토큰 유효 in redux");
       })
       .addCase(checkAndRenewTokens.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
+        console.log("토큰 갱신 에러: ", action.payload);
       });
   },
 });

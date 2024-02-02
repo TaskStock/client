@@ -2,17 +2,47 @@ import { useState, useEffect } from "react";
 import { Alert } from "react-native";
 import { fcmService } from "./push.fcm";
 import { localNotificationService } from "./push.noti";
+import { client } from "../../services/api";
+import { useAppSelect } from "../../store/configureStore.hooks";
 
 export default function usePushNotification() {
+  const { accessToken } = useAppSelect((state) => state.auth);
+
   const [fcmToken, setFcmToken] = useState("");
+  const [isPushOn, setIsPushOn] = useState(false);
+
+  const sendTokenToServer = async (fcmToken, isPushOn) => {
+    if (accessToken === "") return;
+    try {
+      await client.post(
+        "notice/fcm/token",
+        {
+          isPushOn: isPushOn,
+          FCMToken: fcmToken,
+        },
+        { accessToken }
+      );
+      console.log("푸시알림 토큰 서버 전송 성공");
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   useEffect(() => {
-    console.log("fcmToken : ", fcmToken);
-  }, [fcmToken]);
+    if (fcmToken) {
+      // TODO 푸시알림 토큰을 서버로 보내서 저장
+      sendTokenToServer(fcmToken, isPushOn);
+    }
+  }, [fcmToken, isPushOn, accessToken]);
 
   useEffect(() => {
     fcmService.registerAppWithFCM();
-    fcmService.register(onRegister, onNotification, onOpenNotification);
+    fcmService.register(
+      onRegister,
+      onNotification,
+      onOpenNotification,
+      setIsPushOn
+    );
     localNotificationService.configure(onOpenNotification);
   }, []);
 

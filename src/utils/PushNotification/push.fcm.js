@@ -2,8 +2,8 @@ import messaging from "@react-native-firebase/messaging";
 import { Alert, Platform } from "react-native";
 
 class FCMService {
-  register = (onRegister, onNotification, onOpenNotification) => {
-    this.checkPermission(onRegister);
+  register = (onRegister, onNotification, onOpenNotification, setIsPushOn) => {
+    this.checkPermission(onRegister, setIsPushOn);
     this.createNotificationListeners(
       onRegister,
       onNotification,
@@ -17,12 +17,13 @@ class FCMService {
     }
   };
 
-  checkPermission = (onRegister) => {
+  checkPermission = (onRegister, setIsPushOn) => {
     messaging()
       .hasPermission()
       .then((enabled) => {
+        this.getToken(onRegister);
         if (enabled) {
-          this.getToken(onRegister);
+          setIsPushOn(true);
         } else {
           this.requestPermission(onRegister);
         }
