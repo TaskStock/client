@@ -70,7 +70,7 @@ export const getFriendsThunk = createAsyncThunk(
 
     try {
       const res = await client.get("sns/list", { accessToken });
-      // console.log(res); // res.followerList, res.followingList
+      console.log(res); // res.followerList, res.followingList
       return res;
     } catch (error) {
       console.log(error);

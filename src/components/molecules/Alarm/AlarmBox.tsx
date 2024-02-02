@@ -105,27 +105,27 @@ const AlarmBox = ({ item }: { item: IAlarmData }) => {
       switch (buttonText) {
         case "팔로우":
         case "맞팔로우":
-          await followInAlarm(userId, accessToken);
+          await followInAlarm(userId, accessToken, alarmItem.notice_id);
           updateAlarmInfo({
             pending: isPrivate,
             isFollowingYou: !isPrivate,
           });
           break;
         case "팔로잉":
-          await unfollowInAlarm(userId, accessToken);
+          await unfollowInAlarm(userId, accessToken, alarmItem.notice_id);
           updateAlarmInfo({
             isFollowingYou: false,
           });
           break;
         case "요청됨":
-          await cancelRequestInAlarm(userId, accessToken);
+          await cancelRequestInAlarm(userId, accessToken, alarmItem.notice_id);
           updateAlarmInfo({
             pending: false,
             isFollowingYou: false,
           });
           break;
         case "수락":
-          await acceptRequestInAlarm(userId, accessToken);
+          await acceptRequestInAlarm(userId, accessToken, alarmItem.notice_id);
           updateAlarmInfo({
             displayAccept: false,
             isFollowingMe: true,

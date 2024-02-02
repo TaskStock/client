@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useRef, useState } from "react";
+import React, { memo, useRef } from "react";
 import { Animated, Dimensions, PanResponder } from "react-native";
 import styled from "styled-components/native";
 import { spacing } from "../../../constants/spacing";

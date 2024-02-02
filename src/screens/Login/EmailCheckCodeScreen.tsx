@@ -48,6 +48,7 @@ const BorderBottom = styled.View<{ hasContent: boolean }>`
     props.hasContent ? props.theme.high : props.theme.textDimmer};
   border-radius: ${spacing.padding}px;
 `;
+
 const EmailCheckCodeScreen = ({ route, navigation }) => {
   const [code, setCode] = useState<string[]>(new Array(6).fill(""));
   const inputRefs = Array(6)

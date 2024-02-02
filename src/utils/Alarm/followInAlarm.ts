@@ -1,10 +1,10 @@
 import { client } from "../../services/api";
 
-export const followInAlarm = async (userId, accessToken) => {
+export const followInAlarm = async (userId, accessToken, noticeId) => {
   try {
     const res = await client.post(
       "sns/follow",
-      { following_id: userId },
+      { following_id: userId, notice_id: noticeId },
       { accessToken }
     );
     console.log("팔로우 성공: ", res);
@@ -13,11 +13,11 @@ export const followInAlarm = async (userId, accessToken) => {
   }
 };
 
-export const unfollowInAlarm = async (userId, accessToken) => {
+export const unfollowInAlarm = async (userId, accessToken, noticeId) => {
   try {
     const res = await client.delete(
       `sns/unfollow`,
-      { unfollowing_id: userId },
+      { unfollowing_id: userId, notice_id: noticeId },
       {
         accessToken,
       }
@@ -28,11 +28,11 @@ export const unfollowInAlarm = async (userId, accessToken) => {
   }
 };
 
-export const cancelRequestInAlarm = async (userId, accessToken) => {
+export const cancelRequestInAlarm = async (userId, accessToken, noticeId) => {
   try {
     const res = await client.delete(
       "sns/follow",
-      { following_id: userId },
+      { following_id: userId, notice_id: noticeId },
       { accessToken }
     );
     console.log("요청 취소 성공: ", res);
@@ -41,11 +41,11 @@ export const cancelRequestInAlarm = async (userId, accessToken) => {
   }
 };
 
-export const acceptRequestInAlarm = async (userId, accessToken) => {
+export const acceptRequestInAlarm = async (userId, accessToken, noticeId) => {
   try {
     const res = await client.patch(
       "sns/pending",
-      { follower_id: userId },
+      { follower_id: userId, notice_id: noticeId },
       { accessToken }
     );
     console.log("요청 수락 response: ", res);

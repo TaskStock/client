@@ -3,6 +3,7 @@ import * as Font from "expo-font";
 import React, { useEffect, useState } from "react";
 import { StatusBar } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { EventProvider } from "react-native-outside-press";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { ThemeProvider } from "styled-components/native";
 import { darkTheme, grayTheme } from "./src/constants/colors";
@@ -12,9 +13,8 @@ import SplashScreen from "./src/screens/Login/SplashScreen";
 import { useAppDispatch, useAppSelect } from "./src/store/configureStore.hooks";
 import { checkTokenExistence } from "./src/store/modules/auth";
 import { startingTheme } from "./src/store/modules/theme";
+import usePushNotification from "./src/utils/PushNotification/pushNotificationHandler";
 import { checkAndRenewTokens } from "./src/utils/authUtils/tokenUtils";
-import { EventProvider } from "react-native-outside-press";
-import { removeData } from "./src/utils/asyncStorage";
 
 const THEME = {
   dark: {
@@ -36,6 +36,9 @@ export default function App() {
 
   const dispatch = useAppDispatch();
 
+  // push notification
+  const fcmToken = usePushNotification();
+
   useEffect(() => {
     // asyncstorage에서 엑세스토큰, 만료일, refresh만료일을 가져와서
     dispatch(checkTokenExistence());
@@ -54,15 +57,7 @@ export default function App() {
   //   removeData("strategy");
   // }, []);
 
-  // const [assets] = useAssets([require("./assets/splash.png")]);
   const [fontsLoaded] = Font.useFonts(customFontsToLoad);
-
-  // useEffect(() => {
-
-  //   setTimeout(() => {
-  //     setIsReady(true);
-  //   }, 1000);
-  // }, []);
 
   if (!isReady || !fontsLoaded || tokenLoading) return <SplashScreen />;
 

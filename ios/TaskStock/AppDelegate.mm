@@ -1,8 +1,9 @@
 #import "AppDelegate.h"
-
+#import <Firebase.h>
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTLinkingManager.h>
 #import <RNKakaoLogins.h>
+#import <UIKit/UIKit.h>
 
 @implementation AppDelegate
 
@@ -13,7 +14,12 @@
   // You can add your custom initial props in the dictionary below.
   // They will be passed down to the ViewController used by React Native.
   self.initialProps = @{};
-
+  
+  // Firebase가 아직 구성되지 않았다면 구성
+  if ([FIRApp defaultApp] == nil) {
+    [FIRApp configure];
+  }
+  
   return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
 

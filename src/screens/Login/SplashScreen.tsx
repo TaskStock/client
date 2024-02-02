@@ -2,7 +2,6 @@ import React from "react";
 import { Image } from "react-native";
 import styled from "styled-components/native";
 import LoadingSpinner from "../../components/atoms/LoadingSpinner";
-import { useAppSelect } from "../../store/configureStore.hooks";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
 
 const Container = styled.View`
