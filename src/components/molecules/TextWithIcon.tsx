@@ -9,17 +9,32 @@ export const TextWithIcon = ({
   text,
   children,
   textColor,
+  iconPosition = "left",
+  size = "md",
 }: {
   text: string;
   children: React.ReactNode;
   textColor?: string;
+  iconPosition?: "left" | "right";
+  size?: "xs" | "sm" | "md" | "lg";
 }) => {
   return (
     <FlexBox gap={spacing.small} alignItems="center">
-      {children}
-      <Text size="md" color={textColor ? textColor : undefined}>
-        {text}
-      </Text>
+      {iconPosition === "left" ? (
+        <>
+          {children}
+          <Text size={size} color={textColor ? textColor : undefined}>
+            {text}
+          </Text>
+        </>
+      ) : (
+        <>
+          <Text size={size} color={textColor ? textColor : undefined}>
+            {text}
+          </Text>
+          {children}
+        </>
+      )}
     </FlexBox>
   );
 };

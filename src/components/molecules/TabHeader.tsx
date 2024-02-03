@@ -34,11 +34,14 @@ export default function TabHeader({
   props,
   onPressTab,
 }: {
-  props: SceneRendererProps & {
-    navigationState: NavigationState<{
-      key: string;
-      title: string;
-    }>;
+  props: {
+    navigationState: {
+      index: number;
+      routes: {
+        key: string;
+        title: string;
+      }[];
+    };
   };
   onPressTab: (index: number) => void;
 }) {

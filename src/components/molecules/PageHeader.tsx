@@ -9,6 +9,7 @@ import Icons from "../atoms/Icons";
 import Text from "../atoms/Text";
 import { ComponentHeightContext } from "../../utils/ComponentHeightContext";
 import { useResizeLayoutOnFocus } from "../../hooks/useResizeLayoutOnFocus";
+import { View } from "react-native";
 
 const Container = styled.View<{ notchTop: number }>`
   padding: ${(props) => props.notchTop + spacing.padding}px ${spacing.offset}px
@@ -60,15 +61,28 @@ const PageHeader = ({
     <Container notchTop={NOTCH_TOP} onLayout={onLayout}>
       {headerLeftShown ? <HeaderLeft /> : <Blank />}
       {title && (
-        <Title>
-          <Text size="lg" weight="semibold">
-            {title}
-          </Text>
-        </Title>
+        <Text size="lg" weight="semibold">
+          {title}
+        </Text>
       )}
-
       {headerRight ? headerRight : <Blank />}
     </Container>
+  );
+};
+
+export const AbsolutePageHeader = ({ title }: { title?: string }) => {
+  return (
+    <View
+      style={{
+        position: "absolute",
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 100,
+      }}
+    >
+      <PageHeader title={title} />
+    </View>
   );
 };
 
