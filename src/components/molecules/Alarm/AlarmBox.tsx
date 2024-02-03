@@ -84,7 +84,7 @@ const AlarmBox = ({ item }: { item: IAlarmData }) => {
   const { accessToken } = useAppSelect((state) => state.auth);
 
   const [alarmItem, setAlarmItem] = useState(item);
-  const createdAt = formatToLocalMonthDay(alarmItem.created_time);
+  const subText = formatToLocalMonthDay(alarmItem.created_time);
 
   const [buttonText, setButtonText] = useState("");
 
@@ -151,7 +151,7 @@ const AlarmBox = ({ item }: { item: IAlarmData }) => {
     // type === 'admin' 이면 클릭 시 notice_id의 상세페이지로 이동
     const { detail, title } = alarmItem.info;
     handleOnPress = () => {
-      navigation.navigate("AlarmDetail", { detail, title, createdAt });
+      navigation.navigate("AlarmDetail", { detail, title, subText });
     };
   } else {
     // type === 'sns' or 'general' 이면 클릭 시 target_id의 상세페이지로 이동
@@ -174,7 +174,7 @@ const AlarmBox = ({ item }: { item: IAlarmData }) => {
       >
         <Text size="md">{alarmItem.content}</Text>
         <Text size="sm" color={theme.textDim}>
-          {createdAt}
+          {subText}
         </Text>
       </FlexBox>
       {alarmItem.type === "sns" && (
