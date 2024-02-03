@@ -8,7 +8,6 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { ThemeProvider } from "styled-components/native";
 import { darkTheme, grayTheme } from "./src/constants/colors";
 import { customFontsToLoad } from "./src/constants/typography";
-import usePushNotification from "./src/hooks/usePushNotification";
 import Root from "./src/navigators/Root";
 import SplashScreen from "./src/screens/Login/SplashScreen";
 import { useAppDispatch, useAppSelect } from "./src/store/configureStore.hooks";
@@ -34,9 +33,6 @@ export default function App() {
   const { isLoggedIn, loading: tokenLoading } = useAppSelect(
     (state) => state.auth
   );
-
-  // push notification
-  usePushNotification();
 
   useEffect(() => {
     // asyncstorage에서 엑세스토큰, 만료일, refresh만료일을 가져와서

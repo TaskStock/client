@@ -41,7 +41,6 @@ const Info = ({ text, iconType, iconName, color }) => {
   );
 };
 
-// strategy 필요
 const UserInfo = () => {
   const theme = useTheme();
   const dispatch = useAppDispatch();

@@ -150,6 +150,7 @@ const authSlice = createSlice({
       })
       .addCase(registerWithEmail.rejected, (state, action) => {
         state.loading = false;
+        state.isLoggedIn = false;
         state.error = action.payload;
 
         console.log("회원가입 실패", action.payload);
@@ -168,7 +169,8 @@ const authSlice = createSlice({
           state.loading = false;
           state.error = false;
           state.deviceId = action.payload.deviceId;
-
+          // 이걸로 교체
+          // state.strategy = action.payload.strategy;
           const strategy = getData("strategy");
 
           if (strategy && typeof strategy === "string") {
@@ -187,6 +189,7 @@ const authSlice = createSlice({
       .addCase(loginWithEmail.rejected, (state, action) => {
         state.loading = false;
         state.error = true;
+        state.isLoggedIn = false;
         console.log("로그인 실패", action.payload);
       })
       .addCase(checkTokenExistence.fulfilled, (state, action) => {
@@ -194,7 +197,6 @@ const authSlice = createSlice({
 
         state.accessExp = action.payload.accessExp;
         state.refreshExp = action.payload.refreshExp;
-        state.isLoggedIn = action.payload.isLoggedIn;
         state.strategy = action.payload.strategy;
         state.deviceId = action.payload.deviceId;
         state.loading = false;
