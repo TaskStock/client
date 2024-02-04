@@ -8,9 +8,16 @@ import ContentLayout from "../../components/atoms/ContentLayout";
 import { TextAreaInput } from "../../components/atoms/TextInput";
 import { BlackBtn } from "../../components/atoms/Buttons";
 import { useTheme } from "styled-components/native";
+import { useAddWishListMutation } from "../../store/modules/market/market";
 
 export default function WishRegisterScreen() {
   const theme = useTheme();
+
+  const [addWishList] = useAddWishListMutation();
+
+  const onPressAddWishList = () => {
+    addWishList({ wishListId: 1 });
+  };
 
   return (
     <View
@@ -39,7 +46,7 @@ export default function WishRegisterScreen() {
           <Margin margin={spacing.gutter} />
           <TextAreaInput placeholder="종목명을 입력해주세요" minHeight={100} />
           <Margin margin={50} />
-          <BlackBtn text="등록하기" onPress={() => {}} />
+          <BlackBtn text="등록하기" onPress={onPressAddWishList} />
         </KeyboardAvoidingView>
       </ContentLayout>
     </View>

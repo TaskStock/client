@@ -6,6 +6,7 @@ import numberWithCommas from "../../../utils/useNumberWithCommas";
 import FlexBox from "../../atoms/FlexBox";
 import Text from "../../atoms/Text";
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
+import CustomSkeleton from "../../atoms/CustomSkeleton";
 
 const HomeUserInfo = ({
   data,
@@ -31,7 +32,7 @@ const HomeUserInfo = ({
   return (
     <FlexBox alignItems="flex-end">
       {isLoading || error ? (
-        <SkeletonPlaceholder>
+        <CustomSkeleton>
           <SkeletonPlaceholder.Item>
             <SkeletonPlaceholder.Item
               width={100}
@@ -52,7 +53,7 @@ const HomeUserInfo = ({
               marginBottom={4}
             />
           </SkeletonPlaceholder.Item>
-        </SkeletonPlaceholder>
+        </CustomSkeleton>
       ) : (
         <View>
           <Text size="xl" weight="bold">

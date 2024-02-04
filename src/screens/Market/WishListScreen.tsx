@@ -4,8 +4,6 @@ import PageHeader from "../../components/molecules/PageHeader";
 import Section from "../../components/molecules/Section";
 import Margin from "../../components/atoms/Margin";
 import { spacing } from "../../constants/spacing";
-import { TabView } from "react-native-tab-view";
-import { useTab } from "../../hooks/useTab";
 import TabHeader from "../../components/molecules/TabHeader";
 import Text from "../../components/atoms/Text";
 import { useNavigation } from "@react-navigation/native";
@@ -15,9 +13,19 @@ import ContentLayout from "../../components/atoms/ContentLayout";
 import FlexBox from "../../components/atoms/FlexBox";
 import { StockItemForWishList } from "../../components/organisms/Market/StockItem";
 import { useTheme } from "styled-components/native";
+import {
+  useAddLikeToWishItemMutation,
+  useGetAllWishListQuery,
+} from "../../store/modules/market/market";
+import SkeletonPlaceholder from "react-native-skeleton-placeholder";
+import CustomSkeleton from "../../components/atoms/CustomSkeleton";
 
 export default function WishListScreen() {
   const [index, setIndex] = React.useState(0);
+
+  const { data, isLoading, isError } = useGetAllWishListQuery({});
+
+  const [addLikeToWishItem] = useAddLikeToWishItemMutation();
 
   const navigation =
     useNavigation<NativeStackNavigationProp<MarketStackParamList>>();
@@ -37,6 +45,10 @@ export default function WishListScreen() {
   };
 
   const theme = useTheme();
+
+  const onPressWishListItem = () => {
+    addLikeToWishItem({ wishItemId: 1 });
+  };
 
   return (
     <View style={{ flex: 1, backgroundColor: theme.background }}>
@@ -76,17 +88,34 @@ export default function WishListScreen() {
       />
       <ContentLayout>
         <FlexBox direction="column" alignItems="stretch" gap={spacing.padding}>
-          {[1, 2, 3, 4, 5].map((v, i) => {
-            return (
-              <StockItemForWishList
-                key={v + "wish"}
-                left={i}
-                likes={12}
-                name="삼성전자"
-                onPress={() => {}}
-              ></StockItemForWishList>
-            );
-          })}
+          {!isLoading && data ? (
+            [1, 2, 3, 4, 5].map((v, i) => {
+              return (
+                <StockItemForWishList
+                  key={v + "wish"}
+                  left={i}
+                  likes={12}
+                  name="삼성전자"
+                  onPress={onPressWishListItem}
+                ></StockItemForWishList>
+              );
+            })
+          ) : (
+            <>
+              {[1, 2, 3].map((_, index) => (
+                <CustomSkeleton>
+                  <View
+                    style={{
+                      width: "100%",
+                      height: 30,
+                      borderRadius: 10,
+                      marginBottom: 10,
+                    }}
+                  />
+                </CustomSkeleton>
+              ))}
+            </>
+          )}
         </FlexBox>
       </ContentLayout>
     </View>

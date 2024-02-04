@@ -19,7 +19,10 @@ import {
   StockItem,
   StockItemSecond,
 } from "../../components/organisms/Market/StockItem";
-import ScrollViewPlaceholder from "../../components/atoms/ScrollViewPlaceholder";
+import { useGetCategorizedStocksQuery } from "../../store/modules/market/market";
+import CenterLayout from "../../components/atoms/CenterLayout";
+import SkeletonPlaceholder from "react-native-skeleton-placeholder";
+import CustomSkeleton from "../../components/atoms/CustomSkeleton";
 
 const MainRectangle = styled.View`
   width: 100%;
@@ -41,7 +44,7 @@ const InnerFloat = styled.View`
   width: 80%;
 `;
 
-const stockItemData2 = [
+const mockdata = [
   {
     id: 1,
     name: "삼성전자 만약에 이렇게 길어진다면 어떻게 할건지 생각을",
@@ -92,6 +95,25 @@ export default function MarketMainScreen() {
   const onPressWishList = () => {
     navigation.navigate("WishListScreen");
   };
+
+  const { data, isError, isLoading } = useGetCategorizedStocksQuery({});
+
+  // if (isError)
+  //   return (
+  //     <View
+  //       style={{
+  //         flex: 1,
+  //       }}
+  //     >
+  //       <CenterLayout>
+  //         <Text size="md">Error</Text>
+  //       </CenterLayout>
+  //     </View>
+  //   );
+
+  const section1Data = data;
+  const section2Data = data;
+  const section3Data = data;
 
   return (
     <View style={{ flex: 1, backgroundColor: theme.background }}>
@@ -158,17 +180,33 @@ export default function MarketMainScreen() {
                       flexGrow: 0,
                     }}
                   >
-                    {stockItemData2.map((item) => (
-                      <StockItem
-                        id={item.id}
-                        name={item.name}
-                        percent={item.percent}
-                        price={item.price}
-                        onPress={() => {
-                          onPressStockItem(item.id);
-                        }}
-                      ></StockItem>
-                    ))}
+                    {section1Data ? (
+                      section1Data.map((item) => (
+                        <StockItem
+                          id={item.id}
+                          name={item.name}
+                          percent={item.percent}
+                          price={item.price}
+                          onPress={() => {
+                            onPressStockItem(item.id);
+                          }}
+                        ></StockItem>
+                      ))
+                    ) : (
+                      <>
+                        {[1, 2, 3].map((id) => (
+                          <CustomSkeleton key={"skel" + id}>
+                            <View
+                              style={{
+                                width: 100,
+                                height: 100,
+                                borderRadius: 10,
+                              }}
+                            ></View>
+                          </CustomSkeleton>
+                        ))}
+                      </>
+                    )}
                   </ScrollView>
                 </MarketSection>
                 <MarketSection
@@ -176,17 +214,33 @@ export default function MarketMainScreen() {
                   subText="오늘 사람들이 많이 추가한 종목이에요"
                 >
                   <FlexBox direction={"column"} alignItems="stretch" gap={10}>
-                    {stockItemData2.map((item, index) => (
-                      <StockItemSecond
-                        id={item.id}
-                        index={index}
-                        name={item.name}
-                        percent={item.percent}
-                        onPress={() => {
-                          onPressStockItem(item.id);
-                        }}
-                      ></StockItemSecond>
-                    ))}
+                    {section2Data ? (
+                      section2Data.map((item, index) => (
+                        <StockItemSecond
+                          id={item.id}
+                          index={index}
+                          name={item.name}
+                          percent={item.percent}
+                          onPress={() => {
+                            onPressStockItem(item.id);
+                          }}
+                        ></StockItemSecond>
+                      ))
+                    ) : (
+                      <>
+                        {[1, 2, 3].map((id) => (
+                          <CustomSkeleton key={"skel" + id}>
+                            <View
+                              style={{
+                                width: "100%",
+                                height: 30,
+                                borderRadius: 10,
+                              }}
+                            ></View>
+                          </CustomSkeleton>
+                        ))}
+                      </>
+                    )}
                   </FlexBox>
                   <Margin margin={spacing.offset}></Margin>
                 </MarketSection>
@@ -204,17 +258,33 @@ export default function MarketMainScreen() {
                       flexGrow: 0,
                     }}
                   >
-                    {stockItemData2.map((item) => (
-                      <StockItem
-                        id={item.id}
-                        name={item.name}
-                        percent={item.percent}
-                        price={item.price}
-                        onPress={() => {
-                          onPressStockItem(item.id);
-                        }}
-                      ></StockItem>
-                    ))}
+                    {section1Data ? (
+                      section1Data.map((item) => (
+                        <StockItem
+                          id={item.id}
+                          name={item.name}
+                          percent={item.percent}
+                          price={item.price}
+                          onPress={() => {
+                            onPressStockItem(item.id);
+                          }}
+                        ></StockItem>
+                      ))
+                    ) : (
+                      <>
+                        {[1, 2, 3].map((id) => (
+                          <CustomSkeleton key={"skel" + id}>
+                            <View
+                              style={{
+                                width: 100,
+                                height: 100,
+                                borderRadius: 10,
+                              }}
+                            ></View>
+                          </CustomSkeleton>
+                        ))}
+                      </>
+                    )}
                   </ScrollView>
                 </MarketSection>
                 <WishListButton onPress={onPressWishList} />

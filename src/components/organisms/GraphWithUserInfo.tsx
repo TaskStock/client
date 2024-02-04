@@ -9,8 +9,6 @@ import LineChartIcon from "../../../assets/icons/lineChartIcon.svg";
 import { WithLocalSvg } from "react-native-svg";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
 import FlexBox from "../atoms/FlexBox";
-import { LinearGradient } from "expo-linear-gradient";
-import { useAppSelect } from "../../store/configureStore.hooks";
 import { Value } from "../../@types/chart";
 import GradientOverlay from "../atoms/GradientOverlay";
 

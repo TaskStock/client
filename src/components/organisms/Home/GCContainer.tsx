@@ -63,8 +63,8 @@ const GCContainer = () => {
       second: () => (
         <HomeCalendar
           user={{
-            value_yesterday_ago: 0,
-            cumulative_value: 0,
+            value_yesterday_ago: user?.value_yesterday_ago,
+            cumulative_value: user?.cumulative_value,
           }}
           todos={{
             data: todos,

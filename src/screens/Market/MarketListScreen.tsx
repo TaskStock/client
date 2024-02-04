@@ -19,6 +19,9 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import LightLogo from "../../../assets/images/logo-light.png";
 import { MarketItemButton } from "../../components/organisms/Market/MarketButton";
 import FilterIcon from "../../../assets/icons/filterIcon.svg";
+import { useGetAllStocksQuery } from "../../store/modules/market/market";
+import SkeletonPlaceholder from "react-native-skeleton-placeholder";
+import CustomSkeleton from "../../components/atoms/CustomSkeleton";
 
 const PageHeaderBox = styled.View`
   height: ${useResponsiveFontSize(300)}px;
@@ -98,6 +101,8 @@ export default function MarketListScreen() {
     useNavigation<NativeStackNavigationProp<MarketStackParamList>>();
 
   const [searchText, setSearchText] = React.useState("");
+
+  const { data, isLoading, isError } = useGetAllStocksQuery({});
 
   const theme = useTheme();
 
@@ -196,6 +201,49 @@ export default function MarketListScreen() {
                 />
               );
             })}
+            {/* {!isLoading && data ? (
+              list.map((id, idx) => {
+                if (idx % 4 == 0 && idx != 0) {
+                  return (
+                    <View key={id}>
+                      <MarketListItem
+                        id={id}
+                        name="삼성전자"
+                        participants={121}
+                        price={100000}
+                        onPress={() => onPressListItem(id)}
+                      />
+                      <Margin margin={spacing.padding + spacing.small}></Margin>
+                      <WishListButton onPress={onPressWishListButton} />
+                    </View>
+                  );
+                }
+                return (
+                  <MarketListItem
+                    key={id}
+                    id={id}
+                    name="삼성전자"
+                    participants={121}
+                    price={100000}
+                    onPress={() => onPressListItem(id)}
+                  />
+                );
+              })
+            ) : (
+              <>
+                {[1, 2, 3].map((id) => (
+                  <CustomSkeleton key={"skel" + id}>
+                    <View
+                      style={{
+                        width: "100%",
+                        height: 95,
+                        borderRadius: 10,
+                      }}
+                    ></View>
+                  </CustomSkeleton>
+                ))}
+              </>
+            )} */}
           </FlexBox>
         </ContentLayout>
       </ScrollView>
