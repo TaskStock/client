@@ -10,8 +10,10 @@ export default function CustomSkeleton({
 }) {
   const theme = useTheme();
 
+  const backgroundColor = theme.name === "dark" ? theme.box : "#E1E9EE";
+
   return (
-    <SkeletonPlaceholder backgroundColor={theme.box}>
+    <SkeletonPlaceholder speed={1200} backgroundColor={backgroundColor}>
       {children}
     </SkeletonPlaceholder>
   );
