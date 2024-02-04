@@ -14,6 +14,7 @@ import { useAppDispatch, useAppSelect } from "./src/store/configureStore.hooks";
 import { checkTokenExistence } from "./src/store/modules/auth";
 import { startingTheme } from "./src/store/modules/theme";
 import { checkAndRenewTokens } from "./src/utils/authUtils/tokenUtils";
+import { removeData } from "./src/utils/asyncStorage";
 
 const THEME = {
   dark: {

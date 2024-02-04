@@ -1,5 +1,19 @@
 apply plugin: "com.android.application"
 apply plugin: "com.facebook.react"
+apply plugin: "com.google.gms.google-services"
+
+// .env.local 파일에서 환경 변수를 로드하는 함수
+def loadLocalEnv() {
+    def props = new Properties()
+    file("../../.env.local").withInputStream { props.load(it) }
+    return props
+}
+// 환경 변수 로드
+def localEnv = loadLocalEnv()
+// KAKAO_AUTH_NATIVE_KEY 값 가져오기 (없으면 기본값 사용)
+def kakaoAuthNativeKey = localEnv.containsKey('KAKAO_AUTH_NATIVE_KEY') ? localEnv['KAKAO_AUTH_NATIVE_KEY'] : 'default_value'
+
+
 
 def projectRoot = rootDir.getAbsoluteFile().getParentFile().getAbsolutePath()
 
@@ -82,6 +96,7 @@ android {
     compileSdkVersion rootProject.ext.compileSdkVersion
 
     namespace "com.anonymous.TaskStock"
+
     defaultConfig {
         applicationId 'com.anonymous.TaskStock'
         minSdkVersion rootProject.ext.minSdkVersion
@@ -90,7 +105,11 @@ android {
         versionName "1.0.0"
 
         buildConfigField("boolean", "REACT_NATIVE_UNSTABLE_USE_RUNTIME_SCHEDULER_ALWAYS", (findProperty("reactNative.unstable_useRuntimeSchedulerAlways") ?: true).toString())
-        resValue "string", "kakao_auth_native_key", project.env.get("KAKAO_AUTH_NATIVE_KEY")
+        // buildConfigField "String", "kakao_auth_native_key", "\"${kakaoAuthNativeKey}\"" // Java/Kotlin 코드에서 사용하는 상수를 생성
+        resValue "string", "kakao_auth_native_key", kakaoAuthNativeKey
+        manifestPlaceholders = [kakao_auth_native_key: kakaoAuthNativeKey]
+
+
     }
     signingConfigs {
         debug {
@@ -138,6 +157,10 @@ android {
 dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
+
+    // firebase
+    implementation platform('com.google.firebase:firebase-bom:32.7.1')
+    implementation 'com.google.firebase:firebase-analytics'
 
     def isGifEnabled = (findProperty('expo.gif.enabled') ?: "") == "true";
     def isWebpEnabled = (findProperty('expo.webp.enabled') ?: "") == "true";

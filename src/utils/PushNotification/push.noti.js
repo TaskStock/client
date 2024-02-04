@@ -1,9 +1,25 @@
-import PushNotification from "react-native-push-notification";
+import PushNotification, { Importance } from "react-native-push-notification";
 import PushNotificationIOS from "@react-native-community/push-notification-ios";
 import { Platform } from "react-native";
 
 class LocalNotificationService {
   configure = (onOpenNotification) => {
+    // Android 8.0 이상에서 foreground 알림을 위해  채널 생성
+    if (Platform.OS === "android") {
+      PushNotification.createChannel(
+        {
+          channelId: "taskstock_push_notification", // (required)
+          channelName: "TaskStock", // (required)
+          channelDescription: "TaskStock에서 보내는 알림", // (optional) default: undefined.
+          playSound: false, // (optional) default: true
+          soundName: "default", // (optional) See `soundName` parameter of `localNotification` function
+          importance: Importance.HIGH, // (optional) default: Importance.HIGH. Int value of the Android notification importance
+          vibrate: true, // (optional) default: true. Creates the default vibration pattern if true.
+        },
+        (created) => console.log(`createChannel returned '${created}'`) // (optional) callback returns whether the channel was created, false means it already existed.
+      );
+    }
+
     PushNotification.configure({
       onRegister: function (token) {
         console.log(

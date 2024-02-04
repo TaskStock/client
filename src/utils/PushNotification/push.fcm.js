@@ -24,8 +24,10 @@ class FCMService {
       .then((enabled) => {
         this.getToken(onRegister);
         if (enabled) {
+          console.log("enabled 들어옴");
           dispatch(toggleStateThunk(true));
         } else {
+          console.log("disabled 들어옴");
           this.requestPermission(onRegister);
         }
       })
@@ -135,6 +137,7 @@ class FCMService {
     if (isPushOn) {
       // 푸시 알림 on
       this.checkPermission(onRegister, dispatch);
+      dispatch(toggleStateThunk(true));
     } else {
       // 푸시 알림 off
       dispatch(toggleStateThunk(false));

@@ -194,7 +194,7 @@ const authSlice = createSlice({
       })
       .addCase(checkTokenExistence.fulfilled, (state, action) => {
         state.accessToken = action.payload.accessToken;
-
+        state.isLoggedIn = action.payload.isLoggedIn;
         state.accessExp = action.payload.accessExp;
         state.refreshExp = action.payload.refreshExp;
         state.strategy = action.payload.strategy;

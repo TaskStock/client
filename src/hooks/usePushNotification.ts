@@ -81,7 +81,6 @@ export default function usePushNotification() {
       const title = notify.notification.title;
 
       console.log(targetId, title, body);
-      Alert.alert("Open Notification : notify.body :" + notify.body);
 
       // UI 그리기
       // 클릭하면 targetId 디테일페이지로 이동
