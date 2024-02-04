@@ -15,7 +15,8 @@ const StockItemBox = styled(ContentItemBoxContainer)`
 `;
 
 const StockItemSecondBox = styled(ContentItemBoxContainer)`
-  border: 1px solid ${({ theme }) => theme.palette.neutral400_gray};
+  border: ${({ theme }) =>
+    theme.name === "dark" ? "none" : `1px solid ${theme.textDim}`};
   border-radius: 10px;
   background-color: ${({ theme }) => theme.box};
   padding: ${spacing.padding + spacing.small * 1.5}px ${spacing.offset}px;

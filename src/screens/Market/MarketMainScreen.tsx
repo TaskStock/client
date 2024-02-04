@@ -19,11 +19,13 @@ import {
   StockItem,
   StockItemSecond,
 } from "../../components/organisms/Market/StockItem";
+import ScrollViewPlaceholder from "../../components/atoms/ScrollViewPlaceholder";
 
 const MainRectangle = styled.View`
   width: 100%;
   padding-bottom: 100%;
-  background-color: ${({ theme }) => theme.palette.neutral400_gray};
+  background-color: ${({ theme }) =>
+    theme.name == "dark" ? "#2E2E2E" : theme.palette.neutral400_gray};
 `;
 
 const FloatTitle = styled.Pressable`
@@ -92,132 +94,135 @@ export default function MarketMainScreen() {
   };
 
   return (
-    <ScrollView
-      style={{
-        flex: 1,
-      }}
-    >
-      <MainRectangle />
-
-      <View>
-        <FloatTitle>
-          <InnerFloat>
-            <Pressable onPress={onPressCheckStockList}>
-              <ContentItemBox>
-                <FlexBox
-                  alignItems="center"
-                  justifyContent="space-between"
-                  styles={{
-                    paddingHorizontal: spacing.small,
-                  }}
+    <View style={{ flex: 1, backgroundColor: theme.background }}>
+      <ScrollView
+        style={{
+          flex: 1,
+        }}
+      >
+        <MainRectangle />
+        <View>
+          <FloatTitle>
+            <InnerFloat>
+              <Pressable onPress={onPressCheckStockList}>
+                <ContentItemBox>
+                  <FlexBox
+                    alignItems="center"
+                    justifyContent="space-between"
+                    styles={{
+                      paddingHorizontal: spacing.small,
+                    }}
+                  >
+                    <View>
+                      <Text size="xs" color={theme.palette.red}>
+                        갓생 도전!!
+                      </Text>
+                      <Margin margin={5}></Margin>
+                      <Text size="xl" weight="bold">
+                        장 종목 확인하기
+                      </Text>
+                    </View>
+                    <Icons
+                      type="material"
+                      name="chevron-right"
+                      size={30}
+                      color={theme.textDim}
+                    />
+                  </FlexBox>
+                </ContentItemBox>
+              </Pressable>
+            </InnerFloat>
+          </FloatTitle>
+          <View style={{ flex: 1, backgroundColor: theme.background }}>
+            <Margin margin={60}></Margin>
+            <ContentLayout>
+              <FlexBox
+                direction="column"
+                alignItems="stretch"
+                gap={spacing.gutter + spacing.offset}
+                styles={{
+                  flex: 1,
+                }}
+              >
+                <MarketSection
+                  headerText="나의 관심 종목"
+                  subText="장준석님이 자주 추가하는 종목이에요"
                 >
-                  <View>
-                    <Text size="xs" color={theme.palette.red}>
-                      갓생 도전!!
-                    </Text>
-                    <Margin margin={5}></Margin>
-                    <Text size="xl" weight="bold">
-                      장 종목 확인하기
-                    </Text>
-                  </View>
-                  <Icons
-                    type="material"
-                    name="chevron-right"
-                    size={30}
-                    color={theme.textDim}
-                  />
-                </FlexBox>
-              </ContentItemBox>
-            </Pressable>
-          </InnerFloat>
-        </FloatTitle>
-        <Margin margin={60}></Margin>
-        <ContentLayout>
-          <FlexBox
-            direction="column"
-            alignItems="stretch"
-            gap={spacing.gutter + spacing.offset}
-            styles={{
-              flex: 1,
-            }}
-          >
-            <MarketSection
-              headerText="나의 관심 종목"
-              subText="장준석님이 자주 추가하는 종목이에요"
-            >
-              <ScrollView
-                horizontal
-                contentContainerStyle={{
-                  columnGap: spacing.padding + spacing.small,
-                  paddingBottom: spacing.offset,
-                }}
-                style={{
-                  flexGrow: 0,
-                }}
-              >
-                {stockItemData2.map((item) => (
-                  <StockItem
-                    id={item.id}
-                    name={item.name}
-                    percent={item.percent}
-                    price={item.price}
-                    onPress={() => {
-                      onPressStockItem(item.id);
+                  <ScrollView
+                    horizontal
+                    contentContainerStyle={{
+                      columnGap: spacing.padding + spacing.small,
+                      paddingBottom: spacing.offset,
                     }}
-                  ></StockItem>
-                ))}
-              </ScrollView>
-            </MarketSection>
-            <MarketSection
-              headerText="오늘의 인기 종목"
-              subText="오늘 사람들이 많이 추가한 종목이에요"
-            >
-              <FlexBox direction={"column"} alignItems="stretch" gap={10}>
-                {stockItemData2.map((item, index) => (
-                  <StockItemSecond
-                    id={item.id}
-                    index={index}
-                    name={item.name}
-                    percent={item.percent}
-                    onPress={() => {
-                      onPressStockItem(item.id);
+                    style={{
+                      flexGrow: 0,
                     }}
-                  ></StockItemSecond>
-                ))}
+                  >
+                    {stockItemData2.map((item) => (
+                      <StockItem
+                        id={item.id}
+                        name={item.name}
+                        percent={item.percent}
+                        price={item.price}
+                        onPress={() => {
+                          onPressStockItem(item.id);
+                        }}
+                      ></StockItem>
+                    ))}
+                  </ScrollView>
+                </MarketSection>
+                <MarketSection
+                  headerText="오늘의 인기 종목"
+                  subText="오늘 사람들이 많이 추가한 종목이에요"
+                >
+                  <FlexBox direction={"column"} alignItems="stretch" gap={10}>
+                    {stockItemData2.map((item, index) => (
+                      <StockItemSecond
+                        id={item.id}
+                        index={index}
+                        name={item.name}
+                        percent={item.percent}
+                        onPress={() => {
+                          onPressStockItem(item.id);
+                        }}
+                      ></StockItemSecond>
+                    ))}
+                  </FlexBox>
+                  <Margin margin={spacing.offset}></Margin>
+                </MarketSection>
+                <MarketSection
+                  headerText="오늘의 추천 종목"
+                  subText="오늘 이 종목 어때요?"
+                >
+                  <ScrollView
+                    horizontal
+                    contentContainerStyle={{
+                      columnGap: spacing.padding + spacing.small,
+                      paddingBottom: spacing.offset,
+                    }}
+                    style={{
+                      flexGrow: 0,
+                    }}
+                  >
+                    {stockItemData2.map((item) => (
+                      <StockItem
+                        id={item.id}
+                        name={item.name}
+                        percent={item.percent}
+                        price={item.price}
+                        onPress={() => {
+                          onPressStockItem(item.id);
+                        }}
+                      ></StockItem>
+                    ))}
+                  </ScrollView>
+                </MarketSection>
+                <WishListButton onPress={onPressWishList} />
               </FlexBox>
-              <Margin margin={spacing.offset}></Margin>
-            </MarketSection>
-            <MarketSection
-              headerText="오늘의 추천 종목"
-              subText="오늘 이 종목 어때요?"
-            >
-              <ScrollView
-                horizontal
-                contentContainerStyle={{
-                  columnGap: spacing.padding + spacing.small,
-                  paddingBottom: spacing.offset,
-                }}
-                style={{
-                  flexGrow: 0,
-                }}
-              >
-                {stockItemData2.map((item) => (
-                  <StockItem
-                    id={item.id}
-                    name={item.name}
-                    percent={item.percent}
-                    price={item.price}
-                    onPress={() => {
-                      onPressStockItem(item.id);
-                    }}
-                  ></StockItem>
-                ))}
-              </ScrollView>
-            </MarketSection>
-            <WishListButton onPress={onPressWishList} />
-          </FlexBox>
-        </ContentLayout>
-      </View>
-    </ScrollView>
+            </ContentLayout>
+          </View>
+        </View>
+      </ScrollView>
+    </View>
   );
 }

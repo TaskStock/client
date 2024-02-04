@@ -7,12 +7,16 @@ import { spacing } from "../../constants/spacing";
 import ContentLayout from "../../components/atoms/ContentLayout";
 import { TextAreaInput } from "../../components/atoms/TextInput";
 import { BlackBtn } from "../../components/atoms/Buttons";
+import { useTheme } from "styled-components/native";
 
 export default function WishRegisterScreen() {
+  const theme = useTheme();
+
   return (
     <View
       style={{
         flex: 1,
+        backgroundColor: theme.background,
       }}
     >
       <PageHeader title="위시종목 등록"></PageHeader>

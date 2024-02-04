@@ -66,7 +66,12 @@ export const SearchBar2 = ({
   return (
     <Container>
       <Pressable onPress={onPressSearchIcon}>
-        <WithLocalSvg asset={SearchIcon} width={34} height={34} />
+        <WithLocalSvg
+          asset={SearchIcon}
+          width={34}
+          height={34}
+          fill={theme.text}
+        />
       </Pressable>
       <TextInput
         value={text}

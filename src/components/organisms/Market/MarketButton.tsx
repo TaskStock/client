@@ -1,18 +1,19 @@
 import { Pressable } from "react-native";
 import ContentItemBox from "../../atoms/ContentItemBox";
+import { useTheme } from "styled-components/native";
 
 export const MarketItemButton = ({
   children,
-  reversed,
   onPress,
+  bgColor,
 }: {
   children: React.ReactNode;
-  reversed?: boolean;
   onPress?: () => void;
+  bgColor?: string;
 }) => {
   return (
     <Pressable onPress={onPress}>
-      <ContentItemBox height={95} reversed={reversed}>
+      <ContentItemBox height={95} bgColor={bgColor}>
         {children}
       </ContentItemBox>
     </Pressable>

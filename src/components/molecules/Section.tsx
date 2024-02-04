@@ -22,7 +22,7 @@ const SectionHeaderText = styled.Text<{
   font-weight: ${({ weight }) => (weight ? weight : "bold")};
   color: ${({ theme, isMainText }) =>
     theme.name === "dark"
-      ? theme.textDimReverse
+      ? theme.text
       : isMainText
       ? theme.text
       : theme.textDim};

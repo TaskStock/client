@@ -12,6 +12,7 @@ import FlexBox from "../atoms/FlexBox";
 import { LinearGradient } from "expo-linear-gradient";
 import { useAppSelect } from "../../store/configureStore.hooks";
 import { Value } from "../../@types/chart";
+import GradientOverlay from "../atoms/GradientOverlay";
 
 const Container = styled.View`
   width: 100%;
@@ -75,18 +76,7 @@ const GraphWithUserInfo = ({
     refetch: () => void;
   };
 }) => {
-  const theme = useAppSelect((state) => state.theme);
-  const gradient =
-    theme.value === "dark"
-      ? [
-          "rgba(255, 255, 255, 0.00)",
-          "rgba(255, 255, 255, 0.09)",
-          "rgba(255, 255, 255, 0.20)",
-        ]
-      : ["rgba(255, 255, 255, 0.00)", "rgba(255, 255, 255, 0.47)", "#FFFFFF"];
-
   const [isCandleStick, setIsCandleStick] = React.useState(true);
-
   const [size, setSize] = React.useState({
     width: 0,
     height: 0,
@@ -143,18 +133,7 @@ const GraphWithUserInfo = ({
         </IconContainer>
       </FlexBox>
       <Container>
-        <LinearGradient
-          colors={gradient}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 0, y: 1 }}
-          style={{
-            position: "absolute",
-            width: "100%",
-            height: "100%",
-            borderRadius: spacing.offset,
-            // marginTop: spacing.padding,
-          }}
-        ></LinearGradient>
+        <GradientOverlay />
         <InnerContent
           onLayout={(e) => {
             const { width, height } = e.nativeEvent.layout;

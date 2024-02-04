@@ -18,6 +18,7 @@ import { MarketStackParamList } from "../../navigators/MarketStack";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import LightLogo from "../../../assets/images/logo-light.png";
 import { MarketItemButton } from "../../components/organisms/Market/MarketButton";
+import FilterIcon from "../../../assets/icons/filterIcon.svg";
 
 const PageHeaderBox = styled.View`
   height: ${useResponsiveFontSize(300)}px;
@@ -98,6 +99,10 @@ export default function MarketListScreen() {
 
   const [searchText, setSearchText] = React.useState("");
 
+  const theme = useTheme();
+
+  const list = [1, 2, 3, 4, 5, 6, 7];
+
   const onPressListItem = (id: number) => {
     navigation.navigate("StockDetailScreen", {
       stockId: id,
@@ -116,7 +121,7 @@ export default function MarketListScreen() {
   return (
     <>
       <AbsolutePageHeader />
-      <ScrollView style={{ flex: 1 }}>
+      <ScrollView style={{ flex: 1, backgroundColor: theme.background }}>
         <PageHeaderBox>
           <Image
             source={{
@@ -155,6 +160,7 @@ export default function MarketListScreen() {
           <TextWithIcon text="필터">
             <WithLocalSvg
               asset={require("../../../assets/icons/filterIcon.svg")}
+              fill={theme.text}
             />
           </TextWithIcon>
           <Margin margin={spacing.padding}></Margin>
@@ -163,7 +169,7 @@ export default function MarketListScreen() {
             alignItems="stretch"
             gap={spacing.padding + spacing.small}
           >
-            {[1, 2, 3, 4, 5, 6, 7].map((id, idx) => {
+            {list.map((id, idx) => {
               if (idx % 4 == 0 && idx != 0) {
                 return (
                   <View key={id}>

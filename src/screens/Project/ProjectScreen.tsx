@@ -15,6 +15,7 @@ import { useAppDispatch } from "../../store/configureStore.hooks";
 import { resetProjectForm } from "../../store/modules/project/project";
 import ProjectScreenSecond from "../../components/pages/project/ProjectScreenSecond";
 import ProjectScreenFirst from "../../components/pages/project/ProjectScreenFirst";
+import { View } from "react-native";
 
 const sceneMap = {
   first: ProjectScreenFirst,
@@ -50,7 +51,12 @@ const ProjectScreen = () => {
   const dispatch = useAppDispatch();
 
   return (
-    <>
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: theme.background,
+      }}
+    >
       <PageMainHeader title="프로젝트">
         <Icons
           type="entypo"
@@ -71,7 +77,7 @@ const ProjectScreen = () => {
         onSwipeEnd={() => {}}
         swipeEnabled={false}
       ></TabView>
-    </>
+    </View>
   );
 };
 

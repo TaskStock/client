@@ -11,8 +11,12 @@ import { MarketItemButton } from "./MarketButton";
 export const WishListButton = ({ onPress }: { onPress: () => void }) => {
   const theme = useTheme();
 
+  const textColor = theme.name === "dark" ? theme.text : theme.textReverse;
+
+  const bgColor = "#212121";
+
   return (
-    <MarketItemButton reversed onPress={onPress}>
+    <MarketItemButton bgColor={bgColor} onPress={onPress}>
       <FlexBox
         direction="column"
         justifyContent="center"
@@ -26,7 +30,7 @@ export const WishListButton = ({ onPress }: { onPress: () => void }) => {
           추가되었으면 하는 종목이 있나요?
         </Text>
         <Margin margin={spacing.small}></Margin>
-        <Text size="lg" color={theme.textReverse} weight={"extraBold"}>
+        <Text size="lg" color={textColor} weight={"extraBold"}>
           태스팀에게 알려주세요!
         </Text>
         <View
@@ -39,14 +43,14 @@ export const WishListButton = ({ onPress }: { onPress: () => void }) => {
           <TextWithIcon
             iconPosition="right"
             text={"위시종목 등록하기"}
-            textColor={theme.textReverse}
+            textColor={textColor}
             size="xs"
           >
             <Icons
               type="AntDesign"
               name="right"
               size={10}
-              color={theme.textReverse}
+              color={textColor}
             ></Icons>
           </TextWithIcon>
         </View>

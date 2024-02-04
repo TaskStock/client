@@ -14,6 +14,7 @@ import { MarketStackParamList } from "../../navigators/MarketStack";
 import ContentLayout from "../../components/atoms/ContentLayout";
 import FlexBox from "../../components/atoms/FlexBox";
 import { StockItemForWishList } from "../../components/organisms/Market/StockItem";
+import { useTheme } from "styled-components/native";
 
 export default function WishListScreen() {
   const [index, setIndex] = React.useState(0);
@@ -35,8 +36,10 @@ export default function WishListScreen() {
     },
   };
 
+  const theme = useTheme();
+
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: theme.background }}>
       <PageHeader
         headerRight={
           <Pressable onPress={onPressRegister}>

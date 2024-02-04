@@ -12,6 +12,7 @@ import Text from "../../components/atoms/Text";
 import Divider from "../../components/atoms/Divider";
 import styled, { useTheme } from "styled-components/native";
 import { ContentItemBoxContainer } from "../../components/atoms/ContentItemBox";
+import GradientOverlay from "../../components/atoms/GradientOverlay";
 
 const GraphBox = styled(ContentItemBoxContainer)`
   width: 100%;
@@ -24,7 +25,7 @@ export default function StockDetailScreen() {
   const theme = useTheme();
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: theme.background }}>
       <PageHeader />
       <ContentLayout>
         <ScrollView style={{ flex: 1 }}>
@@ -40,27 +41,34 @@ export default function StockDetailScreen() {
           </Section.HeaderSubText>
           <Margin margin={spacing.padding} />
           <View style={{ height: graphHeight }}>
-            <HomeChart
-              isCandleStick={false}
-              value={{
-                data: [
-                  {
-                    date: "2021-08-01",
-                    start: 1000,
-                    end: 2000,
-                    high: 3000,
-                    low: 500,
-                    percentage: 0.5,
-                    value_id: 1,
-                    combo: 0,
-                  },
-                ],
-                isLoading: false,
-                error: null,
-                isError: false,
-                refetch: () => {},
+            <GradientOverlay />
+            <View
+              style={{
+                padding: spacing.offset,
               }}
-            ></HomeChart>
+            >
+              <HomeChart
+                isCandleStick={false}
+                value={{
+                  data: [
+                    {
+                      date: "2021-08-01",
+                      start: 1000,
+                      end: 2000,
+                      high: 3000,
+                      low: 500,
+                      percentage: 0.5,
+                      value_id: 1,
+                      combo: 0,
+                    },
+                  ],
+                  isLoading: false,
+                  error: null,
+                  isError: false,
+                  refetch: () => {},
+                }}
+              ></HomeChart>
+            </View>
           </View>
           <Margin margin={spacing.offset} />
           <BlackBtnForProject text="투자하기" onPress={() => {}} />
