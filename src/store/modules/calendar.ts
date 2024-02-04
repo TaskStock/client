@@ -36,7 +36,7 @@ const calendarSlice = createSlice({
   initialState,
   reducers: {
     setItemContainerHeight: (state, action) => {
-      if (action.payload < 0) {
+      if (action.payload <= 0) {
         return;
       }
 

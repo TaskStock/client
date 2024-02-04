@@ -1,5 +1,5 @@
 import React, { memo, useState } from "react";
-import { Pressable } from "react-native";
+import { Pressable, View } from "react-native";
 import styled from "styled-components/native";
 import FlexBox from "../../atoms/FlexBox";
 import LoadingSpinner from "../../atoms/LoadingSpinner";
@@ -32,11 +32,6 @@ function HomeChart({
     refetch: () => void;
   };
 }) {
-  const [containerSize, setContainerSize] = useState<{
-    width: number;
-    height: number;
-  } | null>(null);
-
   if (isLoading || !data) {
     return (
       <FlexBox justifyContent="center" alignItems="center" styles={{ flex: 1 }}>
@@ -61,29 +56,12 @@ function HomeChart({
   });
 
   return (
-    <Container
-      onLayout={(event) => {
-        const { width, height } = event.nativeEvent.layout;
-
-        if (containerSize?.width === width && containerSize?.height === height)
-          return;
-
-        setContainerSize({
-          width,
-          height,
-        });
-      }}
-    >
-      {containerSize &&
-        (isCandleStick ? (
-          <WagmiChart data={wagmiData}></WagmiChart>
-        ) : (
-          <LineValueChart
-            height={containerSize.height}
-            width={containerSize.width}
-            data={data}
-          ></LineValueChart>
-        ))}
+    <Container>
+      {isCandleStick ? (
+        <WagmiChart data={wagmiData}></WagmiChart>
+      ) : (
+        <LineValueChart data={data}></LineValueChart>
+      )}
     </Container>
   );
 }

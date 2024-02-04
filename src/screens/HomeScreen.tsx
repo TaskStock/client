@@ -6,7 +6,6 @@ import TodoContainer from "../components/molecules/Home/TodoContainer";
 import GCContainer from "../components/organisms/Home/GCContainer";
 import AddTodoModal from "../components/organisms/TodoModal/AddTodoModal";
 import { useAppDispatch, useAppSelect } from "../store/configureStore.hooks";
-import { ComponentHeightContext } from "../utils/ComponentHeightContext";
 import { useFlushSavedValues } from "../hooks/useFlushSavedValues";
 import { getUserInfoThunk } from "../utils/UserUtils/getUserInfoThunk";
 

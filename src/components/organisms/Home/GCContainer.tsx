@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo } from "react";
+import React, { useCallback, useContext, useEffect, useMemo } from "react";
 import { Dimensions, View, useWindowDimensions } from "react-native";
 import {
   NavigationState,
@@ -19,6 +19,8 @@ import { useResizeLayoutOnFocus } from "../../../hooks/useResizeLayoutOnFocus";
 import useUser from "../../../hooks/useUser";
 import useValue from "../../../hooks/useValue";
 import useTodos from "../../../hooks/useTodos";
+import HomeScreenFirst from "../../pages/home/HomeScreenFirst";
+import HomeScreenSecond from "../../pages/home/HomeScreenSecond";
 
 const clientHeight = Dimensions.get("window").height;
 
@@ -32,49 +34,12 @@ const GCContainer = () => {
     { key: "second", title: "캘린더" },
   ]);
 
-  const { user, loading: userInfoLoading, error: userInfoError } = useUser();
-  const { data: values, error, isError, isLoading, refetch } = useValue();
-  const {
-    data: todos,
-    isLoading: todosIsLoading,
-    isError: todosIsError,
-  } = useTodos();
-
   const sceneMap = useMemo(() => {
     return {
-      first: () => (
-        <GraphWithUserInfo
-          userInfo={{
-            cumulative_value: user?.cumulative_value,
-            value_yesterday_ago: user?.value_yesterday_ago,
-            nickname: user?.user_name,
-            error: userInfoError,
-            loading: userInfoLoading,
-          }}
-          value={{
-            data: values,
-            isLoading,
-            isError,
-            error,
-            refetch,
-          }}
-        />
-      ),
-      second: () => (
-        <HomeCalendar
-          user={{
-            value_yesterday_ago: user?.value_yesterday_ago,
-            cumulative_value: user?.cumulative_value,
-          }}
-          todos={{
-            data: todos,
-            isLoading: todosIsLoading,
-            isError: todosIsError,
-          }}
-        />
-      ),
+      first: () => <HomeScreenFirst />,
+      second: () => <HomeScreenSecond />,
     };
-  }, [user, values]);
+  }, []);
 
   const renderScene = SceneMap(sceneMap);
 
@@ -82,23 +47,44 @@ const GCContainer = () => {
     dispatch(setTabIndex(index));
   };
 
-  const renderTabBar = (
-    props: SceneRendererProps & {
-      navigationState: NavigationState<{
-        key: string;
-        title: string;
-      }>;
-    }
-  ) => {
-    return (
-      <TabHeader
-        onPressTab={(index) => {
-          dispatch(setTabIndex(index));
-        }}
-        props={props}
-      />
-    );
-  };
+  // const renderTabBar = (
+  //   props: SceneRendererProps & {
+  //     navigationState: NavigationState<{
+  //       key: string;
+  //       title: string;
+  //     }>;
+  //   }
+  // ) => {
+  //   return (
+  //     <TabHeader
+  //       onPressTab={(index) => {
+  //         dispatch(setTabIndex(index));
+  //       }}
+  //       props={props}
+  //     />
+  //   );
+  // };
+
+  const renderTabBar = useCallback(
+    (
+      props: SceneRendererProps & {
+        navigationState: NavigationState<{
+          key: string;
+          title: string;
+        }>;
+      }
+    ) => {
+      return (
+        <TabHeader
+          onPressTab={(index) => {
+            dispatch(setTabIndex(index));
+          }}
+          props={props}
+        />
+      );
+    },
+    []
+  );
 
   const { setContentsHeight } = useContext(ComponentHeightContext);
 

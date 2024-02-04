@@ -1,6 +1,5 @@
 import * as React from "react";
 import { useTheme } from "styled-components/native";
-import useWagmiCandleStick from "../../hooks/useWagmiCandleStick";
 import {
   CandlestickChartCandles,
   CandlestickChartCrosshair,
@@ -11,14 +10,10 @@ import { CandlestickChart } from "../organisms/WagmiChart/candle/Chart";
 import { sizeContext } from "../organisms/GraphWithUserInfo";
 import { WagmiData } from "../../@types/chart";
 
-export const CustomWidthContext = React.createContext({
-  width: 0,
-  height: 0,
-});
-
-export default function WagmiChart({ data }: { data: WagmiData[] }) {
-  // const { data } = useWagmiCandleStick();
+function WagmiChart({ data }: { data: WagmiData[] }) {
   const theme = useTheme();
+
+  console.log("wagon chart data rerendered");
 
   const { width: contextWidth, height: contextHeight } =
     React.useContext(sizeContext);
@@ -45,3 +40,5 @@ export default function WagmiChart({ data }: { data: WagmiData[] }) {
     </>
   );
 }
+
+export default React.memo(WagmiChart);
