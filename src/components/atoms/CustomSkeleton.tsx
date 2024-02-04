@@ -5,10 +5,8 @@ import { useTheme } from "styled-components/native";
 
 export default function CustomSkeleton({
   children,
-  key,
 }: {
   children: React.ReactElement;
-  key?: string;
 }) {
   const theme = useTheme();
 

@@ -17,7 +17,6 @@ import {
   useAddStockToMyListMutation,
   useGetStockDetailsQuery,
 } from "../../store/modules/market/market";
-import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 import CustomSkeleton from "../../components/atoms/CustomSkeleton";
 
 export default function StockDetailScreen() {
@@ -165,17 +164,19 @@ export default function StockDetailScreen() {
               ) : (
                 <>
                   {[1, 2, 3].map((_, index) => (
-                    <CustomSkeleton>
-                      <View
-                        key={index + "textSkel"}
-                        style={{
-                          width: "100%",
-                          height: 30,
-                          borderRadius: 10,
-                          marginBottom: 10,
-                        }}
-                      />
-                    </CustomSkeleton>
+                    <View key={index + "textSkel"}>
+                      <CustomSkeleton>
+                        <View
+                          key={index + "textSkel"}
+                          style={{
+                            width: "100%",
+                            height: 30,
+                            borderRadius: 10,
+                            marginBottom: 10,
+                          }}
+                        />
+                      </CustomSkeleton>
+                    </View>
                   ))}
                 </>
               )}

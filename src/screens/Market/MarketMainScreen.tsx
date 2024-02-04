@@ -195,15 +195,17 @@ export default function MarketMainScreen() {
                     ) : (
                       <>
                         {[1, 2, 3].map((id) => (
-                          <CustomSkeleton key={"skel" + id}>
-                            <View
-                              style={{
-                                width: 100,
-                                height: 100,
-                                borderRadius: 10,
-                              }}
-                            ></View>
-                          </CustomSkeleton>
+                          <View key={"section1skel" + id}>
+                            <CustomSkeleton>
+                              <View
+                                style={{
+                                  width: 100,
+                                  height: 100,
+                                  borderRadius: 10,
+                                }}
+                              ></View>
+                            </CustomSkeleton>
+                          </View>
                         ))}
                       </>
                     )}
@@ -229,15 +231,17 @@ export default function MarketMainScreen() {
                     ) : (
                       <>
                         {[1, 2, 3].map((id) => (
-                          <CustomSkeleton key={"skel" + id}>
-                            <View
-                              style={{
-                                width: "100%",
-                                height: 30,
-                                borderRadius: 10,
-                              }}
-                            ></View>
-                          </CustomSkeleton>
+                          <View key={"section2skel" + id}>
+                            <CustomSkeleton>
+                              <View
+                                style={{
+                                  width: "100%",
+                                  height: 30,
+                                  borderRadius: 10,
+                                }}
+                              ></View>
+                            </CustomSkeleton>
+                          </View>
                         ))}
                       </>
                     )}
@@ -273,15 +277,17 @@ export default function MarketMainScreen() {
                     ) : (
                       <>
                         {[1, 2, 3].map((id) => (
-                          <CustomSkeleton key={"skel" + id}>
-                            <View
-                              style={{
-                                width: 100,
-                                height: 100,
-                                borderRadius: 10,
-                              }}
-                            ></View>
-                          </CustomSkeleton>
+                          <View key={"section3skel" + id}>
+                            <CustomSkeleton>
+                              <View
+                                style={{
+                                  width: 100,
+                                  height: 100,
+                                  borderRadius: 10,
+                                }}
+                              ></View>
+                            </CustomSkeleton>
+                          </View>
                         ))}
                       </>
                     )}

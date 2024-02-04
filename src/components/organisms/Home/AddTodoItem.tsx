@@ -4,7 +4,6 @@ import { spacing } from "../../../constants/spacing";
 import Icons from "../../atoms/Icons";
 import styled, { useTheme } from "styled-components/native";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
-import { useAddSimpleTodoMutation } from "../../../store/modules/todo/todo";
 import { useState } from "react";
 import { useAppSelect } from "../../../store/configureStore.hooks";
 import Text from "../../atoms/Text";
@@ -23,7 +22,6 @@ const ErrorMsg = styled.View`
 
 const AddTodoItem = () => {
   const [content, setContent] = useState("");
-  const [addSimpleTodo, result] = useAddSimpleTodoMutation();
   const [error, setError] = useState<string | null>();
 
   const { currentDateString } = useAppSelect((state) => state.calendar);
@@ -47,14 +45,6 @@ const AddTodoItem = () => {
       }, 2000);
       return;
     }
-
-    addSimpleTodo({
-      content,
-      add_date: currentDateString,
-      queryArgs: {
-        date: getAllTodoQueryArg.date,
-      },
-    });
 
     setContent("");
   };
