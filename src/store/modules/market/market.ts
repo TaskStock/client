@@ -1,5 +1,7 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { myFetchFunction } from "../../myFetchFunction";
+import { StockItem, StockDetail } from "../../../@types/stock";
+import { Wish } from "../../../@types/wish";
 
 export const marketApi = createApi({
   reducerPath: "marketApi",
@@ -9,31 +11,70 @@ export const marketApi = createApi({
     getCategorizedStocks: builder.query({
       query: () => "market/categorized-stocks",
     }),
-    getAllStocks: builder.query({
-      query: () => "market/all-stocks",
+    getAllStocks: builder.query<
+      {
+        stockitems: StockItem[];
+      },
+      void
+    >({
+      query: () => ({ url: "/siuser/all", method: "GET" }),
     }),
-    getStockDetails: builder.query({
-      query: (id: string) => `market/stock-details/${id}`,
+    getStockDetails: builder.query<
+      {
+        stockitems: StockDetail;
+      },
+      {
+        id: number;
+      }
+    >({
+      query: ({ id }) => {
+        return { url: `/siuser/detail/${id}`, method: "GET" };
+      },
     }),
-    getAllWishList: builder.query({
-      query: () => "market/wishlist",
+    getAllWishList: builder.query<
+      {
+        wishlist: Wish[];
+      },
+      {
+        offset: number;
+        limit: number;
+        filter: "like" | "latest";
+      }
+    >({
+      query: ({ offset, limit, filter }) => {
+        return {
+          url: `/wishlist?offset=${offset}&limit=${limit}&filter=${filter}`,
+          method: "GET",
+        };
+      },
     }),
-    addStockToMyList: builder.mutation({
-      query: (id: string) => ({
-        url: `market/wishlist/${id}`,
+    addWishList: builder.mutation<
+      {
+        result: string;
+      },
+      {
+        name: string;
+      }
+    >({
+      query: () => ({
+        url: `/wishlist`,
         method: "POST",
       }),
     }),
-    addWishList: builder.mutation({
-      query: (id: string) => ({
-        url: `market/wishlist/${id}`,
+    toggleLikeWishItem: builder.mutation<
+      {
+        result: string;
+      },
+      {
+        wishlist_id: number;
+      }
+    >({
+      query: ({ wishlist_id }) => ({
+        url: `/wishlist/liketoggle`,
         method: "POST",
-      }),
-    }),
-    addLikeToWishItem: builder.mutation({
-      query: (id: string) => ({
-        url: `market/wishlist/like/${id}`,
-        method: "POST",
+        body: {
+          wishlist_id,
+        },
       }),
     }),
   }),
@@ -44,7 +85,6 @@ export const {
   useGetAllStocksQuery,
   useGetStockDetailsQuery,
   useGetAllWishListQuery,
-  useAddStockToMyListMutation,
   useAddWishListMutation,
-  useAddLikeToWishItemMutation,
+  useToggleLikeWishItemMutation,
 } = marketApi;

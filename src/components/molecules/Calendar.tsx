@@ -167,6 +167,7 @@ function Calendar({ todos }: { todos: Todo[] | undefined }) {
       >
         <FlatList
           numColumns={7}
+          scrollEnabled={false}
           data={calendarItems}
           keyExtractor={(item) => item.date.toISOString()}
           renderItem={renderItem}

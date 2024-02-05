@@ -17,6 +17,7 @@ export interface AddTodoForm {
 }
 
 export interface Todo extends AddTodoForm {
+  stockitem_id: null | number;
   todo_id: number;
   check: boolean;
   date: IsoString;

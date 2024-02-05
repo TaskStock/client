@@ -1,28 +1,24 @@
-import { Pressable, ScrollView, View } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React from "react";
-import { MarketSection } from "../../components/molecules/Section";
-import ContentLayout from "../../components/atoms/ContentLayout";
+import { Pressable, ScrollView, View } from "react-native";
 import styled, { useTheme } from "styled-components/native";
-import Margin from "../../components/atoms/Margin";
-import { spacing } from "../../constants/spacing";
-import ContentItemBox, {
-  ContentItemBoxContainer,
-} from "../../components/atoms/ContentItemBox";
+import ContentItemBox from "../../components/atoms/ContentItemBox";
+import ContentLayout from "../../components/atoms/ContentLayout";
+import CustomSkeleton from "../../components/atoms/CustomSkeleton";
 import FlexBox from "../../components/atoms/FlexBox";
 import Icons from "../../components/atoms/Icons";
+import Margin from "../../components/atoms/Margin";
 import Text from "../../components/atoms/Text";
-import { useNavigation } from "@react-navigation/native";
-import { MarketStackParamList } from "../../navigators/MarketStack";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { WishListButton } from "../../components/organisms/Market/WishListBtn";
+import { MarketSection } from "../../components/molecules/Section";
 import {
   StockItem,
   StockItemSecond,
 } from "../../components/organisms/Market/StockItem";
+import { WishListButton } from "../../components/organisms/Market/WishListBtn";
+import { spacing } from "../../constants/spacing";
+import { MarketStackParamList } from "../../navigators/MarketStack";
 import { useGetCategorizedStocksQuery } from "../../store/modules/market/market";
-import CenterLayout from "../../components/atoms/CenterLayout";
-import SkeletonPlaceholder from "react-native-skeleton-placeholder";
-import CustomSkeleton from "../../components/atoms/CustomSkeleton";
 
 const MainRectangle = styled.View`
   width: 100%;

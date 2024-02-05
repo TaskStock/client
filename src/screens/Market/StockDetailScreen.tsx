@@ -1,23 +1,23 @@
-import { Dimensions, ScrollView, View } from "react-native";
 import React from "react";
-import PageHeader from "../../components/molecules/PageHeader";
+import { Dimensions, ScrollView, View } from "react-native";
+import { useTheme } from "styled-components/native";
+import { BlackBtnForProject } from "../../components/atoms/Buttons";
 import ContentLayout from "../../components/atoms/ContentLayout";
+import CustomSkeleton from "../../components/atoms/CustomSkeleton";
+import Divider from "../../components/atoms/Divider";
+import FlexBox from "../../components/atoms/FlexBox";
+import GradientOverlay from "../../components/atoms/GradientOverlay";
+import Margin from "../../components/atoms/Margin";
+import Text from "../../components/atoms/Text";
+import PageHeader from "../../components/molecules/PageHeader";
 import Section from "../../components/molecules/Section";
 import HomeChart from "../../components/organisms/Home/HomeChart";
-import Margin from "../../components/atoms/Margin";
-import { spacing } from "../../constants/spacing";
-import { BlackBtnForProject } from "../../components/atoms/Buttons";
-import FlexBox from "../../components/atoms/FlexBox";
-import Text from "../../components/atoms/Text";
-import Divider from "../../components/atoms/Divider";
-import GradientOverlay from "../../components/atoms/GradientOverlay";
 import StockDetailGraphSection from "../../components/organisms/Market/StockDetailGraphSection";
-import { useTheme } from "styled-components/native";
+import { spacing } from "../../constants/spacing";
 import {
   useAddStockToMyListMutation,
   useGetStockDetailsQuery,
 } from "../../store/modules/market/market";
-import CustomSkeleton from "../../components/atoms/CustomSkeleton";
 
 export default function StockDetailScreen() {
   const graphHeight = Dimensions.get("screen").height * 0.3;

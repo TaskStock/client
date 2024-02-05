@@ -102,11 +102,11 @@ export default function MarketListScreen() {
 
   const [searchText, setSearchText] = React.useState("");
 
-  const { data, isLoading, isError } = useGetAllStocksQuery({});
+  const { data, error, isLoading, isError } = useGetAllStocksQuery();
+
+  const list = data?.stockitems;
 
   const theme = useTheme();
-
-  const list = [1, 2, 3, 4, 5, 6, 7];
 
   const onPressListItem = (id: number) => {
     navigation.navigate("StockDetailScreen", {
@@ -162,73 +162,65 @@ export default function MarketListScreen() {
             placeholder="종목명을 검색하세요."
           ></SearchBar2>
           <Margin margin={spacing.offset}></Margin>
-          <TextWithIcon text="필터">
-            <WithLocalSvg
-              asset={require("../../../assets/icons/filterIcon.svg")}
-              fill={theme.text}
-            />
-          </TextWithIcon>
+          {isLoading || isError ? (
+            <CustomSkeleton>
+              <View
+                style={{
+                  width: 30,
+                  height: 10,
+                  borderRadius: 10,
+                }}
+              ></View>
+            </CustomSkeleton>
+          ) : (
+            <TextWithIcon text="필터">
+              <WithLocalSvg
+                asset={require("../../../assets/icons/filterIcon.svg")}
+                fill={theme.text}
+              />
+            </TextWithIcon>
+          )}
+
           <Margin margin={spacing.padding}></Margin>
           <FlexBox
             direction="column"
             alignItems="stretch"
             gap={spacing.padding + spacing.small}
           >
-            {list.map((id, idx) => {
-              if (idx % 4 == 0 && idx != 0) {
-                return (
-                  <View key={id}>
+            {!isLoading && list ? (
+              list.length !== 0 ? (
+                list.map((id, idx) => {
+                  if (idx % 4 == 0 && idx != 0) {
+                    return (
+                      <View key={id}>
+                        <MarketListItem
+                          id={id}
+                          name="삼성전자"
+                          participants={121}
+                          price={100000}
+                          onPress={() => onPressListItem(id)}
+                        />
+                        <Margin
+                          margin={spacing.padding + spacing.small}
+                        ></Margin>
+                        <WishListButton onPress={onPressWishListButton} />
+                      </View>
+                    );
+                  }
+                  return (
                     <MarketListItem
+                      key={id}
                       id={id}
                       name="삼성전자"
                       participants={121}
                       price={100000}
                       onPress={() => onPressListItem(id)}
                     />
-                    <Margin margin={spacing.padding + spacing.small}></Margin>
-                    <WishListButton onPress={onPressWishListButton} />
-                  </View>
-                );
-              }
-              return (
-                <MarketListItem
-                  key={id}
-                  id={id}
-                  name="삼성전자"
-                  participants={121}
-                  price={100000}
-                  onPress={() => onPressListItem(id)}
-                />
-              );
-            })}
-            {/* {!isLoading && data ? (
-              list.map((id, idx) => {
-                if (idx % 4 == 0 && idx != 0) {
-                  return (
-                    <View key={id}>
-                      <MarketListItem
-                        id={id}
-                        name="삼성전자"
-                        participants={121}
-                        price={100000}
-                        onPress={() => onPressListItem(id)}
-                      />
-                      <Margin margin={spacing.padding + spacing.small}></Margin>
-                      <WishListButton onPress={onPressWishListButton} />
-                    </View>
                   );
-                }
-                return (
-                  <MarketListItem
-                    key={id}
-                    id={id}
-                    name="삼성전자"
-                    participants={121}
-                    price={100000}
-                    onPress={() => onPressListItem(id)}
-                  />
-                );
-              })
+                })
+              ) : (
+                <Text size="md">종목이 없습니다.</Text>
+              )
             ) : (
               <>
                 {[1, 2, 3].map((id) => (
@@ -243,7 +235,7 @@ export default function MarketListScreen() {
                   </CustomSkeleton>
                 ))}
               </>
-            )} */}
+            )}
           </FlexBox>
         </ContentLayout>
       </ScrollView>

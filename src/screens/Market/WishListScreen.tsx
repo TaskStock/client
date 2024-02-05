@@ -1,5 +1,5 @@
 import { Pressable, View } from "react-native";
-import React from "react";
+import React, { useRef } from "react";
 import PageHeader from "../../components/molecules/PageHeader";
 import Section from "../../components/molecules/Section";
 import Margin from "../../components/atoms/Margin";
@@ -14,18 +14,25 @@ import FlexBox from "../../components/atoms/FlexBox";
 import { StockItemForWishList } from "../../components/organisms/Market/StockItem";
 import { useTheme } from "styled-components/native";
 import {
-  useAddLikeToWishItemMutation,
   useGetAllWishListQuery,
+  useToggleLikeWishItemMutation,
 } from "../../store/modules/market/market";
-import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 import CustomSkeleton from "../../components/atoms/CustomSkeleton";
 
 export default function WishListScreen() {
   const [index, setIndex] = React.useState(0);
 
-  const { data, isLoading, isError } = useGetAllWishListQuery({});
+  const filter = useRef<"like" | "latest">("like");
 
-  const [addLikeToWishItem] = useAddLikeToWishItemMutation();
+  const { data, isLoading, isError } = useGetAllWishListQuery({
+    filter: filter.current,
+    limit: 10,
+    offset: 0,
+  });
+
+  const wishList = data?.wishlist;
+
+  const [toggleLikeWishItem] = useToggleLikeWishItemMutation();
 
   const navigation =
     useNavigation<NativeStackNavigationProp<MarketStackParamList>>();
@@ -46,8 +53,8 @@ export default function WishListScreen() {
 
   const theme = useTheme();
 
-  const onPressWishListItem = () => {
-    addLikeToWishItem({ wishItemId: 1 });
+  const onPressWishListItem = (id: number) => {
+    toggleLikeWishItem({ wishlist_id: id });
   };
 
   return (
@@ -83,23 +90,40 @@ export default function WishListScreen() {
       <TabHeader
         onPressTab={(i) => {
           setIndex(i);
+          filter.current = i === 0 ? "like" : "latest";
         }}
         props={tabHeaderProps}
       />
       <ContentLayout>
         <FlexBox direction="column" alignItems="stretch" gap={spacing.padding}>
-          {!isLoading && data ? (
-            [1, 2, 3, 4, 5].map((v, i) => {
-              return (
-                <StockItemForWishList
-                  key={v + "wish"}
-                  left={i}
-                  likes={12}
-                  name="삼성전자"
-                  onPress={onPressWishListItem}
-                ></StockItemForWishList>
-              );
-            })
+          {!isLoading && wishList ? (
+            wishList.length != 0 ? (
+              wishList.map((v, i) => {
+                return (
+                  <StockItemForWishList
+                    key={v.wishlist_id + "wish"}
+                    left={i}
+                    likes={v.like_count}
+                    name={v.name}
+                    onPress={() => {
+                      onPressWishListItem(v.wishlist_id);
+                    }}
+                  ></StockItemForWishList>
+                );
+              })
+            ) : (
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <Text size="md" weight="medium">
+                  위시리스트가 비어있습니다.
+                </Text>
+              </View>
+            )
           ) : (
             <>
               {[1, 2, 3].map((_, index) => (

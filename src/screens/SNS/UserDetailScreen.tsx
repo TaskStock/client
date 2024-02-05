@@ -168,7 +168,7 @@ const UserDetailScreen = ({ route, navigation }: UserDetailScreenProps) => {
 
   if (isLoading || isError || !data) {
     return (
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1, backgroundColor: theme.background }}>
         <PageHeader
           headerRight={
             <Icons type="entypo" name="share" size={28} color="black" />
@@ -182,7 +182,7 @@ const UserDetailScreen = ({ route, navigation }: UserDetailScreenProps) => {
   }
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: theme.background }}>
       <PageHeader
         headerRight={
           <Icons type="entypo" name="share" size={28} color="black" />
@@ -209,7 +209,7 @@ const UserDetailScreen = ({ route, navigation }: UserDetailScreenProps) => {
               <Margin margin={spacing.padding} />
               <View
                 style={{
-                  backgroundColor: "white",
+                  backgroundColor: theme.background,
                   height: 1000,
                 }}
               >
