@@ -96,7 +96,7 @@ export const logout = createAsyncThunk(
       );
 
       if (data.result !== "success") {
-        throw new Error(data.message || "로그아웃 실패");
+        return rejectWithValue(data.result);
       }
       return data;
     } catch (error) {

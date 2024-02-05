@@ -8,6 +8,7 @@ import AddTodoModal from "../components/organisms/TodoModal/AddTodoModal";
 import { useFlushSavedValues } from "../hooks/useFlushSavedValues";
 import { useAppDispatch, useAppSelect } from "../store/configureStore.hooks";
 import { getUserInfoThunk } from "../utils/UserUtils/getUserInfoThunk";
+import usePushNotification from "../hooks/usePushNotification";
 
 const Container = styled.View`
   background-color: ${({ theme }) => theme.background};
@@ -16,6 +17,12 @@ const Container = styled.View`
 
 const HomeScreen = ({ navigation }) => {
   const isAddModalOpen = useAppSelect((state) => state.todo.isAddModalOpen);
+
+  const { isLoggedIn } = useAppSelect((state) => state.auth);
+
+  // push notification
+  usePushNotification();
+
 
   const dispatch = useAppDispatch();
 

@@ -23,7 +23,8 @@ interface initialState {
     introduce: string;
     group_id: number;
     region: string;
-    strategy: string;
+    // strategy: string;
+    is_push_on: boolean;
   };
   loading: boolean;
   error: string | null;
@@ -45,7 +46,8 @@ const initialUserState: initialState = {
     introduce: "",
     group_id: 0,
     region: "",
-    strategy: "",
+    // strategy: "",
+    is_push_on: false,
   },
   loading: false,
   error: null,
