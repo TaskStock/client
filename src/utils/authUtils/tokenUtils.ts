@@ -48,6 +48,8 @@ export const checkAndRenewTokens = createAsyncThunk(
   async (_, { getState, rejectWithValue }) => {
     const state = getState() as RootState;
 
+    console.log("=====checkAndRenewTokens=====");
+
     //accessToken => Redux store에서 가져옴, 만료 15분 전 갱신
     const {
       auth: { accessToken, accessExp, refreshExp },

@@ -18,6 +18,10 @@ import Text from "../../atoms/Text";
 import { SnsStackParamList } from "../../../navigators/SnsStack";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import FollowBtn from "../../atoms/FollowBtn";
+import {
+  addFollowingCount,
+  subFollowingCount,
+} from "../../../store/modules/user";
 
 const Container = styled.TouchableOpacity`
   flex-direction: row;
@@ -46,7 +50,7 @@ const UserBox = ({
     switch (button) {
       case "팔로우":
       case "맞팔로우":
-        dispatch(followThunk(userId));
+        dispatch(followThunk({ followingId: userId, isPrivate }));
         break;
       case "팔로잉":
         dispatch(unfollowThunk(userId));

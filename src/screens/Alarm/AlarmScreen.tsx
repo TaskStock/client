@@ -1,14 +1,13 @@
+import { useRefresh } from "@react-native-community/hooks";
 import React, { useEffect, useState } from "react";
 import { FlatList, RefreshControl } from "react-native";
+import { useTheme } from "styled-components";
 import styled from "styled-components/native";
 import AlarmBox from "../../components/molecules/Alarm/AlarmBox";
+import PinnedAlarmBox from "../../components/molecules/Alarm/PinnedAlarmBox";
 import PageHeader from "../../components/molecules/PageHeader";
 import { client } from "../../services/api";
 import { useAppSelect } from "../../store/configureStore.hooks";
-import { useRefresh } from "@react-native-community/hooks";
-import { useTheme } from "styled-components";
-import Text from "../../components/atoms/Text";
-import PinnedAlarmBox from "../../components/molecules/Alarm/PinnedAlarmBox";
 
 const Container = styled.View`
   flex: 1;
@@ -27,6 +26,9 @@ export interface IAlarmData {
 const AlarmScreen = () => {
   const { isRefreshing, onRefresh } = useRefresh(() => getData());
   const { accessToken } = useAppSelect((state) => state.auth);
+  const { followerList, followingList, searchList } = useAppSelect(
+    (state) => state.friends
+  );
   const [alarmDatas, setAlarmDatas] = useState([]);
   const theme = useTheme();
   const getData = async () => {
@@ -42,15 +44,7 @@ const AlarmScreen = () => {
   };
   useEffect(() => {
     getData();
-  }, []);
-
-  const Blank = () => (
-    <>
-      <Text size="md" color={theme.textDim}>
-        알림이 없어요 :)
-      </Text>
-    </>
-  );
+  }, [followerList, followingList, searchList]);
 
   return (
     <Container>

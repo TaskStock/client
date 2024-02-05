@@ -40,7 +40,7 @@ const initialUserState: initialState = {
     following_count: 0,
     premium: 0,
     cumulative_value: 0,
-    value_month_ago: 0,
+    value_yesterday_ago: 0,
     created_time: "",
     image: "",
     introduce: "",
@@ -59,6 +59,18 @@ const userSlice = createSlice({
   reducers: {
     updateUserValue: (state, action) => {
       state.user.cumulative_value += action.payload;
+    },
+    addFollowingCount: (state) => {
+      state.user.following_count += 1;
+    },
+    subFollowingCount: (state) => {
+      state.user.following_count -= 1;
+    },
+    addFollowerCount: (state) => {
+      state.user.follower_count += 1;
+    },
+    subFollowerCount: (state) => {
+      state.user.follower_count -= 1;
     },
   },
   extraReducers: (builder) => {
@@ -137,4 +149,10 @@ const userSlice = createSlice({
 });
 
 export default userSlice.reducer;
-export const { updateUserValue } = userSlice.actions;
+export const {
+  updateUserValue,
+  addFollowingCount,
+  subFollowingCount,
+  addFollowerCount,
+  subFollowerCount,
+} = userSlice.actions;

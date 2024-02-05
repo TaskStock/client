@@ -1,5 +1,5 @@
 import React from "react";
-import { View } from "react-native";
+import { Pressable, View } from "react-native";
 import { useTheme } from "styled-components";
 import styled from "styled-components/native";
 import { spacing } from "../../../constants/spacing";
@@ -11,6 +11,8 @@ import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import numberWithCommas from "../../../utils/useNumberWithCommas";
 import { useAppSelect } from "../../../store/configureStore.hooks";
 import PrivateLockIcon from "../../atoms/PrivateLockIcon";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { SnsStackParamList } from "../../../navigators/SnsStack";
 
 const Container = styled.View`
   padding: ${spacing.offset}px 0;
@@ -22,17 +24,19 @@ const Info = ({ text, iconType, iconName, color }) => {
       <IconsWithoutFeedBack
         name={iconName}
         type={iconType}
-        size={17}
+        size={spacing.offset}
         color={color}
       />
-      <Text size="xs">{text}</Text>
+      <Text size="sm">{text}</Text>
     </FlexBox>
   );
 };
 
 const MyInfo = ({ data }) => {
   const theme = useTheme();
+  const navigation = useNavigation<NavigationProp<SnsStackParamList>>();
   const { private: isPrivate } = useAppSelect((state) => state.user.user);
+  const { badges } = useAppSelect((state) => state.badge);
   return (
     <Container>
       <FlexBox gap={spacing.offset} alignItems="center">
@@ -70,12 +74,16 @@ const MyInfo = ({ data }) => {
           iconType={"materialIcons"}
           color={theme.text}
         />
-        <Info
-          text={`뱃지`}
-          iconName={"trophy-award"}
-          iconType={"material"}
-          color={theme.text}
-        />
+        {badges.length > 0 && (
+          <Pressable onPress={() => navigation.navigate("Badge")}>
+            <Info
+              text={`뱃지`}
+              iconName={"trophy-award"}
+              iconType={"material"}
+              color={theme.text}
+            />
+          </Pressable>
+        )}
       </FlexBox>
     </Container>
   );

@@ -14,14 +14,18 @@ export async function client<T = any>(
   // 토큰 유효한지 확인
   const fetchToken = async () => {
     try {
-      const res = (await checkAndRenewTokens()) as any;
+      console.log("[api] ===== AT 유효성 검사 =====");
+      // dispatch(checkAndRenewTokens());
+      const res = await checkAndRenewTokens();
+      console.log("[api] 새 토큰 요청 res : ", res);
       if (res.accessToken) {
-        console.log("새 AT로 교체: ", res.accessToken);
+        console.log("[api] 새 AT로 교체: ", res.accessToken);
         return res.accessToken;
       }
+      console.log("[api] AT 유효함", accessToken);
       return accessToken;
     } catch (e) {
-      console.log("토큰 유효성 검사 실패: ", e);
+      console.log("[api] 토큰 유효성 검사 실패: ", e);
       return accessToken; // 에러 발생시 기존 토큰 반환
     }
   };
