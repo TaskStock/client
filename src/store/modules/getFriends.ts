@@ -63,8 +63,6 @@ const initialFriendState: initialState = {
     button: "팔로우",
   },
   loading: false,
-  follower_count: 0,
-  following_count: 0,
   error: null,
 };
 
@@ -269,6 +267,12 @@ const friendSlice = createSlice({
         state.targetUser.isFollowingYou
       );
 
+      // follower_count, following_count update
+      // pending === false이면 나의 following_count +1, 상대방의 follower_count +1
+      if (!state.targetUser.pending && state.targetUser.follower_count) {
+        state.targetUser.follower_count += 1;
+      }
+
       console.log("팔로우 성공");
     });
     builder.addCase(unfollowThunk.pending, (state, action) => {
@@ -296,6 +300,13 @@ const friendSlice = createSlice({
         state.targetUser.isFollowingMe,
         state.targetUser.isFollowingYou
       );
+
+      // follower_count, following_count update
+      // pending === false이면 나의 following_count -1, 상대방의 follower_count -1
+      if (!state.targetUser.pending && state.targetUser.follower_count) {
+        state.targetUser.follower_count -= 1;
+      }
+
       console.log("언팔로우 성공");
     });
     builder.addCase(cancelRequestThunk.pending, (state, action) => {

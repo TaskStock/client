@@ -1,4 +1,7 @@
+import { useRefresh } from "@react-native-community/hooks";
 import React, { useState } from "react";
+import { FlatList } from "react-native";
+import { RefreshControl } from "react-native-gesture-handler";
 import { useTheme } from "styled-components";
 import styled from "styled-components/native";
 import FlexBox from "../../components/atoms/FlexBox";
@@ -8,11 +11,8 @@ import PageHeader from "../../components/molecules/PageHeader";
 import UserBox from "../../components/molecules/SNS/UserBox";
 import { spacing } from "../../constants/spacing";
 import { useAppDispatch, useAppSelect } from "../../store/configureStore.hooks";
-import { IFriend, searchThunk } from "../../store/modules/getFriends";
+import { searchThunk } from "../../store/modules/getFriends";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
-import { useRefresh } from "@react-native-community/hooks";
-import { FlatList } from "react-native";
-import { RefreshControl } from "react-native-gesture-handler";
 
 const Container = styled.View`
   flex: 1;
@@ -56,6 +56,7 @@ const TextInputContainer = ({
       <IconsWithoutFeedBack
         type="materialIcons"
         name="search"
+        color={theme.text}
         size={useResponsiveFontSize(36)}
       />
       <Input

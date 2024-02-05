@@ -1,10 +1,13 @@
-import { useNavigation } from "@react-navigation/native";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
 import { useTheme } from "styled-components";
 import styled from "styled-components/native";
 import { spacing } from "../../../constants/spacing";
 import { IAlarmData } from "../../../screens/Alarm/AlarmScreen";
-import { useAppSelect } from "../../../store/configureStore.hooks";
+import {
+  useAppDispatch,
+  useAppSelect,
+} from "../../../store/configureStore.hooks";
 import {
   acceptRequestInAlarm,
   cancelRequestInAlarm,
@@ -18,6 +21,13 @@ import FlexBox from "../../atoms/FlexBox";
 import FollowBtn from "../../atoms/FollowBtn";
 import { IconProps, IconsWithoutFeedBack } from "../../atoms/Icons";
 import Text from "../../atoms/Text";
+import {
+  addFollowerCount,
+  addFollowingCount,
+  subFollowingCount,
+} from "../../../store/modules/user";
+import { Alert } from "react-native";
+import { AlarmStackParamList } from "../../../navigators/AlarmStack";
 
 const AlarmContainer = styled.TouchableOpacity<{ read: boolean }>`
   flex-direction: row;
@@ -80,16 +90,25 @@ const updateBtnText = (info) => {
 
 const AlarmBox = ({ item }: { item: IAlarmData }) => {
   const theme = useTheme();
-  const navigation = useNavigation() as any;
+  const navigation = useNavigation<NavigationProp<AlarmStackParamList>>();
+  const dispatch = useAppDispatch();
   const { accessToken } = useAppSelect((state) => state.auth);
 
   const [alarmItem, setAlarmItem] = useState(item);
+
+  useEffect(() => {
+    setAlarmItem(item);
+  }, [item]);
   const subText = formatToLocalMonthDay(alarmItem.created_time);
 
   const [buttonText, setButtonText] = useState("");
 
   const handleFollowChange = async () => {
-    const { target_id: userId, private: isPrivate } = alarmItem.info;
+    const {
+      target_id: userId,
+      private: isPrivate,
+      isFollowingYou,
+    } = alarmItem.info;
 
     const updateAlarmInfo = (newInfo) => {
       setAlarmItem((prevAlarmItem) => ({
@@ -102,34 +121,74 @@ const AlarmBox = ({ item }: { item: IAlarmData }) => {
     };
 
     try {
+      let result;
       switch (buttonText) {
         case "팔로우":
         case "맞팔로우":
-          await followInAlarm(userId, accessToken, alarmItem.notice_id);
-          updateAlarmInfo({
-            pending: isPrivate,
-            isFollowingYou: !isPrivate,
-          });
+          result = await followInAlarm(
+            userId,
+            accessToken,
+            alarmItem.notice_id
+          );
+          if (result === "success") {
+            updateAlarmInfo({
+              pending: isPrivate,
+              isFollowingYou: !isPrivate,
+            });
+            if (!isPrivate) {
+              dispatch(addFollowingCount());
+            }
+          } else {
+            Alert.alert("팔로우 실패", "서버 오류. 다시 시도해주세요.");
+          }
+
           break;
         case "팔로잉":
-          await unfollowInAlarm(userId, accessToken, alarmItem.notice_id);
-          updateAlarmInfo({
-            isFollowingYou: false,
-          });
+          result = await unfollowInAlarm(
+            userId,
+            accessToken,
+            alarmItem.notice_id
+          );
+          if (result === "success") {
+            updateAlarmInfo({
+              isFollowingYou: false,
+            });
+            dispatch(subFollowingCount());
+          } else {
+            Alert.alert("언팔로우 실패", "서버 오류. 다시 시도해주세요.");
+          }
           break;
         case "요청됨":
-          await cancelRequestInAlarm(userId, accessToken, alarmItem.notice_id);
-          updateAlarmInfo({
-            pending: false,
-            isFollowingYou: false,
-          });
+          result = await cancelRequestInAlarm(
+            userId,
+            accessToken,
+            alarmItem.notice_id
+          );
+          if (result === "success") {
+            updateAlarmInfo({
+              pending: false,
+              isFollowingYou: false,
+            });
+          } else {
+            Alert.alert("요청 취소 실패", "서버 오류. 다시 시도해주세요.");
+          }
           break;
         case "수락":
-          await acceptRequestInAlarm(userId, accessToken, alarmItem.notice_id);
-          updateAlarmInfo({
-            displayAccept: false,
-            isFollowingMe: true,
-          });
+          result = await acceptRequestInAlarm(
+            userId,
+            accessToken,
+            alarmItem.notice_id
+          );
+          if (result === "success") {
+            updateAlarmInfo({
+              displayAccept: false,
+              isFollowingMe: true,
+              isFollowingYou: isFollowingYou,
+            });
+            dispatch(addFollowerCount());
+          } else {
+            Alert.alert("요청 수락 실패", "서버 오류. 다시 시도해주세요.");
+          }
           break;
         default:
           console.log("Invalid button text");

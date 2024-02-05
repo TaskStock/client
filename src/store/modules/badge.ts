@@ -6,7 +6,7 @@ interface BadgeState {
 }
 
 const initialState: BadgeState = {
-  badges: [],
+  badges: [], // 1, 3, 5, 6
 };
 
 const badgeSlice = createSlice({
@@ -15,7 +15,10 @@ const badgeSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(badgeThunk.fulfilled, (state, action) => {
-      state.badges.push(action.payload);
+      state.badges = action.payload;
+    });
+    builder.addCase(badgeThunk.rejected, (state, action) => {
+      console.log("뱃지 추가 실패: ", action.payload);
     });
   },
 });

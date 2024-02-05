@@ -1,13 +1,12 @@
-import React from "react";
-import styled from "styled-components/native";
-import { spacing } from "../../../constants/spacing";
-import { IconsWithoutFeedBack } from "../../atoms/Icons";
-import FlexBox from "../../atoms/FlexBox";
-import Text from "../../atoms/Text";
-import { palette } from "../../../constants/colors";
-import { useTheme } from "styled-components";
 import { useNavigation } from "@react-navigation/native";
-import { View } from "react-native";
+import React from "react";
+import { useTheme } from "styled-components";
+import styled from "styled-components/native";
+import { palette } from "../../../constants/colors";
+import { spacing } from "../../../constants/spacing";
+import FlexBox from "../../atoms/FlexBox";
+import { IconsWithoutFeedBack } from "../../atoms/Icons";
+import Text from "../../atoms/Text";
 
 const Container = styled.TouchableOpacity`
   margin: ${spacing.padding}px ${spacing.offset}px;
