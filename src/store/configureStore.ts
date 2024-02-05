@@ -11,6 +11,7 @@ import retrospectReducer from "./modules/retrospect/retrospect";
 import { retrospectApi } from "./modules/retrospect/retrospect";
 import { pushNotiReducer } from "./modules/pushNoti";
 import getFriendsReducer, { getFriendsApi } from "./modules/getFriends";
+import { badgeReducer } from "./modules/badge";
 
 const store = configureStore({
   reducer: {
@@ -30,6 +31,7 @@ const store = configureStore({
     retrospect: retrospectReducer,
     friends: getFriendsReducer,
     pushNoti: pushNotiReducer,
+    badge: badgeReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
