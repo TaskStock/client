@@ -16,6 +16,8 @@ const AccountScreen = () => {
   const { private: isPrivate } = useAppSelect((state) => state.user.user);
   const dispatch = useAppDispatch();
   const [isEnabled, setIsEnabled] = useState<boolean>(isPrivate);
+  const { strategy } = useAppSelect((state) => state.auth);
+  console.log(strategy);
 
   const toggleSwitch = () => {
     dispatch(setPrivateThunk(!isEnabled));
@@ -29,12 +31,14 @@ const AccountScreen = () => {
           icon={{ type: "ionicons", name: "lock-closed-outline" }}
           toggle={{ isEnabled, setIsEnabled, toggleSwitch }}
         />
+        {strategy === "local" && (
+          <Menu
+            text="비밀번호 재설정"
+            icon={{ type: "ionicons", name: "shield-checkmark-outline" }}
+            onPress={() => {}}
+          />
+        )}
 
-        <Menu
-          text="비밀번호 재설정"
-          icon={{ type: "ionicons", name: "shield-checkmark-outline" }}
-          onPress={() => {}}
-        />
         <Menu text="회원 탈퇴" onPress={() => {}} textColor={palette.red} />
       </Container>
     </View>

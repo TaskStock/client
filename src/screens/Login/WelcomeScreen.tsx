@@ -30,7 +30,7 @@ const WelcomeScreen = ({ navigation }) => {
   const dispatch = useAppDispatch();
 
   // 최근 로그인한 기록
-  const strategy = useAppSelect((state) => state.auth.strategy);
+  const { strategy } = useAppSelect((state) => state.auth);
 
   const handleSocialLogin = async (type) => {
     const user = await type();
@@ -54,7 +54,10 @@ const WelcomeScreen = ({ navigation }) => {
         };
 
         dispatch(setSocialLoggedIn(returnValue));
+        console.log("소셜로그인 성공", response);
         // navigation.navigate("MainTab", { screen: "Home" });
+      } else {
+        console.log("소셜로그인 실패", response);
       }
     } catch (e) {
       console.log(user?.strategy, "로그인 실패", e);

@@ -120,7 +120,7 @@ export const searchThunk = createAsyncThunk(
         `sns/users/search/?searchScope=global&searchTarget=${searchText}`,
         { accessToken }
       );
-
+      // console.log(response);
       if (response.result === "success") {
         return response.searchResult;
       } else {

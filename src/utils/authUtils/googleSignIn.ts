@@ -1,15 +1,17 @@
-import { GOOGLE_AUTH_IOS_CLIENT_ID } from "@env";
+// import { GOOGLE_AUTH_IOS_CLIENT_ID } from "@env";
 import {
   GoogleSignin,
   statusCodes,
 } from "@react-native-google-signin/google-signin";
+import Config from "react-native-config";
 
 GoogleSignin.configure({
   // webClientId: '', // idToken을 얻기 위해 필요한 값임
-  iosClientId: GOOGLE_AUTH_IOS_CLIENT_ID,
+  iosClientId: Config.GOOGLE_AUTH_IOS_CLIENT_ID,
 });
 
 export async function onGoogleButtonPress() {
+  console.log("===== 구글clientID", Config.GOOGLE_AUTH_IOS_CLIENT_ID);
   try {
     await GoogleSignin.hasPlayServices();
     const userInfo = await GoogleSignin.signIn();

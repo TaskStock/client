@@ -27,7 +27,16 @@ export const buttonRender = (
       }
     }
   } else {
-    isFollowingYou ? (button = "팔로잉") : (button = "맞팔로우");
+    // 상대가 나를 팔로우할 경우
+    if (isFollowingYou === true) {
+      button = "팔로잉";
+    } else {
+      if (isPrivate === true) {
+        isPending ? (button = "요청됨") : (button = "맞팔로우");
+      } else {
+        button = "맞팔로우";
+      }
+    }
   }
 
   return button;

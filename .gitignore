@@ -81,3 +81,5 @@ yarn-error.*
 /android/app/google-services.json
 
 *.keystore. 
+**/GoogleService-Info.plist
+

@@ -12,21 +12,28 @@ export async function client<T = any>(
   { body, accessToken, ...customConfig }: IClient = {}
 ): Promise<T> {
   // 토큰 유효한지 확인
-  const res = (await checkAndRenewTokens()) as any;
-  // AT가 만료되어 갱신한 경우 새 AT로 교체
-  if (res.accessToken) {
-    accessToken = res.accessToken;
-    console.log("새 AT로 교체: ", accessToken);
-  }
+  const fetchToken = async () => {
+    try {
+      const res = (await checkAndRenewTokens()) as any;
+      if (res.accessToken) {
+        console.log("새 AT로 교체: ", res.accessToken);
+        return res.accessToken;
+      }
+      return accessToken;
+    } catch (e) {
+      console.log("토큰 유효성 검사 실패: ", e);
+      return accessToken; // 에러 발생시 기존 토큰 반환
+    }
+  };
+
+  const AT = await fetchToken();
 
   const SERVER_URL = getAPIHost();
 
   const headers = {
     "Content-Type": "application/json",
-    ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
+    ...(AT ? { Authorization: `Bearer ${AT}` } : {}),
   };
-
-  // console.log("=========== 받은 access 토큰: ", accessToken);
 
   const config: RequestInit = {
     method: customConfig.method,

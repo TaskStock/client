@@ -95,7 +95,7 @@ export default function RetrospectWriteScreen() {
           <NormalSection headerText="회고 내용">
             <TextAreaInput
               numberOfLines={50}
-              minHeight={useResponsiveFontSize(100)}
+              minHeight={useResponsiveFontSize(260)}
               placeholder="회고 내용을 입력해주세요"
               value={retrospectForm.content}
               onChangeText={onChangeRetrospectContent}

@@ -84,7 +84,7 @@ const AlarmBox = ({ item }: { item: IAlarmData }) => {
   const { accessToken } = useAppSelect((state) => state.auth);
 
   const [alarmItem, setAlarmItem] = useState(item);
-  const createdAt = formatToLocalMonthDay(alarmItem.created_time);
+  const subText = formatToLocalMonthDay(alarmItem.created_time);
 
   const [buttonText, setButtonText] = useState("");
 
@@ -105,27 +105,27 @@ const AlarmBox = ({ item }: { item: IAlarmData }) => {
       switch (buttonText) {
         case "팔로우":
         case "맞팔로우":
-          await followInAlarm(userId, accessToken);
+          await followInAlarm(userId, accessToken, alarmItem.notice_id);
           updateAlarmInfo({
             pending: isPrivate,
             isFollowingYou: !isPrivate,
           });
           break;
         case "팔로잉":
-          await unfollowInAlarm(userId, accessToken);
+          await unfollowInAlarm(userId, accessToken, alarmItem.notice_id);
           updateAlarmInfo({
             isFollowingYou: false,
           });
           break;
         case "요청됨":
-          await cancelRequestInAlarm(userId, accessToken);
+          await cancelRequestInAlarm(userId, accessToken, alarmItem.notice_id);
           updateAlarmInfo({
             pending: false,
             isFollowingYou: false,
           });
           break;
         case "수락":
-          await acceptRequestInAlarm(userId, accessToken);
+          await acceptRequestInAlarm(userId, accessToken, alarmItem.notice_id);
           updateAlarmInfo({
             displayAccept: false,
             isFollowingMe: true,
@@ -151,7 +151,7 @@ const AlarmBox = ({ item }: { item: IAlarmData }) => {
     // type === 'admin' 이면 클릭 시 notice_id의 상세페이지로 이동
     const { detail, title } = alarmItem.info;
     handleOnPress = () => {
-      navigation.navigate("AlarmDetail", { detail, title, createdAt });
+      navigation.navigate("AlarmDetail", { detail, title, subText });
     };
   } else {
     // type === 'sns' or 'general' 이면 클릭 시 target_id의 상세페이지로 이동
@@ -174,7 +174,7 @@ const AlarmBox = ({ item }: { item: IAlarmData }) => {
       >
         <Text size="md">{alarmItem.content}</Text>
         <Text size="sm" color={theme.textDim}>
-          {createdAt}
+          {subText}
         </Text>
       </FlexBox>
       {alarmItem.type === "sns" && (

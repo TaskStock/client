@@ -26,7 +26,6 @@ const requestNewTokens = async (accessToken: string, refreshToken: string) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
       },
       body: JSON.stringify({ refreshToken, device_id: deviceId }),
     });
@@ -63,7 +62,7 @@ export const checkAndRenewTokens = createAsyncThunk(
     // UTC 기준 Unix timestamp (seconds)
     const currentTime = Math.floor(Date.now() / 1000);
 
-    // accessToken, refreshToken 둘다 유효한 경우
+    // CASE1 : accessToken, refreshToken 둘다 유효한 경우
     if (
       accessToken &&
       refreshToken &&
@@ -74,7 +73,7 @@ export const checkAndRenewTokens = createAsyncThunk(
       return;
     }
 
-    // CASE1 : accessToken 만료, refreshToken 유효
+    // CASE2 : accessToken 만료, refreshToken 유효
     if (
       accessToken &&
       refreshToken &&
@@ -87,7 +86,7 @@ export const checkAndRenewTokens = createAsyncThunk(
       return newTokens;
     }
 
-    // CASE 2: accessToken, refreshToken 둘 다 만료 => logout
+    // CASE 3: accessToken, refreshToken 둘 다 만료 => logout
     if (
       (accessToken && refreshToken && currentTime > refreshExp) ||
       refreshExp - currentTime < sevenDaysInSec

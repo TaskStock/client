@@ -21,7 +21,8 @@ const Pencil = styled.View`
   align-items: center;
 `;
 const EditImage = ({ onPress }) => {
-  const { image, strategy } = useAppSelect((state) => state.user.user);
+  const { image } = useAppSelect((state) => state.user.user);
+  const { strategy } = useAppSelect((state) => state.auth);
   const theme = useTheme();
   return (
     <Container onPress={onPress}>
