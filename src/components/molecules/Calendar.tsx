@@ -138,10 +138,12 @@ const CalendarItem = memo(({ item }: { item: TCalendarItem }) => {
   );
 });
 
-function Calendar({ todos }: { todos: Todo[] }) {
+function Calendar({ todos }: { todos: Todo[] | undefined }) {
   const calendarItems = useAppSelect((state) => state.calendar.calendarItems);
 
   const { recalculate } = useCalculateTodoCount({ todos });
+
+  const dispatch = useDispatch();
 
   useFocusEffect(() => {
     recalculate();
@@ -150,8 +152,6 @@ function Calendar({ todos }: { todos: Todo[] }) {
   const renderItem = ({ item }: { item: TCalendarItem }) => {
     return <CalendarItem item={item} />;
   };
-
-  const dispatch = useDispatch();
 
   const onLayout = useResizeLayoutOnFocus({
     resizeFunction: (height) => dispatch(setItemContainerHeight(height)),

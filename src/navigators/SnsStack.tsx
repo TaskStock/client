@@ -4,11 +4,17 @@ import EditProfileScreen from "../screens/SNS/EditProfileScreen";
 import RankingScreen from "../screens/SNS/RankingScreen";
 import SearchScreen from "../screens/SNS/SearchScreen";
 import UserDetailScreen from "../screens/SNS/UserDetailScreen";
-import Icons from "../components/atoms/Icons";
-import { useTheme } from "styled-components";
-import { View } from "react-native";
 
-const NativeStack = createNativeStackNavigator();
+export type SnsStackParamList = {
+  Ranking: undefined;
+  EditProfile: undefined;
+  Search: undefined;
+  UserDetail: {
+    userId: number;
+  };
+};
+
+const NativeStack = createNativeStackNavigator<SnsStackParamList>();
 
 const SnsStack = () => {
   return (

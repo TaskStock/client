@@ -9,9 +9,9 @@ import {
 } from "victory-native";
 import { useTheme } from "styled-components/native";
 import { Value } from "../../@types/chart";
-import { View } from "react-native";
 import { Circle, Svg } from "react-native-svg";
 import { palette } from "../../constants/colors";
+import { View } from "react-native";
 
 const DotDataComponent = (props: any) => {
   const { x, y, datum } = props;
@@ -39,12 +39,10 @@ export default function LineValueChart({
   width,
   height,
   data,
-  maxLength,
 }: {
   data: Value[];
   width: number;
   height: number;
-  maxLength: number;
 }) {
   const theme = useTheme();
 
@@ -60,30 +58,29 @@ export default function LineValueChart({
   const twoThirds = minY + ((maxY - minY) * 2) / 3;
   const oneThird = minY + ((maxY - minY) * 1) / 3;
 
-  const maxYWithPadding = maxY + (maxY - minY) / 3;
-  const minYWithPadding = minY - (maxY - minY) / 3;
+  let maxYWithPadding = maxY + (maxY - minY) / 3;
+  let minYWithPadding = minY - (maxY - minY) / 3;
+
+  if (maxYWithPadding === minYWithPadding) {
+    maxYWithPadding = maxYWithPadding + 1;
+    minYWithPadding = minYWithPadding - 1;
+  }
 
   return (
     <VictoryChart
       width={width}
       height={height}
-      padding={
-        {
-          // left: 30,
-          // right: 30,
-          // top: 10,
-          // bottom: 10,
-        }
-      }
+      padding={{}}
       containerComponent={
         <VictoryZoomContainer zoomDimension="x"></VictoryZoomContainer>
       }
+      style={{}}
     >
       <VictoryLine
         theme={VictoryTheme.material}
         domain={{
           y: [minYWithPadding, maxYWithPadding],
-          x: [-1, maxLength],
+          x: [-1, 31],
         }}
         style={{
           data: {

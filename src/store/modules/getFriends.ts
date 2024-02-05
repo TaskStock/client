@@ -7,6 +7,12 @@ import {
   followThunk,
   unfollowThunk,
 } from "../../utils/UserUtils/followThunk";
+import { createApi } from "@reduxjs/toolkit/query/react";
+import { myFetchFunction } from "../myFetchFunction";
+import { IUserBox } from "../../@types/userBox";
+import { Value } from "../../@types/chart";
+import { Todo } from "../../@types/todo";
+import { Project } from "../../@types/project";
 
 export interface IFriend {
   user_id: number;
@@ -61,6 +67,31 @@ const initialFriendState: initialState = {
   following_count: 0,
   error: null,
 };
+
+interface getFriendInfoQueryResult {
+  result: string;
+  targetData: IUserBox;
+  values: Value[];
+  todos: Todo[];
+  projects: Project[];
+}
+
+export const getFriendsApi = createApi({
+  reducerPath: "getFriendsApi",
+  baseQuery: myFetchFunction(""),
+  endpoints: (builder) => ({
+    getFriendInfo: builder.query<getFriendInfoQueryResult, { userId: number }>({
+      query: (body) => {
+        return {
+          url: `ssns/users/${body.userId}`,
+          method: "GET",
+        };
+      },
+    }),
+  }),
+});
+
+export const { useGetFriendInfoQuery } = getFriendsApi;
 
 export const getFriendsThunk = createAsyncThunk(
   "sns/getFriendsThunk",

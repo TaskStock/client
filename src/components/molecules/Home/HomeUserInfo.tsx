@@ -14,16 +14,16 @@ const HomeUserInfo = ({
 }: {
   data: {
     cumulative_value: number;
-    value_month_ago: number;
+    value_yesterday_ago: number;
     nickname: string;
   };
   isLoading: boolean;
   error: string | null;
 }) => {
   const theme = useTheme();
-  const diff = data.cumulative_value - data.value_month_ago;
+  const diff = data.cumulative_value - data.value_yesterday_ago;
   const diff_rate =
-    ((data.cumulative_value - data.value_month_ago) * 100) /
+    ((data.cumulative_value - data.value_yesterday_ago) * 100) /
     data.cumulative_value;
 
   const renderDiffRate = diff_rate.toFixed(2);
@@ -67,7 +67,7 @@ const HomeUserInfo = ({
             styles={{ paddingTop: spacing.small }}
           >
             <Text size="sm" weight="regular" color={theme.textDim}>
-              1개월 전보다
+              어제보다
             </Text>
             <Text
               size="sm"

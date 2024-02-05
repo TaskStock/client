@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useMemo } from "react";
 import { Dimensions, View, useWindowDimensions } from "react-native";
 import {
   NavigationState,
@@ -8,7 +8,7 @@ import {
 } from "react-native-tab-view";
 import { ComponentHeightContext } from "../../../utils/ComponentHeightContext";
 import HomeCalendar from "./HomeCalendar";
-import HomeGraph from "./HomeGraph";
+import GraphWithUserInfo from "../GraphWithUserInfo";
 import TabHeader from "../../molecules/TabHeader";
 import {
   useAppDispatch,
@@ -16,17 +16,9 @@ import {
 } from "../../../store/configureStore.hooks";
 import { setTabIndex } from "../../../store/modules/home";
 import { useResizeLayoutOnFocus } from "../../../hooks/useResizeLayoutOnFocus";
-
-const FirstRoute = () => <HomeGraph myData={[]} />;
-
-const SecondRoute = () => {
-  return <HomeCalendar />;
-};
-
-const renderScene = SceneMap({
-  first: FirstRoute,
-  second: SecondRoute,
-});
+import useUser from "../../../hooks/useUser";
+import useValue from "../../../hooks/useValue";
+import useTodos from "../../../hooks/useTodos";
 
 const clientHeight = Dimensions.get("window").height;
 
@@ -39,6 +31,52 @@ const GCContainer = () => {
     { key: "first", title: "그래프" },
     { key: "second", title: "캘린더" },
   ]);
+
+  const { user, loading: userInfoLoading, error: userInfoError } = useUser();
+  const { data: values, error, isError, isLoading, refetch } = useValue();
+  const {
+    data: todos,
+    isLoading: todosIsLoading,
+    isError: todosIsError,
+  } = useTodos();
+
+  const sceneMap = useMemo(() => {
+    return {
+      first: () => (
+        <GraphWithUserInfo
+          userInfo={{
+            cumulative_value: user?.cumulative_value,
+            value_yesterday_ago: user?.value_yesterday_ago,
+            nickname: user?.user_name,
+            error: userInfoError,
+            loading: userInfoLoading,
+          }}
+          value={{
+            data: values,
+            isLoading,
+            isError,
+            error,
+            refetch,
+          }}
+        />
+      ),
+      second: () => (
+        <HomeCalendar
+          user={{
+            value_yesterday_ago: user?.value_yesterday_ago,
+            cumulative_value: user?.cumulative_value,
+          }}
+          todos={{
+            data: todos,
+            isLoading: todosIsLoading,
+            isError: todosIsError,
+          }}
+        />
+      ),
+    };
+  }, [user, values]);
+
+  const renderScene = SceneMap(sceneMap);
 
   const onChangeIndex = (index: number) => {
     dispatch(setTabIndex(index));
