@@ -7,6 +7,8 @@ import { TabView } from "react-native-tab-view";
 import TabHeader from "../../components/molecules/TabHeader";
 import ProjectDetailFirst from "../../components/pages/project/ProjectDetailFirst";
 import ProjectDetailSecond from "../../components/pages/project/ProjectDetailSecond";
+import { View } from "react-native";
+import { useTheme } from "styled-components/native";
 
 type Props = NativeStackScreenProps<ProjectStackParamList, "ProjectDetail">;
 
@@ -34,6 +36,8 @@ export default function ProjectDetailScreen({ navigation, route }: Props) {
     sceneMap,
   });
 
+  const theme = useTheme();
+
   const renderTabBar = (props: any) => {
     return (
       <TabHeader
@@ -45,7 +49,12 @@ export default function ProjectDetailScreen({ navigation, route }: Props) {
     );
   };
   return (
-    <>
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: theme.background,
+      }}
+    >
       <PageHeader title={route.params.project_title || "프로젝트 상세"} />
       <TabView
         navigationState={{ index, routes }}
@@ -55,6 +64,6 @@ export default function ProjectDetailScreen({ navigation, route }: Props) {
         onSwipeEnd={() => {}}
         swipeEnabled={false}
       ></TabView>
-    </>
+    </View>
   );
 }

@@ -1,6 +1,5 @@
 import { Value } from "../@types/chart";
 import { convertAndCreateWagmiData } from "../utils/createRestDummyData";
-import useValue from "./useValue";
 
 const useWagmiCandleStick = ({ data }: { data: Value[] }) => {
   let wagmiData: {

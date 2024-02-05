@@ -8,6 +8,7 @@ import HomeScreen from "../screens/HomeScreen";
 import { ComponentHeightProvider } from "../utils/ComponentHeightContext";
 import ProjectStack from "./ProjectStack";
 import SnsStack from "./SnsStack";
+import MarketStack from "./MarketStack";
 
 const Tab = createBottomTabNavigator();
 
@@ -50,6 +51,21 @@ function MainTab() {
             ),
           }}
         />
+        <Tab.Screen
+          name="MarketStack"
+          component={MarketStack}
+          options={{
+            headerShown: false,
+            tabBarIcon: ({ focused, color, size }) => (
+              <IconsWithoutFeedBack
+                type="feather"
+                name="shopping-bag"
+                size={size * 1.2}
+                color={color}
+              />
+            ),
+          }}
+        />
 
         <Tab.Screen
           name="ProjectStack"
@@ -67,21 +83,7 @@ function MainTab() {
             ),
           }}
         />
-        <Tab.Screen
-          name="Group"
-          component={GroupScreen}
-          options={{
-            // headerShown: false,
-            tabBarIcon: ({ focused, color, size }) => (
-              <IconsWithoutFeedBack
-                type="materialIcons"
-                name="people-alt"
-                size={size * 1.2}
-                color={color}
-              />
-            ),
-          }}
-        />
+
         <Tab.Screen
           name="SnsStack"
           component={SnsStack}

@@ -49,3 +49,40 @@ export const SearchBar = ({
     </Container>
   );
 };
+
+export const SearchBar2 = ({
+  text,
+  onChangeText,
+  onPressSearchIcon,
+  placeholder,
+}: {
+  text: string;
+  placeholder: string;
+  onChangeText: (text: string) => void;
+  onPressSearchIcon: () => void;
+}) => {
+  const theme = useTheme();
+
+  return (
+    <Container>
+      <Pressable onPress={onPressSearchIcon}>
+        <WithLocalSvg
+          asset={SearchIcon}
+          width={34}
+          height={34}
+          fill={theme.text}
+        />
+      </Pressable>
+      <TextInput
+        value={text}
+        placeholderTextColor={theme.textDim}
+        placeholder={placeholder}
+        onChangeText={onChangeText}
+        style={{
+          fontSize: useResponsiveFontSize(16),
+          flex: 1,
+        }}
+      ></TextInput>
+    </Container>
+  );
+};

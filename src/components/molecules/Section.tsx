@@ -3,6 +3,7 @@ import React from "react";
 import Margin from "../atoms/Margin";
 import styled from "styled-components/native";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
+import { spacing } from "../../constants/spacing";
 
 const SectionHeader = styled.View`
   display: flex;
@@ -13,16 +14,26 @@ const SectionHeader = styled.View`
 `;
 
 const SectionHeaderText = styled.Text<{
-  systemTheme?: string;
   isMainText?: boolean;
+  weight?: "bold" | "normal";
+  size?: number;
 }>`
-  font-size: ${useResponsiveFontSize(18)}px;
-  color: ${({ theme, systemTheme, isMainText }) =>
-    systemTheme === "dark"
-      ? theme.textDimReverse
+  font-size: ${({ size }) => (size ? size : useResponsiveFontSize(18))}px;
+  font-weight: ${({ weight }) => (weight ? weight : "bold")};
+  color: ${({ theme, isMainText }) =>
+    theme.name === "dark"
+      ? theme.text
       : isMainText
       ? theme.text
       : theme.textDim};
+`;
+
+const SectionHeaderSubText = styled.Text<{
+  size?: number;
+}>`
+  font-size: ${({ size }) => (size ? size : useResponsiveFontSize(14))}px;
+  color: ${({ theme }) =>
+    theme.name === "dark" ? theme.textDimReverse : theme.textDim};
 `;
 
 const _Section = ({
@@ -48,6 +59,37 @@ const _Section = ({
 const Section = Object.assign(_Section, {
   Header: SectionHeader,
   HeaderText: SectionHeaderText,
+  HeaderSubText: SectionHeaderSubText,
 });
 
 export default Section;
+
+export const MarketSection = ({
+  headerText,
+  subText,
+  gapSize = "md",
+  children,
+}: {
+  headerText: string;
+  subText?: string;
+  children?: React.ReactNode;
+  gapSize?: "md" | "lg" | "xl";
+}) => {
+  const margin = gapSize === "md" ? 5 : gapSize === "lg" ? 10 : 15;
+
+  return (
+    <View style={{}}>
+      <SectionHeaderText isMainText={true} size={24}>
+        {headerText}
+      </SectionHeaderText>
+      {subText && (
+        <>
+          <Margin margin={5} />
+          <SectionHeaderSubText size={15}>{subText}</SectionHeaderSubText>
+        </>
+      )}
+      <Margin margin={15} />
+      {children}
+    </View>
+  );
+};

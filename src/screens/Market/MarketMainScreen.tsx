@@ -1,0 +1,300 @@
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import React from "react";
+import { Pressable, ScrollView, View } from "react-native";
+import styled, { useTheme } from "styled-components/native";
+import ContentItemBox from "../../components/atoms/ContentItemBox";
+import ContentLayout from "../../components/atoms/ContentLayout";
+import CustomSkeleton from "../../components/atoms/CustomSkeleton";
+import FlexBox from "../../components/atoms/FlexBox";
+import Icons from "../../components/atoms/Icons";
+import Margin from "../../components/atoms/Margin";
+import Text from "../../components/atoms/Text";
+import { MarketSection } from "../../components/molecules/Section";
+import {
+  StockItem,
+  StockItemSecond,
+} from "../../components/organisms/Market/StockItem";
+import { WishListButton } from "../../components/organisms/Market/WishListBtn";
+import { spacing } from "../../constants/spacing";
+import { MarketStackParamList } from "../../navigators/MarketStack";
+import { useGetCategorizedStocksQuery } from "../../store/modules/market/market";
+
+const MainRectangle = styled.View`
+  width: 100%;
+  padding-bottom: 100%;
+  background-color: ${({ theme }) =>
+    theme.name == "dark" ? "#2E2E2E" : theme.palette.neutral400_gray};
+`;
+
+const FloatTitle = styled.Pressable`
+  width: 100%;
+  position: absolute;
+  top: -35px;
+  z-index: 2;
+  justify-content: center;
+  align-items: center;
+`;
+
+const InnerFloat = styled.View`
+  width: 80%;
+`;
+
+const mockdata = [
+  {
+    id: 1,
+    name: "삼성전자 만약에 이렇게 길어진다면 어떻게 할건지 생각을",
+    percent: 21,
+    price: 100000,
+  },
+  {
+    id: 2,
+    name: "삼성전자",
+    percent: 21,
+    price: 100000,
+  },
+  {
+    id: 3,
+    name: "삼성전자",
+    percent: 21,
+    price: 100000,
+  },
+  {
+    id: 4,
+    name: "삼성전자",
+    percent: 21,
+    price: 100000,
+  },
+  {
+    id: 5,
+    name: "삼성전자",
+    percent: 21,
+    price: 100000,
+  },
+];
+
+export default function MarketMainScreen() {
+  const theme = useTheme();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<MarketStackParamList>>();
+
+  const onPressCheckStockList = () => {
+    navigation.navigate("MarketListScreen");
+  };
+
+  const onPressStockItem = (id: number) => {
+    navigation.navigate("StockDetailScreen", {
+      stockId: id,
+    });
+  };
+
+  const onPressWishList = () => {
+    navigation.navigate("WishListScreen");
+  };
+
+  const { data, isError, isLoading } = useGetCategorizedStocksQuery({});
+
+  // if (isError)
+  //   return (
+  //     <View
+  //       style={{
+  //         flex: 1,
+  //       }}
+  //     >
+  //       <CenterLayout>
+  //         <Text size="md">Error</Text>
+  //       </CenterLayout>
+  //     </View>
+  //   );
+
+  const section1Data = data;
+  const section2Data = data;
+  const section3Data = data;
+
+  return (
+    <View style={{ flex: 1, backgroundColor: theme.background }}>
+      <ScrollView
+        style={{
+          flex: 1,
+        }}
+      >
+        <MainRectangle />
+        <View>
+          <FloatTitle>
+            <InnerFloat>
+              <Pressable onPress={onPressCheckStockList}>
+                <ContentItemBox>
+                  <FlexBox
+                    alignItems="center"
+                    justifyContent="space-between"
+                    styles={{
+                      paddingHorizontal: spacing.small,
+                    }}
+                  >
+                    <View>
+                      <Text size="xs" color={theme.palette.red}>
+                        갓생 도전!!
+                      </Text>
+                      <Margin margin={5}></Margin>
+                      <Text size="xl" weight="bold">
+                        장 종목 확인하기
+                      </Text>
+                    </View>
+                    <Icons
+                      type="material"
+                      name="chevron-right"
+                      size={30}
+                      color={theme.textDim}
+                    />
+                  </FlexBox>
+                </ContentItemBox>
+              </Pressable>
+            </InnerFloat>
+          </FloatTitle>
+          <View style={{ flex: 1, backgroundColor: theme.background }}>
+            <Margin margin={60}></Margin>
+            <ContentLayout>
+              <FlexBox
+                direction="column"
+                alignItems="stretch"
+                gap={spacing.gutter + spacing.offset}
+                styles={{
+                  flex: 1,
+                }}
+              >
+                <MarketSection
+                  headerText="나의 관심 종목"
+                  subText="장준석님이 자주 추가하는 종목이에요"
+                >
+                  <ScrollView
+                    horizontal
+                    contentContainerStyle={{
+                      columnGap: spacing.padding + spacing.small,
+                      paddingBottom: spacing.offset,
+                    }}
+                    style={{
+                      flexGrow: 0,
+                    }}
+                  >
+                    {section1Data ? (
+                      section1Data.map((item) => (
+                        <StockItem
+                          id={item.id}
+                          name={item.name}
+                          percent={item.percent}
+                          price={item.price}
+                          onPress={() => {
+                            onPressStockItem(item.id);
+                          }}
+                        ></StockItem>
+                      ))
+                    ) : (
+                      <>
+                        {[1, 2, 3].map((id) => (
+                          <View key={"section1skel" + id}>
+                            <CustomSkeleton>
+                              <View
+                                style={{
+                                  width: 100,
+                                  height: 100,
+                                  borderRadius: 10,
+                                }}
+                              ></View>
+                            </CustomSkeleton>
+                          </View>
+                        ))}
+                      </>
+                    )}
+                  </ScrollView>
+                </MarketSection>
+                <MarketSection
+                  headerText="오늘의 인기 종목"
+                  subText="오늘 사람들이 많이 추가한 종목이에요"
+                >
+                  <FlexBox direction={"column"} alignItems="stretch" gap={10}>
+                    {section2Data ? (
+                      section2Data.map((item, index) => (
+                        <StockItemSecond
+                          id={item.id}
+                          index={index}
+                          name={item.name}
+                          percent={item.percent}
+                          onPress={() => {
+                            onPressStockItem(item.id);
+                          }}
+                        ></StockItemSecond>
+                      ))
+                    ) : (
+                      <>
+                        {[1, 2, 3].map((id) => (
+                          <View key={"section2skel" + id}>
+                            <CustomSkeleton>
+                              <View
+                                style={{
+                                  width: "100%",
+                                  height: 30,
+                                  borderRadius: 10,
+                                }}
+                              ></View>
+                            </CustomSkeleton>
+                          </View>
+                        ))}
+                      </>
+                    )}
+                  </FlexBox>
+                  <Margin margin={spacing.offset}></Margin>
+                </MarketSection>
+                <MarketSection
+                  headerText="오늘의 추천 종목"
+                  subText="오늘 이 종목 어때요?"
+                >
+                  <ScrollView
+                    horizontal
+                    contentContainerStyle={{
+                      columnGap: spacing.padding + spacing.small,
+                      paddingBottom: spacing.offset,
+                    }}
+                    style={{
+                      flexGrow: 0,
+                    }}
+                  >
+                    {section1Data ? (
+                      section1Data.map((item) => (
+                        <StockItem
+                          id={item.id}
+                          name={item.name}
+                          percent={item.percent}
+                          price={item.price}
+                          onPress={() => {
+                            onPressStockItem(item.id);
+                          }}
+                        ></StockItem>
+                      ))
+                    ) : (
+                      <>
+                        {[1, 2, 3].map((id) => (
+                          <View key={"section3skel" + id}>
+                            <CustomSkeleton>
+                              <View
+                                style={{
+                                  width: 100,
+                                  height: 100,
+                                  borderRadius: 10,
+                                }}
+                              ></View>
+                            </CustomSkeleton>
+                          </View>
+                        ))}
+                      </>
+                    )}
+                  </ScrollView>
+                </MarketSection>
+                <WishListButton onPress={onPressWishList} />
+              </FlexBox>
+            </ContentLayout>
+          </View>
+        </View>
+      </ScrollView>
+    </View>
+  );
+}

@@ -20,19 +20,26 @@ export const useCalculateTodoCount = ({
 
   const dispatch = useAppDispatch();
 
-  const recalculate = React.useCallback(() => {
+  // const recalculate = React.useCallback(() => {
+  //   memorizedCurrentDate.current = dayjs(currentDate).format("YYYY-MM");
+  //   dispatch(updateCalendarItemTodoCount({ todos: todos || [] }));
+  // }, [dispatch, todos]);
+
+  const recalculate = () => {
     memorizedCurrentDate.current = dayjs(currentDate).format("YYYY-MM");
     dispatch(updateCalendarItemTodoCount({ todos: todos || [] }));
-  }, [dispatch, todos]);
+  };
 
   useEffect(() => {
     if (
       todos &&
       dayjs(currentDate).format("YYYY-MM") !== memorizedCurrentDate.current
     ) {
+      console.log(todos.length, "recalculate");
+
       recalculate();
     }
-  }, [currentDate, getAllTodosQuery]);
+  }, [currentDate, getAllTodosQuery, todos]);
 
   return { recalculate };
 };

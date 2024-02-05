@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { memo, useContext, useEffect, useRef, useState } from "react";
 import { Animated } from "react-native";
 import { NavigationState, SceneRendererProps } from "react-native-tab-view";
 import styled, { useTheme } from "styled-components/native";
@@ -30,15 +30,18 @@ const TabText = styled.Text<{ isFocused: boolean }>`
     props.isFocused ? props.theme.text : props.theme.textDim};
 `;
 
-export default function TabHeader({
+function TabHeader({
   props,
   onPressTab,
 }: {
-  props: SceneRendererProps & {
-    navigationState: NavigationState<{
-      key: string;
-      title: string;
-    }>;
+  props: {
+    navigationState: {
+      index: number;
+      routes: {
+        key: string;
+        title: string;
+      }[];
+    };
   };
   onPressTab: (index: number) => void;
 }) {
@@ -122,3 +125,5 @@ export default function TabHeader({
     </Container>
   );
 }
+
+export default memo(TabHeader);

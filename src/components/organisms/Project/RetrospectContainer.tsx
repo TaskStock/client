@@ -208,7 +208,7 @@ export default function RetrospectContainer({
             }}
           >
             <RoundItemBtn onPress={onPressWriteProject} size="xl" isSelected>
-              <Text size="md" color={theme.textReverse}>
+              <Text size="md" color={theme.text}>
                 회고 작성하기
               </Text>
             </RoundItemBtn>

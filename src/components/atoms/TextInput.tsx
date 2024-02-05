@@ -25,8 +25,9 @@ const Container = styled.Pressable<{
       props.alert ? props.theme.alert : props.theme.textInputBorder};
   border-radius: ${useResponsiveFontSize(6)}px;
   width: 100%;
+  padding: ${useResponsiveFontSize(15)}px;
   /* padding: ${spacing.offset}px; */
-  padding: ${useResponsiveFontSize(8)}px;
+  /* padding: ${useResponsiveFontSize(8)}px; */
   gap: ${useResponsiveFontSize(7)}px;
   margin-bottom: ${(props) => (props.alert ? 0 : spacing.padding)}px;
   background-color: ${(props) => props.theme.textInput};
