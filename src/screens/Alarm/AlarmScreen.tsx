@@ -6,8 +6,11 @@ import styled from "styled-components/native";
 import AlarmBox from "../../components/molecules/Alarm/AlarmBox";
 import PinnedAlarmBox from "../../components/molecules/Alarm/PinnedAlarmBox";
 import PageHeader from "../../components/molecules/PageHeader";
+// import { client } from "../../services/api";
+import { useAppDispatch, useAppSelect } from "../../store/configureStore.hooks";
+import { useClient } from "../../hooks/useClient";
 import { client } from "../../services/api";
-import { useAppSelect } from "../../store/configureStore.hooks";
+import { checkAndRenewTokens } from "../../utils/authUtils/tokenUtils";
 
 const Container = styled.View`
   flex: 1;
@@ -24,6 +27,7 @@ export interface IAlarmData {
 }
 
 const AlarmScreen = () => {
+  const dispatch = useAppDispatch();
   const { isRefreshing, onRefresh } = useRefresh(() => getData());
   const { accessToken } = useAppSelect((state) => state.auth);
   const { followerList, followingList, searchList } = useAppSelect(
@@ -32,6 +36,7 @@ const AlarmScreen = () => {
   const [alarmDatas, setAlarmDatas] = useState([]);
   const theme = useTheme();
   const getData = async () => {
+    // await dispatch(checkAndRenewTokens());
     try {
       const res = await client.get("notice/all", {
         accessToken,

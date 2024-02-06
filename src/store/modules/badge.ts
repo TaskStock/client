@@ -6,7 +6,7 @@ interface BadgeState {
 }
 
 const initialState: BadgeState = {
-  badges: [], // 1, 3, 5, 6
+  badges: [1, 9], // 1, 3, 5, 6
 };
 
 const badgeSlice = createSlice({

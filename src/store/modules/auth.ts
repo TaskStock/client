@@ -238,7 +238,7 @@ const authSlice = createSlice({
       .addCase(checkAndRenewTokens.fulfilled, (state, action) => {
         state.loading = false;
         // 토큰이 있는 경우(만료되었더라도)
-        if (action.payload) {
+        if (action.payload.type === "renewed") {
           const { accessToken, refreshToken, accessExp, refreshExp } =
             action.payload;
           state.accessToken = accessToken;
@@ -253,7 +253,7 @@ const authSlice = createSlice({
           storeData("accessExp", accessExp);
           console.log("토큰 갱신 성공 ", action.payload);
         }
-        console.log("토큰 유효 in redux");
+        console.log("[REDUX] 토큰 유효");
       })
       .addCase(checkAndRenewTokens.rejected, (state, action) => {
         state.loading = false;

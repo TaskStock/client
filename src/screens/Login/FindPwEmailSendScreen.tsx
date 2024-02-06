@@ -8,6 +8,7 @@ import { checkValidEmail } from "../../utils/checkValidity";
 
 // 예외처리
 // 1. 가입하지 않은 이메일
+// 2. 소셜로그인으로 가입한 이메일은 비밀번호 찾기 불가능
 
 const FindPwEmailSendScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -20,15 +21,20 @@ const FindPwEmailSendScreen = ({ navigation }) => {
       const responseData = await client.post("account/sendMail/password", {
         email: email,
       });
+      const { result, codeId } = responseData;
 
-      if (responseData.result === "success") {
+      if (result === "success") {
         navigation.navigate("EmailCheckCode", {
           email,
-          codeId: responseData.codeId,
+          codeId: codeId,
           type: "findPw",
         });
-      } else if (responseData.result === "fail") {
+      } else if (result === "fail") {
         setEmailAlert("가입되지 않은 이메일입니다.");
+      } else if (result === "social") {
+        setEmailAlert(
+          "소셜로그인으로 가입된 이메일은 비밀번호 찾기가 불가능합니다."
+        );
       } else {
         setEmailAlert("이메일 전송에 실패했습니다.");
       }

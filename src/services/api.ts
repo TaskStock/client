@@ -14,34 +14,34 @@ export async function client<T = any>(
 ): Promise<T> {
   // 토큰 유효한지 확인
 
-  const fetchToken = async () => {
-    try {
-      console.log("[api] ===== AT 유효성 검사 =====");
-      // dispatch(checkAndRenewTokens());
+  // const fetchToken = async () => {
+  //   try {
+  //     console.log("[api] ===== AT 유효성 검사 =====");
+  //     // dispatch(checkAndRenewTokens());
 
-      const res = await checkAndRenewTokens();
-      console.log("[api] 새 토큰 요청 res : ", res);
-      if (res.accessToken) {
-        console.log("[api] 새 AT로 교체: ", res.accessToken);
-        return res.accessToken;
-      }
-      console.log("[api] AT 유효함", accessToken);
-      return accessToken;
-    } catch (e) {
-      console.log("[api] 토큰 유효성 검사 실패: ", e);
-      return accessToken; // 에러 발생시 기존 토큰 반환
-      // 나중에 예외처리 추가
-      // 로그아웃?
-    }
-  };
+  //     const res = await checkAndRenewTokens();
+  //     console.log("[api] 새 토큰 요청 res : ", res);
+  //     if (res.accessToken) {
+  //       console.log("[api] 새 AT로 교체: ", res.accessToken);
+  //       return res.accessToken;
+  //     }
+  //     console.log("[api] AT 유효함", accessToken);
+  //     return accessToken;
+  //   } catch (e) {
+  //     console.log("[api] 토큰 유효성 검사 실패: ", e);
+  //     return accessToken; // 에러 발생시 기존 토큰 반환
+  //     // 나중에 예외처리 추가
+  //     // 로그아웃?
+  //   }
+  // };
 
-  const AT = accessToken ? await fetchToken() : null;
+  // const AT = accessToken ? await fetchToken() : null;
 
   const SERVER_URL = getAPIHost();
 
   const headers = {
     "Content-Type": "application/json",
-    ...(AT ? { Authorization: `Bearer ${AT}` } : {}),
+    ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
   };
 
   const config: RequestInit = {

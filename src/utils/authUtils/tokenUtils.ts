@@ -31,14 +31,14 @@ const requestNewTokens = async (accessToken: string, refreshToken: string) => {
     });
 
     if (!response.ok) {
-      throw new Error("Token refresh failed");
+      console.log("[requestNewTokens] response not ok");
     }
 
     const data = await response.json();
     console.log("=====새 토큰 요청 성공=====", data);
     return data;
   } catch (error) {
-    throw new Error("get new accessToken failed");
+    console.log("[requestNewTokens] error: ", error);
   }
 };
 
@@ -72,7 +72,7 @@ export const checkAndRenewTokens = createAsyncThunk(
       currentTime < refreshExp - sevenDaysInSec
     ) {
       console.log("=====토큰들 유효함=====");
-      return;
+      return { accessToken, refreshToken, type: "valid" };
     }
 
     // CASE2 : accessToken 만료, refreshToken 유효
@@ -85,7 +85,7 @@ export const checkAndRenewTokens = createAsyncThunk(
       // 새 accessToken 요청
       console.log("=====accessToken 만료, refreshToken 유효=====");
       const newTokens = await requestNewTokens(accessToken, refreshToken);
-      return newTokens;
+      return { ...newTokens, type: "renewed" };
     }
 
     // CASE 3: accessToken, refreshToken 둘 다 만료 => logout

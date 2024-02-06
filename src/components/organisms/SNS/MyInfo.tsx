@@ -13,6 +13,7 @@ import { useAppSelect } from "../../../store/configureStore.hooks";
 import PrivateLockIcon from "../../atoms/PrivateLockIcon";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { SnsStackParamList } from "../../../navigators/SnsStack";
+import BadgesPreview from "../../molecules/SNS/BadgesPreview";
 
 const Container = styled.View`
   padding: ${spacing.offset}px 0;
@@ -34,7 +35,7 @@ const Info = ({ text, iconType, iconName, color }) => {
 
 const MyInfo = () => {
   const theme = useTheme();
-  const navigation = useNavigation<NavigationProp<SnsStackParamList>>();
+  const navigation = useNavigation() as any;
   const {
     private: isPrivate,
     image,
@@ -61,14 +62,14 @@ const MyInfo = () => {
             </Text>
             <PrivateLockIcon isPrivate={isPrivate} />
           </FlexBox>
-          <Text size="xs" color={theme.textDim}>
+          <Text size="sm" color={theme.textDim}>
             {introduce}
           </Text>
         </View>
       </FlexBox>
       <FlexBox
         direction="column"
-        gap={useResponsiveFontSize(2)}
+        gap={useResponsiveFontSize(7)}
         styles={{ paddingTop: spacing.padding, paddingLeft: spacing.small }}
       >
         <Info
@@ -84,14 +85,11 @@ const MyInfo = () => {
           color={theme.text}
         />
         {badges.length > 0 && (
-          <Pressable onPress={() => navigation.navigate("Badge")}>
-            <Info
-              text={`뱃지`}
-              iconName={"trophy-award"}
-              iconType={"material"}
-              color={theme.text}
-            />
-          </Pressable>
+          <BadgesPreview
+            onPress={() =>
+              navigation.navigate("StackWithoutTab", { screen: "Badge" })
+            }
+          />
         )}
       </FlexBox>
     </Container>
