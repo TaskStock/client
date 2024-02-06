@@ -18,7 +18,6 @@ const Container = styled.View`
 const RankingScreen = ({ navigation }) => {
   const dispatch = useAppDispatch();
   const { NOTCH_TOP } = useHeight();
-  const myInfo = useAppSelect((state) => state.user.user);
 
   useEffect(() => {
     dispatch(getFriendsThunk());
@@ -26,7 +25,7 @@ const RankingScreen = ({ navigation }) => {
 
   return (
     <Container style={{ paddingTop: NOTCH_TOP }}>
-      <MyInfo data={myInfo} />
+      <MyInfo />
       <BlackBtn
         onPress={() => {
           navigation.navigate("EditProfile");

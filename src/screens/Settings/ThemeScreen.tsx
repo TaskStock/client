@@ -8,15 +8,16 @@ import { spacing } from "../../constants/spacing";
 import useHeight from "../../hooks/useHeight";
 import { useAppDispatch, useAppSelect } from "../../store/configureStore.hooks";
 import { pickTheme } from "../../store/modules/theme";
+import { darkTheme, grayTheme } from "../../constants/colors";
 
 const TempTheme = {
   dark: {
-    background: "#000",
-    text: "#fff",
+    background: darkTheme.background,
+    text: darkTheme.text,
   },
   gray: {
-    background: "#fff",
-    text: "#000",
+    background: grayTheme.background,
+    text: grayTheme.text,
   },
 };
 

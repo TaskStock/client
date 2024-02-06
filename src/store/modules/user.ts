@@ -102,20 +102,20 @@ const userSlice = createSlice({
     });
     builder.addCase(uploadImageThunk.pending, (state, action) => {
       state.loading = true;
-      console.log("uploadImageThunk pending");
+      console.log("프로필 변경중...");
     });
     builder.addCase(uploadImageThunk.rejected, (state, action) => {
       state.loading = false;
-      state.error = "이미지 업로드 실패";
+      state.error = "프로필 변경 실패";
     });
     builder.addCase(uploadImageThunk.fulfilled, (state, action) => {
       state.loading = false;
-      state.user.image = action.payload.imagePath;
-      console.log("성공", state.user.image);
+      state.user.image = action.payload;
+      console.log("프로필 변경 성공", state.user.image);
     });
     builder.addCase(setToDefaultImageThunk.pending, (state, action) => {
       state.loading = true;
-      console.log("setToDefaultImageThunk pending");
+      console.log("기본이미지로 변경중...");
     });
     builder.addCase(setToDefaultImageThunk.rejected, (state, action) => {
       state.loading = false;
@@ -123,10 +123,9 @@ const userSlice = createSlice({
     });
     builder.addCase(setToDefaultImageThunk.fulfilled, (state, action) => {
       state.loading = false;
-      state.user.image = action.payload.imagePath;
-      console.log("성공", state.user.image);
+      state.user.image = "";
+      console.log("기본이미지 변경 성공");
     });
-
     builder.addCase(setPrivateThunk.pending, (state, action) => {
       state.loading = true;
       console.log("setPrivateThunk pending");
