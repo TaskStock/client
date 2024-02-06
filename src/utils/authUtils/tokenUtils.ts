@@ -45,7 +45,7 @@ const requestNewTokens = async (accessToken: string, refreshToken: string) => {
 // 토큰 확인 및 갱신을 위한 createAsyncThunk
 export const checkAndRenewTokens = createAsyncThunk(
   "auth/checkAndRenewTokens",
-  async (_, { getState, rejectWithValue }) => {
+  async (_, { getState, rejectWithValue, dispatch }) => {
     const state = getState() as RootState;
 
     console.log("=====checkAndRenewTokens=====");
@@ -93,7 +93,6 @@ export const checkAndRenewTokens = createAsyncThunk(
       (accessToken && refreshToken && currentTime > refreshExp) ||
       refreshExp - currentTime < sevenDaysInSec
     ) {
-      const dispatch = useAppDispatch();
       console.log("=====토큰들 만료됨=====");
       return dispatch(logout());
     }

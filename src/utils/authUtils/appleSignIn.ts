@@ -12,11 +12,12 @@ export async function onAppleButtonPress() {
 
     const appleUser = {
       // apple은 처음 로그인 시에만 email을 제공해줌. 따라서 user identifier(user)를 email로 사용함
-      email: appleAuthRequestResponse.user,
+      email: appleAuthRequestResponse.email,
       userName: `${appleAuthRequestResponse.fullName?.givenName} ${appleAuthRequestResponse.fullName?.familyName}`,
       userPicture: null,
       isAgree: 1,
       strategy: "apple",
+      apple_token: appleAuthRequestResponse.user,
     };
     console.log("appleUser: ", appleUser);
     // get current authentication state for user
