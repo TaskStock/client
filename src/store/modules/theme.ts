@@ -1,6 +1,8 @@
 import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { Appearance } from "react-native";
 import { getData, storeData } from "../../utils/asyncStorage";
+import { client } from "../../services/api";
+import { RootState } from "../configureStore";
 
 export const startingTheme = createAsyncThunk(
   "theme/startingTheme",
@@ -24,10 +26,23 @@ export const startingTheme = createAsyncThunk(
 // 설정에서 테마 변경
 export const pickTheme = createAsyncThunk(
   "theme/pickTheme",
-  async (theme: string) => {
-    // server에 전송
-
-    return theme;
+  async (theme: string, { rejectWithValue, getState }) => {
+    const state = getState() as RootState;
+    const { accessToken } = state.auth;
+    try {
+      const res = await client.patch(
+        "account/setting/theme",
+        { theme },
+        { accessToken }
+      );
+      if (res.result === "success") {
+        return theme;
+      } else {
+        return rejectWithValue(res);
+      }
+    } catch (e) {
+      return rejectWithValue(e);
+    }
   }
 );
 
@@ -54,6 +69,9 @@ export const themeSlice = createSlice({
         state.value = action.payload;
         storeData("theme", action.payload);
         // console.log("pickTheme", state.value);
+      })
+      .addCase(pickTheme.rejected, (state, action) => {
+        console.log("pickTheme rejected", action.payload);
       });
   },
 });
