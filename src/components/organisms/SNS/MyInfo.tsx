@@ -85,11 +85,7 @@ const MyInfo = () => {
           color={theme.text}
         />
         {badges.length > 0 && (
-          <BadgesPreview
-            onPress={() =>
-              navigation.navigate("StackWithoutTab", { screen: "Badge" })
-            }
-          />
+          <BadgesPreview onPress={() => navigation.navigate("Badge")} />
         )}
       </FlexBox>
     </Container>
