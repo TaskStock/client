@@ -74,6 +74,9 @@ const authSlice = createSlice({
     setAccessToken: (state, action) => {
       state.accessToken = action.payload;
     },
+    setStrategy: (state, action) => {
+      state.strategy = action.payload;
+    },
     setLoggedIn: (state, action) => {
       if (action.payload.accessToken) {
         state.accessToken = action.payload.accessToken;
@@ -169,8 +172,6 @@ const authSlice = createSlice({
           state.loading = false;
           state.error = false;
           state.deviceId = action.payload.deviceId;
-          // 이걸로 교체
-          // state.strategy = action.payload.strategy;
           const strategy = getData("strategy");
 
           if (strategy && typeof strategy === "string") {
@@ -262,7 +263,7 @@ const authSlice = createSlice({
   },
 });
 
-export const { setAccessToken, setLoggedIn, setSocialLoggedIn } =
+export const { setAccessToken, setStrategy, setLoggedIn, setSocialLoggedIn } =
   authSlice.actions;
 
 export const authReducer = authSlice.reducer;
