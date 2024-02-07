@@ -8,13 +8,15 @@ import FlexBox from "../../atoms/FlexBox";
 import { IconsWithoutFeedBack } from "../../atoms/Icons";
 import Text from "../../atoms/Text";
 import UserBox from "../../molecules/SNS/UserBox";
+import { useTheme } from "styled-components";
 
-const Filter = ({ onPress }) => (
+const Filter = ({ onPress, iconColor }) => (
   <TouchableOpacity onPress={onPress} style={{ marginTop: spacing.padding }}>
     <FlexBox alignItems="center" gap={spacing.small}>
       <IconsWithoutFeedBack
         type="ionicons"
         name="filter"
+        color={iconColor}
         size={spacing.offset}
       />
       <Text size="sm">필터</Text>
@@ -27,9 +29,10 @@ const RankingTab = ({ data }) => {
   const { isRefreshing, onRefresh } = useRefresh(() =>
     dispatch(getFriendsThunk())
   );
+  const theme = useTheme();
   return (
     <>
-      <Filter onPress={() => {}} />
+      <Filter onPress={() => {}} iconColor={theme.text} />
       <FlatList<IFriend>
         data={data}
         renderItem={({ item }) => (

@@ -93,6 +93,12 @@ const CustomerServiceScreen = ({ navigation }) => {
     }
   };
 
+  const onChangeContent = (text) => {
+    if (content.length < 1500) {
+      setContent(text);
+    }
+  };
+
   return (
     <>
       <PageHeader title="고객센터" />
@@ -106,7 +112,7 @@ const CustomerServiceScreen = ({ navigation }) => {
           minHeight={useResponsiveFontSize(400)}
           placeholder="내용을 입력해주세요"
           value={content}
-          onChangeText={(text) => setContent(text)}
+          onChangeText={onChangeContent}
         ></TextAreaInput>
         <Success visible={visible} message={message} />
         <BlackBtn text="보내기" onPress={sendToServer} />

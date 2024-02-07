@@ -17,11 +17,11 @@ const pushNotiSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(toggleStateThunk.fulfilled, (state, action) => {
-      console.log("푸시알림 설정 변경 성공", action.payload);
+      // console.log("푸시알림 설정 변경 성공", action.payload);
       state.isPushOn = action.payload as boolean;
     });
     builder.addCase(toggleStateThunk.rejected, (state, action) => {
-      console.log("푸시알림 설정 변경 성공");
+      console.log("푸시알림 설정 변경 실패");
       state.error = action.payload as string;
     });
   },
