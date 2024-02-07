@@ -11,7 +11,9 @@ const badgeThunk = createAsyncThunk(
     const { badges } = rootState.badge;
 
     // 이미 뱃지 있으면 fetch 안함
-    if (badges.includes(type)) {
+    const exists = badges.some((badge) => badge.type === type);
+    // 이미 존재하는 경우, 'already exists' 메시지와 함께 거부
+    if (exists) {
       return rejectWithValue("already exists");
     }
 

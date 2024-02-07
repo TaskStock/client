@@ -7,6 +7,7 @@ import { spacing } from "../../constants/spacing";
 import useHeight from "../../hooks/useHeight";
 import { useAppDispatch, useAppSelect } from "../../store/configureStore.hooks";
 import { getFriendsThunk } from "../../store/modules/getFriends";
+import createBadgeDispatcher from "../../utils/badgeUtils/badge";
 
 const Container = styled.View`
   flex: 1;

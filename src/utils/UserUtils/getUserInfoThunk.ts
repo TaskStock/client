@@ -5,6 +5,8 @@ import { toggleStateThunk } from "../PushNotification/pushNotiThunk";
 import { setTheme } from "../../store/modules/theme";
 import { setStrategy } from "../../store/modules/auth";
 import { storeData } from "../asyncStorage";
+import badgeThunk from "../badgeUtils/badgeThunk";
+import { addBadge } from "../../store/modules/badge";
 
 // const data = {
 //   message: "유저 정보 가져오기 성공",
@@ -29,6 +31,7 @@ import { storeData } from "../asyncStorage";
 //     user_name: "",
 //     value_yesterday_ago: "0.00",
 //   },
+// badges: [],
 // };
 
 export const getUserInfoThunk = createAsyncThunk(
@@ -66,6 +69,10 @@ export const getUserInfoThunk = createAsyncThunk(
         dispatch(setStrategy(serverStrategy));
         storeData("strategy", serverStrategy);
       }
+
+      // badge
+      console.log("getUserInfoThunk badges: ", data.badges);
+      dispatch(addBadge(data.badges));
 
       return data;
     } catch (error) {

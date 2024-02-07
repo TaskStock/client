@@ -1,10 +1,12 @@
 import { useEffect } from "react";
-import { Alert } from "react-native";
+import { Alert, Platform } from "react-native";
 import { client } from "../services/api";
 import { useAppDispatch, useAppSelect } from "../store/configureStore.hooks";
 import { setFcmToken } from "../store/modules/pushNoti";
 import { fcmService } from "../utils/PushNotification/push.fcm";
 import { localNotificationService } from "../utils/PushNotification/push.noti";
+import PushNotification from "react-native-push-notification";
+import PushNotificationIOS from "@react-native-community/push-notification-ios";
 
 export default function usePushNotification() {
   const { accessToken } = useAppSelect((state) => state.auth);
@@ -49,26 +51,49 @@ export default function usePushNotification() {
   }, [fcmToken]);
 
   const onRegister = (tk) => {
-    console.log("[App] onRegister : fcmToken :", tk);
+    console.log(Platform.OS, ">>>>>[FCMService] onRegister, fcmToken :", tk);
     if (tk) dispatch(setFcmToken(tk));
   };
 
   // 포그라운드
   const onNotification = (notify) => {
     if (notify) {
-      console.log("[App] onNotification : notify :", notify);
+      console.log(
+        Platform.OS,
+        ">>>>>[FCMService] onNotification, notify :",
+        notify
+      );
+
       const options = {
         soundName: "default",
         playSound: true,
+        // Android-only options:
+        channelId: "taskstock_push_notification", // 채널 ID 설정, Android O 이상 필요
       };
 
-      localNotificationService.showNotification(
-        0,
-        notify.title,
-        notify.body,
-        notify,
-        options
-      );
+      if (Platform.OS === "android") {
+        PushNotification.localNotification({
+          message: notify.body,
+          title: notify.title,
+          // bigPictureUrl: remoteMessage.notification.android.imageUrl,
+          // smallIcon: remoteMessage.notification.android.imageUrl,
+        });
+      } else {
+        PushNotificationIOS.addNotificationRequest({
+          id: "undefined",
+          body: notify.body,
+          title: notify.title,
+          userInfo: undefined,
+        });
+      }
+      // localNotificationService.showNotification(
+      //   0,
+      //   notify.title,
+      //   notify.body,
+      //   notify,
+      //   options
+      // );
+      // 로컬 알림 표시
     }
   };
 
@@ -84,6 +109,7 @@ export default function usePushNotification() {
 
       // UI 그리기
       // 클릭하면 targetId 디테일페이지로 이동
+      Alert.alert("onOpenNotification:", targetId, title, body);
     }
   };
 }

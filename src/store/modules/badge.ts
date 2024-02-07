@@ -12,37 +12,26 @@ interface BadgeState {
 
 const initialState: BadgeState = {
   badges: [
-    {
-      type: 1,
-      created_time: "2024-02-05T15:47:21.993Z",
-    },
-    {
-      type: 2,
-      created_time: "2024-02-05T15:47:21.993Z",
-    },
-    {
-      type: 3,
-      created_time: "2024-02-05T15:47:21.993Z",
-    },
-    {
-      type: 5,
-      created_time: "2024-02-05T15:47:21.993Z",
-    },
-    {
-      type: 6,
-      created_time: "2024-02-05T15:47:21.993Z",
-    },
-    {
-      type: 9,
-      created_time: "2024-02-05T16:02:07.204Z",
-    },
+    // {
+    //   type: 1,
+    //   created_time: "2024-02-05T15:47:21.993Z",
+    // },
+    // {
+    //   type: 2,
+    //   created_time: "2024-02-05T15:47:21.993Z",
+    // },
   ],
 };
 
 const badgeSlice = createSlice({
   name: "badge",
   initialState,
-  reducers: {},
+  reducers: {
+    addBadge: (state, action) => {
+      state.badges = action.payload;
+      console.log("뱃지 추가 성공: ", state.badges);
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(badgeThunk.fulfilled, (state, action) => {
       state.badges = action.payload;
@@ -53,4 +42,5 @@ const badgeSlice = createSlice({
   },
 });
 
+export const { addBadge } = badgeSlice.actions;
 export const badgeReducer = badgeSlice.reducer;
