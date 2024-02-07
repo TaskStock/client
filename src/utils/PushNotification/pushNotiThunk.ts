@@ -1,10 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { client } from "../../services/api";
 import { RootState } from "../../store/configureStore";
+import { checkAndRenewTokens } from "../authUtils/tokenUtils";
 
 export const toggleStateThunk = createAsyncThunk(
   "pushNoti/toggleState",
-  async (isPushOn: boolean, { getState, rejectWithValue }) => {
+  async (isPushOn: boolean, { getState, rejectWithValue, dispatch }) => {
+    await dispatch(checkAndRenewTokens());
     const { auth } = getState() as RootState;
     try {
       const res = await client.patch(

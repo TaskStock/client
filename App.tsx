@@ -31,18 +31,16 @@ export default function App() {
   const theme = useAppSelect((state) => state.theme.value);
   const dispatch = useAppDispatch();
 
-  const { isLoggedIn, loading: tokenLoading } = useAppSelect(
-    (state) => state.auth
-  );
+  const { isLoggedIn } = useAppSelect((state) => state.auth);
 
   useEffect(() => {
     // asyncstorage에서 엑세스토큰, 만료일, refresh만료일을 가져와서
     dispatch(checkTokenExistence());
     dispatch(startingTheme());
-    if (isLoggedIn) {
-      dispatch(checkAndRenewTokens());
-    }
-  }, [dispatch, isLoggedIn]);
+    // if (isLoggedIn) {
+    //   dispatch(checkAndRenewTokens());
+    // }
+  }, [isLoggedIn]);
 
   // useEffect(() => {
   //   removeData("accessToken");
@@ -55,7 +53,7 @@ export default function App() {
 
   const [fontsLoaded] = Font.useFonts(customFontsToLoad);
 
-  if (!fontsLoaded || tokenLoading) return <SplashScreen />;
+  if (!fontsLoaded) return <SplashScreen />;
 
   return (
     <ThemeProvider theme={THEME[theme].theme}>

@@ -11,14 +11,6 @@ const requestNewTokens = async (accessToken: string, refreshToken: string) => {
   // refreshToken을 사용하여 새 토큰을 요청
 
   try {
-    // const response = await client.post(
-    //   "account/refresh",
-    //   { refreshToken },
-    //   { accessToken }
-    // );
-    // console.log("=====새 토큰 요청 성공=====", response);
-    // return response;
-
     // 종속성 문제를 위해 api.ts에서 분리
     const SERVER_URL = getAPIHost();
     const deviceId = await getDeviceId();
@@ -71,8 +63,8 @@ export const checkAndRenewTokens = createAsyncThunk(
       currentTime < accessExp - fifteenMinInSec &&
       currentTime < refreshExp - sevenDaysInSec
     ) {
-      console.log("=====토큰들 유효함=====");
-      return { accessToken, refreshToken, type: "valid" };
+      // console.log("=====토큰들 유효함=====");
+      return rejectWithValue("토큰들 유효함");
     }
 
     // CASE2 : accessToken 만료, refreshToken 유효
@@ -85,7 +77,7 @@ export const checkAndRenewTokens = createAsyncThunk(
       // 새 accessToken 요청
       console.log("=====accessToken 만료, refreshToken 유효=====");
       const newTokens = await requestNewTokens(accessToken, refreshToken);
-      return { ...newTokens, type: "renewed" };
+      return newTokens;
     }
 
     // CASE 3: accessToken, refreshToken 둘 다 만료 => logout
@@ -94,7 +86,10 @@ export const checkAndRenewTokens = createAsyncThunk(
       refreshExp - currentTime < sevenDaysInSec
     ) {
       console.log("=====토큰들 만료됨=====");
-      return dispatch(logout());
+      dispatch(logout());
+      return rejectWithValue("AT, RT 만료");
     }
+
+    return rejectWithValue("다른 케이스: 토큰 유효성 검사 실패");
   }
 );

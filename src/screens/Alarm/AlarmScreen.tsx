@@ -1,16 +1,12 @@
 import { useRefresh } from "@react-native-community/hooks";
 import React, { useEffect, useState } from "react";
 import { FlatList, RefreshControl } from "react-native";
-import { useTheme } from "styled-components";
 import styled from "styled-components/native";
 import AlarmBox from "../../components/molecules/Alarm/AlarmBox";
 import PinnedAlarmBox from "../../components/molecules/Alarm/PinnedAlarmBox";
 import PageHeader from "../../components/molecules/PageHeader";
-// import { client } from "../../services/api";
-import { useAppDispatch, useAppSelect } from "../../store/configureStore.hooks";
 import { useClient } from "../../hooks/useClient";
-import { client } from "../../services/api";
-import { checkAndRenewTokens } from "../../utils/authUtils/tokenUtils";
+import { useAppDispatch, useAppSelect } from "../../store/configureStore.hooks";
 
 const Container = styled.View`
   flex: 1;
@@ -30,11 +26,13 @@ const AlarmScreen = () => {
   const dispatch = useAppDispatch();
   const { isRefreshing, onRefresh } = useRefresh(() => getData());
   const { accessToken } = useAppSelect((state) => state.auth);
+
   const { followerList, followingList, searchList } = useAppSelect(
     (state) => state.friends
   );
   const [alarmDatas, setAlarmDatas] = useState([]);
-  const theme = useTheme();
+
+  const client = useClient(dispatch);
   const getData = async () => {
     // await dispatch(checkAndRenewTokens());
     try {
@@ -42,7 +40,7 @@ const AlarmScreen = () => {
         accessToken,
       });
       setAlarmDatas(res.noticeList);
-      console.log("알림 목록: ", res.noticeList);
+      // console.log("알림 목록: ", res.noticeList);
     } catch (e) {
       console.log(e);
     }
@@ -58,7 +56,7 @@ const AlarmScreen = () => {
         <FlatList<IAlarmData>
           data={alarmDatas}
           renderItem={({ item }) => <AlarmBox item={item} />}
-          keyExtractor={(item, index) => item.notice_id.toString()}
+          keyExtractor={(item) => item.notice_id.toString()}
           refreshControl={
             <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
           }

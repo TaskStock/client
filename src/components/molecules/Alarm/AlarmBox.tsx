@@ -28,6 +28,7 @@ import {
 } from "../../../store/modules/user";
 import { Alert } from "react-native";
 import { AlarmStackParamList } from "../../../navigators/AlarmStack";
+import { useClient } from "../../../hooks/useClient";
 
 const AlarmContainer = styled.TouchableOpacity<{ read: boolean }>`
   flex-direction: row;
@@ -92,6 +93,7 @@ const AlarmBox = ({ item }: { item: IAlarmData }) => {
   const theme = useTheme();
   const navigation = useNavigation<NavigationProp<AlarmStackParamList>>();
   const dispatch = useAppDispatch();
+  const client = useClient(dispatch);
   const { accessToken } = useAppSelect((state) => state.auth);
 
   const [alarmItem, setAlarmItem] = useState(item);
@@ -128,7 +130,8 @@ const AlarmBox = ({ item }: { item: IAlarmData }) => {
           result = await followInAlarm(
             userId,
             accessToken,
-            alarmItem.notice_id
+            alarmItem.notice_id,
+            client
           );
           if (result === "success") {
             updateAlarmInfo({
@@ -147,7 +150,8 @@ const AlarmBox = ({ item }: { item: IAlarmData }) => {
           result = await unfollowInAlarm(
             userId,
             accessToken,
-            alarmItem.notice_id
+            alarmItem.notice_id,
+            client
           );
           if (result === "success") {
             updateAlarmInfo({
@@ -162,7 +166,8 @@ const AlarmBox = ({ item }: { item: IAlarmData }) => {
           result = await cancelRequestInAlarm(
             userId,
             accessToken,
-            alarmItem.notice_id
+            alarmItem.notice_id,
+            client
           );
           if (result === "success") {
             updateAlarmInfo({
@@ -177,7 +182,8 @@ const AlarmBox = ({ item }: { item: IAlarmData }) => {
           result = await acceptRequestInAlarm(
             userId,
             accessToken,
-            alarmItem.notice_id
+            alarmItem.notice_id,
+            client
           );
           if (result === "success") {
             updateAlarmInfo({

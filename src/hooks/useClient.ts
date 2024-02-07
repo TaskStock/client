@@ -14,16 +14,15 @@ export const useClient = (dispatch) => {
     { body, accessToken, ...customConfig }: IClient = {},
     method = undefined
   ) => {
-    // const tokenResult = await dispatch(checkAndRenewTokens());
-    await dispatch(checkAndRenewTokens());
+    const tokenResult = await dispatch(checkAndRenewTokens());
+    console.log("tokenResult: ", tokenResult);
 
-    // const AT =
-    //   tokenResult.payload?.type === "renewed"
-    //     ? tokenResult.payload.accessToken
-    //     : accessToken;
+    const AT = tokenResult.payload?.accessToken
+      ? tokenResult.payload.accessToken
+      : accessToken;
 
     const config = method ? { ...customConfig, method } : customConfig;
-    return client(endpoint, { body, accessToken, ...config });
+    return client(endpoint, { body, accessToken: AT, ...config });
   };
 
   const clientMethods = {

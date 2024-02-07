@@ -1,6 +1,4 @@
-import { client } from "../../services/api";
-
-export const followInAlarm = async (userId, accessToken, noticeId) => {
+export const followInAlarm = async (userId, accessToken, noticeId, client) => {
   try {
     const res = await client.post(
       "sns/follow",
@@ -21,7 +19,12 @@ export const followInAlarm = async (userId, accessToken, noticeId) => {
   }
 };
 
-export const unfollowInAlarm = async (userId, accessToken, noticeId) => {
+export const unfollowInAlarm = async (
+  userId,
+  accessToken,
+  noticeId,
+  client
+) => {
   try {
     const res = await client.delete(
       `sns/unfollow`,
@@ -43,7 +46,12 @@ export const unfollowInAlarm = async (userId, accessToken, noticeId) => {
   }
 };
 
-export const cancelRequestInAlarm = async (userId, accessToken, noticeId) => {
+export const cancelRequestInAlarm = async (
+  userId,
+  accessToken,
+  noticeId,
+  client
+) => {
   try {
     const res = await client.delete(
       "sns/follow",
@@ -63,7 +71,12 @@ export const cancelRequestInAlarm = async (userId, accessToken, noticeId) => {
   }
 };
 
-export const acceptRequestInAlarm = async (userId, accessToken, noticeId) => {
+export const acceptRequestInAlarm = async (
+  userId,
+  accessToken,
+  noticeId,
+  client
+) => {
   try {
     const res = await client.patch(
       "sns/pending",

@@ -1,10 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { RootState } from "../../store/configureStore";
 import { client } from "../../services/api";
-import { toggleStateThunk } from "../PushNotification/pushNotiThunk";
-import { setTheme } from "../../store/modules/theme";
+import { RootState } from "../../store/configureStore";
 import { setStrategy } from "../../store/modules/auth";
+import { addBadge } from "../../store/modules/badge";
+import { setTheme } from "../../store/modules/theme";
+import { toggleStateThunk } from "../PushNotification/pushNotiThunk";
 import { storeData } from "../asyncStorage";
+import { checkAndRenewTokens } from "../authUtils/tokenUtils";
 
 // const data = {
 //   message: "유저 정보 가져오기 성공",
@@ -29,11 +31,13 @@ import { storeData } from "../asyncStorage";
 //     user_name: "",
 //     value_yesterday_ago: "0.00",
 //   },
+//   badges: [],
 // };
 
 export const getUserInfoThunk = createAsyncThunk(
   "user/getUserInfo",
   async (_, { rejectWithValue, getState, dispatch }) => {
+    await dispatch(checkAndRenewTokens());
     const rootState = getState() as RootState;
 
     const accessToSend = rootState.auth.accessToken.replace(/^"|"$/g, "");
@@ -42,8 +46,6 @@ export const getUserInfoThunk = createAsyncThunk(
       const data = await client("account/getUserInfo", {
         accessToken: accessToSend,
       });
-
-      console.log("getUserInfoThunk success", data.userData.theme);
 
       // [테마] redux !== 서버 => 테마 변경
       const clientTheme = rootState.theme.value;
@@ -66,6 +68,9 @@ export const getUserInfoThunk = createAsyncThunk(
         dispatch(setStrategy(serverStrategy));
         storeData("strategy", serverStrategy);
       }
+
+      // badge
+      dispatch(addBadge(data.badges));
 
       return data;
     } catch (error) {

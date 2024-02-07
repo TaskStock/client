@@ -1,17 +1,21 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { client } from "../../services/api";
 import { RootState } from "../../store/configureStore";
+import { checkAndRenewTokens } from "../authUtils/tokenUtils";
 
 const badgeThunk = createAsyncThunk(
   "badge/requestBadge",
-  async (type: number, { getState, rejectWithValue }) => {
+  async (type: number, { getState, rejectWithValue, dispatch }) => {
+    await dispatch(checkAndRenewTokens());
     const rootState = getState() as RootState;
     const { accessToken } = rootState.auth;
     const { user_id } = rootState.user.user;
     const { badges } = rootState.badge;
 
     // 이미 뱃지 있으면 fetch 안함
-    if (badges.includes(type)) {
+    const exists = badges.some((badge) => badge.type === type);
+    // 이미 존재하는 경우, 'already exists' 메시지와 함께 거부
+    if (exists) {
       return rejectWithValue("already exists");
     }
 

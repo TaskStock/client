@@ -24,15 +24,19 @@ class FCMService {
       .then((enabled) => {
         this.getToken(onRegister);
         if (enabled) {
-          console.log("enabled 들어옴");
+          console.log(Platform.OS, ">>>>>[FCMService] enabled 들어옴");
           dispatch(toggleStateThunk(true));
         } else {
-          console.log("disabled 들어옴");
+          console.log(Platform.OS, "disabled 들어옴");
           this.requestPermission(onRegister);
         }
       })
       .catch((error) => {
-        console.log("[FCMService] Permission rejected ", error);
+        console.log(
+          Platform.OS,
+          ">>>>>[FCMService] Permission rejected ",
+          error
+        );
       });
   };
 
@@ -43,11 +47,14 @@ class FCMService {
         if (fcmToken) {
           onRegister(fcmToken);
         } else {
-          console.log("[FCMService] User does not have a device token");
+          console.log(
+            Platform.OS,
+            ">>>>>[FCMService] User does not have a device token"
+          );
         }
       })
       .catch((error) => {
-        console.log("[FCMService] getToken rejected", error);
+        console.log(Platform.OS, ">>>>>[FCMService] getToken rejected", error);
       });
   };
 
@@ -58,7 +65,11 @@ class FCMService {
         this.getToken(onRegister);
       })
       .catch((error) => {
-        console.log("[FCMService] Request Permission rejected", error);
+        console.log(
+          Platform.OS,
+          ">>>>>[FCMService] Request Permission rejected",
+          error
+        );
       });
   };
 
@@ -66,7 +77,7 @@ class FCMService {
     messaging()
       .deleteToken()
       .catch((error) => {
-        console.log("[FCMService] Delete token error", error);
+        console.log(Platform.OS, ">>>>>[FCMService] Delete token error", error);
       });
   };
 
@@ -75,16 +86,21 @@ class FCMService {
     onNotification,
     onOpenNotification
   ) => {
-    // 백그라운드에서 알림을 클릭했을 때의 처리 로직
+    // 실행중이지만 현재화면은 다른 앱이 실행중이거나 아무것도 실행하지않을때
     messaging().onNotificationOpenedApp((remoteMessage) => {
       if (remoteMessage) {
-        console.log(remoteMessage.data.target_id);
+        console.log(
+          Platform.OS,
+          ">>>>>[FCMService] 백그라운드에서 알람 클릭 data: ",
+          remoteMessage
+        );
+        // console.log(remoteMessage.data.target_id);
 
         onOpenNotification(remoteMessage);
       }
     });
 
-    // 앱이 종료된 상태에서 사용자가 알림을 클릭하여 앱이 시작될 때
+    //앱이 실행중이 아닐때
     messaging()
       .getInitialNotification()
       .then((remoteMessage) => {
@@ -94,10 +110,14 @@ class FCMService {
         }
       })
       .catch((error) => {
-        console.log("quit state notification error : ", error);
+        console.log(
+          Platform.OS,
+          ">>>>>[FCMService] quit state notification error : ",
+          error
+        );
       });
 
-    // 포그라운드 상태
+    // 포그라운드 상태 : 실행중이고 현재 화면일때
     this.messageListener = messaging().onMessage(async (remoteMessage) => {
       if (remoteMessage) {
         if (Platform.OS === "ios") {
@@ -107,13 +127,19 @@ class FCMService {
           // 포그라운드 상태에서 메시지가 도착했을 때의 처리 로직
           if (notification) {
             console.log(
-              "Notification while app is in foreground:",
+              Platform.OS,
+              ">>>>>[FCMService] 포그라운드 알람:",
               notification
             );
             onNotification(notification);
           }
         } else {
           // Android
+          console.log(
+            Platform.OS,
+            ">>>>>[FCMService] 포그라운드 알람:",
+            notification
+          );
           if (remoteMessage.notification) {
             onNotification(remoteMessage.notification);
           }
@@ -123,7 +149,11 @@ class FCMService {
 
     // 토큰 갱신
     messaging().onTokenRefresh((fcmToken) => {
-      console.log("New fcm token refresh: ", fcmToken);
+      console.log(
+        Platform.OS,
+        ">>>>>[FCMService] New fcm token refresh: ",
+        fcmToken
+      );
       onRegister(fcmToken);
     });
   };

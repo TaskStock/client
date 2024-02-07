@@ -57,7 +57,7 @@ const WelcomeScreen = ({ navigation }) => {
         console.log("소셜로그인 성공", response);
         // navigation.navigate("MainTab", { screen: "Home" });
       } else if (response.result === "fail") {
-        Alert.alert(response.message);
+        Alert.alert(response.message, response.strategy);
       } else {
         console.log("소셜로그인 실패", response);
       }

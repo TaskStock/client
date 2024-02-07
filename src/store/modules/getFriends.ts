@@ -13,6 +13,7 @@ import { IUserBox } from "../../@types/userBox";
 import { Value } from "../../@types/chart";
 import { Todo } from "../../@types/todo";
 import { Project } from "../../@types/project";
+import { checkAndRenewTokens } from "../../utils/authUtils/tokenUtils";
 
 export interface IFriend {
   user_id: number;
@@ -93,7 +94,8 @@ export const { useGetFriendInfoQuery } = getFriendsApi;
 
 export const getFriendsThunk = createAsyncThunk(
   "sns/getFriendsThunk",
-  async (_, { rejectWithValue, getState }) => {
+  async (_, { rejectWithValue, getState, dispatch }) => {
+    await dispatch(checkAndRenewTokens());
     const rootState = getState() as RootState;
     const { accessToken } = rootState.auth;
 
@@ -110,7 +112,8 @@ export const getFriendsThunk = createAsyncThunk(
 
 export const searchThunk = createAsyncThunk(
   "sns/searchThunk",
-  async (searchText: string, { rejectWithValue, getState }) => {
+  async (searchText: string, { rejectWithValue, getState, dispatch }) => {
+    await dispatch(checkAndRenewTokens());
     const rootState = getState() as RootState;
     const { accessToken } = rootState.auth;
     try {
@@ -133,7 +136,8 @@ export const searchThunk = createAsyncThunk(
 
 export const getTargetUserThunk = createAsyncThunk(
   "sns/getTargetUserThunk",
-  async (userId: number, { rejectWithValue, getState }) => {
+  async (userId: number, { rejectWithValue, getState, dispatch }) => {
+    await dispatch(checkAndRenewTokens());
     const rootState = getState() as RootState;
     const { accessToken } = rootState.auth;
     try {
