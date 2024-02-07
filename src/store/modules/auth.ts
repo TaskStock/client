@@ -231,29 +231,22 @@ const authSlice = createSlice({
     });
     builder.addCase(checkAndRenewTokens.pending, (state) => {
       // state.loading = true;
-      console.log("토큰 갱신 진행중");
+      // console.log("토큰 갱신 진행중");
     });
     builder.addCase(checkAndRenewTokens.fulfilled, (state, action) => {
       // state.loading = false;
-
-      const { accessToken, refreshToken, accessExp, refreshExp } =
-        action.payload;
+      const { accessToken, accessExp } = action.payload;
       state.accessToken = accessToken;
       state.accessExp = accessExp;
 
-      if (refreshExp && refreshExp) {
-        state.refreshExp = refreshExp;
-        storeData("refreshExp", refreshExp);
-        storeData("refreshToken", refreshToken);
-      }
       storeData("accessToken", accessToken);
       storeData("accessExp", accessExp);
-      console.log("토큰 갱신 성공 ", action.payload);
+      console.log("AT 만료 후 토큰 갱신 성공 ", action.payload);
     });
     builder.addCase(checkAndRenewTokens.rejected, (state, action) => {
       // state.loading = false;
       state.error = action.payload;
-      console.log("토큰 갱신 rejected: ", action.payload);
+      // console.log("토큰 갱신 rejected: ", action.payload);
     });
   },
 });
