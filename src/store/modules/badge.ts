@@ -1,12 +1,26 @@
 import { createSlice } from "@reduxjs/toolkit";
 import badgeThunk from "../../utils/badgeUtils/badgeThunk";
 
+interface IBadge {
+  type: number;
+  created_time: string;
+}
+
 interface BadgeState {
-  badges: number[];
+  badges: IBadge[];
 }
 
 const initialState: BadgeState = {
-  badges: [1, 9], // 1, 3, 5, 6
+  badges: [
+    {
+      type: 1,
+      created_time: "2024-02-05T15:47:21.993Z",
+    },
+    {
+      type: 9,
+      created_time: "2024-02-05T16:02:07.204Z",
+    },
+  ],
 };
 
 const badgeSlice = createSlice({

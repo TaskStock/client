@@ -19,8 +19,9 @@ const BadgeContainer = styled.View`
 `;
 
 const Badge = ({ type }) => {
-  const badgeData = BADGES[type][0];
-  const imageSrc = badgeData.image;
+  //   const badgeData = BADGES[type][0];
+  const badgeData = BADGES.find((badge) => badge.type === type);
+  const imageSrc = badgeData?.image;
   return (
     <BadgeContainer>
       <Image
@@ -50,7 +51,7 @@ const BadgesPreview = ({ onPress }) => {
         />
         <FlexBox gap={-useResponsiveFontSize(8)} alignItems="center">
           {badges.map((badge) => (
-            <Badge type={badge} key={badge} />
+            <Badge type={badge.type} key={badge.type} />
           ))}
         </FlexBox>
       </FlexBox>

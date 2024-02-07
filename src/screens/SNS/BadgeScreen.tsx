@@ -1,20 +1,26 @@
-import React from "react";
-import { Image, View } from "react-native";
+import React, { useRef, useState } from "react";
+import { Dimensions, FlatList, Image } from "react-native";
 import styled from "styled-components/native";
-import { useAppSelect } from "../../store/configureStore.hooks";
 import { BADGES } from "../../../public/data/badges";
-import Icons from "../../components/atoms/Icons";
 import FlexBox from "../../components/atoms/FlexBox";
-import { spacing } from "../../constants/spacing";
-import Text from "../../components/atoms/Text";
+import Icons, { IconsPic } from "../../components/atoms/Icons";
 import Margin from "../../components/atoms/Margin";
+import Text from "../../components/atoms/Text";
+import Share from "../../components/molecules/Badge/Share";
+import { spacing } from "../../constants/spacing";
+import { useAppSelect } from "../../store/configureStore.hooks";
+import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
+
+import BadgeItem from "../../components/organisms/Badge/BadgeItem";
+import { palette } from "../../constants/colors";
 
 const Container = styled.View`
   flex: 1;
   align-items: center;
+  background-color: ${palette.neutral600_gray};
 `;
 
-const Header = ({ gridOnPress, closeOnPress }) => (
+const Header = ({ currentPage, totalPage, gridOnPress, closeOnPress }) => (
   <FlexBox
     alignItems="center"
     justifyContent="space-between"
@@ -26,70 +32,73 @@ const Header = ({ gridOnPress, closeOnPress }) => (
     <Icons
       name="grid"
       type="ionicons"
-      size={30}
+      size={useResponsiveFontSize(30)}
       color="white"
       onPress={gridOnPress}
     />
     <Text size="lg" weight="semibold" color={"white"}>
-      1/9
+      {currentPage} / {totalPage}
     </Text>
-    <Icons
-      name="close-circle-outline"
-      type="material"
-      size={38}
-      color="white"
+    <IconsPic
+      source={require("../../../assets/icons/badge-close.png")}
+      size={45}
       onPress={closeOnPress}
     />
   </FlexBox>
 );
 
+const { width: clientWidth } = Dimensions.get("window");
 const BadgeScreen = ({ navigation }) => {
-  const { badges } = useAppSelect((state) => state.badge);
-  // BADGES의 key의 개수 (page 수)
-  const TOTAL_BADGES = Object.keys(BADGES).length;
+  const [currentPage, setCurrentBadge] = useState(1);
+  const totalPage = BADGES.length;
+  const flatListRef = useRef(null);
+
+  const handleScroll = (event) => {
+    const scrollPosition = event.nativeEvent.contentOffset.x;
+    const currentIndex = Math.round(scrollPosition / clientWidth);
+    const badgeType = BADGES[currentIndex].type;
+    setCurrentBadge(badgeType);
+  };
+
+  const { badges: reduxBadges } = useAppSelect((state) => state.badge);
+  const givenBadge = reduxBadges.find((badge) => badge.type === currentPage);
   return (
     <Container>
-      <Image
-        source={BADGES[badges[0]][0].background}
-        style={{
-          width: "100%",
-          height: "100%",
-          resizeMode: "cover",
-          position: "absolute",
-        }}
-      />
-      <Header gridOnPress={() => {}} closeOnPress={() => navigation.goBack()} />
-      <Image
-        source={BADGES[badges[0]][0].image}
-        style={{
-          width: "80%",
-          height: "40%",
-          resizeMode: "cover",
-        }}
-      />
-      <View style={{ gap: 10, alignItems: "center", flex: 1 }}>
-        <Text size="xl" weight="semibold" color={"white"}>
-          {BADGES[badges[0]][0].title}
-        </Text>
-        <Text size="lg" weight="semibold" color={"white"}>
-          {BADGES[badges[0]][0].description}
-        </Text>
+      {givenBadge && (
         <Image
-          source={require("../../../assets/images/badges/badge-dotGap.png")}
+          source={BADGES[currentPage - 1].background}
           style={{
-            width: 10,
-            height: 40,
-            resizeMode: "contain",
+            width: "100%",
+            height: "100%",
+            resizeMode: "cover",
+            position: "absolute",
           }}
         />
-        <Text size="md" color={"white"}>
-          2024년 12월 31일 획득
-        </Text>
-      </View>
-      <Text size="md" color={"white"}>
+      )}
+
+      <Header
+        currentPage={currentPage}
+        totalPage={totalPage}
+        gridOnPress={() => {}}
+        closeOnPress={() => navigation.goBack()}
+      />
+      <FlatList
+        data={BADGES}
+        ref={flatListRef}
+        keyExtractor={(item) => item.type.toString()}
+        horizontal
+        renderItem={({ item }) => <BadgeItem item={item} />}
+        pagingEnabled
+        onScroll={handleScroll}
+        scrollEventThrottle={16} // Define how often the scroll event will be fired
+        showsHorizontalScrollIndicator={false}
+      />
+
+      <Text size="sm" color={"white"}>
         옆으로 넘겨 더 다양한 뱃지를 확인해보세요!
       </Text>
-      <Margin margin={100} />
+      <Share onPress={() => {}} />
+      <Margin margin={80} />
     </Container>
   );
 };
