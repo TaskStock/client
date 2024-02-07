@@ -9,6 +9,7 @@ import { useFlushSavedValues } from "../hooks/useFlushSavedValues";
 import { useAppDispatch, useAppSelect } from "../store/configureStore.hooks";
 import { getUserInfoThunk } from "../utils/UserUtils/getUserInfoThunk";
 import usePushNotification from "../hooks/usePushNotification";
+import { checkAndRenewTokens } from "../utils/authUtils/tokenUtils";
 
 const Container = styled.View`
   background-color: ${({ theme }) => theme.background};
@@ -18,11 +19,8 @@ const Container = styled.View`
 const HomeScreen = ({ navigation }) => {
   const isAddModalOpen = useAppSelect((state) => state.todo.isAddModalOpen);
 
-  const { isLoggedIn } = useAppSelect((state) => state.auth);
-
   // push notification
-  usePushNotification();
-
+  // usePushNotification();
 
   const dispatch = useAppDispatch();
 

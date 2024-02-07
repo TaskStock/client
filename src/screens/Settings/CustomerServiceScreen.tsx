@@ -7,13 +7,13 @@ import Text from "../../components/atoms/Text";
 import { TextAreaInput } from "../../components/atoms/TextInput";
 import PageHeader from "../../components/molecules/PageHeader";
 import { spacing } from "../../constants/spacing";
-import { client } from "../../services/api";
 import { RootState } from "../../store/configureStore";
-import { useAppSelect } from "../../store/configureStore.hooks";
+import { useAppDispatch, useAppSelect } from "../../store/configureStore.hooks";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
 import { Shadow } from "react-native-shadow-2";
 import { palette } from "../../constants/colors";
 import FlexBox from "../../components/atoms/FlexBox";
+import { useClient } from "../../hooks/useClient";
 
 const Container = styled.View`
   padding: ${spacing.offset}px;
@@ -57,6 +57,9 @@ const CustomerServiceScreen = ({ navigation }) => {
 
   const [visible, setVisible] = useState(false);
   const [message, setMessage] = useState("");
+
+  const dispatch = useAppDispatch();
+  const client = useClient(dispatch);
 
   const sendToServer = async () => {
     // 내용 비어있으면 보내지 않음

@@ -29,7 +29,7 @@ const badgeSlice = createSlice({
   reducers: {
     addBadge: (state, action) => {
       state.badges = action.payload;
-      console.log("뱃지 추가 성공: ", state.badges);
+      // console.log("뱃지 추가 성공: ", state.badges);
     },
   },
   extraReducers: (builder) => {

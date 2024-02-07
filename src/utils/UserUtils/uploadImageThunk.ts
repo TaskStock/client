@@ -3,10 +3,12 @@ import { Asset } from "react-native-image-picker";
 import { RootState } from "../../store/configureStore";
 import { getAPIHost } from "../getAPIHost";
 import { client } from "../../services/api";
+import { checkAndRenewTokens } from "../authUtils/tokenUtils";
 
 export const uploadImageThunk = createAsyncThunk(
   "user/uploadImageThunk",
-  async (image: Asset, { getState, rejectWithValue }) => {
+  async (image: Asset, { getState, rejectWithValue, dispatch }) => {
+    await dispatch(checkAndRenewTokens());
     const state = getState() as RootState;
     const { accessToken } = state.auth;
 
@@ -49,7 +51,8 @@ export const uploadImageThunk = createAsyncThunk(
 
 export const setToDefaultImageThunk = createAsyncThunk(
   "user/setToDefaultImageThunk",
-  async (_, { getState, rejectWithValue }) => {
+  async (_, { getState, rejectWithValue, dispatch }) => {
+    await dispatch(checkAndRenewTokens());
     const state = getState() as RootState;
     const { accessToken } = state.auth;
 

@@ -1,18 +1,19 @@
+import PushNotificationIOS from "@react-native-community/push-notification-ios";
 import { useEffect } from "react";
 import { Alert, Platform } from "react-native";
-import { client } from "../services/api";
+import PushNotification from "react-native-push-notification";
 import { useAppDispatch, useAppSelect } from "../store/configureStore.hooks";
 import { setFcmToken } from "../store/modules/pushNoti";
 import { fcmService } from "../utils/PushNotification/push.fcm";
 import { localNotificationService } from "../utils/PushNotification/push.noti";
-import PushNotification from "react-native-push-notification";
-import PushNotificationIOS from "@react-native-community/push-notification-ios";
+import { useClient } from "./useClient";
 
 export default function usePushNotification() {
   const { accessToken } = useAppSelect((state) => state.auth);
   const { isPushOn, fcmToken } = useAppSelect((state) => state.pushNoti);
 
   const dispatch = useAppDispatch();
+  const client = useClient(dispatch);
 
   const sendTokenToServer = async (fcmToken, isPushOn) => {
     if (accessToken === "") return;
@@ -25,7 +26,7 @@ export default function usePushNotification() {
         },
         { accessToken }
       );
-      console.log("푸시알림 토큰 서버 전송 성공");
+      // console.log("푸시알림 토큰 서버 전송 성공");
       return res;
     } catch (e) {
       console.log(e);
