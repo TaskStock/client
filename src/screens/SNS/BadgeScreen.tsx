@@ -7,12 +7,11 @@ import Icons, { IconsPic } from "../../components/atoms/Icons";
 import Margin from "../../components/atoms/Margin";
 import Text from "../../components/atoms/Text";
 import Share from "../../components/molecules/Badge/Share";
+import BadgeItem from "../../components/organisms/Badge/BadgeItem";
+import { palette } from "../../constants/colors";
 import { spacing } from "../../constants/spacing";
 import { useAppSelect } from "../../store/configureStore.hooks";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
-
-import BadgeItem from "../../components/organisms/Badge/BadgeItem";
-import { palette } from "../../constants/colors";
 
 const Container = styled.View`
   flex: 1;
@@ -48,25 +47,45 @@ const Header = ({ currentPage, totalPage, gridOnPress, closeOnPress }) => (
 );
 
 const { width: clientWidth } = Dimensions.get("window");
+
+// =============== 로직 ==================
+// BADGES로 SORTED_BADGES 생성 (가지고 있는 뱃지, 가지고 있지 않은 뱃지 순)
+// currentPage => SORTED_BADGES의 index + 1
+// totalPage => SORTED_BADGES.length
+// =======================================
+
 const BadgeScreen = ({ navigation }) => {
-  const [currentPage, setCurrentBadge] = useState(1);
-  const totalPage = BADGES.length;
+  const { badges: reduxBadges } = useAppSelect((state) => state.badge);
+  // ===== 가지고 있는 뱃지는 먼저 배치하기 위해 새 배열 생성 =====
+  const ownedTypes = new Set(reduxBadges.map((badge) => badge.type));
+  // 뱃지 분류 (가지고 있는 뱃지, 가지고 있지 않은 뱃지)
+  const ownedBadges = BADGES.filter((badge) => ownedTypes.has(badge.type));
+  const unownedBadges = BADGES.filter((badge) => !ownedTypes.has(badge.type));
+  // Concatenate
+  const SORTED_BADGES = [...ownedBadges, ...unownedBadges];
+
+  // 현재 페이지
+  const [currentPage, setCurrent] = useState(1);
+  const totalPage = SORTED_BADGES.length;
   const flatListRef = useRef(null);
+
+  const givenBadge = reduxBadges.find(
+    (badge) => badge.type === SORTED_BADGES[currentPage - 1].type
+  );
 
   const handleScroll = (event) => {
     const scrollPosition = event.nativeEvent.contentOffset.x;
     const currentIndex = Math.round(scrollPosition / clientWidth);
-    const badgeType = BADGES[currentIndex].type;
-    setCurrentBadge(badgeType);
+    setCurrent(currentIndex + 1);
   };
 
-  const { badges: reduxBadges } = useAppSelect((state) => state.badge);
-  const givenBadge = reduxBadges.find((badge) => badge.type === currentPage);
+  // [1, 9]
+
   return (
     <Container>
       {givenBadge && (
         <Image
-          source={BADGES[currentPage - 1].background}
+          source={SORTED_BADGES[currentPage - 1].background}
           style={{
             width: "100%",
             height: "100%",
@@ -83,14 +102,14 @@ const BadgeScreen = ({ navigation }) => {
         closeOnPress={() => navigation.goBack()}
       />
       <FlatList
-        data={BADGES}
+        data={SORTED_BADGES}
         ref={flatListRef}
         keyExtractor={(item) => item.type.toString()}
         horizontal
         renderItem={({ item }) => <BadgeItem item={item} />}
         pagingEnabled
         onScroll={handleScroll}
-        scrollEventThrottle={16} // Define how often the scroll event will be fired
+        scrollEventThrottle={16}
         showsHorizontalScrollIndicator={false}
       />
 
