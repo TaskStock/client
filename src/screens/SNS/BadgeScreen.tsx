@@ -52,6 +52,9 @@ const { width: clientWidth } = Dimensions.get("window");
 // BADGES로 SORTED_BADGES 생성 (가지고 있는 뱃지, 가지고 있지 않은 뱃지 순)
 // currentPage => SORTED_BADGES의 index + 1
 // totalPage => SORTED_BADGES.length
+
+// 현재 페이지의 뱃지가 가지고 있는 뱃지인지 확인
+// badge.type === SORTED_BADGES[currentPage - 1].type
 // =======================================
 
 const BadgeScreen = ({ navigation }) => {
@@ -69,6 +72,7 @@ const BadgeScreen = ({ navigation }) => {
   const totalPage = SORTED_BADGES.length;
   const flatListRef = useRef(null);
 
+  // 현재 페이지의 뱃지가 가지고 있는 뱃지인지 확인
   const givenBadge = reduxBadges.find(
     (badge) => badge.type === SORTED_BADGES[currentPage - 1].type
   );
@@ -78,8 +82,6 @@ const BadgeScreen = ({ navigation }) => {
     const currentIndex = Math.round(scrollPosition / clientWidth);
     setCurrent(currentIndex + 1);
   };
-
-  // [1, 9]
 
   return (
     <Container>

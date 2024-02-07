@@ -17,6 +17,22 @@ const initialState: BadgeState = {
       created_time: "2024-02-05T15:47:21.993Z",
     },
     {
+      type: 2,
+      created_time: "2024-02-05T15:47:21.993Z",
+    },
+    {
+      type: 3,
+      created_time: "2024-02-05T15:47:21.993Z",
+    },
+    {
+      type: 5,
+      created_time: "2024-02-05T15:47:21.993Z",
+    },
+    {
+      type: 6,
+      created_time: "2024-02-05T15:47:21.993Z",
+    },
+    {
       type: 9,
       created_time: "2024-02-05T16:02:07.204Z",
     },

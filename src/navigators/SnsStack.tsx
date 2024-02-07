@@ -39,7 +39,13 @@ const SnsStack = () => {
           presentation: "modal",
         }}
       />
-      <NativeStack.Screen name="BadgeAll" component={BadgeAllScreen} />
+      <NativeStack.Screen
+        name="BadgeAll"
+        component={BadgeAllScreen}
+        options={{
+          presentation: "modal",
+        }}
+      />
     </NativeStack.Navigator>
   );
 };
