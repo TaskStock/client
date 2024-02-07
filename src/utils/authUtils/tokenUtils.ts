@@ -40,8 +40,6 @@ export const checkAndRenewTokens = createAsyncThunk(
   async (_, { getState, rejectWithValue, dispatch }) => {
     const state = getState() as RootState;
 
-    console.log("=====checkAndRenewTokens=====");
-
     //accessToken => Redux store에서 가져옴, 만료 15분 전 갱신
     const {
       auth: { accessToken, accessExp, refreshExp },
@@ -76,7 +74,7 @@ export const checkAndRenewTokens = createAsyncThunk(
     ) {
       // 새 accessToken 요청
       console.log("=====accessToken 만료, refreshToken 유효=====");
-      const newTokens = await requestNewTokens(accessToken, refreshToken);
+      const newTokens = await requestNewTokens(accessToken, refreshToken); // accessToken, accessExp
       return newTokens;
     }
 
