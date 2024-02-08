@@ -4,16 +4,16 @@ import badge2 from "../../assets/images/badges/badge-2.png";
 import badgebg2 from "../../assets/images/badges/badge-bg-2.png";
 import badge3 from "../../assets/images/badges/badge-3.png";
 import badgebg3 from "../../assets/images/badges/badge-bg-3.png";
-// import badge4 from "../../assets/images/badges/badge-4.png";
-// import badgebg4 from "../../assets/images/badges/badge-bg-4.png";
+import badge4 from "../../assets/images/badges/badge-4.png";
+import badgebg4 from "../../assets/images/badges/badge-bg-4.png";
 import badge5 from "../../assets/images/badges/badge-5.png";
 import badgebg5 from "../../assets/images/badges/badge-bg-5.png";
 import badge6 from "../../assets/images/badges/badge-6.png";
 import badgebg6 from "../../assets/images/badges/badge-bg-6.png";
-// import badge7 from "../../assets/images/badges/badge-7.png";
-// import badgebg7 from "../../assets/images/badges/badge-bg-7.png";
-// import badge8 from "../../assets/images/badges/badge-8.png";
-// import badgebg8 from "../../assets/images/badges/badge-bg-8.png";
+import badge7 from "../../assets/images/badges/badge-7.png";
+import badgebg7 from "../../assets/images/badges/badge-bg-7.png";
+import badge8 from "../../assets/images/badges/badge-8.png";
+import badgebg8 from "../../assets/images/badges/badge-bg-8.png";
 import badge9 from "../../assets/images/badges/badge-9.png";
 import badgebg9 from "../../assets/images/badges/badge-bg-9.png";
 
@@ -46,8 +46,8 @@ export const BADGES = [
     type: 4,
     title: "슈퍼개미의 선택",
     description: "가치 20만원 돌파",
-    // image: badge4,
-    // background: badgebg4,
+    image: badge4,
+    background: badgebg4,
   },
 
   {
@@ -70,16 +70,16 @@ export const BADGES = [
     type: 7,
     title: "1+1",
     description: "상승률 정확히 11%",
-    // image: badge7,
-    // background: badgebg7,
+    image: badge7,
+    background: badgebg7,
   },
 
   {
     type: 8,
     title: "급등주",
     description: "상승률 50% 돌파",
-    // image: badge8,
-    // background: badgebg8,
+    image: badge8,
+    background: badgebg8,
   },
 
   {

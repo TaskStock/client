@@ -20,7 +20,7 @@ const HomeScreen = ({ navigation }) => {
   const isAddModalOpen = useAppSelect((state) => state.todo.isAddModalOpen);
 
   // push notification
-  // usePushNotification();
+  usePushNotification();
 
   const dispatch = useAppDispatch();
 

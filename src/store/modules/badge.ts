@@ -11,16 +11,7 @@ interface BadgeState {
 }
 
 const initialState: BadgeState = {
-  badges: [
-    // {
-    //   type: 1,
-    //   created_time: "2024-02-05T15:47:21.993Z",
-    // },
-    // {
-    //   type: 2,
-    //   created_time: "2024-02-05T15:47:21.993Z",
-    // },
-  ],
+  badges: [],
 };
 
 const badgeSlice = createSlice({

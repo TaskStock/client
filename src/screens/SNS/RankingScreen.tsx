@@ -5,9 +5,8 @@ import MyInfo from "../../components/organisms/SNS/MyInfo";
 import RankingContainer from "../../components/organisms/SNS/RankingContainer";
 import { spacing } from "../../constants/spacing";
 import useHeight from "../../hooks/useHeight";
-import { useAppDispatch, useAppSelect } from "../../store/configureStore.hooks";
+import { useAppDispatch } from "../../store/configureStore.hooks";
 import { getFriendsThunk } from "../../store/modules/getFriends";
-import createBadgeDispatcher from "../../utils/badgeUtils/badge";
 
 const Container = styled.View`
   flex: 1;

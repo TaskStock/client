@@ -16,6 +16,8 @@ import { onGoogleButtonPress } from "../../utils/authUtils/googleSignIn";
 import { onKakaoButtonPress } from "../../utils/authUtils/kakaoSignIn";
 import getDeviceId from "../../utils/getDeviceId";
 import { onAppleButtonPress } from "../../utils/authUtils/appleSignIn";
+import { getApiLevel } from "react-native-device-info";
+import { getAPIHost } from "../../utils/getAPIHost";
 
 const Login = styled.View`
   gap: ${spacing.padding}px;

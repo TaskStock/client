@@ -207,7 +207,7 @@ const AlarmBox = ({ item }: { item: IAlarmData }) => {
   useEffect(() => {
     if (alarmItem.type === "sns") {
       setButtonText(updateBtnText(alarmItem.info));
-      console.log("update buttonText in useEffect", alarmItem.info);
+      // console.log("update buttonText in useEffect", alarmItem.info);
     }
   }, [alarmItem]);
 

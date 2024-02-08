@@ -29,6 +29,7 @@ import android.content.Intent;
 import android.provider.Settings;
 
 import io.invertase.firebase.app.ReactNativeFirebaseAppPackage;
+import io.invertase.firebase.messaging.ReactNativeFirebaseMessagingPackage;
 
 
 

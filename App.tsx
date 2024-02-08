@@ -37,9 +37,9 @@ export default function App() {
     // asyncstorage에서 엑세스토큰, 만료일, refresh만료일을 가져와서
     dispatch(checkTokenExistence());
     dispatch(startingTheme());
-    // if (isLoggedIn) {
-    //   dispatch(checkAndRenewTokens());
-    // }
+    if (isLoggedIn) {
+      dispatch(checkAndRenewTokens());
+    }
   }, [isLoggedIn]);
 
   // useEffect(() => {
