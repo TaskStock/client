@@ -96,6 +96,7 @@ export default function SnsTabHeader({
         type="materialIcons"
         name="search"
         size={useResponsiveFontSize(36)}
+        color={theme.text}
         onPress={() => navigation.navigate("Search")}
       />
     </FlexBox>

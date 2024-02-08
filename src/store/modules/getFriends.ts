@@ -13,6 +13,7 @@ import { IUserBox } from "../../@types/userBox";
 import { Value } from "../../@types/chart";
 import { Todo } from "../../@types/todo";
 import { Project } from "../../@types/project";
+import { checkAndRenewTokens } from "../../utils/authUtils/tokenUtils";
 
 export interface IFriend {
   user_id: number;
@@ -63,8 +64,6 @@ const initialFriendState: initialState = {
     button: "팔로우",
   },
   loading: false,
-  follower_count: 0,
-  following_count: 0,
   error: null,
 };
 
@@ -95,7 +94,8 @@ export const { useGetFriendInfoQuery } = getFriendsApi;
 
 export const getFriendsThunk = createAsyncThunk(
   "sns/getFriendsThunk",
-  async (_, { rejectWithValue, getState }) => {
+  async (_, { rejectWithValue, getState, dispatch }) => {
+    await dispatch(checkAndRenewTokens());
     const rootState = getState() as RootState;
     const { accessToken } = rootState.auth;
 
@@ -112,7 +112,8 @@ export const getFriendsThunk = createAsyncThunk(
 
 export const searchThunk = createAsyncThunk(
   "sns/searchThunk",
-  async (searchText: string, { rejectWithValue, getState }) => {
+  async (searchText: string, { rejectWithValue, getState, dispatch }) => {
+    await dispatch(checkAndRenewTokens());
     const rootState = getState() as RootState;
     const { accessToken } = rootState.auth;
     try {
@@ -120,7 +121,7 @@ export const searchThunk = createAsyncThunk(
         `sns/users/search/?searchScope=global&searchTarget=${searchText}`,
         { accessToken }
       );
-
+      // console.log(response);
       if (response.result === "success") {
         return response.searchResult;
       } else {
@@ -135,7 +136,8 @@ export const searchThunk = createAsyncThunk(
 
 export const getTargetUserThunk = createAsyncThunk(
   "sns/getTargetUserThunk",
-  async (userId: number, { rejectWithValue, getState }) => {
+  async (userId: number, { rejectWithValue, getState, dispatch }) => {
+    await dispatch(checkAndRenewTokens());
     const rootState = getState() as RootState;
     const { accessToken } = rootState.auth;
     try {
@@ -269,6 +271,12 @@ const friendSlice = createSlice({
         state.targetUser.isFollowingYou
       );
 
+      // follower_count, following_count update
+      // pending === false이면 나의 following_count +1, 상대방의 follower_count +1
+      if (!state.targetUser.pending && state.targetUser.follower_count) {
+        state.targetUser.follower_count += 1;
+      }
+
       console.log("팔로우 성공");
     });
     builder.addCase(unfollowThunk.pending, (state, action) => {
@@ -296,6 +304,13 @@ const friendSlice = createSlice({
         state.targetUser.isFollowingMe,
         state.targetUser.isFollowingYou
       );
+
+      // follower_count, following_count update
+      // pending === false이면 나의 following_count -1, 상대방의 follower_count -1
+      if (!state.targetUser.pending && state.targetUser.follower_count) {
+        state.targetUser.follower_count -= 1;
+      }
+
       console.log("언팔로우 성공");
     });
     builder.addCase(cancelRequestThunk.pending, (state, action) => {

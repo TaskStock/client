@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useMemo } from "react";
+import React, { useCallback, useContext, useMemo } from "react";
 import { Dimensions, View, useWindowDimensions } from "react-native";
 import {
   NavigationState,
@@ -6,19 +6,14 @@ import {
   SceneRendererProps,
   TabView,
 } from "react-native-tab-view";
-import { ComponentHeightContext } from "../../../utils/ComponentHeightContext";
-import HomeCalendar from "./HomeCalendar";
-import GraphWithUserInfo from "../GraphWithUserInfo";
-import TabHeader from "../../molecules/TabHeader";
+import { useResizeLayoutOnFocus } from "../../../hooks/useResizeLayoutOnFocus";
 import {
   useAppDispatch,
   useAppSelect,
 } from "../../../store/configureStore.hooks";
 import { setTabIndex } from "../../../store/modules/home";
-import { useResizeLayoutOnFocus } from "../../../hooks/useResizeLayoutOnFocus";
-import useUser from "../../../hooks/useUser";
-import useValue from "../../../hooks/useValue";
-import useTodos from "../../../hooks/useTodos";
+import { ComponentHeightContext } from "../../../utils/ComponentHeightContext";
+import TabHeader from "../../molecules/TabHeader";
 import HomeScreenFirst from "../../pages/home/HomeScreenFirst";
 import HomeScreenSecond from "../../pages/home/HomeScreenSecond";
 
@@ -46,24 +41,6 @@ const GCContainer = () => {
   const onChangeIndex = (index: number) => {
     dispatch(setTabIndex(index));
   };
-
-  // const renderTabBar = (
-  //   props: SceneRendererProps & {
-  //     navigationState: NavigationState<{
-  //       key: string;
-  //       title: string;
-  //     }>;
-  //   }
-  // ) => {
-  //   return (
-  //     <TabHeader
-  //       onPressTab={(index) => {
-  //         dispatch(setTabIndex(index));
-  //       }}
-  //       props={props}
-  //     />
-  //   );
-  // };
 
   const renderTabBar = useCallback(
     (

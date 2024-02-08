@@ -7,21 +7,23 @@ import {
   CandlestickChartProvider,
 } from "../organisms/WagmiChart/candle";
 import { CandlestickChart } from "../organisms/WagmiChart/candle/Chart";
-import { sizeContext } from "../organisms/GraphWithUserInfo";
 import { WagmiData } from "../../@types/chart";
 
-function WagmiChart({ data }: { data: WagmiData[] }) {
+function WagmiChart({
+  data,
+  width,
+  height,
+}: {
+  data: WagmiData[];
+  width: number;
+  height: number;
+}) {
   const theme = useTheme();
-
-  console.log("wagon chart data rerendered");
-
-  const { width: contextWidth, height: contextHeight } =
-    React.useContext(sizeContext);
 
   return (
     <>
       <CandlestickChartProvider data={data}>
-        <CandlestickChart width={contextWidth} height={contextHeight}>
+        <CandlestickChart width={width} height={height}>
           <CandlestickChartCandles
             useAnimations={true}
             positiveColor={theme.palette.red}

@@ -5,7 +5,6 @@ export const myFetchFunction = (baseUrl) => {
     const endPoint = args.url.substring(1);
 
     const accessToSend = api.getState().auth.accessToken.replace(/^"|"$/g, "");
-
     try {
       const data = await client(`${endPoint}`, {
         method: args.method,

@@ -83,8 +83,6 @@ export default function RetrospectList({
 
   const dispatch = useAppDispatch();
 
-  const scrollViewRef = useRef(null);
-
   const throttleScrollEnd = useRef(
     _.throttle(() => {
       onScrollBottom();
@@ -117,7 +115,6 @@ export default function RetrospectList({
 
   return (
     <ScrollView
-      ref={scrollViewRef}
       onScroll={handleScroll}
       scrollEventThrottle={50} //
     >

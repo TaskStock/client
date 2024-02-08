@@ -1,10 +1,16 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { client } from "../../services/api";
 import { RootState } from "../../store/configureStore";
+import { addFollowingCount, subFollowingCount } from "../../store/modules/user";
+import { checkAndRenewTokens } from "../authUtils/tokenUtils";
 
 export const followThunk = createAsyncThunk(
   "user/followThunk",
-  async (followingId: Number, { rejectWithValue, getState }) => {
+  async (
+    { followingId, isPrivate }: { followingId: Number; isPrivate: boolean },
+    { rejectWithValue, getState, dispatch }
+  ) => {
+    await dispatch(checkAndRenewTokens());
     const rootState = getState() as RootState;
     const { accessToken } = rootState.auth;
 
@@ -20,6 +26,10 @@ export const followThunk = createAsyncThunk(
       );
       console.log("팔로우 response: ", data);
       if (data.result === "success") {
+        if (isPrivate === false) {
+          dispatch(addFollowingCount());
+        }
+
         return { ...data, followingId };
       } else {
         return rejectWithValue(data.result);
@@ -33,7 +43,8 @@ export const followThunk = createAsyncThunk(
 
 export const unfollowThunk = createAsyncThunk(
   "user/unfollowThunk",
-  async (followingId: Number, { rejectWithValue, getState }) => {
+  async (followingId: Number, { rejectWithValue, getState, dispatch }) => {
+    await dispatch(checkAndRenewTokens());
     const rootState = getState() as RootState;
     const { accessToken } = rootState.auth;
 
@@ -47,6 +58,7 @@ export const unfollowThunk = createAsyncThunk(
       );
       console.log("언팔로우 response: ", data);
       if (data.result === "success") {
+        dispatch(subFollowingCount());
         console.log("updated following list", rootState.friends.followingList);
         return followingId;
       } else {
@@ -62,6 +74,7 @@ export const unfollowThunk = createAsyncThunk(
 export const cancelRequestThunk = createAsyncThunk(
   "user/cancelRequest",
   async (targetId: Number, { rejectWithValue, getState, dispatch }) => {
+    await dispatch(checkAndRenewTokens());
     const rootState = getState() as RootState;
     const { accessToken } = rootState.auth;
 

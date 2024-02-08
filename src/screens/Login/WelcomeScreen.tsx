@@ -1,5 +1,5 @@
 import React from "react";
-import { Platform } from "react-native";
+import { Alert, Platform } from "react-native";
 import { useTheme } from "styled-components";
 import styled from "styled-components/native";
 import Divider from "../../components/molecules/Login/Divider";
@@ -16,6 +16,8 @@ import { onGoogleButtonPress } from "../../utils/authUtils/googleSignIn";
 import { onKakaoButtonPress } from "../../utils/authUtils/kakaoSignIn";
 import getDeviceId from "../../utils/getDeviceId";
 import { onAppleButtonPress } from "../../utils/authUtils/appleSignIn";
+import { getApiLevel } from "react-native-device-info";
+import { getAPIHost } from "../../utils/getAPIHost";
 
 const Login = styled.View`
   gap: ${spacing.padding}px;
@@ -30,7 +32,7 @@ const WelcomeScreen = ({ navigation }) => {
   const dispatch = useAppDispatch();
 
   // 최근 로그인한 기록
-  const strategy = useAppSelect((state) => state.auth.strategy);
+  const { strategy } = useAppSelect((state) => state.auth);
 
   const handleSocialLogin = async (type) => {
     const user = await type();
@@ -54,10 +56,16 @@ const WelcomeScreen = ({ navigation }) => {
         };
 
         dispatch(setSocialLoggedIn(returnValue));
+        console.log("소셜로그인 성공", response);
         // navigation.navigate("MainTab", { screen: "Home" });
+      } else if (response.result === "fail") {
+        Alert.alert(response.message, response.strategy);
+      } else {
+        console.log("소셜로그인 실패", response);
       }
     } catch (e) {
       console.log(user?.strategy, "로그인 실패", e);
+      Alert.alert(e);
     }
   };
 

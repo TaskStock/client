@@ -22,6 +22,7 @@ import FilterIcon from "../../../assets/icons/filterIcon.svg";
 import { useGetAllStocksQuery } from "../../store/modules/market/market";
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 import CustomSkeleton from "../../components/atoms/CustomSkeleton";
+import { upValue } from "../../constants/value";
 
 const PageHeaderBox = styled.View`
   height: ${useResponsiveFontSize(300)}px;
@@ -67,7 +68,7 @@ const MarketListItem = ({
   const theme = useTheme();
 
   return (
-    <MarketItemButton key={id} onPress={onPress}>
+    <MarketItemButton onPress={onPress}>
       <MarketListItemInner>
         <FlexBox
           direction="column"
@@ -102,11 +103,18 @@ export default function MarketListScreen() {
 
   const [searchText, setSearchText] = React.useState("");
 
-  const { data, isLoading, isError } = useGetAllStocksQuery({});
+  const { data, error, isLoading, isError } = useGetAllStocksQuery();
+
+  const list = data?.stockitems;
+
+  const filteredList = list?.filter((item) => {
+    if (searchText === "") {
+      return true;
+    }
+    return item.name.includes(searchText);
+  });
 
   const theme = useTheme();
-
-  const list = [1, 2, 3, 4, 5, 6, 7];
 
   const onPressListItem = (id: number) => {
     navigation.navigate("StockDetailScreen", {
@@ -162,77 +170,70 @@ export default function MarketListScreen() {
             placeholder="종목명을 검색하세요."
           ></SearchBar2>
           <Margin margin={spacing.offset}></Margin>
-          <TextWithIcon text="필터">
-            <WithLocalSvg
-              asset={require("../../../assets/icons/filterIcon.svg")}
-              fill={theme.text}
-            />
-          </TextWithIcon>
+          {/* {isLoading || isError ? (
+            <CustomSkeleton>
+              <View
+                style={{
+                  width: 30,
+                  height: 10,
+                  borderRadius: 10,
+                }}
+              ></View>
+            </CustomSkeleton>
+          ) : (
+            <TextWithIcon text="필터">
+              <WithLocalSvg
+                asset={require("../../../assets/icons/filterIcon.svg")}
+                fill={theme.text}
+              />
+            </TextWithIcon>
+          )} */}
+
           <Margin margin={spacing.padding}></Margin>
           <FlexBox
             direction="column"
             alignItems="stretch"
             gap={spacing.padding + spacing.small}
           >
-            {list.map((id, idx) => {
-              if (idx % 4 == 0 && idx != 0) {
-                return (
-                  <View key={id}>
-                    <MarketListItem
-                      id={id}
-                      name="삼성전자"
-                      participants={121}
-                      price={100000}
-                      onPress={() => onPressListItem(id)}
-                    />
-                    <Margin margin={spacing.padding + spacing.small}></Margin>
-                    <WishListButton onPress={onPressWishListButton} />
-                  </View>
-                );
-              }
-              return (
-                <MarketListItem
-                  key={id}
-                  id={id}
-                  name="삼성전자"
-                  participants={121}
-                  price={100000}
-                  onPress={() => onPressListItem(id)}
-                />
-              );
-            })}
-            {/* {!isLoading && data ? (
-              list.map((id, idx) => {
-                if (idx % 4 == 0 && idx != 0) {
+            {!isLoading && filteredList ? (
+              filteredList.length !== 0 ? (
+                filteredList.map((item, idx) => {
+                  if (idx % 4 == 0 && idx != 0) {
+                    return (
+                      <View key={item.stockitem_id}>
+                        <MarketListItem
+                          id={item.stockitem_id}
+                          name={item.name}
+                          participants={item.take_count}
+                          price={item.level * upValue}
+                          onPress={() => onPressListItem(item.stockitem_id)}
+                        />
+                        <Margin
+                          margin={spacing.padding + spacing.small}
+                        ></Margin>
+                        <WishListButton onPress={onPressWishListButton} />
+                      </View>
+                    );
+                  }
                   return (
-                    <View key={id}>
+                    <View key={item.stockitem_id}>
                       <MarketListItem
-                        id={id}
-                        name="삼성전자"
-                        participants={121}
-                        price={100000}
-                        onPress={() => onPressListItem(id)}
+                        id={item.stockitem_id}
+                        name={item.name}
+                        participants={item.take_count}
+                        price={item.level * upValue}
+                        onPress={() => onPressListItem(item.stockitem_id)}
                       />
-                      <Margin margin={spacing.padding + spacing.small}></Margin>
-                      <WishListButton onPress={onPressWishListButton} />
                     </View>
                   );
-                }
-                return (
-                  <MarketListItem
-                    key={id}
-                    id={id}
-                    name="삼성전자"
-                    participants={121}
-                    price={100000}
-                    onPress={() => onPressListItem(id)}
-                  />
-                );
-              })
+                })
+              ) : (
+                <Text size="md">종목이 없습니다.</Text>
+              )
             ) : (
               <>
                 {[1, 2, 3].map((id) => (
-                  <CustomSkeleton key={"skel" + id}>
+                  <CustomSkeleton key={"marketListskel" + id}>
                     <View
                       style={{
                         width: "100%",
@@ -243,7 +244,7 @@ export default function MarketListScreen() {
                   </CustomSkeleton>
                 ))}
               </>
-            )} */}
+            )}
           </FlexBox>
         </ContentLayout>
       </ScrollView>

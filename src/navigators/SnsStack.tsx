@@ -4,6 +4,8 @@ import EditProfileScreen from "../screens/SNS/EditProfileScreen";
 import RankingScreen from "../screens/SNS/RankingScreen";
 import SearchScreen from "../screens/SNS/SearchScreen";
 import UserDetailScreen from "../screens/SNS/UserDetailScreen";
+import BadgeScreen from "../screens/SNS/BadgeScreen";
+import BadgeAllScreen from "../screens/SNS/BadgeAllScreen";
 
 export type SnsStackParamList = {
   Ranking: undefined;
@@ -12,6 +14,8 @@ export type SnsStackParamList = {
   UserDetail: {
     userId: number;
   };
+  Badge: undefined;
+  BadgeAll: undefined;
 };
 
 const NativeStack = createNativeStackNavigator<SnsStackParamList>();
@@ -28,6 +32,20 @@ const SnsStack = () => {
       <NativeStack.Screen name="EditProfile" component={EditProfileScreen} />
       <NativeStack.Screen name="Search" component={SearchScreen} />
       <NativeStack.Screen name="UserDetail" component={UserDetailScreen} />
+      <NativeStack.Screen
+        name="Badge"
+        component={BadgeScreen}
+        options={{
+          presentation: "modal",
+        }}
+      />
+      <NativeStack.Screen
+        name="BadgeAll"
+        component={BadgeAllScreen}
+        options={{
+          presentation: "modal",
+        }}
+      />
     </NativeStack.Navigator>
   );
 };

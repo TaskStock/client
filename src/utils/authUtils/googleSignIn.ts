@@ -1,3 +1,4 @@
+// import { GOOGLE_AUTH_IOS_CLIENT_ID } from "@env";
 import { GOOGLE_AUTH_IOS_CLIENT_ID } from "@env";
 import {
   GoogleSignin,
@@ -10,6 +11,7 @@ GoogleSignin.configure({
 });
 
 export async function onGoogleButtonPress() {
+  console.log("===== 구글clientID", GOOGLE_AUTH_IOS_CLIENT_ID);
   try {
     await GoogleSignin.hasPlayServices();
     const userInfo = await GoogleSignin.signIn();

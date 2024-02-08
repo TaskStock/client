@@ -16,7 +16,32 @@ const GraphBox = styled(ContentItemBoxContainer)`
   align-items: center;
 `;
 
-export default function StockDetailGraphSection() {
+export default function StockDetailGraphSection({
+  successRate: { mySuccessRate, averageSuccessRate },
+  weekdaySuccessCount: {
+    monday,
+    tuesday,
+    wednesday,
+    thursday,
+    friday,
+    saturday,
+    sunday,
+  },
+}: {
+  successRate: {
+    mySuccessRate: number;
+    averageSuccessRate: number;
+  };
+  weekdaySuccessCount: {
+    monday: number;
+    tuesday: number;
+    wednesday: number;
+    thursday: number;
+    friday: number;
+    saturday: number;
+    sunday: number;
+  };
+}) {
   const theme = useTheme();
 
   const [graphSize, setGraphSize] = React.useState({
@@ -26,8 +51,8 @@ export default function StockDetailGraphSection() {
 
   const data = [
     { x: "fake", y: 0, fake: true },
-    { x: "나", y: 80 },
-    { x: "평균", y: 70 },
+    { x: "나", y: mySuccessRate },
+    { x: "평균", y: averageSuccessRate },
     { x: "fake123", y: 0, fake: true },
   ];
 
@@ -78,31 +103,31 @@ export default function StockDetailGraphSection() {
   const data2 = [
     {
       x: "월",
-      y: 32,
+      y: monday,
     },
     {
       x: "화",
-      y: 40,
+      y: tuesday,
     },
     {
       x: "수",
-      y: 50,
+      y: wednesday,
     },
     {
       x: "목",
-      y: 60,
+      y: thursday,
     },
     {
       x: "금",
-      y: 70,
+      y: friday,
     },
     {
       x: "토",
-      y: 80,
+      y: saturday,
     },
     {
       x: "일",
-      y: 90,
+      y: sunday,
     },
   ];
 

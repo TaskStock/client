@@ -12,7 +12,6 @@ import { Value } from "../../@types/chart";
 import { Circle, Svg } from "react-native-svg";
 import { palette } from "../../constants/colors";
 import { View } from "react-native";
-import { sizeContext } from "../organisms/GraphWithUserInfo";
 
 const DotDataComponent = (props: any) => {
   const { x, y, datum } = props;
@@ -36,7 +35,17 @@ const DotDataComponent = (props: any) => {
   );
 };
 
-export default function LineValueChart({ data }: { data: Value[] }) {
+export default function LineValueChart({
+  data,
+  width,
+  height,
+}: {
+  data: {
+    end: number;
+  }[];
+  width: number;
+  height: number;
+}) {
   const theme = useTheme();
 
   if (data.length === 0) return <></>;
@@ -59,13 +68,10 @@ export default function LineValueChart({ data }: { data: Value[] }) {
     minYWithPadding = minYWithPadding - 1;
   }
 
-  const { width: contextWidth, height: contextHeight } =
-    useContext(sizeContext);
-
   return (
     <VictoryChart
-      width={contextWidth}
-      height={contextHeight}
+      width={width}
+      height={height}
       padding={{}}
       containerComponent={
         <VictoryZoomContainer zoomDimension="x"></VictoryZoomContainer>

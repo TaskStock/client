@@ -7,7 +7,6 @@ import {
   registerWithEmail,
 } from "../../utils/authUtils/signInUtils";
 import { checkAndRenewTokens } from "../../utils/authUtils/tokenUtils";
-import store from "../configureStore";
 
 interface IInitialUserState {
   accessToken: string;
@@ -75,6 +74,9 @@ const authSlice = createSlice({
     setAccessToken: (state, action) => {
       state.accessToken = action.payload;
     },
+    setStrategy: (state, action) => {
+      state.strategy = action.payload;
+    },
     setLoggedIn: (state, action) => {
       if (action.payload.accessToken) {
         state.accessToken = action.payload.accessToken;
@@ -121,143 +123,135 @@ const authSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder
-      // 이메일 회원가입
-      .addCase(registerWithEmail.pending, (state) => {
-        state.loading = true;
-        console.log("회원가입 진행중");
-      })
-      .addCase(registerWithEmail.fulfilled, (state, action) => {
-        // redux에 저장
+    // 이메일 회원가입
+    builder.addCase(registerWithEmail.pending, (state) => {
+      state.loading = true;
+      console.log("회원가입 진행중");
+    });
+    builder.addCase(registerWithEmail.fulfilled, (state, action) => {
+      // redux에 저장
+      state.accessToken = action.payload.accessToken;
+      state.accessExp = action.payload.accessExp;
+      state.refreshExp = action.payload.refreshExp;
+      state.isLoggedIn = true;
+      state.loading = false;
+      state.strategy = action.payload.strategy;
+      state.deviceId = action.payload.deviceId;
+
+      // AsyncStorage에 저장
+      storeData("accessToken", action.payload.accessToken);
+      storeData("refreshToken", action.payload.refreshToken);
+      storeData("accessExp", action.payload.accessExp);
+      storeData("refreshExp", action.payload.refreshExp);
+      storeData("deviceId", action.payload.deviceId);
+
+      // strategy는 회원가입 시에만 저장
+      storeData("strategy", action.payload.strategy);
+
+      console.log("회원가입 성공: ");
+    });
+    builder.addCase(registerWithEmail.rejected, (state, action) => {
+      state.loading = false;
+      state.isLoggedIn = false;
+      state.error = action.payload;
+
+      console.log("회원가입 실패", action.payload);
+    });
+    // 이메일 로그인
+    builder.addCase(loginWithEmail.pending, (state) => {
+      state.loading = true;
+      console.log("로그인 진행중");
+    });
+    builder.addCase(loginWithEmail.fulfilled, (state, action) => {
+      if (action.payload.accessToken) {
         state.accessToken = action.payload.accessToken;
         state.accessExp = action.payload.accessExp;
         state.refreshExp = action.payload.refreshExp;
         state.isLoggedIn = true;
         state.loading = false;
-        state.strategy = action.payload.strategy;
+        state.error = false;
         state.deviceId = action.payload.deviceId;
+        const strategy = getData("strategy");
 
-        // AsyncStorage에 저장
+        if (strategy && typeof strategy === "string") {
+          state.strategy = strategy;
+        }
+
         storeData("accessToken", action.payload.accessToken);
         storeData("refreshToken", action.payload.refreshToken);
         storeData("accessExp", action.payload.accessExp);
         storeData("refreshExp", action.payload.refreshExp);
         storeData("deviceId", action.payload.deviceId);
 
-        // strategy는 회원가입 시에만 저장
-        storeData("strategy", action.payload.strategy);
+        console.log("로그인 성공: ");
+      }
+    });
+    builder.addCase(loginWithEmail.rejected, (state, action) => {
+      state.loading = false;
+      state.error = true;
+      state.isLoggedIn = false;
+      console.log("로그인 실패", action.payload);
+    });
+    builder.addCase(checkTokenExistence.fulfilled, (state, action) => {
+      state.accessToken = action.payload.accessToken;
+      state.isLoggedIn = action.payload.isLoggedIn;
+      state.accessExp = action.payload.accessExp;
+      state.refreshExp = action.payload.refreshExp;
+      state.strategy = action.payload.strategy;
+      state.deviceId = action.payload.deviceId;
+      state.loading = false;
+    });
+    builder.addCase(checkTokenExistence.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    });
+    // 로그아웃
+    builder.addCase(logout.pending, (state) => {
+      state.loading = true;
+      console.log("로그아웃 진행중: ", state);
+    });
+    builder.addCase(logout.fulfilled, (state) => {
+      // asyncStorage에서 토큰 제거
+      AsyncStorage.removeItem("accessToken");
+      AsyncStorage.removeItem("refreshToken");
+      AsyncStorage.removeItem("accessExp");
+      AsyncStorage.removeItem("refreshExp");
 
-        console.log("회원가입 성공: ");
-      })
-      .addCase(registerWithEmail.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
+      state.accessToken = "";
+      state.accessExp = 0;
+      state.refreshExp = 0;
+      state.isLoggedIn = false;
+      state.loading = false;
+      state.error = null;
+    });
+    builder.addCase(logout.rejected, (state, action) => {
+      state.error = action.payload;
+      state.loading = false;
+      console.log("로그아웃 에러: ", action.payload);
+    });
+    builder.addCase(checkAndRenewTokens.pending, (state) => {
+      // state.loading = true;
+      // console.log("토큰 갱신 진행중");
+    });
+    builder.addCase(checkAndRenewTokens.fulfilled, (state, action) => {
+      // state.loading = false;
+      const { accessToken, accessExp } = action.payload;
+      state.accessToken = accessToken;
+      state.accessExp = accessExp;
 
-        console.log("회원가입 실패", action.payload);
-      })
-      // 이메일 로그인
-      .addCase(loginWithEmail.pending, (state) => {
-        state.loading = true;
-        console.log("로그인 진행중");
-      })
-      .addCase(loginWithEmail.fulfilled, (state, action) => {
-        if (action.payload.accessToken) {
-          state.accessToken = action.payload.accessToken;
-          state.accessExp = action.payload.accessExp;
-          state.refreshExp = action.payload.refreshExp;
-          state.isLoggedIn = true;
-          state.loading = false;
-          state.error = false;
-          state.deviceId = action.payload.deviceId;
-
-          const strategy = getData("strategy");
-
-          if (strategy && typeof strategy === "string") {
-            state.strategy = strategy;
-          }
-
-          storeData("accessToken", action.payload.accessToken);
-          storeData("refreshToken", action.payload.refreshToken);
-          storeData("accessExp", action.payload.accessExp);
-          storeData("refreshExp", action.payload.refreshExp);
-          storeData("deviceId", action.payload.deviceId);
-
-          console.log("로그인 성공: ");
-        }
-      })
-      .addCase(loginWithEmail.rejected, (state, action) => {
-        state.loading = false;
-        state.error = true;
-        console.log("로그인 실패", action.payload);
-      })
-      .addCase(checkTokenExistence.fulfilled, (state, action) => {
-        state.accessToken = action.payload.accessToken;
-
-        state.accessExp = action.payload.accessExp;
-        state.refreshExp = action.payload.refreshExp;
-        state.isLoggedIn = action.payload.isLoggedIn;
-        state.strategy = action.payload.strategy;
-        state.deviceId = action.payload.deviceId;
-        state.loading = false;
-      })
-      .addCase(checkTokenExistence.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      })
-      // 로그아웃
-      .addCase(logout.pending, (state) => {
-        state.loading = true;
-        console.log("로그아웃 진행중: ", state);
-      })
-      .addCase(logout.fulfilled, (state) => {
-        // asyncStorage에서 토큰 제거
-        AsyncStorage.removeItem("accessToken");
-        AsyncStorage.removeItem("refreshToken");
-        AsyncStorage.removeItem("accessExp");
-        AsyncStorage.removeItem("refreshExp");
-
-        state.accessToken = "";
-        state.accessExp = 0;
-        state.refreshExp = 0;
-        state.isLoggedIn = false;
-        state.loading = false;
-        state.error = null;
-      })
-      .addCase(logout.rejected, (state, action) => {
-        state.error = action.payload;
-        state.loading = false;
-        console.log("로그아웃 에러: ", action.payload);
-      })
-      // 토큰 갱신
-      .addCase(checkAndRenewTokens.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(checkAndRenewTokens.fulfilled, (state, action) => {
-        state.loading = false;
-        // 토큰이 있는 경우(만료되었더라도)
-        if (action.payload) {
-          const { accessToken, refreshToken, accessExp, refreshExp } =
-            action.payload;
-          state.accessToken = accessToken;
-          state.accessExp = accessExp;
-
-          if (refreshExp && refreshExp) {
-            state.refreshExp = refreshExp;
-            storeData("refreshExp", refreshExp);
-            storeData("refreshToken", refreshToken);
-          }
-          storeData("accessToken", accessToken);
-          storeData("accessExp", accessExp);
-        }
-      })
-      .addCase(checkAndRenewTokens.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      });
+      storeData("accessToken", accessToken);
+      storeData("accessExp", accessExp);
+      console.log("AT 만료 후 토큰 갱신 성공 ", action.payload);
+    });
+    builder.addCase(checkAndRenewTokens.rejected, (state, action) => {
+      // state.loading = false;
+      state.error = action.payload;
+      // console.log("토큰 갱신 rejected: ", action.payload);
+    });
   },
 });
 
-export const { setAccessToken, setLoggedIn, setSocialLoggedIn } =
+export const { setAccessToken, setStrategy, setLoggedIn, setSocialLoggedIn } =
   authSlice.actions;
 
 export const authReducer = authSlice.reducer;

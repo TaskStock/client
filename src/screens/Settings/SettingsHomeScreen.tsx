@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
+import { Alert } from "react-native";
 import styled from "styled-components/native";
 import PageHeader from "../../components/molecules/PageHeader";
 import Menu from "../../components/molecules/Settings/Menu";
 import { palette } from "../../constants/colors";
 import { spacing } from "../../constants/spacing";
 import { useAppDispatch, useAppSelect } from "../../store/configureStore.hooks";
+import { setFcmToken } from "../../store/modules/pushNoti";
+import { fcmService } from "../../utils/PushNotification/push.fcm";
 import { checkStorage } from "../../utils/asyncStorage";
 import { logout } from "../../utils/authUtils/signInUtils";
 import { resetNavigation } from "../../utils/resetNavigation";
-import { Alert } from "react-native";
 
 const Container = styled.View`
   flex: 1;
@@ -17,7 +19,7 @@ const Container = styled.View`
 
 const SettingsHomeScreen = ({ navigation }) => {
   const dispatch = useAppDispatch();
-  const isLoggedIn = useAppSelect((state) => state.auth.isLoggedIn);
+  const { isLoggedIn, accessToken } = useAppSelect((state) => state.auth);
 
   // 로그아웃
   const askLogout = () => {
@@ -56,10 +58,20 @@ const SettingsHomeScreen = ({ navigation }) => {
   };
 
   // 푸시알림
-  const [isEnabled, setIsEnabled] = useState<boolean>(false);
-  const toggleSwitch = () => {
-    // dispatch 푸시알림
+  const { isPushOn } = useAppSelect((state) => state.pushNoti);
+  const [isEnabled, setIsEnabled] = useState<boolean>(isPushOn);
+
+  const onRegister = (tk) => {
+    if (tk) dispatch(setFcmToken(tk));
   };
+
+  const toggleSwitch = () => {
+    fcmService.togglePushNotifications(!isPushOn, onRegister, dispatch);
+  };
+
+  useEffect(() => {
+    setIsEnabled(isPushOn);
+  }, [isPushOn]);
 
   return (
     <>

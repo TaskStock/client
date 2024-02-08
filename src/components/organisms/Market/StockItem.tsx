@@ -34,6 +34,7 @@ export const StockItem = ({
   onPress: () => void;
 }) => {
   const theme = useTheme();
+  const percentFormat = percent.toFixed(2);
 
   return (
     <Pressable onPress={onPress}>
@@ -50,7 +51,7 @@ export const StockItem = ({
           </Text>
           <Margin margin={30}></Margin>
           <View>
-            <TextWithIcon text={percent + "%"}>
+            <TextWithIcon text={percentFormat + "%"}>
               {percent > 0 ? (
                 <Icons
                   type="AntDesign"
@@ -90,6 +91,10 @@ export const StockItemSecond = ({
   percent: number;
   onPress: () => void;
 }) => {
+  const theme = useTheme();
+
+  const percentFormat = percent.toFixed(2);
+
   return (
     <Pressable onPress={onPress}>
       <StockItemSecondBox>
@@ -102,8 +107,22 @@ export const StockItemSecond = ({
               {name.length > 15 ? name.slice(0, 15) + "..." : name}
             </Text>
           </View>
-          <TextWithIcon text={percent + "%"}>
-            <Icons type="AntDesign" name="caretdown" size={14} color={"red"} />
+          <TextWithIcon text={percentFormat + "%"}>
+            {percent > 0 ? (
+              <Icons
+                type="AntDesign"
+                name="caretup"
+                size={14}
+                color={theme.palette.red}
+              />
+            ) : (
+              <Icons
+                type="AntDesign"
+                name="caretdown"
+                size={14}
+                color={theme.palette.blue}
+              />
+            )}
           </TextWithIcon>
         </FlexBox>
       </StockItemSecondBox>
@@ -115,11 +134,13 @@ export const StockItemForWishList = ({
   left,
   name,
   likes,
+  isLiked,
   onPress,
 }: {
   left: number | string;
   name: string;
   likes: number;
+  isLiked: boolean;
   onPress: () => void;
 }) => {
   return (
@@ -135,7 +156,23 @@ export const StockItemForWishList = ({
         </View>
         <TextWithIcon text={likes + ""}>
           <>
-            <Icons type="AntDesign" name="hearto" size={18} color={"red"} />
+            {isLiked ? (
+              <Icons
+                onPress={onPress}
+                type="AntDesign"
+                name="heart"
+                size={18}
+                color={"red"}
+              />
+            ) : (
+              <Icons
+                onPress={onPress}
+                type="AntDesign"
+                name="hearto"
+                size={18}
+                color={"red"}
+              />
+            )}
             <Margin
               direction="horizontal"
               margin={spacing.small * 0.5}

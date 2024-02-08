@@ -23,7 +23,8 @@ interface initialState {
     introduce: string;
     group_id: number;
     region: string;
-    strategy: string;
+    // strategy: string;
+    is_push_on: boolean;
   };
   loading: boolean;
   error: string | null;
@@ -39,13 +40,14 @@ const initialUserState: initialState = {
     following_count: 0,
     premium: 0,
     cumulative_value: 0,
-    value_month_ago: 0,
+    value_yesterday_ago: 0,
     created_time: "",
     image: "",
     introduce: "",
     group_id: 0,
     region: "",
-    strategy: "",
+    // strategy: "",
+    is_push_on: false,
   },
   loading: false,
   error: null,
@@ -57,6 +59,18 @@ const userSlice = createSlice({
   reducers: {
     updateUserValue: (state, action) => {
       state.user.cumulative_value += action.payload;
+    },
+    addFollowingCount: (state) => {
+      state.user.following_count += 1;
+    },
+    subFollowingCount: (state) => {
+      state.user.following_count -= 1;
+    },
+    addFollowerCount: (state) => {
+      state.user.follower_count += 1;
+    },
+    subFollowerCount: (state) => {
+      state.user.follower_count -= 1;
     },
   },
   extraReducers: (builder) => {
@@ -88,20 +102,20 @@ const userSlice = createSlice({
     });
     builder.addCase(uploadImageThunk.pending, (state, action) => {
       state.loading = true;
-      console.log("uploadImageThunk pending");
+      console.log("프로필 변경중...");
     });
     builder.addCase(uploadImageThunk.rejected, (state, action) => {
       state.loading = false;
-      state.error = "이미지 업로드 실패";
+      state.error = "프로필 변경 실패";
     });
     builder.addCase(uploadImageThunk.fulfilled, (state, action) => {
       state.loading = false;
-      state.user.image = action.payload.imagePath;
-      console.log("성공", state.user.image);
+      state.user.image = action.payload;
+      console.log("프로필 변경 성공", state.user.image);
     });
     builder.addCase(setToDefaultImageThunk.pending, (state, action) => {
       state.loading = true;
-      console.log("setToDefaultImageThunk pending");
+      console.log("기본이미지로 변경중...");
     });
     builder.addCase(setToDefaultImageThunk.rejected, (state, action) => {
       state.loading = false;
@@ -109,10 +123,9 @@ const userSlice = createSlice({
     });
     builder.addCase(setToDefaultImageThunk.fulfilled, (state, action) => {
       state.loading = false;
-      state.user.image = action.payload.imagePath;
-      console.log("성공", state.user.image);
+      state.user.image = "";
+      console.log("기본이미지 변경 성공");
     });
-
     builder.addCase(setPrivateThunk.pending, (state, action) => {
       state.loading = true;
       console.log("setPrivateThunk pending");
@@ -135,4 +148,10 @@ const userSlice = createSlice({
 });
 
 export default userSlice.reducer;
-export const { updateUserValue } = userSlice.actions;
+export const {
+  updateUserValue,
+  addFollowingCount,
+  subFollowingCount,
+  addFollowerCount,
+  subFollowerCount,
+} = userSlice.actions;

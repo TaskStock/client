@@ -1,26 +1,23 @@
-import { View, Pressable } from "react-native";
-
+import { Pressable, View } from "react-native";
 import React from "react";
-import { Todo } from "../../../@types/todo";
-import TodoItem from "../../molecules/Home/TodoItem";
 import DraggableFlatList, {
   DragEndParams,
   ScaleDecorator,
 } from "react-native-draggable-flatlist";
-import {
-  useChangeOrderTodoMutation,
-  useGetAllTodosQuery,
-} from "../../../store/modules/todo/todo";
-import { useAppSelect } from "../../../store/configureStore.hooks";
-import { spacing } from "../../../constants/spacing";
-import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
-import useTodos from "../../../hooks/useTodos";
-import Text from "../../atoms/Text";
-import Margin from "../../atoms/Margin";
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
-import FlexBox from "../../atoms/FlexBox";
-import CheckBox from "../../atoms/CheckBox";
 import { useTheme } from "styled-components";
+import { Todo } from "../../../@types/todo";
+import { spacing } from "../../../constants/spacing";
+import useTodos from "../../../hooks/useTodos";
+import { useAppSelect } from "../../../store/configureStore.hooks";
+import { useChangeOrderTodoMutation } from "../../../store/modules/todo/todo";
+import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
+import CheckBox from "../../atoms/CheckBox";
+import CustomSkeleton from "../../atoms/CustomSkeleton";
+import FlexBox from "../../atoms/FlexBox";
+import Margin from "../../atoms/Margin";
+import Text from "../../atoms/Text";
+import TodoItem from "../../molecules/Home/TodoItem";
 
 const SkeletonTodoItem = () => {
   const theme = useTheme();
@@ -38,12 +35,12 @@ const SkeletonTodoItem = () => {
       gap={spacing.small}
     >
       <CheckBox src={checkBoxSrc} onPress={() => {}}></CheckBox>
-      <SkeletonPlaceholder>
+      <CustomSkeleton>
         <SkeletonPlaceholder.Item
           width={250}
           height={useResponsiveFontSize(17)}
         />
-      </SkeletonPlaceholder>
+      </CustomSkeleton>
     </FlexBox>
   );
 };

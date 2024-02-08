@@ -4,7 +4,19 @@ import AlarmDetailScreen from "../screens/Alarm/AlarmDetailScreen";
 import AlarmScreen from "../screens/Alarm/AlarmScreen";
 import UserDetailScreen from "../screens/SNS/UserDetailScreen";
 
-const NativeStack = createNativeStackNavigator();
+export type AlarmStackParamList = {
+  Alarm: undefined;
+  AlarmDetail: {
+    detail: string;
+    title: string;
+    subText: string;
+  };
+  UserDetail: {
+    userId: number;
+  };
+};
+
+const NativeStack = createNativeStackNavigator<AlarmStackParamList>();
 
 const AlarmStack = () => {
   const theme = useTheme();

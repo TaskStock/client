@@ -1,13 +1,15 @@
-import React, { useContext, useEffect, useLayoutEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Modal } from "react-native";
 import styled from "styled-components/native";
 import HeaderTop from "../components/molecules/Home/HeaderTop";
 import TodoContainer from "../components/molecules/Home/TodoContainer";
 import GCContainer from "../components/organisms/Home/GCContainer";
 import AddTodoModal from "../components/organisms/TodoModal/AddTodoModal";
-import { useAppDispatch, useAppSelect } from "../store/configureStore.hooks";
 import { useFlushSavedValues } from "../hooks/useFlushSavedValues";
+import { useAppDispatch, useAppSelect } from "../store/configureStore.hooks";
 import { getUserInfoThunk } from "../utils/UserUtils/getUserInfoThunk";
+import usePushNotification from "../hooks/usePushNotification";
+import { checkAndRenewTokens } from "../utils/authUtils/tokenUtils";
 
 const Container = styled.View`
   background-color: ${({ theme }) => theme.background};
@@ -16,6 +18,9 @@ const Container = styled.View`
 
 const HomeScreen = ({ navigation }) => {
   const isAddModalOpen = useAppSelect((state) => state.todo.isAddModalOpen);
+
+  // push notification
+  usePushNotification();
 
   const dispatch = useAppDispatch();
 

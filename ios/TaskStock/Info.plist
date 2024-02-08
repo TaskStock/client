@@ -71,6 +71,10 @@
 	</dict>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>TaskStock이 사용자의 사진 라이브러리에 접근하도록 허용합니다.</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>SplashScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>

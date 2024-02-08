@@ -1,6 +1,6 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import SettingsStack from "./SettingsStack";
 import AlarmStack from "./AlarmStack";
+import SettingsStack from "./SettingsStack";
 
 const Nav = createNativeStackNavigator();
 

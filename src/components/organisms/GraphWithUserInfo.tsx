@@ -50,11 +50,6 @@ const Divider = styled.View`
   background-color: ${({ theme }) => theme.textDimmer};
 `;
 
-export const sizeContext = React.createContext({
-  width: 0,
-  height: 0,
-});
-
 const GraphWithUserInfo = ({
   userInfo,
   value,
@@ -141,18 +136,18 @@ const GraphWithUserInfo = ({
             }
           }}
         >
-          <sizeContext.Provider value={size}>
-            <HomeChart
-              value={{
-                data: value.data,
-                isLoading: value.isLoading,
-                isError: value.isError,
-                error: value.error,
-                refetch: value.refetch,
-              }}
-              isCandleStick={isCandleStick}
-            />
-          </sizeContext.Provider>
+          <HomeChart
+            width={size.width}
+            height={size.height}
+            value={{
+              data: value.data,
+              isLoading: value.isLoading,
+              isError: value.isError,
+              error: value.error,
+              refetch: value.refetch,
+            }}
+            isCandleStick={isCandleStick}
+          />
         </InnerContent>
       </Container>
     </View>

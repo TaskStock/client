@@ -1,6 +1,4 @@
-import { useEffect, useState } from "react";
-import { client } from "../services/api";
-import { useAppDispatch, useAppSelect } from "../store/configureStore.hooks";
+import { useAppSelect } from "../store/configureStore.hooks";
 
 const useUser = () => {
   const { user, loading, error } = useAppSelect((state) => state.user);

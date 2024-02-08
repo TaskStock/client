@@ -19,6 +19,7 @@ import { saveValueUpdate, savedValueUpdate } from "../home";
 import { projectApi } from "../project/project";
 import { Project } from "../../../@types/project";
 import { updateUserValue } from "../user";
+import { marketApi } from "../market/market";
 
 const upValue = 1000;
 const downValue = 1000;
@@ -30,6 +31,7 @@ export const addTodoMutation = (builder: TodoApiBuilder) =>
       index: number;
     },
     {
+      stockitem_id: number | null;
       form: AddTodoForm;
       add_date: IsoString;
       isHomeDrawerOpen: boolean;
@@ -44,7 +46,11 @@ export const addTodoMutation = (builder: TodoApiBuilder) =>
       return {
         url: "/todo/new",
         method: "POST",
-        body: { ...body.form, nowUTC: body.add_date },
+        body: {
+          ...body.form,
+          nowUTC: body.add_date,
+          stockitem_id: body.stockitem_id,
+        },
       };
     },
 
@@ -57,6 +63,7 @@ export const addTodoMutation = (builder: TodoApiBuilder) =>
         check: false,
         date: body.add_date,
         index: 0,
+        stockitem_id: null,
       };
 
       const patchAddTodo = dispatch(
@@ -161,6 +168,17 @@ export const addTodoMutation = (builder: TodoApiBuilder) =>
             }
           )
         );
+
+        if (body.stockitem_id !== null)
+          dispatch(
+            marketApi.util.updateQueryData(
+              "getStockDetails",
+              { id: body.stockitem_id },
+              (draft) => {
+                draft.stockitem.is_add_today = true;
+              }
+            )
+          );
       } catch (error) {
         console.log(error);
         patchAddTodo.undo();

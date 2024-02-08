@@ -2,10 +2,13 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { Asset } from "react-native-image-picker";
 import { RootState } from "../../store/configureStore";
 import { getAPIHost } from "../getAPIHost";
+import { client } from "../../services/api";
+import { checkAndRenewTokens } from "../authUtils/tokenUtils";
 
 export const uploadImageThunk = createAsyncThunk(
   "user/uploadImageThunk",
-  async (image: Asset, { getState, rejectWithValue }) => {
+  async (image: Asset, { getState, rejectWithValue, dispatch }) => {
+    await dispatch(checkAndRenewTokens());
     const state = getState() as RootState;
     const { accessToken } = state.auth;
 
@@ -32,12 +35,13 @@ export const uploadImageThunk = createAsyncThunk(
       });
       const data = await res.json();
       // console.log("응답: ", data);
-      if (data.result === "fail") {
+      const { result, imagePath } = data;
+      if (result === "fail") {
         console.log("서버에서 이미지 업로드 실패");
         return rejectWithValue(data);
       }
 
-      return data;
+      return imagePath;
     } catch (error) {
       console.log("이미지 업로드 실패: ", error);
       return rejectWithValue(error.response.data);
@@ -47,27 +51,21 @@ export const uploadImageThunk = createAsyncThunk(
 
 export const setToDefaultImageThunk = createAsyncThunk(
   "user/setToDefaultImageThunk",
-  async (_, { getState, rejectWithValue }) => {
+  async (_, { getState, rejectWithValue, dispatch }) => {
+    await dispatch(checkAndRenewTokens());
     const state = getState() as RootState;
     const { accessToken } = state.auth;
-    const SERVER_URL = getAPIHost();
-    const URL = `${SERVER_URL}sns/edit/default`;
-    try {
-      const res = await fetch(URL, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-      const data = await res.json();
-      // console.log("응답: ", data);
-      if (data.result === "fail") {
-        console.log("서버에서 이미지 업로드 실패");
-        return rejectWithValue(data);
-      }
 
-      return data;
+    try {
+      const res = await client.patch("sns/edit/default", {}, { accessToken });
+      const { result } = res;
+
+      if (result === "success") {
+        return result;
+      } else if (result === "fail") {
+        console.log("서버에서 이미지 업로드 실패");
+        return rejectWithValue(result);
+      }
     } catch (error) {
       console.log("기본이미지 변경 실패: ", error);
       return rejectWithValue(error.response.data);

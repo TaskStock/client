@@ -30,8 +30,6 @@ export const getAllTodosQuery = (builder: TodoApiBuilder) =>
     providesTags: ["Todos"],
 
     async onCacheEntryAdded(arg, { cacheDataLoaded, dispatch }) {
-      console.log("onCacheEntryAdded");
-
       const response = await cacheDataLoaded;
 
       dispatch(updateCalendarItemTodoCount({ todos: response.data.todos }));

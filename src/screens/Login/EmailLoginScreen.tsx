@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TouchableOpacity, View } from "react-native";
 import { useTheme } from "styled-components/native";
 import { BlackBtn } from "../../components/atoms/Buttons";
@@ -21,13 +21,16 @@ const EmailLoginScreen = ({ navigation }) => {
     password: "",
   });
   const [alert, setAlert] = useState("");
-  const loading = useAppSelect((state) => state.auth.loading);
+  const { loading, isLoggedIn } = useAppSelect((state) => state.auth);
 
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigation.navigate("MainTab", {
+        screen: "Home",
+      });
+    }
+  }, [isLoggedIn]);
   const handleLogin = async () => {
-    // await dispatch(
-    //   loginWithEmail({ email: user.email, password: user.password })
-    // );
-
     // server 응답 형식의 차이 때문에 utils와 분리
     const SERVER_URL = getAPIHost();
     const url = `${SERVER_URL}account/login/email`;
@@ -49,15 +52,8 @@ const EmailLoginScreen = ({ navigation }) => {
       const responseData = await response.json();
       console.log("이메일 응답", responseData);
       if (responseData.result === "success") {
-        navigation.navigate("MainTab", {
-          screen: "Home",
-        });
+        dispatch(setLoggedIn({ ...responseData, deviceId }));
       }
-      console.log("status: ", response.status);
-
-      // Redux, asyncStorage에 상태 업데이트
-      dispatch(setLoggedIn({ ...responseData, deviceId }));
-      return responseData;
     } catch (e) {
       setAlert("이메일 혹은 비밀번호가 일치하지 않습니다.");
     }

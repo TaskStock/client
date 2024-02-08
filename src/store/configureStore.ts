@@ -9,8 +9,11 @@ import homeReducer from "./modules/home";
 import userReducer from "./modules/user";
 import retrospectReducer from "./modules/retrospect/retrospect";
 import { retrospectApi } from "./modules/retrospect/retrospect";
+import { pushNotiReducer } from "./modules/pushNoti";
 import getFriendsReducer, { getFriendsApi } from "./modules/getFriends";
+import { badgeReducer } from "./modules/badge";
 import { marketApi } from "./modules/market/market";
+import marketReducer from "./modules/market/market";
 
 const store = configureStore({
   reducer: {
@@ -30,6 +33,9 @@ const store = configureStore({
     project: projectReducer,
     retrospect: retrospectReducer,
     friends: getFriendsReducer,
+    market: marketReducer,
+    pushNoti: pushNotiReducer,
+    badge: badgeReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

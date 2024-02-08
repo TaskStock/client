@@ -1,14 +1,14 @@
-import React, { memo, useState } from "react";
-import { Pressable, View } from "react-native";
+import React, { memo } from "react";
+import { Pressable } from "react-native";
 import styled from "styled-components/native";
+import { Value } from "../../../@types/chart";
+import useWagmiCandleStick from "../../../hooks/useWagmiCandleStick";
+import CenterLayout from "../../atoms/CenterLayout";
 import FlexBox from "../../atoms/FlexBox";
 import LoadingSpinner from "../../atoms/LoadingSpinner";
 import Text from "../../atoms/Text";
 import LineValueChart from "../../molecules/LineValueChart";
-import CenterLayout from "../../atoms/CenterLayout";
 import WagmiChart from "../../molecules/WagmiChart";
-import useWagmiCandleStick from "../../../hooks/useWagmiCandleStick";
-import { Value } from "../../../@types/chart";
 
 const Container = styled.View`
   width: 100%;
@@ -22,6 +22,8 @@ const Container = styled.View`
 function HomeChart({
   isCandleStick,
   value: { data, isLoading, isError, error, refetch },
+  width,
+  height,
 }: {
   isCandleStick: boolean;
   value: {
@@ -31,6 +33,8 @@ function HomeChart({
     error: any;
     refetch: () => void;
   };
+  width: number;
+  height: number;
 }) {
   if (isLoading || !data) {
     return (
@@ -58,9 +62,13 @@ function HomeChart({
   return (
     <Container>
       {isCandleStick ? (
-        <WagmiChart data={wagmiData}></WagmiChart>
+        <WagmiChart data={wagmiData} width={width} height={height}></WagmiChart>
       ) : (
-        <LineValueChart data={data}></LineValueChart>
+        <LineValueChart
+          data={data}
+          width={width}
+          height={height}
+        ></LineValueChart>
       )}
     </Container>
   );

@@ -1,5 +1,5 @@
 import { View, Text, KeyboardAvoidingView, Platform } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import PageHeader from "../../components/molecules/PageHeader";
 import Section from "../../components/molecules/Section";
 import Margin from "../../components/atoms/Margin";
@@ -9,14 +9,32 @@ import { TextAreaInput } from "../../components/atoms/TextInput";
 import { BlackBtn } from "../../components/atoms/Buttons";
 import { useTheme } from "styled-components/native";
 import { useAddWishListMutation } from "../../store/modules/market/market";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { MarketStackParamList } from "../../navigators/MarketStack";
 
-export default function WishRegisterScreen() {
+type WishRegisterScreenProps = NativeStackScreenProps<
+  MarketStackParamList,
+  "StockDetailScreen"
+>;
+
+export default function WishRegisterScreen({
+  route,
+  navigation,
+}: WishRegisterScreenProps) {
   const theme = useTheme();
 
   const [addWishList] = useAddWishListMutation();
 
+  const [text, setText] = useState("");
+
+  const onChangeText = (text: string) => {
+    setText(text);
+  };
+
   const onPressAddWishList = () => {
-    addWishList({ wishListId: 1 });
+    addWishList({ name: text });
+    setText("");
+    navigation.goBack();
   };
 
   return (
@@ -44,8 +62,14 @@ export default function WishRegisterScreen() {
             알림으로 알려드릴게요.
           </Section.HeaderSubText>
           <Margin margin={spacing.gutter} />
-          <TextAreaInput placeholder="종목명을 입력해주세요" minHeight={100} />
+          <TextAreaInput
+            value={text}
+            onChangeText={onChangeText}
+            placeholder="종목명을 입력해주세요"
+            minHeight={100}
+          />
           <Margin margin={50} />
+          <Text></Text>
           <BlackBtn text="등록하기" onPress={onPressAddWishList} />
         </KeyboardAvoidingView>
       </ContentLayout>

@@ -41,7 +41,6 @@ const Info = ({ text, iconType, iconName, color }) => {
   );
 };
 
-// strategy 필요
 const UserInfo = () => {
   const theme = useTheme();
   const dispatch = useAppDispatch();
@@ -51,7 +50,9 @@ const UserInfo = () => {
     switch (data.button) {
       case "팔로우":
       case "맞팔로우":
-        dispatch(followThunk(data.user_id));
+        dispatch(
+          followThunk({ followingId: data.user_id, isPrivate: data.private })
+        );
         break;
       case "팔로잉":
         dispatch(unfollowThunk(data.user_id));

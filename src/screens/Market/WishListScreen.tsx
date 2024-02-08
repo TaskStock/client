@@ -1,31 +1,40 @@
-import { Pressable, View } from "react-native";
-import React from "react";
-import PageHeader from "../../components/molecules/PageHeader";
-import Section from "../../components/molecules/Section";
-import Margin from "../../components/atoms/Margin";
-import { spacing } from "../../constants/spacing";
-import TabHeader from "../../components/molecules/TabHeader";
-import Text from "../../components/atoms/Text";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { MarketStackParamList } from "../../navigators/MarketStack";
-import ContentLayout from "../../components/atoms/ContentLayout";
-import FlexBox from "../../components/atoms/FlexBox";
-import { StockItemForWishList } from "../../components/organisms/Market/StockItem";
+import React from "react";
+import { Pressable, ScrollView, View } from "react-native";
 import { useTheme } from "styled-components/native";
-import {
-  useAddLikeToWishItemMutation,
-  useGetAllWishListQuery,
-} from "../../store/modules/market/market";
-import SkeletonPlaceholder from "react-native-skeleton-placeholder";
+import ContentLayout from "../../components/atoms/ContentLayout";
 import CustomSkeleton from "../../components/atoms/CustomSkeleton";
+import FlexBox from "../../components/atoms/FlexBox";
+import Margin from "../../components/atoms/Margin";
+import Text from "../../components/atoms/Text";
+import PageHeader from "../../components/molecules/PageHeader";
+import Section from "../../components/molecules/Section";
+import TabHeader from "../../components/molecules/TabHeader";
+import { StockItemForWishList } from "../../components/organisms/Market/StockItem";
+import { spacing } from "../../constants/spacing";
+import { useSlideInvoke } from "../../hooks/useSlideInvoke";
+import { useWishList } from "../../hooks/useWishList";
+import { MarketStackParamList } from "../../navigators/MarketStack";
+import { useAppDispatch } from "../../store/configureStore.hooks";
+import {
+  increaseWishOffset,
+  setFilterIndex,
+  useToggleLikeWishItemMutation,
+} from "../../store/modules/market/market";
 
 export default function WishListScreen() {
-  const [index, setIndex] = React.useState(0);
+  const { filterIndex, isLoading, list, offset, refetch } = useWishList();
 
-  const { data, isLoading, isError } = useGetAllWishListQuery({});
+  const dispatch = useAppDispatch();
 
-  const [addLikeToWishItem] = useAddLikeToWishItemMutation();
+  const { handleScroll } = useSlideInvoke({
+    onScrollBottom: () => {
+      dispatch(increaseWishOffset());
+    },
+  });
+
+  const [toggleLikeWishItem] = useToggleLikeWishItemMutation();
 
   const navigation =
     useNavigation<NativeStackNavigationProp<MarketStackParamList>>();
@@ -36,7 +45,7 @@ export default function WishListScreen() {
 
   const tabHeaderProps = {
     navigationState: {
-      index: index,
+      index: filterIndex,
       routes: [
         { key: "1", title: "좋아요순" },
         { key: "2", title: "최신등록순" },
@@ -46,8 +55,12 @@ export default function WishListScreen() {
 
   const theme = useTheme();
 
-  const onPressWishListItem = () => {
-    addLikeToWishItem({ wishItemId: 1 });
+  const onPressWishListItem = (id: number) => {
+    toggleLikeWishItem({ wishlist_id: id });
+  };
+
+  const onPressTab = (i: number) => {
+    dispatch(setFilterIndex(i));
   };
 
   return (
@@ -80,43 +93,70 @@ export default function WishListScreen() {
         </Section.HeaderSubText>
       </View>
       <Margin margin={spacing.offset} />
-      <TabHeader
-        onPressTab={(i) => {
-          setIndex(i);
-        }}
-        props={tabHeaderProps}
-      />
+      <TabHeader onPressTab={onPressTab} props={tabHeaderProps} />
       <ContentLayout>
-        <FlexBox direction="column" alignItems="stretch" gap={spacing.padding}>
-          {!isLoading && data ? (
-            [1, 2, 3, 4, 5].map((v, i) => {
-              return (
-                <StockItemForWishList
-                  key={v + "wish"}
-                  left={i}
-                  likes={12}
-                  name="삼성전자"
-                  onPress={onPressWishListItem}
-                ></StockItemForWishList>
-              );
-            })
-          ) : (
-            <>
-              {[1, 2, 3].map((_, index) => (
-                <CustomSkeleton>
-                  <View
-                    style={{
-                      width: "100%",
-                      height: 30,
-                      borderRadius: 10,
-                      marginBottom: 10,
-                    }}
-                  />
-                </CustomSkeleton>
-              ))}
-            </>
-          )}
-        </FlexBox>
+        <ScrollView
+          onScroll={handleScroll}
+          style={{
+            flex: 1,
+          }}
+          scrollEventThrottle={30}
+        >
+          <FlexBox
+            direction="column"
+            alignItems="stretch"
+            gap={spacing.padding}
+          >
+            {!isLoading && list ? (
+              list.length != 0 ? (
+                list.map((v, i) => {
+                  return (
+                    <View key={v.wishlist_id + "wish"}>
+                      <StockItemForWishList
+                        left={i}
+                        likes={v.like_count}
+                        name={v.name}
+                        isLiked={v.is_liked}
+                        onPress={() => {
+                          onPressWishListItem(v.wishlist_id);
+                        }}
+                      ></StockItemForWishList>
+                    </View>
+                  );
+                })
+              ) : (
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  <Text size="md" weight="medium">
+                    위시리스트가 비어있습니다.
+                  </Text>
+                </View>
+              )
+            ) : (
+              <>
+                {[1, 2, 3].map((_, index) => (
+                  <View key={index + "skel"}>
+                    <CustomSkeleton>
+                      <View
+                        style={{
+                          width: "100%",
+                          height: 30,
+                          borderRadius: 10,
+                          marginBottom: 10,
+                        }}
+                      />
+                    </CustomSkeleton>
+                  </View>
+                ))}
+              </>
+            )}
+          </FlexBox>
+        </ScrollView>
       </ContentLayout>
     </View>
   );

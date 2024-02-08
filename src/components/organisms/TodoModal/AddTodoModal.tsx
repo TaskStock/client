@@ -181,6 +181,7 @@ export default function AddTodoModal() {
         form: addTodoForm,
         add_date: currentDate as IsoString,
         isHomeDrawerOpen: isHomeDrawerOpen,
+        stockitem_id: null,
         queryArgs: {
           date: getAllTodoQueryArg.date,
           graph_before_date: startDate,
@@ -247,9 +248,7 @@ export default function AddTodoModal() {
                   <Section
                     header={
                       <Section.Header>
-                        <Section.HeaderText systemTheme="dark">
-                          할 일
-                        </Section.HeaderText>
+                        <Section.HeaderText>할 일</Section.HeaderText>
                       </Section.Header>
                     }
                   >
@@ -270,9 +269,7 @@ export default function AddTodoModal() {
                   <Section
                     header={
                       <Section.Header>
-                        <Section.HeaderText systemTheme="dark">
-                          가치
-                        </Section.HeaderText>
+                        <Section.HeaderText>가치</Section.HeaderText>
                         <ValueText>{value}원</ValueText>
                       </Section.Header>
                     }

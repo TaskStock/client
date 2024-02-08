@@ -1,28 +1,26 @@
-import { Pressable, ScrollView, View } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React from "react";
-import { MarketSection } from "../../components/molecules/Section";
-import ContentLayout from "../../components/atoms/ContentLayout";
+import { Pressable, ScrollView, View } from "react-native";
 import styled, { useTheme } from "styled-components/native";
-import Margin from "../../components/atoms/Margin";
-import { spacing } from "../../constants/spacing";
-import ContentItemBox, {
-  ContentItemBoxContainer,
-} from "../../components/atoms/ContentItemBox";
+import ContentItemBox from "../../components/atoms/ContentItemBox";
+import ContentLayout from "../../components/atoms/ContentLayout";
+import CustomSkeleton from "../../components/atoms/CustomSkeleton";
 import FlexBox from "../../components/atoms/FlexBox";
 import Icons from "../../components/atoms/Icons";
+import Margin from "../../components/atoms/Margin";
 import Text from "../../components/atoms/Text";
-import { useNavigation } from "@react-navigation/native";
-import { MarketStackParamList } from "../../navigators/MarketStack";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { WishListButton } from "../../components/organisms/Market/WishListBtn";
+import { MarketSection } from "../../components/molecules/Section";
 import {
   StockItem,
   StockItemSecond,
 } from "../../components/organisms/Market/StockItem";
+import { WishListButton } from "../../components/organisms/Market/WishListBtn";
+import { spacing } from "../../constants/spacing";
+import { MarketStackParamList } from "../../navigators/MarketStack";
 import { useGetCategorizedStocksQuery } from "../../store/modules/market/market";
-import CenterLayout from "../../components/atoms/CenterLayout";
-import SkeletonPlaceholder from "react-native-skeleton-placeholder";
-import CustomSkeleton from "../../components/atoms/CustomSkeleton";
+import { upValue } from "../../constants/value";
+import HomeChart from "../../components/organisms/Home/HomeChart";
 
 const MainRectangle = styled.View`
   width: 100%;
@@ -96,7 +94,7 @@ export default function MarketMainScreen() {
     navigation.navigate("WishListScreen");
   };
 
-  const { data, isError, isLoading } = useGetCategorizedStocksQuery({});
+  const { data, isError, isLoading, error } = useGetCategorizedStocksQuery();
 
   // if (isError)
   //   return (
@@ -111,9 +109,9 @@ export default function MarketMainScreen() {
   //     </View>
   //   );
 
-  const section1Data = data;
-  const section2Data = data;
-  const section3Data = data;
+  const section1Data = data?.myinterest;
+  const section2Data = data?.todaypopular;
+  const section3Data = data?.todayrecommend;
 
   return (
     <View style={{ flex: 1, backgroundColor: theme.background }}>
@@ -181,17 +179,26 @@ export default function MarketMainScreen() {
                     }}
                   >
                     {section1Data ? (
-                      section1Data.map((item) => (
-                        <StockItem
-                          id={item.id}
-                          name={item.name}
-                          percent={item.percent}
-                          price={item.price}
-                          onPress={() => {
-                            onPressStockItem(item.id);
-                          }}
-                        ></StockItem>
-                      ))
+                      section1Data.map((item) => {
+                        let value =
+                          (item.success_count / item.take_count) * 100;
+
+                        let successRate = value ? value : 0;
+
+                        return (
+                          <View key={item.stockitem_id}>
+                            <StockItem
+                              id={item.stockitem_id}
+                              name={item.name}
+                              percent={successRate}
+                              price={item.level * upValue}
+                              onPress={() => {
+                                onPressStockItem(item.stockitem_id);
+                              }}
+                            ></StockItem>
+                          </View>
+                        );
+                      })
                     ) : (
                       <>
                         {[1, 2, 3].map((id) => (
@@ -217,17 +224,25 @@ export default function MarketMainScreen() {
                 >
                   <FlexBox direction={"column"} alignItems="stretch" gap={10}>
                     {section2Data ? (
-                      section2Data.map((item, index) => (
-                        <StockItemSecond
-                          id={item.id}
-                          index={index}
-                          name={item.name}
-                          percent={item.percent}
-                          onPress={() => {
-                            onPressStockItem(item.id);
-                          }}
-                        ></StockItemSecond>
-                      ))
+                      section2Data.map((item, index) => {
+                        const value =
+                          (item.success_count / item.take_count) * 100;
+                        const successRate = value ? value : 0;
+
+                        return (
+                          <View key={item.stockitem_id}>
+                            <StockItemSecond
+                              id={item.stockitem_id}
+                              index={index}
+                              name={item.name}
+                              percent={successRate}
+                              onPress={() => {
+                                onPressStockItem(item.stockitem_id);
+                              }}
+                            ></StockItemSecond>
+                          </View>
+                        );
+                      })
                     ) : (
                       <>
                         {[1, 2, 3].map((id) => (
@@ -262,18 +277,27 @@ export default function MarketMainScreen() {
                       flexGrow: 0,
                     }}
                   >
-                    {section1Data ? (
-                      section1Data.map((item) => (
-                        <StockItem
-                          id={item.id}
-                          name={item.name}
-                          percent={item.percent}
-                          price={item.price}
-                          onPress={() => {
-                            onPressStockItem(item.id);
-                          }}
-                        ></StockItem>
-                      ))
+                    {section3Data ? (
+                      section3Data.map((item) => {
+                        let value =
+                          (item.success_count / item.take_count) * 100;
+
+                        let successRate = value ? value : 0;
+
+                        return (
+                          <View key={item.stockitem_id}>
+                            <StockItem
+                              id={item.stockitem_id}
+                              name={item.name}
+                              percent={successRate}
+                              price={item.level * upValue}
+                              onPress={() => {
+                                onPressStockItem(item.stockitem_id);
+                              }}
+                            ></StockItem>
+                          </View>
+                        );
+                      })
                     ) : (
                       <>
                         {[1, 2, 3].map((id) => (
