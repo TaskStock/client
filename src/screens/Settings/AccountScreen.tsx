@@ -12,7 +12,7 @@ const Container = styled.View`
   padding: ${spacing.offset}px;
 `;
 
-const AccountScreen = () => {
+const AccountScreen = ({ navigation }) => {
   const { private: isPrivate } = useAppSelect((state) => state.user.user);
   const dispatch = useAppDispatch();
   const [isEnabled, setIsEnabled] = useState<boolean>(isPrivate);
@@ -35,7 +35,9 @@ const AccountScreen = () => {
           <Menu
             text="비밀번호 재설정"
             icon={{ type: "ionicons", name: "shield-checkmark-outline" }}
-            onPress={() => {}}
+            onPress={() => {
+              navigation.navigate("ChangePwCheckPw");
+            }}
           />
         )}
 

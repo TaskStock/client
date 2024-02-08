@@ -6,11 +6,15 @@ import AccountScreen from "../screens/Settings/AccountScreen";
 import { useTheme } from "styled-components";
 import InfoScreen from "../screens/Settings/InfoScreen";
 import CustomerServiceScreen from "../screens/Settings/CustomerServiceScreen";
+import ChangePwCheckPwScreen from "../screens/Settings/ChangePwCheckPwScreen";
+import Icons from "../components/atoms/Icons";
+import FindPwSetNewPwScreen from "../screens/Login/FindPwSetNewPwScreen";
 
 const NativeStack = createNativeStackNavigator();
 
 const SettingsStack = () => {
   const theme = useTheme();
+
   return (
     <NativeStack.Navigator
       screenOptions={{
@@ -27,6 +31,11 @@ const SettingsStack = () => {
         name="SettingsCustomerService"
         component={CustomerServiceScreen}
       />
+      <NativeStack.Screen
+        name="ChangePwCheckPw"
+        component={ChangePwCheckPwScreen}
+      />
+      <NativeStack.Screen name="SetNewPw" component={FindPwSetNewPwScreen} />
     </NativeStack.Navigator>
   );
 };

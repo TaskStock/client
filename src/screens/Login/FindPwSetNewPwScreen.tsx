@@ -5,14 +5,20 @@ import LoginContainer from "../../components/molecules/Login/LoginContainer";
 import { spacing } from "../../constants/spacing";
 import { client } from "../../services/api";
 import { checkValidPassword } from "../../utils/checkValidity";
-import * as SecureStore from "expo-secure-store";
+import PageHeader from "../../components/molecules/PageHeader";
+import styled from "styled-components/native";
+
+const Container = styled.View`
+  background-color: ${({ theme }) => theme.box};
+  flex: 1;
+`;
 
 const FindPwSetNewPwScreen = ({ route, navigation }) => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [pwalert, setPwAlert] = useState("");
   const [confirmAlert, setConfirmAlert] = useState("");
-  const email = route.params.email;
+  const { email, type } = route.params;
 
   const handlePwChange = (text) => {
     setPassword(text);
@@ -33,12 +39,11 @@ const FindPwSetNewPwScreen = ({ route, navigation }) => {
         });
         console.log(response);
         if (response.result === "success") {
-          navigation.navigate("EmailLogin");
-          // secure store에도 업데이트
-          await SecureStore.setItemAsync(
-            "userCredentials",
-            JSON.stringify({ email, password })
-          );
+          if (type === "login") {
+            navigation.navigate("EmailLogin");
+          } else if (type === "settings") {
+            navigation.popToTop();
+          }
         } else {
           alert("비밀번호 변경에 실패했습니다.");
         }
@@ -51,32 +56,35 @@ const FindPwSetNewPwScreen = ({ route, navigation }) => {
   };
 
   return (
-    <LoginContainer comment="새 비밀번호를 입력해주세요.">
-      <TextInput
-        subText={"비밀번호"}
-        placeholder="새로운 비밀번호를 입력해주세요"
-        value={password}
-        onChangeText={handlePwChange}
-        secureTextEntry
-        alert={!!pwalert}
-        alertText={pwalert}
-      />
-      <TextInput
-        subText={"비밀번호 확인"}
-        placeholder="새로운 비밀번호를 다시 입력해주세요"
-        value={confirmPassword}
-        onChangeText={handleConfirmPwChange}
-        secureTextEntry
-        alert={!!confirmAlert}
-        alertText={confirmAlert}
-      />
-      <BlackBtn
-        text={"확인"}
-        onPress={handleSetNewPw}
-        style={{ marginTop: spacing.padding }}
-        // loading={loading}
-      />
-    </LoginContainer>
+    <Container>
+      {type === "settings" && <PageHeader title="" />}
+      <LoginContainer comment="새 비밀번호를 입력해주세요.">
+        <TextInput
+          subText={"비밀번호"}
+          placeholder="새로운 비밀번호를 입력해주세요"
+          value={password}
+          onChangeText={handlePwChange}
+          secureTextEntry
+          alert={!!pwalert}
+          alertText={pwalert}
+        />
+        <TextInput
+          subText={"비밀번호 확인"}
+          placeholder="새로운 비밀번호를 다시 입력해주세요"
+          value={confirmPassword}
+          onChangeText={handleConfirmPwChange}
+          secureTextEntry
+          alert={!!confirmAlert}
+          alertText={confirmAlert}
+        />
+        <BlackBtn
+          text={"확인"}
+          onPress={handleSetNewPw}
+          style={{ marginTop: spacing.padding }}
+          // loading={loading}
+        />
+      </LoginContainer>
+    </Container>
   );
 };
 
