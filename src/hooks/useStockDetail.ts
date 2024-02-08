@@ -107,7 +107,5 @@ function calculateStatisticsAverageAndMax(stat: StockDetail["statistics"]): {
       break;
   }
 
-  console.log({ average, maxWeekday, maxValue });
-
   return { average, maxWeekday, maxValue };
 }
