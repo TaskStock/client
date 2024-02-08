@@ -60,6 +60,10 @@ const userSlice = createSlice({
     updateUserValue: (state, action) => {
       state.user.cumulative_value += action.payload;
     },
+    TestSetUserValueTo: (state, action) => {
+      state.user.cumulative_value = 111;
+      state.user.value_yesterday_ago = 100;
+    },
     addFollowingCount: (state) => {
       state.user.following_count += 1;
     },
@@ -154,4 +158,5 @@ export const {
   subFollowingCount,
   addFollowerCount,
   subFollowerCount,
+  TestSetUserValueTo,
 } = userSlice.actions;

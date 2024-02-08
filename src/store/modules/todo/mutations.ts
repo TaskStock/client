@@ -20,6 +20,7 @@ import { projectApi } from "../project/project";
 import { Project } from "../../../@types/project";
 import { updateUserValue } from "../user";
 import { marketApi } from "../market/market";
+import { firstTodoBadgeDispatcher } from "../../../utils/badgeUtils/badge";
 
 const upValue = 1000;
 const downValue = 1000;
@@ -429,6 +430,9 @@ export const toggleTodoMutation = (builder: TodoApiBuilder) =>
               body.check ? body.level * upValue : -body.level * downValue
             )
           );
+        }
+        if (body.check) {
+          firstTodoBadgeDispatcher(dispatch).firstTodo();
         }
       } catch (error) {
         console.log(error);

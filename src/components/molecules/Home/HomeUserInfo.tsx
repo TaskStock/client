@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Pressable, View } from "react-native";
 import { useTheme } from "styled-components";
 import { spacing } from "../../../constants/spacing";
@@ -7,6 +7,9 @@ import FlexBox from "../../atoms/FlexBox";
 import Text from "../../atoms/Text";
 import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 import CustomSkeleton from "../../atoms/CustomSkeleton";
+import createBadgeDispatcher from "../../../utils/badgeUtils/badge";
+import { useAppDispatch } from "../../../store/configureStore.hooks";
+import { TestSetUserValueTo } from "../../../store/modules/user";
 
 const HomeUserInfo = ({
   data,
@@ -22,12 +25,40 @@ const HomeUserInfo = ({
   error: string | null;
 }) => {
   const theme = useTheme();
+  const dispatch = useAppDispatch();
   const diff = data.cumulative_value - data.value_yesterday_ago;
   const diff_rate =
-    ((data.cumulative_value - data.value_yesterday_ago) * 100) /
-    data.cumulative_value;
+    ((data.cumulative_value - data.value_yesterday_ago) /
+      data.value_yesterday_ago) *
+    100;
 
   const renderDiffRate = diff_rate.toFixed(2);
+
+  const badgeFunctions = createBadgeDispatcher(dispatch);
+
+  useEffect(() => {
+    if (data.cumulative_value >= 100000 && data.cumulative_value < 200000) {
+      badgeFunctions.reached10K();
+    } else if (
+      data.cumulative_value >= 200000 &&
+      data.cumulative_value < 500000
+    ) {
+      badgeFunctions.reached20K();
+    } else if (
+      data.cumulative_value >= 500000 &&
+      data.cumulative_value < 1000000
+    ) {
+      badgeFunctions.reached50K();
+    } else if (data.cumulative_value >= 1000000) {
+      badgeFunctions.reached100K();
+    }
+
+    if (diff_rate == 11) {
+      badgeFunctions.reached11Percent();
+    } else if (diff_rate >= 50) {
+      badgeFunctions.reached50Percent();
+    }
+  }, [data.cumulative_value, diff_rate]);
 
   return (
     <FlexBox alignItems="flex-end">

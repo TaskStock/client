@@ -27,4 +27,8 @@ const createBadgeDispatcher = (dispatch) => ({
   firstTodo: () => dispatch(badgeThunk(9)),
 });
 
+export const firstTodoBadgeDispatcher = (dispatch) => ({
+  firstTodo: () => dispatch(badgeThunk(9)),
+});
+
 export default createBadgeDispatcher;
