@@ -1,13 +1,16 @@
 import dayjs from "dayjs";
 import React, { memo, useContext } from "react";
-import { Pressable, ScrollView, View } from "react-native";
+import { Pressable, View } from "react-native";
+import { useTheme } from "styled-components";
 import styled from "styled-components/native";
 import { spacing } from "../../../constants/spacing";
+import { useProject } from "../../../hooks/useProject";
 import {
   useAppDispatch,
   useAppSelect,
 } from "../../../store/configureStore.hooks";
 import { setIsDrawerOpen, setTabIndex } from "../../../store/modules/home";
+import { setSelectedProjectId } from "../../../store/modules/project/project";
 import {
   openAddTodoModal,
   setTodoDrawerPosition,
@@ -17,11 +20,9 @@ import FlexBox from "../../atoms/FlexBox";
 import Icons from "../../atoms/Icons";
 import Text from "../../atoms/Text";
 import DraggableTodoList from "../../organisms/Home/DraggableTodoList";
-import BottomDrawer from "./BottomDrawer";
-import { useTheme } from "styled-components";
-import { useProject } from "../../../hooks/useProject";
-import { setSelectedProjectId } from "../../../store/modules/project/project";
 import HorizontalProjectList from "../../organisms/HorizontalProjectList";
+import BottomDrawer from "./BottomDrawer";
+import analytics from "@react-native-firebase/analytics";
 
 export const DateContainer = styled.View`
   padding: ${spacing.small}px ${spacing.gutter}px 0;
@@ -70,12 +71,15 @@ const TodoContainer = () => {
               name="circle-with-plus"
               size={28}
               color={theme.text}
-              onPress={() => {
+              onPress={async () => {
                 dispatch(
                   openAddTodoModal({
                     project_id: selectedProjectId,
                   })
                 );
+                await analytics().logEvent("add_todo", {
+                  project_id: selectedProjectId,
+                });
               }}
             />
           </FlexBox>

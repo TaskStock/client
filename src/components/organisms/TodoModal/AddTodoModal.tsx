@@ -92,6 +92,7 @@ const CloseBox = styled.View`
 
 const ValueText = styled(Section.HeaderText)`
   color: ${({ theme }) => theme.palette.red};
+  font-weight: normal;
 `;
 
 const TodoInput = styled.TextInput`
