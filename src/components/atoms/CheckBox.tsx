@@ -2,9 +2,12 @@ import React from "react";
 import { Image, TouchableWithoutFeedback } from "react-native";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
 
-const CheckBox = ({ src, onPress }: { src: any; onPress: () => void }) => {
+const CheckBox = ({ src, onPress }: { src: any; onPress?: () => void }) => {
   return (
-    <TouchableWithoutFeedback onPress={onPress}>
+    <TouchableWithoutFeedback
+      onPress={onPress ? onPress : undefined}
+      disabled={!onPress}
+    >
       <Image
         source={src}
         style={{

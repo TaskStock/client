@@ -142,7 +142,7 @@ const EmailCheckCodeScreen = ({ route, navigation }) => {
     if (res.result === "success" && type === "register") {
       navigation.navigate("EmailRegister", { email });
     } else if (res.result === "success" && type === "findPw") {
-      navigation.navigate("FindPwSetNewPw", { email });
+      navigation.navigate("FindPwSetNewPw", { email, type: "login" });
     } else if (res.result === "fail") {
       setAlert("인증번호가 일치하지 않습니다.");
     } else {
