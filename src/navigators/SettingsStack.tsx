@@ -9,6 +9,7 @@ import CustomerServiceScreen from "../screens/Settings/CustomerServiceScreen";
 import ChangePwCheckPwScreen from "../screens/Settings/ChangePwCheckPwScreen";
 import Icons from "../components/atoms/Icons";
 import FindPwSetNewPwScreen from "../screens/Login/FindPwSetNewPwScreen";
+import UnSubscribeScreen from "../screens/Settings/UnSubscribeScreen";
 
 const NativeStack = createNativeStackNavigator();
 
@@ -36,6 +37,7 @@ const SettingsStack = () => {
         component={ChangePwCheckPwScreen}
       />
       <NativeStack.Screen name="SetNewPw" component={FindPwSetNewPwScreen} />
+      <NativeStack.Screen name="UnSubscribe" component={UnSubscribeScreen} />
     </NativeStack.Navigator>
   );
 };

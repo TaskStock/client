@@ -41,7 +41,13 @@ const AccountScreen = ({ navigation }) => {
           />
         )}
 
-        <Menu text="회원 탈퇴" onPress={() => {}} textColor={palette.red} />
+        <Menu
+          text="회원 탈퇴"
+          onPress={() => {
+            navigation.navigate("UnSubscribe");
+          }}
+          textColor={palette.red}
+        />
       </Container>
     </View>
   );
