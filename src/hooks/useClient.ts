@@ -15,7 +15,7 @@ export const useClient = (dispatch) => {
     method = undefined
   ) => {
     const tokenResult = await dispatch(checkAndRenewTokens());
-    console.log("tokenResult: ", tokenResult);
+    console.log("[useClient] tokenResult: ", tokenResult.payload);
 
     const AT = tokenResult.payload?.accessToken
       ? tokenResult.payload.accessToken
