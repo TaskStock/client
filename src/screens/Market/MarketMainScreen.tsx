@@ -154,74 +154,74 @@ export default function MarketMainScreen() {
             </InnerFloat>
           </FloatTitle>
           <View style={{ flex: 1, backgroundColor: theme.background }}>
-            <Margin margin={60}></Margin>
-            <ContentLayout>
-              <FlexBox
-                direction="column"
-                alignItems="stretch"
-                gap={spacing.gutter + spacing.offset}
-                styles={{
-                  flex: 1,
-                }}
+            <Margin margin={80}></Margin>
+            <FlexBox
+              direction="column"
+              alignItems="stretch"
+              gap={spacing.gutter + spacing.offset}
+              styles={{
+                flex: 1,
+              }}
+            >
+              <MarketSection
+                headerText="나의 관심 종목"
+                subText="장준석님이 자주 추가하는 종목이에요"
               >
-                <MarketSection
-                  headerText="나의 관심 종목"
-                  subText="장준석님이 자주 추가하는 종목이에요"
+                <ScrollView
+                  horizontal
+                  contentContainerStyle={{
+                    columnGap: spacing.padding + spacing.small,
+                    paddingLeft: spacing.gutter,
+                    paddingBottom: spacing.offset,
+                  }}
+                  style={{
+                    flexGrow: 0,
+                  }}
                 >
-                  <ScrollView
-                    horizontal
-                    contentContainerStyle={{
-                      columnGap: spacing.padding + spacing.small,
-                      paddingBottom: spacing.offset,
-                    }}
-                    style={{
-                      flexGrow: 0,
-                    }}
-                  >
-                    {section1Data ? (
-                      section1Data.map((item) => {
-                        let value =
-                          (item.success_count / item.take_count) * 100;
+                  {section1Data ? (
+                    section1Data.map((item) => {
+                      let value = (item.success_count / item.take_count) * 100;
 
-                        let successRate = value ? value : 0;
+                      let successRate = value ? value : 0;
 
-                        return (
-                          <View key={item.stockitem_id}>
-                            <StockItem
-                              id={item.stockitem_id}
-                              name={item.name}
-                              percent={successRate}
-                              price={item.level * upValue}
-                              onPress={() => {
-                                onPressStockItem(item.stockitem_id);
+                      return (
+                        <View key={item.stockitem_id}>
+                          <StockItem
+                            id={item.stockitem_id}
+                            name={item.name}
+                            percent={successRate}
+                            price={item.level * upValue}
+                            onPress={() => {
+                              onPressStockItem(item.stockitem_id);
+                            }}
+                          ></StockItem>
+                        </View>
+                      );
+                    })
+                  ) : (
+                    <>
+                      {[1, 2, 3].map((id) => (
+                        <View key={"section1skel" + id}>
+                          <CustomSkeleton>
+                            <View
+                              style={{
+                                width: 100,
+                                height: 100,
+                                borderRadius: 10,
                               }}
-                            ></StockItem>
-                          </View>
-                        );
-                      })
-                    ) : (
-                      <>
-                        {[1, 2, 3].map((id) => (
-                          <View key={"section1skel" + id}>
-                            <CustomSkeleton>
-                              <View
-                                style={{
-                                  width: 100,
-                                  height: 100,
-                                  borderRadius: 10,
-                                }}
-                              ></View>
-                            </CustomSkeleton>
-                          </View>
-                        ))}
-                      </>
-                    )}
-                  </ScrollView>
-                </MarketSection>
-                <MarketSection
-                  headerText="오늘의 인기 종목"
-                  subText="오늘 사람들이 많이 추가한 종목이에요"
-                >
+                            ></View>
+                          </CustomSkeleton>
+                        </View>
+                      ))}
+                    </>
+                  )}
+                </ScrollView>
+              </MarketSection>
+              <MarketSection
+                headerText="오늘의 인기 종목"
+                subText="오늘 사람들이 많이 추가한 종목이에요"
+              >
+                <ContentLayout noVerticalPadding>
                   <FlexBox direction={"column"} alignItems="stretch" gap={10}>
                     {section2Data ? (
                       section2Data.map((item, index) => {
@@ -262,64 +262,67 @@ export default function MarketMainScreen() {
                     )}
                   </FlexBox>
                   <Margin margin={spacing.offset}></Margin>
-                </MarketSection>
-                <MarketSection
-                  headerText="오늘의 추천 종목"
-                  subText="오늘 이 종목 어때요?"
+                </ContentLayout>
+              </MarketSection>
+              <MarketSection
+                headerText="오늘의 추천 종목"
+                subText="오늘 이 종목 어때요?"
+              >
+                <ScrollView
+                  horizontal
+                  contentContainerStyle={{
+                    columnGap: spacing.padding + spacing.small,
+                    paddingBottom: spacing.offset,
+                    paddingLeft: spacing.gutter,
+                  }}
+                  style={{
+                    flexGrow: 0,
+                  }}
                 >
-                  <ScrollView
-                    horizontal
-                    contentContainerStyle={{
-                      columnGap: spacing.padding + spacing.small,
-                      paddingBottom: spacing.offset,
-                    }}
-                    style={{
-                      flexGrow: 0,
-                    }}
-                  >
-                    {section3Data ? (
-                      section3Data.map((item) => {
-                        let value =
-                          (item.success_count / item.take_count) * 100;
+                  {section3Data ? (
+                    section3Data.map((item) => {
+                      let value = (item.success_count / item.take_count) * 100;
 
-                        let successRate = value ? value : 0;
+                      let successRate = value ? value : 0;
 
-                        return (
-                          <View key={item.stockitem_id}>
-                            <StockItem
-                              id={item.stockitem_id}
-                              name={item.name}
-                              percent={successRate}
-                              price={item.level * upValue}
-                              onPress={() => {
-                                onPressStockItem(item.stockitem_id);
+                      return (
+                        <View key={item.stockitem_id}>
+                          <StockItem
+                            id={item.stockitem_id}
+                            name={item.name}
+                            percent={successRate}
+                            price={item.level * upValue}
+                            onPress={() => {
+                              onPressStockItem(item.stockitem_id);
+                            }}
+                          ></StockItem>
+                        </View>
+                      );
+                    })
+                  ) : (
+                    <>
+                      {[1, 2, 3].map((id) => (
+                        <View key={"section3skel" + id}>
+                          <CustomSkeleton>
+                            <View
+                              style={{
+                                width: 100,
+                                height: 100,
+                                borderRadius: 10,
                               }}
-                            ></StockItem>
-                          </View>
-                        );
-                      })
-                    ) : (
-                      <>
-                        {[1, 2, 3].map((id) => (
-                          <View key={"section3skel" + id}>
-                            <CustomSkeleton>
-                              <View
-                                style={{
-                                  width: 100,
-                                  height: 100,
-                                  borderRadius: 10,
-                                }}
-                              ></View>
-                            </CustomSkeleton>
-                          </View>
-                        ))}
-                      </>
-                    )}
-                  </ScrollView>
-                </MarketSection>
+                            ></View>
+                          </CustomSkeleton>
+                        </View>
+                      ))}
+                    </>
+                  )}
+                </ScrollView>
+              </MarketSection>
+              <ContentLayout noFlex noVerticalPadding>
                 <WishListButton onPress={onPressWishList} />
-              </FlexBox>
-            </ContentLayout>
+              </ContentLayout>
+            </FlexBox>
+            {/* </ContentLayout> */}
           </View>
         </View>
       </ScrollView>

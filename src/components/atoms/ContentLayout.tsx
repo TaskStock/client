@@ -5,15 +5,17 @@ import { spacing } from "../../constants/spacing";
 export default function ContentLayout({
   children,
   noFlex = false,
+  noVerticalPadding = false,
 }: {
   children: React.ReactNode;
   noFlex?: boolean;
+  noVerticalPadding?: boolean;
 }) {
   return (
     <View
       style={{
         paddingHorizontal: spacing.gutter,
-        paddingVertical: spacing.offset,
+        paddingVertical: noVerticalPadding ? 0 : spacing.gutter,
         flex: noFlex ? 0 : 1,
       }}
     >

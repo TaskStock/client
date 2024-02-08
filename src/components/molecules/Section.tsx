@@ -79,15 +79,21 @@ export const MarketSection = ({
 
   return (
     <View style={{}}>
-      <SectionHeaderText isMainText={true} size={24}>
-        {headerText}
-      </SectionHeaderText>
-      {subText && (
-        <>
-          <Margin margin={5} />
-          <SectionHeaderSubText size={15}>{subText}</SectionHeaderSubText>
-        </>
-      )}
+      <View
+        style={{
+          paddingHorizontal: spacing.gutter,
+        }}
+      >
+        <SectionHeaderText isMainText={true} size={24}>
+          {headerText}
+        </SectionHeaderText>
+        {subText && (
+          <>
+            <Margin margin={5} />
+            <SectionHeaderSubText size={15}>{subText}</SectionHeaderSubText>
+          </>
+        )}
+      </View>
       <Margin margin={15} />
       {children}
     </View>
