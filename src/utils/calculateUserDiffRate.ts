@@ -12,7 +12,7 @@ export const calculateUserDiffRate = (user: {
   const diff = data.cumulative_value - data.value_month_ago;
   const diff_rate =
     ((data.cumulative_value - data.value_month_ago) * 100) /
-    data.cumulative_value;
+    data.value_month_ago;
 
   const renderDiffRate = diff_rate.toFixed(2);
 

@@ -1,4 +1,4 @@
-import { View } from "react-native";
+import { ScrollView, View } from "react-native";
 import React from "react";
 import styled, { useTheme } from "styled-components/native";
 import PageHeader from "../../components/molecules/PageHeader";
@@ -85,67 +85,74 @@ export default function RetrospectWriteScreen() {
       }}
     >
       <PageHeader />
-      <ContentLayout>
-        <FlexBox direction="column" gap={spacing.offset} alignItems="stretch">
-          <NormalSection headerText="회고 날짜">
-            <TextInputWithBorder
-              value={retrospectDateFormat}
-            ></TextInputWithBorder>
-          </NormalSection>
-          <NormalSection headerText="회고 내용">
-            <TextAreaInput
-              numberOfLines={50}
-              minHeight={useResponsiveFontSize(260)}
-              placeholder="회고 내용을 입력해주세요"
-              value={retrospectForm.content}
-              onChangeText={onChangeRetrospectContent}
-            ></TextAreaInput>
-          </NormalSection>
-          <NormalSection headerText="프로젝트">
-            <RoundItemBtnContainer>
-              {projects.map((project) => {
-                return (
-                  <RoundItemBtn
-                    onPress={() => {
-                      onChangeProjectId(project.project_id);
-                    }}
-                    key={project.project_id}
-                    isSelected={
-                      project.project_id === retrospectForm.project_id
-                    }
-                  >
-                    <Text
-                      size="md"
-                      color={
+      <ScrollView style={{ flex: 1 }}>
+        <ContentLayout>
+          <FlexBox direction="column" gap={spacing.offset} alignItems="stretch">
+            <NormalSection headerText="회고 날짜">
+              <TextInputWithBorder
+                value={retrospectDateFormat}
+              ></TextInputWithBorder>
+            </NormalSection>
+            <NormalSection headerText="회고 내용">
+              <TextAreaInput
+                numberOfLines={50}
+                minHeight={useResponsiveFontSize(260)}
+                placeholder="회고 내용을 입력해주세요"
+                value={retrospectForm.content}
+                onChangeText={onChangeRetrospectContent}
+              ></TextAreaInput>
+            </NormalSection>
+            <NormalSection headerText="프로젝트">
+              <RoundItemBtnContainer>
+                {projects.map((project) => {
+                  return (
+                    <RoundItemBtn
+                      onPress={() => {
+                        onChangeProjectId(project.project_id);
+                      }}
+                      key={project.project_id}
+                      isSelected={
                         project.project_id === retrospectForm.project_id
-                          ? theme.textReverse
-                          : theme.text
                       }
                     >
-                      {project.name}
-                    </Text>
-                  </RoundItemBtn>
-                );
-              })}
-            </RoundItemBtnContainer>
-          </NormalSection>
-        </FlexBox>
-        <Margin margin={useResponsiveFontSize(50)} />
-        <FlexBox gap={spacing.padding}>
-          <BlackBtnForProject
-            text="저장하기"
-            onPress={onPressSave}
-            style={{ flex: 3 }}
-          ></BlackBtnForProject>
-          {isEdit && (
-            <GrayBtn
-              text="삭제"
-              onPress={onPressDelete}
-              style={{ flex: 1 }}
-            ></GrayBtn>
-          )}
-        </FlexBox>
-      </ContentLayout>
+                      <Text
+                        size="md"
+                        color={
+                          // project.project_id === retrospectForm.project_id
+                          //   ? theme.textReverse
+                          //   : theme.text
+                          theme.name === "gray"
+                            ? project.project_id === retrospectForm.project_id
+                              ? theme.textReverse
+                              : theme.text
+                            : theme.text
+                        }
+                      >
+                        {project.name}
+                      </Text>
+                    </RoundItemBtn>
+                  );
+                })}
+              </RoundItemBtnContainer>
+            </NormalSection>
+          </FlexBox>
+          <Margin margin={useResponsiveFontSize(50)} />
+          <FlexBox gap={spacing.padding}>
+            <BlackBtnForProject
+              text="저장하기"
+              onPress={onPressSave}
+              style={{ flex: 3 }}
+            ></BlackBtnForProject>
+            {isEdit && (
+              <GrayBtn
+                text="삭제"
+                onPress={onPressDelete}
+                style={{ flex: 1 }}
+              ></GrayBtn>
+            )}
+          </FlexBox>
+        </ContentLayout>
+      </ScrollView>
     </View>
   );
 }

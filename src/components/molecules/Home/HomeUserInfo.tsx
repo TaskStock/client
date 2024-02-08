@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Pressable, View } from "react-native";
+import { View } from "react-native";
 import { useTheme } from "styled-components";
 import { spacing } from "../../../constants/spacing";
 import numberWithCommas from "../../../utils/useNumberWithCommas";
@@ -9,7 +9,7 @@ import SkeletonPlaceholder from "react-native-skeleton-placeholder";
 import CustomSkeleton from "../../atoms/CustomSkeleton";
 import createBadgeDispatcher from "../../../utils/badgeUtils/badge";
 import { useAppDispatch } from "../../../store/configureStore.hooks";
-import { TestSetUserValueTo } from "../../../store/modules/user";
+import { calculateUserDiffRate } from "../../../utils/calculateUserDiffRate";
 
 const HomeUserInfo = ({
   data,
@@ -26,13 +26,13 @@ const HomeUserInfo = ({
 }) => {
   const theme = useTheme();
   const dispatch = useAppDispatch();
-  const diff = data.cumulative_value - data.value_yesterday_ago;
-  const diff_rate =
-    ((data.cumulative_value - data.value_yesterday_ago) /
-      data.value_yesterday_ago) *
-    100;
 
-  const renderDiffRate = diff_rate.toFixed(2);
+  const { diff, diff_rate, renderDiffRate } = calculateUserDiffRate({
+    cumulative_value: data.cumulative_value,
+    value_yesterday_ago: data.value_yesterday_ago,
+  });
+
+  console.log(data.cumulative_value, data.value_yesterday_ago);
 
   const badgeFunctions = createBadgeDispatcher(dispatch);
 

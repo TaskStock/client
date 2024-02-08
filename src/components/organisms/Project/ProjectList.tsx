@@ -11,7 +11,10 @@ import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { ProjectStackParamList } from "../../../navigators/ProjectStack";
 import { ModalBtn, ModalContainer } from "../../atoms/FloatModal";
 import OutsidePressHandler from "react-native-outside-press";
-import { useAppDispatch } from "../../../store/configureStore.hooks";
+import {
+  useAppDispatch,
+  useAppSelect,
+} from "../../../store/configureStore.hooks";
 import {
   editProjectForm,
   useDeleteProjectMutation,
@@ -23,6 +26,7 @@ import styled, { useTheme } from "styled-components/native";
 import Margin from "../../atoms/Margin";
 import Text from "../../atoms/Text";
 import LoadingSpinner from "../../atoms/LoadingSpinner";
+import user from "../../../store/modules/user";
 
 const ProjectBox = styled.View<{ isFinished: boolean }>`
   border-radius: ${useResponsiveFontSize(20)}px;
@@ -59,6 +63,8 @@ function ProjectItem({ item }: { item: Project }) {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [deleteProject] = useDeleteProjectMutation();
   const [updateProject] = useUpdateProjectMutation();
+
+  const currentUserId = useAppSelect((state) => state.user.user.user_id);
 
   const theme = useTheme();
 
@@ -110,6 +116,10 @@ function ProjectItem({ item }: { item: Project }) {
   };
 
   const onPressMoreDot = () => {
+    if (item.user_id !== currentUserId) {
+      return;
+    }
+
     setIsModalOpen(!isModalOpen);
   };
 
@@ -212,11 +222,12 @@ function ProjectItem({ item }: { item: Project }) {
               </View>
             </OutsidePressHandler>
           )}
-
-          <MoreBtn onPress={onPressProjectDetailBtn}>
-            <Text size="sm">프로젝트 더보기</Text>
-            <Icons type="entypo" name="chevron-thin-right" size={15} />
-          </MoreBtn>
+          {currentUserId == item.user_id && (
+            <MoreBtn onPress={onPressProjectDetailBtn}>
+              <Text size="sm">프로젝트 더보기</Text>
+              <Icons type="entypo" name="chevron-thin-right" size={15} />
+            </MoreBtn>
+          )}
         </View>
       </FlexBox>
     </ProjectBox>

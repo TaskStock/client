@@ -113,7 +113,16 @@ export default function ProjectManageScreen() {
                   onPress={() => onChangeProjectPublic(item.value)}
                   isSelected={form.public_range === item.value ? true : false}
                 >
-                  <Text size="md" color={theme.text}>
+                  <Text
+                    size="md"
+                    color={
+                      theme.name == "dark"
+                        ? theme.text
+                        : form.public_range === item.value
+                        ? theme.textReverse
+                        : theme.text
+                    }
+                  >
                     {item.name}
                   </Text>
                 </RoundItemBtn>
