@@ -2,6 +2,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React from "react";
 import { Dimensions, ScrollView, View } from "react-native";
 import { useTheme } from "styled-components/native";
+import { IsoString } from "../../@types/calendar";
 import { BlackBtnForProject, GrayBtn } from "../../components/atoms/Buttons";
 import ContentLayout from "../../components/atoms/ContentLayout";
 import CustomSkeleton from "../../components/atoms/CustomSkeleton";
@@ -10,20 +11,19 @@ import FlexBox from "../../components/atoms/FlexBox";
 import GradientOverlay from "../../components/atoms/GradientOverlay";
 import Margin from "../../components/atoms/Margin";
 import Text from "../../components/atoms/Text";
+import LineValueChart from "../../components/molecules/LineValueChart";
 import PageHeader from "../../components/molecules/PageHeader";
 import Section from "../../components/molecules/Section";
-import HomeChart from "../../components/organisms/Home/HomeChart";
 import StockDetailGraphSection from "../../components/organisms/Market/StockDetailGraphSection";
 import { spacing } from "../../constants/spacing";
 import { upValue } from "../../constants/value";
-import { useStockDetail } from "../../hooks/useStockDetail";
-import { MarketStackParamList } from "../../navigators/MarketStack";
-import { useAddTodoMutation } from "../../store/modules/todo/todo";
-import { useGetStockSuccessRateQuery } from "../../store/modules/market/market";
-import LineValueChart from "../../components/molecules/LineValueChart";
-import { IsoString } from "../../@types/calendar";
 import { useGetAllTodoArgs } from "../../hooks/useGetAllTodoArgs";
 import { useGetValuesArg } from "../../hooks/useGetValuesArg";
+import { useStockDetail } from "../../hooks/useStockDetail";
+import { MarketStackParamList } from "../../navigators/MarketStack";
+import { useGetStockSuccessRateQuery } from "../../store/modules/market/market";
+import { useAddTodoMutation } from "../../store/modules/todo/todo";
+import analytics from "@react-native-firebase/analytics";
 
 type StockDetailScreenProps = NativeStackScreenProps<
   MarketStackParamList,
@@ -89,7 +89,7 @@ export default function StockDetailScreen({
   const queryArg = useGetAllTodoArgs();
   const graphQueryArg = useGetValuesArg();
 
-  const onPressAddStock = () => {
+  const onPressAddStock = async () => {
     if (!info) return;
 
     addTodo({
@@ -109,6 +109,10 @@ export default function StockDetailScreen({
         graph_before_date: graphQueryArg.startDate,
         graph_today_date: graphQueryArg.endDate,
       },
+    });
+
+    await analytics().logEvent("add_stock", {
+      stockitem_id: route.params.stockId,
     });
   };
 

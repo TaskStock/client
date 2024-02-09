@@ -32,8 +32,6 @@ const HomeUserInfo = ({
     value_yesterday_ago: data.value_yesterday_ago,
   });
 
-  console.log(data.cumulative_value, data.value_yesterday_ago);
-
   const badgeFunctions = createBadgeDispatcher(dispatch);
 
   useEffect(() => {

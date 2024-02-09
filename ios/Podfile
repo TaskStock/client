@@ -121,6 +121,7 @@ target 'TaskStock' do
     end
   end
 
+  pod 'FirebaseAnalytics'
   pod 'GoogleUtilities', :modular_headers => true
   
 end

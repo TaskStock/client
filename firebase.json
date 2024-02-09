@@ -1,7 +1,7 @@
 {
   "react-native": {
     "messaging_android_notification_channel_id": "taskstock_push_notification",
-    "analytics_auto_collection_enabled": false,
+    "analytics_auto_collection_enabled": true,
     "messaging_auto_init_enabled": false,
     "messaging_android_headless_task_timeout": 30000,
     "messaging_android_notification_color": "@color/dark"
