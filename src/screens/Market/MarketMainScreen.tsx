@@ -17,10 +17,9 @@ import {
 } from "../../components/organisms/Market/StockItem";
 import { WishListButton } from "../../components/organisms/Market/WishListBtn";
 import { spacing } from "../../constants/spacing";
+import { upValue } from "../../constants/value";
 import { MarketStackParamList } from "../../navigators/MarketStack";
 import { useGetCategorizedStocksQuery } from "../../store/modules/market/market";
-import { upValue } from "../../constants/value";
-import HomeChart from "../../components/organisms/Home/HomeChart";
 
 const MainRectangle = styled.View`
   width: 100%;
@@ -41,39 +40,6 @@ const FloatTitle = styled.Pressable`
 const InnerFloat = styled.View`
   width: 80%;
 `;
-
-const mockdata = [
-  {
-    id: 1,
-    name: "삼성전자 만약에 이렇게 길어진다면 어떻게 할건지 생각을",
-    percent: 21,
-    price: 100000,
-  },
-  {
-    id: 2,
-    name: "삼성전자",
-    percent: 21,
-    price: 100000,
-  },
-  {
-    id: 3,
-    name: "삼성전자",
-    percent: 21,
-    price: 100000,
-  },
-  {
-    id: 4,
-    name: "삼성전자",
-    percent: 21,
-    price: 100000,
-  },
-  {
-    id: 5,
-    name: "삼성전자",
-    percent: 21,
-    price: 100000,
-  },
-];
 
 export default function MarketMainScreen() {
   const theme = useTheme();
@@ -171,7 +137,7 @@ export default function MarketMainScreen() {
                   horizontal
                   contentContainerStyle={{
                     columnGap: spacing.padding + spacing.small,
-                    paddingLeft: spacing.gutter,
+                    paddingHorizontal: spacing.gutter,
                     paddingBottom: spacing.offset,
                   }}
                   style={{
@@ -273,7 +239,7 @@ export default function MarketMainScreen() {
                   contentContainerStyle={{
                     columnGap: spacing.padding + spacing.small,
                     paddingBottom: spacing.offset,
-                    paddingLeft: spacing.gutter,
+                    paddingHorizontal: spacing.gutter,
                   }}
                   style={{
                     flexGrow: 0,

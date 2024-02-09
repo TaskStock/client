@@ -5,6 +5,7 @@ import {
   resetAllRetrospectQueries,
   resetProjectRetrospectQueries,
 } from "./retrospect";
+import { showErrorToast } from "../../../utils/showToast";
 
 type Builder = EndpointBuilder<
   (
@@ -68,6 +69,7 @@ export const addRetrospectMutation = (builder: Builder) =>
       } catch (e) {
         console.error(e);
         patchUpdateProjectCount.undo();
+        showErrorToast("잠시후에 다시 시도해주세요");
       }
     },
   });
@@ -94,6 +96,7 @@ export const updateRetrospectMutation = (builder: Builder) =>
         await queryFulfilled;
       } catch (e) {
         console.error(e);
+        showErrorToast("잠시후에 다시 시도해주세요");
       }
     },
   });
@@ -138,6 +141,7 @@ export const deleteRetrospectMutation = (builder: Builder) =>
       } catch (e) {
         console.error(e);
         patchUpdateProjectCount.undo();
+        showErrorToast("잠시후에 다시 시도해주세요");
       }
     },
   });

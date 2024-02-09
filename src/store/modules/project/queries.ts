@@ -1,5 +1,6 @@
 import { EndpointBuilder } from "@reduxjs/toolkit/query";
 import { Project } from "../../../@types/project";
+import { showErrorToast } from "../../../utils/showToast";
 
 export const getAllProjectsQuery = (
   builder: EndpointBuilder<
@@ -35,4 +36,12 @@ export const getAllProjectsQuery = (
       method: "GET",
     }),
     providesTags: ["Project"],
+    onQueryStarted: async (arg, { dispatch, queryFulfilled }) => {
+      try {
+        const response = await queryFulfilled;
+      } catch (error) {
+        console.log("Error", error);
+        showErrorToast("프로젝트 목록을 불러오는데 실패했어요.");
+      }
+    },
   });

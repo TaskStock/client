@@ -41,9 +41,11 @@ export const toastConfig = {
     */
   error: ({
     text1,
+    text2,
     props,
   }: {
     text1?: string;
+    text2?: string;
     props: {
       uuid: string;
     };
@@ -62,6 +64,11 @@ export const toastConfig = {
       {text1 && (
         <Text size="md" color={palette.neutral100_gray} weight="medium">
           ⚠️ {text1}
+        </Text>
+      )}
+      {text2 && (
+        <Text size="md" color={palette.neutral100_gray} weight="medium">
+          {text2}
         </Text>
       )}
     </View>
