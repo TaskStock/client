@@ -7,6 +7,7 @@ import PinnedAlarmBox from "../../components/molecules/Alarm/PinnedAlarmBox";
 import PageHeader from "../../components/molecules/PageHeader";
 import { useClient } from "../../hooks/useClient";
 import { useAppDispatch, useAppSelect } from "../../store/configureStore.hooks";
+import PopupModal from "../../components/organisms/PopupModal";
 
 const Container = styled.View`
   flex: 1;

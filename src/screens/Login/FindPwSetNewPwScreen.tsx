@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import styled from "styled-components/native";
 import { BlackBtn } from "../../components/atoms/Buttons";
 import TextInput from "../../components/atoms/TextInput";
 import LoginContainer from "../../components/molecules/Login/LoginContainer";
+import PageHeader from "../../components/molecules/PageHeader";
+import PopupModal from "../../components/organisms/PopupModal";
 import { spacing } from "../../constants/spacing";
 import { client } from "../../services/api";
 import { checkValidPassword } from "../../utils/checkValidity";
-import PageHeader from "../../components/molecules/PageHeader";
-import styled from "styled-components/native";
 
 const Container = styled.View`
   background-color: ${({ theme }) => theme.box};
@@ -19,6 +20,7 @@ const FindPwSetNewPwScreen = ({ route, navigation }) => {
   const [pwalert, setPwAlert] = useState("");
   const [confirmAlert, setConfirmAlert] = useState("");
   const { email, type } = route.params;
+  const [modalVisible, setModalVisible] = useState(false);
 
   const handlePwChange = (text) => {
     setPassword(text);
@@ -39,11 +41,7 @@ const FindPwSetNewPwScreen = ({ route, navigation }) => {
         });
         console.log(response);
         if (response.result === "success") {
-          if (type === "login") {
-            navigation.navigate("EmailLogin");
-          } else if (type === "settings") {
-            navigation.popToTop();
-          }
+          setModalVisible(true);
         } else {
           alert("비밀번호 변경에 실패했습니다.");
         }
@@ -57,6 +55,18 @@ const FindPwSetNewPwScreen = ({ route, navigation }) => {
 
   return (
     <Container>
+      <PopupModal
+        text="비밀번호가 정상적으로 변경되었습니다."
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        onPress={() => {
+          if (type === "login") {
+            navigation.navigate("EmailLogin");
+          } else if (type === "settings") {
+            navigation.popToTop();
+          }
+        }}
+      />
       {type === "settings" && <PageHeader title="" />}
       <LoginContainer comment="새 비밀번호를 입력해주세요.">
         <TextInput
