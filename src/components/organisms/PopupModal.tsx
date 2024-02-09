@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import { Modal, View } from "react-native";
 import { useTheme } from "styled-components";
 import styled from "styled-components/native";
 import { spacing } from "../../constants/spacing";
+import { useAppSelect } from "../../store/configureStore.hooks";
+import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
 import { IconsWithoutFeedBack } from "../atoms/Icons";
 import Text from "../atoms/Text";
 
@@ -18,10 +20,14 @@ const BackgroundPressable = styled.Pressable`
   height: 100%;
   position: absolute;
 `;
-const Children = styled.View`
+const Children = styled.View<{ reduxTheme: string }>`
   width: 90%;
   height: 250px;
   background-color: ${({ theme }) => theme.box};
+  border: 1px solid
+    ${({ theme, reduxTheme }) =>
+      reduxTheme === "dark" ? theme.textDim : "transparent"};
+
   border-radius: 20px;
   overflow: hidden;
 `;
@@ -52,6 +58,7 @@ const PopupModal = ({
   onPress?: () => void;
 }) => {
   const theme = useTheme();
+  const reduxTheme = useAppSelect((state) => state.theme.value);
   const handleClose = () => {
     setModalVisible(false);
     onPress && onPress();
@@ -68,18 +75,18 @@ const PopupModal = ({
       >
         <Overlay>
           <BackgroundPressable onPress={() => handleClose()} />
-          <Children>
+          <Children reduxTheme={reduxTheme}>
             <Upper>
               <IconsWithoutFeedBack
                 type="ionicons"
                 name="checkmark-circle-outline"
-                size={80}
-                color={theme.textDim}
+                size={useResponsiveFontSize(100)}
+                color={reduxTheme === "gray" ? theme.textDim : theme.text}
               />
               <Text size="md">{text}</Text>
             </Upper>
             <Bottom onPress={() => handleClose()}>
-              <Text size="md">확인</Text>
+              <Text size="lg">확인</Text>
             </Bottom>
           </Children>
         </Overlay>

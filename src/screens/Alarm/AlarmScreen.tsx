@@ -49,9 +49,14 @@ const AlarmScreen = () => {
   useEffect(() => {
     getData();
   }, [followerList, followingList, searchList]);
-
+  const [modalVisible, setModalVisible] = useState(true);
   return (
     <Container>
+      <PopupModal
+        text="알림"
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+      />
       <PageHeader title="알림" />
       {alarmDatas.length !== 0 && (
         <FlatList<IAlarmData>
