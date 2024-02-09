@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Modal } from "react-native";
+import { Modal, Pressable } from "react-native";
 import styled from "styled-components/native";
 import HeaderTop from "../components/molecules/Home/HeaderTop";
 import TodoContainer from "../components/molecules/Home/TodoContainer";
@@ -10,6 +10,9 @@ import { useAppDispatch, useAppSelect } from "../store/configureStore.hooks";
 import { getUserInfoThunk } from "../utils/UserUtils/getUserInfoThunk";
 import usePushNotification from "../hooks/usePushNotification";
 import { checkAndRenewTokens } from "../utils/authUtils/tokenUtils";
+import Toast from "react-native-toast-message";
+import Text from "../components/atoms/Text";
+import { showErrorToast, showSuccessToast } from "../utils/showToast";
 
 const Container = styled.View`
   background-color: ${({ theme }) => theme.background};
@@ -34,6 +37,7 @@ const HomeScreen = ({ navigation }) => {
     <Container>
       <HeaderTop navigation={navigation} />
       <GCContainer />
+
       <TodoContainer />
       {isAddModalOpen && (
         <Modal visible={isAddModalOpen} transparent={true}>

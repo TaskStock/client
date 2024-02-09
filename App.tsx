@@ -15,6 +15,8 @@ import { checkTokenExistence } from "./src/store/modules/auth";
 import { startingTheme } from "./src/store/modules/theme";
 import { checkAndRenewTokens } from "./src/utils/authUtils/tokenUtils";
 import { removeData } from "./src/utils/asyncStorage";
+import Toast from "react-native-toast-message";
+import { toastConfig } from "./src/config/toast";
 
 const THEME = {
   dark: {
@@ -64,6 +66,7 @@ export default function App() {
               <Root isLoggedIn={isLoggedIn} />
             </GestureHandlerRootView>
           </NavigationContainer>
+          <Toast config={toastConfig}></Toast>
           <StatusBar barStyle={THEME[theme].barStyle} />
         </EventProvider>
       </SafeAreaProvider>
