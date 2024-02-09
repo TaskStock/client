@@ -4,8 +4,10 @@ import { spacing } from "../../constants/spacing";
 import styled from "styled-components/native";
 import { Project } from "../../@types/project";
 import ProjectSelectBtn from "../molecules/Home/ProjectSelectBtn";
+import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
 
 export const Projects = styled.View`
+  min-width: 100%;
   padding-left: ${spacing.gutter}px;
   border-bottom-width: 1px;
   border-bottom-color: ${({ theme }) => theme.textDimmer};
