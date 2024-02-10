@@ -1,5 +1,6 @@
 import { EndpointBuilder } from "@reduxjs/toolkit/query";
 import { Project, publicType } from "../../../@types/project";
+import { showErrorToast } from "../../../utils/showToast";
 
 type MutationBuilder = EndpointBuilder<
   (
@@ -42,6 +43,14 @@ export const addProjectMutation = (builder: MutationBuilder) =>
       },
     }),
     invalidatesTags: ["Project"],
+    onQueryStarted: async (arg, { dispatch, queryFulfilled }) => {
+      try {
+        await queryFulfilled;
+      } catch (error) {
+        console.log("Error", error);
+        showErrorToast("잠시후에 다시 시도해주세요.");
+      }
+    },
   });
 
 export const deleteProjectMutation = (builder: MutationBuilder) =>
@@ -54,6 +63,14 @@ export const deleteProjectMutation = (builder: MutationBuilder) =>
       },
     }),
     invalidatesTags: ["Project"],
+    onQueryStarted: async (arg, { dispatch, queryFulfilled }) => {
+      try {
+        await queryFulfilled;
+      } catch (error) {
+        console.log("Error", error);
+        showErrorToast("잠시후에 다시 시도해주세요.");
+      }
+    },
   });
 
 export const updateProjectMutation = (builder: MutationBuilder) =>
@@ -79,4 +96,12 @@ export const updateProjectMutation = (builder: MutationBuilder) =>
       },
     }),
     invalidatesTags: ["Project"],
+    onQueryStarted: async (arg, { dispatch, queryFulfilled }) => {
+      try {
+        await queryFulfilled;
+      } catch (error) {
+        console.log("Error", error);
+        showErrorToast("잠시후에 다시 시도해주세요.");
+      }
+    },
   });

@@ -21,6 +21,7 @@ import { Project } from "../../../@types/project";
 import { updateUserValue } from "../user";
 import { marketApi } from "../market/market";
 import { firstTodoBadgeDispatcher } from "../../../utils/badgeUtils/badge";
+import { showErrorToast } from "../../../utils/showToast";
 
 const upValue = 1000;
 const downValue = 1000;
@@ -182,6 +183,7 @@ export const addTodoMutation = (builder: TodoApiBuilder) =>
           );
       } catch (error) {
         console.log(error);
+        showErrorToast("할일 추가에 실패했어요. 다시 시도해주세요.");
         patchAddTodo.undo();
         if (patchUpdateHighLowValue) patchUpdateHighLowValue.undo();
         if (patchSaveValueUpdate) patchSaveValueUpdate.undo();
@@ -569,6 +571,7 @@ export const deleteTodoMutation = (builder: TodoApiBuilder) =>
         }
       } catch (error) {
         console.log(error);
+        showErrorToast("할일 삭제에 실패했어요. 다시 시도해주세요.");
         patchResult.undo();
         if (patchUpdateGraphEndValue) patchUpdateGraphEndValue.undo();
         if (patchUpdateProjectTodoCount) patchUpdateProjectTodoCount.undo();

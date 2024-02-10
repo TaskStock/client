@@ -7,6 +7,7 @@ import {
   setAllRetrospectQueries,
   setProjectRetrospectQueries,
 } from "./retrospect";
+import { showErrorToast } from "../../../utils/showToast";
 
 type Builder = EndpointBuilder<
   (
@@ -59,6 +60,7 @@ export const getAllRetrospectQuery = (builder: Builder) =>
           );
       } catch (error) {
         console.log(error);
+        showErrorToast("회고 목록을 불러오는데 실패했어요.");
       }
     },
   });
@@ -94,6 +96,7 @@ export const getAllProjectRetrospectQuery = (builder: Builder) =>
         const result = await queryFulfilled;
       } catch (error) {
         console.log(error);
+        showErrorToast("회고 목록을 불러오는데 실패했어요.");
       }
     },
   });

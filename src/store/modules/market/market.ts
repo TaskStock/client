@@ -4,6 +4,7 @@ import { StockItem, StockDetail } from "../../../@types/stock";
 import { Wish } from "../../../@types/wish";
 import { createSlice } from "@reduxjs/toolkit";
 import { IsoString } from "../../../@types/calendar";
+import { showErrorToast } from "../../../utils/showToast";
 
 interface MarketState {
   wish: {
@@ -113,6 +114,14 @@ export const marketApi = createApi({
           url: "/siuser/market",
         };
       },
+      onQueryStarted: async (arg, { dispatch, queryFulfilled }) => {
+        try {
+          const response = await queryFulfilled;
+        } catch (error) {
+          console.log("Error", error);
+          showErrorToast("종목 데이터를 불러오는데 실패했어요.");
+        }
+      },
     }),
     getAllStocks: builder.query<
       {
@@ -121,6 +130,14 @@ export const marketApi = createApi({
       void
     >({
       query: () => ({ url: "/siuser/all", method: "GET" }),
+      onQueryStarted: async (arg, { dispatch, queryFulfilled }) => {
+        try {
+          const response = await queryFulfilled;
+        } catch (error) {
+          console.log("Error", error);
+          showErrorToast("종목 리스트를 불러오는데 실패했어요.");
+        }
+      },
     }),
     getStockDetails: builder.query<
       StockDetail,
@@ -130,6 +147,17 @@ export const marketApi = createApi({
     >({
       query: ({ id }) => {
         return { url: `/siuser/detail/${id}`, method: "GET" };
+      },
+      onQueryStarted: async (arg, { dispatch, queryFulfilled }) => {
+        try {
+          const response = await queryFulfilled;
+        } catch (error) {
+          console.log("Error", error);
+          showErrorToast(
+            "상세정보를 불러오는데 실패했어요.",
+            "잠시후에 다시 시도해주세요"
+          );
+        }
       },
     }),
     getAllWishList: builder.query<
@@ -150,6 +178,14 @@ export const marketApi = createApi({
         };
       },
       providesTags: ["WishList"],
+      onQueryStarted: async (arg, { dispatch, queryFulfilled }) => {
+        try {
+          const response = await queryFulfilled;
+        } catch (error) {
+          console.log("Error", error);
+          showErrorToast("위시리스트를 불러오는데 실패했어요.");
+        }
+      },
     }),
     getStockSuccessRate: builder.query<
       {
@@ -194,12 +230,12 @@ export const marketApi = createApi({
         try {
           await queryFulfilled;
           dispatch(resetWishList());
-
           // 여기서 reset 하면서, offset이 0이 되니까, 다시 데이터를 받아오는데,
           // 그 다음에 또 invalidatesTags를 통해서, 다시 받아오게 된다.
           // 그래서 아마 데이터가 두번 받아오는 것 같다.
         } catch (error) {
           console.log("Error", error);
+          showErrorToast("잠시후에 다시 시도해주세요");
         }
       },
       invalidatesTags: ["WishList"],
@@ -225,6 +261,7 @@ export const marketApi = createApi({
           dispatch(toggleWishLike(arg.wishlist_id));
         } catch (error) {
           console.log("Error", error);
+          showErrorToast("잠시후에 다시 시도해주세요");
         }
       },
     }),
