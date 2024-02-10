@@ -68,10 +68,9 @@ const ProjectItemComponent = ({
   );
 };
 
-export default function ProjectItemList({
-  scrollViewRef,
-}: {
-  scrollViewRef: React.RefObject<ScrollView>;
+export default function ProjectItemList({}: // scrollViewRef,
+{
+  // scrollViewRef: React.RefObject<ScrollView>;
 }) {
   const {
     projects: projectList,
@@ -115,13 +114,13 @@ export default function ProjectItemList({
 
   const projectContainerRef = React.useRef<View>(null);
 
-  useEffect(() => {
-    if (isAddProject) {
-      setTimeout(() => {
-        scrollViewRef.current?.scrollToEnd({ animated: true });
-      }, 100);
-    }
-  }, [isAddProject]);
+  // useEffect(() => {
+  //   if (isAddProject) {
+  //     setTimeout(() => {
+  //       scrollViewRef.current?.scrollToEnd({ animated: true });
+  //     }, 100);
+  //   }
+  // }, [isAddProject]);
 
   return (
     <ProjectItemContainer

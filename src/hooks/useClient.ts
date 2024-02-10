@@ -1,5 +1,4 @@
 import { client } from "../services/api";
-import { useAppDispatch } from "../store/configureStore.hooks";
 import { checkAndRenewTokens } from "../utils/authUtils/tokenUtils";
 
 interface IClient {

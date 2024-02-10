@@ -47,6 +47,7 @@ const EmailRegisterScreen = ({ route, navigation }) => {
   }, [email]);
 
   const dispatch = useAppDispatch();
+  // const { modalVisible, setModalVisible } = HandleModalVisible();
 
   const handleChange = (name: string, value: string) => {
     setUser((prevUser) => ({
@@ -55,11 +56,11 @@ const EmailRegisterScreen = ({ route, navigation }) => {
     }));
   };
 
-  useEffect(() => {
-    if (isLoggedIn === true) {
-      navigation.navigate("MainTab", { screen: "Home" });
-    }
-  }, [isLoggedIn]);
+  // useEffect(() => {
+  //   if (isLoggedIn === true) {
+  //     setModalVisible(true);
+  //   }
+  // }, [isLoggedIn]);
 
   const handleSignUp = async () => {
     if (user.password !== confirmPassword) {
@@ -72,6 +73,7 @@ const EmailRegisterScreen = ({ route, navigation }) => {
 
   return (
     <LoginContainer>
+      {/* <PopupModal text={"회원가입이 완료되었습니다."} onPress={() => {}} /> */}
       <TextInput
         subText={"사용자 이름"}
         placeholder="사용자 이름을 입력해주세요"

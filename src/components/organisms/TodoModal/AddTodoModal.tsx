@@ -1,40 +1,38 @@
-import React, { useCallback } from "react";
+import dayjs from "dayjs";
+import React, { useEffect, useState } from "react";
 import {
-  Keyboard,
   KeyboardAvoidingView,
   Platform,
   Pressable,
   ScrollView,
-  Switch,
-  TouchableWithoutFeedback,
   View,
 } from "react-native";
 import { useDispatch } from "react-redux";
 import styled, { useTheme } from "styled-components/native";
+import { IsoString } from "../../../@types/calendar";
 import { spacing } from "../../../constants/spacing";
+import useTodos from "../../../hooks/useTodos";
+import useValue from "../../../hooks/useValue";
 import { AppDispatch } from "../../../store/configureStore";
-import { useAppSelect } from "../../../store/configureStore.hooks";
 import {
-  setAddTodoForm,
+  useAppDispatch,
+  useAppSelect,
+} from "../../../store/configureStore.hooks";
+import {
   closeTodoModal,
+  setAddTodoForm,
   toggleRepeatEndModal,
   useAddTodoMutation,
   useEditTodoMutation,
 } from "../../../store/modules/todo/todo";
-import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
-import FlexBox from "../../atoms/FlexBox";
 import Icons from "../../atoms/Icons";
-import Margin from "../../atoms/Margin";
 import Text from "../../atoms/Text";
+import Section from "../../molecules/Section";
+import TutorialBox from "../../molecules/TutorialBox";
 import ProjectItemList from "./ProjectItemList";
 import ValueSlider from "./ValueSlider";
-import DateTimePicker from "@react-native-community/datetimepicker";
-import dayjs from "dayjs";
-import { getNewRepeatDay } from "../../../utils/getNewRepeatDay";
-import { IsoString } from "../../../@types/calendar";
-import useTodos from "../../../hooks/useTodos";
-import useValue from "../../../hooks/useValue";
-import Section from "../../molecules/Section";
+import { removeData } from "../../../utils/asyncStorage";
+import { setStep2, setStep3 } from "../../../store/modules/tutorial";
 
 const AddTodoOverlay = styled.Pressable`
   position: absolute;
@@ -100,6 +98,7 @@ const TodoInput = styled.TextInput`
   border-bottom-width: 1px;
   padding: 6px 1px;
   color: ${({ theme }) => theme.text};
+  z-index: 2000;
 `;
 
 const RepeatDayItem = styled.Pressable<{ isSelected?: boolean; size: number }>`
@@ -132,7 +131,7 @@ const dayList = ["월", "화", "수", "목", "금", "토", "일"];
 
 export default function AddTodoModal() {
   const theme = useTheme();
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const addTodoForm = useAppSelect((state) => state.todo.addTodoForm);
   const isEditMode = Boolean(
     useAppSelect((state) => state.todo.addTodoForm.todo_id)
@@ -160,6 +159,28 @@ export default function AddTodoModal() {
   const isHomeDrawerOpen = useAppSelect((state) => state.home.isDrawerOpen);
 
   const currentDate = useAppSelect((state) => state.calendar.currentDateString);
+
+  // tutorial
+  const { showTutorial, step2 } = useAppSelect((state) => state.tutorial);
+  // const showTutorial = true;
+
+  const [tutorialShown1, setTutorialShown1] = useState(false);
+  const [tutorialShown2, setTutorialShown2] = useState(false);
+
+  useEffect(() => {
+    console.log(showTutorial, step2);
+    if (showTutorial && step2) {
+      setTutorialShown1(true);
+    }
+  }, [showTutorial]);
+
+  useEffect(() => {
+    console.log("value: ", value);
+    if (value > 0) {
+      setTutorialShown1(false);
+      setTutorialShown2(true);
+    }
+  }, [value]);
 
   const onPressSubmitBtn = () => {
     if (isEditMode) {
@@ -190,6 +211,8 @@ export default function AddTodoModal() {
         },
       });
     }
+    setTutorialShown2(false);
+    dispatch(setStep2(false));
   };
 
   const datePickerInitialDate = addTodoForm.repeat_end_date
@@ -217,6 +240,8 @@ export default function AddTodoModal() {
     <AddTodoOverlay
       onPress={() => {
         dispatch(closeTodoModal());
+        setTutorialShown1(false);
+        setTutorialShown2(false);
       }}
     >
       <InnerPressable>
@@ -225,19 +250,24 @@ export default function AddTodoModal() {
             <Icons
               onPress={() => {
                 dispatch(closeTodoModal());
+                setTutorialShown1(false);
+                setTutorialShown2(false);
               }}
               type="ionicons"
               name="close"
               size={30}
             />
           </CloseBox>
-          <ScrollView
+
+          <View
             style={{
               marginBottom: spacing.offset,
+              flex: 1,
             }}
-            ref={scrollViewRef}
+            // ref={scrollViewRef}
           >
             <KeyboardAvoidingView
+              style={{ flex: 1 }}
               behavior={Platform.OS === "ios" ? "padding" : "height"}
             >
               <Pressable
@@ -270,12 +300,23 @@ export default function AddTodoModal() {
                   <Section
                     header={
                       <Section.Header>
-                        <Section.HeaderText>가치</Section.HeaderText>
+                        <>
+                          {showTutorial && tutorialShown1 ? (
+                            <TutorialBox
+                              type={2}
+                              style={{ bottom: -4, left: 30, height: 280 }}
+                              ratio={0.8}
+                            />
+                          ) : null}
+                          <Section.HeaderText>가치</Section.HeaderText>
+                        </>
                         <ValueText>{value}원</ValueText>
                       </Section.Header>
                     }
                   >
-                    <ValueSlider></ValueSlider>
+                    <View style={{ zIndex: 2000 }}>
+                      <ValueSlider></ValueSlider>
+                    </View>
                   </Section>
                   {/* <Section
                     header={
@@ -396,19 +437,29 @@ export default function AddTodoModal() {
                     }
                   >
                     <ProjectItemList
-                      scrollViewRef={scrollViewRef}
+                    // scrollViewRef={scrollViewRef}
                     ></ProjectItemList>
                   </Section>
                 </AddTodoContents>
               </Pressable>
             </KeyboardAvoidingView>
-          </ScrollView>
+          </View>
 
-          <AddTodoBtn onPress={onPressSubmitBtn}>
-            <Text size="md">
-              {isEditMode ? "투두 수정하기" : "투두 추가하기"}
-            </Text>
-          </AddTodoBtn>
+          <View>
+            {showTutorial && tutorialShown2 ? (
+              <TutorialBox
+                type={3}
+                style={{ bottom: 37, left: 15, height: 150 }}
+                ratio={0.65}
+              />
+            ) : null}
+
+            <AddTodoBtn onPress={onPressSubmitBtn}>
+              <Text size="md">
+                {isEditMode ? "투두 수정하기" : "투두 추가하기"}
+              </Text>
+            </AddTodoBtn>
+          </View>
         </AddTodoBox>
       </InnerPressable>
     </AddTodoOverlay>

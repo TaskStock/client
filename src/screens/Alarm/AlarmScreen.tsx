@@ -34,7 +34,6 @@ const AlarmScreen = () => {
 
   const client = useClient(dispatch);
   const getData = async () => {
-    // await dispatch(checkAndRenewTokens());
     try {
       const res = await client.get("notice/all", {
         accessToken,
@@ -48,21 +47,18 @@ const AlarmScreen = () => {
   useEffect(() => {
     getData();
   }, [followerList, followingList, searchList]);
-
   return (
     <Container>
       <PageHeader title="알림" />
-      {alarmDatas.length !== 0 && (
-        <FlatList<IAlarmData>
-          data={alarmDatas}
-          renderItem={({ item }) => <AlarmBox item={item} />}
-          keyExtractor={(item) => item.notice_id.toString()}
-          refreshControl={
-            <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
-          }
-          ListHeaderComponent={<PinnedAlarmBox />}
-        />
-      )}
+      <FlatList<IAlarmData>
+        data={alarmDatas}
+        renderItem={({ item }) => <AlarmBox item={item} />}
+        keyExtractor={(item) => item.notice_id.toString()}
+        refreshControl={
+          <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
+        }
+        ListHeaderComponent={<PinnedAlarmBox />}
+      />
     </Container>
   );
 };

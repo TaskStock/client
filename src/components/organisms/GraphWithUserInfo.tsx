@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React, { memo, useEffect } from "react";
 import { View } from "react-native";
 import styled from "styled-components/native";
 import { spacing } from "../../constants/spacing";
@@ -11,8 +11,10 @@ import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
 import FlexBox from "../atoms/FlexBox";
 import { Value } from "../../@types/chart";
 import GradientOverlay from "../atoms/GradientOverlay";
+import { useAppDispatch, useAppSelect } from "../../store/configureStore.hooks";
+import { setStep4 } from "../../store/modules/tutorial";
 
-const Container = styled.View`
+const Container = styled.View<{ dottedBorder: boolean }>`
   width: 100%;
   flex: 1;
   border-radius: ${spacing.offset}px;
@@ -22,6 +24,8 @@ const Container = styled.View`
   justify-content: center;
   padding: ${spacing.padding}px;
   /* background-color: ${(props) => props.theme.box}; */
+  border: 1px dotted
+    ${({ theme, dottedBorder }) => (dottedBorder ? theme.text : "transparent")};
 `;
 
 const InnerContent = styled.View`
@@ -74,6 +78,19 @@ const GraphWithUserInfo = ({
     width: 0,
     height: 0,
   });
+  const dispatch = useAppDispatch();
+  const { showTutorial, step4 } = useAppSelect((state) => state.tutorial);
+  const [dottedBorder, setDottedBorder] = React.useState(false);
+
+  useEffect(() => {
+    if (showTutorial && step4) {
+      setDottedBorder(true);
+      setTimeout(() => {
+        setDottedBorder(false);
+        dispatch(setStep4(false));
+      }, 1600);
+    }
+  }, [showTutorial, step4]);
 
   return (
     <View
@@ -125,7 +142,7 @@ const GraphWithUserInfo = ({
           </IconBox>
         </IconContainer>
       </FlexBox>
-      <Container>
+      <Container dottedBorder={dottedBorder}>
         <GradientOverlay />
         <InnerContent
           onLayout={(e) => {
