@@ -3,6 +3,7 @@ import { IRegisterUser } from "../../screens/Login/EmailRegisterScreen";
 import { client } from "../../services/api";
 import { RootState } from "../../store/configureStore";
 import getDeviceId from "../getDeviceId";
+import { checkAndRenewTokens } from "./tokenUtils";
 
 // 회원가입, 로그인
 // accessToken => asyncStorage, redux에 저장
@@ -79,7 +80,8 @@ export const loginWithEmail = createAsyncThunk(
 // 로그아웃
 export const logout = createAsyncThunk(
   "auth/logout",
-  async (_, { getState, rejectWithValue }) => {
+  async (_, { getState, rejectWithValue, dispatch }) => {
+    await dispatch(checkAndRenewTokens());
     try {
       const state = getState() as RootState;
       const { accessToken, deviceId } = state.auth;

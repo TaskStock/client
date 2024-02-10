@@ -1,5 +1,6 @@
+import analytics from "@react-native-firebase/analytics";
 import dayjs from "dayjs";
-import React, { memo, useContext } from "react";
+import React, { memo, useContext, useEffect, useState } from "react";
 import { Pressable, View } from "react-native";
 import { useTheme } from "styled-components";
 import styled from "styled-components/native";
@@ -21,13 +22,13 @@ import Icons from "../../atoms/Icons";
 import Text from "../../atoms/Text";
 import DraggableTodoList from "../../organisms/Home/DraggableTodoList";
 import HorizontalProjectList from "../../organisms/HorizontalProjectList";
+import TutorialBox from "../TutorialBox";
 import BottomDrawer from "./BottomDrawer";
-import analytics from "@react-native-firebase/analytics";
+import { setStep1 } from "../../../store/modules/tutorial";
 
 export const DateContainer = styled.View`
   padding: ${spacing.small}px ${spacing.gutter}px 0;
 `;
-
 const TodoContainer = () => {
   const theme = useTheme();
   const dispatch = useAppDispatch();
@@ -40,6 +41,10 @@ const TodoContainer = () => {
 
   const defaultValue = DEFAULT_HEIGHT;
   const openState = OPEN_STATE;
+
+  const { showTutorial, step1, step3 } = useAppSelect(
+    (state) => state.tutorial
+  );
 
   if (defaultValue !== 0 && openState !== 0) {
     return (
@@ -66,31 +71,43 @@ const TodoContainer = () => {
                 {headerDate}
               </Text>
             </Pressable>
-            <Icons
-              type="entypo"
-              name="circle-with-plus"
-              size={28}
-              color={theme.text}
-              onPress={async () => {
-                dispatch(
-                  openAddTodoModal({
+            <View>
+              {showTutorial && step1 ? (
+                <TutorialBox style={{ bottom: -30, right: -19 }} type={1} />
+              ) : null}
+
+              <Icons
+                type="entypo"
+                name="circle-with-plus"
+                size={28}
+                color={theme.text}
+                onPress={async () => {
+                  dispatch(setStep1(false));
+                  dispatch(
+                    openAddTodoModal({
+                      project_id: selectedProjectId,
+                    })
+                  );
+                  await analytics().logEvent("add_todo", {
                     project_id: selectedProjectId,
-                  })
-                );
-                await analytics().logEvent("add_todo", {
-                  project_id: selectedProjectId,
-                });
-              }}
-            />
+                  });
+                }}
+                style={{ zIndex: 1000 }}
+              />
+            </View>
           </FlexBox>
+          {showTutorial && step3 ? (
+            <TutorialBox style={{ bottom: -80, left: 0 }} type={4} />
+          ) : null}
         </DateContainer>
+
         <HorizontalProjectList
           selectedProjectId={selectedProjectId}
           onPressProject={(id) => {
             dispatch(setSelectedProjectId(id));
           }}
           projects={projects}
-        ></HorizontalProjectList>
+        />
 
         <View
           style={{

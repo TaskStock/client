@@ -15,6 +15,7 @@ import { checkTokenExistence } from "./src/store/modules/auth";
 import { startingTheme } from "./src/store/modules/theme";
 import { checkAndRenewTokens } from "./src/utils/authUtils/tokenUtils";
 import { removeData } from "./src/utils/asyncStorage";
+import { checkFirstTime } from "./src/store/modules/tutorial";
 
 const THEME = {
   dark: {
@@ -42,6 +43,9 @@ export default function App() {
     }
   }, [isLoggedIn]);
 
+  // useEffect(() => {
+  //   removeData("firstTime");
+  // }, []);
   // useEffect(() => {
   //   removeData("accessToken");
   //   removeData("refreshToken");

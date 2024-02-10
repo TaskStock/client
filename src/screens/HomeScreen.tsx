@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Modal } from "react-native";
+import { Modal, TouchableOpacity, View } from "react-native";
 import styled from "styled-components/native";
 import HeaderTop from "../components/molecules/Home/HeaderTop";
 import TodoContainer from "../components/molecules/Home/TodoContainer";
@@ -10,6 +10,8 @@ import { useAppDispatch, useAppSelect } from "../store/configureStore.hooks";
 import { getUserInfoThunk } from "../utils/UserUtils/getUserInfoThunk";
 import usePushNotification from "../hooks/usePushNotification";
 import { checkAndRenewTokens } from "../utils/authUtils/tokenUtils";
+import { checkFirstTime, setTutorial } from "../store/modules/tutorial";
+import TutorialBox from "../components/molecules/TutorialBox";
 
 const Container = styled.View`
   background-color: ${({ theme }) => theme.background};
@@ -18,17 +20,27 @@ const Container = styled.View`
 
 const HomeScreen = ({ navigation }) => {
   const isAddModalOpen = useAppSelect((state) => state.todo.isAddModalOpen);
+  const dispatch = useAppDispatch();
 
   // push notification
   usePushNotification();
 
-  const dispatch = useAppDispatch();
+  // tutorial
+  const showTutorialIfFirst = async () => {
+    const first = await checkFirstTime();
+    if (first) {
+      dispatch(setTutorial(true));
+    }
+  };
 
   useEffect(() => {
     dispatch(getUserInfoThunk());
+    showTutorialIfFirst();
   }, []);
 
   useFlushSavedValues();
+
+  const { showTutorial, step5 } = useAppSelect((state) => state.tutorial);
 
   return (
     <Container>
@@ -40,6 +52,22 @@ const HomeScreen = ({ navigation }) => {
           <AddTodoModal></AddTodoModal>
         </Modal>
       )}
+      {showTutorial && step5 ? (
+        <TouchableOpacity
+          onPress={() => {
+            dispatch(setTutorial(false));
+          }}
+          style={{
+            position: "absolute",
+            width: "100%",
+            height: "110%",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <TutorialBox type={5} />
+        </TouchableOpacity>
+      ) : null}
     </Container>
   );
 };

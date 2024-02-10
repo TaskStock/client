@@ -7,7 +7,6 @@ import PinnedAlarmBox from "../../components/molecules/Alarm/PinnedAlarmBox";
 import PageHeader from "../../components/molecules/PageHeader";
 import { useClient } from "../../hooks/useClient";
 import { useAppDispatch, useAppSelect } from "../../store/configureStore.hooks";
-import PopupModal from "../../components/organisms/PopupModal";
 
 const Container = styled.View`
   flex: 1;
@@ -35,7 +34,6 @@ const AlarmScreen = () => {
 
   const client = useClient(dispatch);
   const getData = async () => {
-    // await dispatch(checkAndRenewTokens());
     try {
       const res = await client.get("notice/all", {
         accessToken,
@@ -49,26 +47,18 @@ const AlarmScreen = () => {
   useEffect(() => {
     getData();
   }, [followerList, followingList, searchList]);
-  const [modalVisible, setModalVisible] = useState(true);
   return (
     <Container>
-      <PopupModal
-        text="알림"
-        modalVisible={modalVisible}
-        setModalVisible={setModalVisible}
-      />
       <PageHeader title="알림" />
-      {alarmDatas.length !== 0 && (
-        <FlatList<IAlarmData>
-          data={alarmDatas}
-          renderItem={({ item }) => <AlarmBox item={item} />}
-          keyExtractor={(item) => item.notice_id.toString()}
-          refreshControl={
-            <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
-          }
-          ListHeaderComponent={<PinnedAlarmBox />}
-        />
-      )}
+      <FlatList<IAlarmData>
+        data={alarmDatas}
+        renderItem={({ item }) => <AlarmBox item={item} />}
+        keyExtractor={(item) => item.notice_id.toString()}
+        refreshControl={
+          <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
+        }
+        ListHeaderComponent={<PinnedAlarmBox />}
+      />
     </Container>
   );
 };
