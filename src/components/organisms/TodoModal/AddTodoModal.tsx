@@ -7,13 +7,11 @@ import {
   ScrollView,
   View,
 } from "react-native";
-import { useDispatch } from "react-redux";
 import styled, { useTheme } from "styled-components/native";
 import { IsoString } from "../../../@types/calendar";
 import { spacing } from "../../../constants/spacing";
 import useTodos from "../../../hooks/useTodos";
 import useValue from "../../../hooks/useValue";
-import { AppDispatch } from "../../../store/configureStore";
 import {
   useAppDispatch,
   useAppSelect,
@@ -25,14 +23,13 @@ import {
   useAddTodoMutation,
   useEditTodoMutation,
 } from "../../../store/modules/todo/todo";
+import { setStep2 } from "../../../store/modules/tutorial";
 import Icons from "../../atoms/Icons";
 import Text from "../../atoms/Text";
 import Section from "../../molecules/Section";
 import TutorialBox from "../../molecules/TutorialBox";
 import ProjectItemList from "./ProjectItemList";
 import ValueSlider from "./ValueSlider";
-import { removeData } from "../../../utils/asyncStorage";
-import { setStep2, setStep3 } from "../../../store/modules/tutorial";
 
 const AddTodoOverlay = styled.Pressable`
   position: absolute;
@@ -449,7 +446,7 @@ export default function AddTodoModal() {
             {showTutorial && tutorialShown2 ? (
               <TutorialBox
                 type={3}
-                style={{ bottom: 37, left: 15, height: 150 }}
+                style={{ top: 50, left: 15, height: 150 }}
                 ratio={0.65}
               />
             ) : null}
