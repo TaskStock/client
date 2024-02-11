@@ -14,6 +14,7 @@ import { spacing } from "../../constants/spacing";
 import { useClient } from "../../hooks/useClient";
 import { useAppDispatch, useAppSelect } from "../../store/configureStore.hooks";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
+import { setUnRegister } from "../../store/modules/auth";
 
 const THEME_CONSTANTS = {
   dark: {
@@ -61,13 +62,16 @@ const UnSubscribeScreen = () => {
       Alert.alert("회원 탈퇴 유의사항에 동의해주세요.");
     } else {
       try {
-        // 백엔드 미완성
         const res = await client.delete(
           "account/setting/unregister",
-          {},
+          { content: reason },
           { accessToken }
         );
         console.log(res);
+        const { result } = res;
+        if (result === "success") {
+          await dispatch(setUnRegister());
+        }
       } catch (e) {
         console.log("회원 탈퇴 실패: ", e);
       }

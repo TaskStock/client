@@ -15,6 +15,11 @@ import { Todo } from "../../@types/todo";
 import { Project } from "../../@types/project";
 import { checkAndRenewTokens } from "../../utils/authUtils/tokenUtils";
 
+interface IBadge {
+  type: number;
+  created_time: string;
+}
+
 export interface IFriend {
   user_id: number;
   user_name: string;
@@ -42,6 +47,7 @@ interface initialState {
   following_count?: number;
   error: string | null;
   button?: "팔로우" | "팔로잉" | "맞팔로우" | "요청됨" | "수락";
+  badges: IBadge[];
 }
 
 const initialFriendState: initialState = {
@@ -63,6 +69,7 @@ const initialFriendState: initialState = {
     following_count: 0,
     button: "팔로우",
   },
+  badges: [],
   loading: false,
   error: null,
 };
@@ -142,11 +149,14 @@ export const getTargetUserThunk = createAsyncThunk(
     const { accessToken } = rootState.auth;
     try {
       const response = await client.get(`sns/users/${userId}`, { accessToken });
-      // console.log(response);
-      if (response.result === "success") {
-        return response.targetData;
+      console.log(response);
+      const { result, projects, targetData, todos, values, badges } = response;
+      if (result === "success") {
+        dispatch(addFriendBadges(badges));
+
+        return targetData;
       } else {
-        return rejectWithValue(response.result);
+        return rejectWithValue(result);
       }
     } catch (error) {
       console.log("검색 실패: ", error);
@@ -154,6 +164,61 @@ export const getTargetUserThunk = createAsyncThunk(
     }
   }
 );
+
+const data = {
+  projects: [],
+  result: "success",
+  targetData: {
+    cumulative_value: 52000,
+    follower_count: 1,
+    following_count: 0,
+    image:
+      "https://lh3.googleusercontent.com/a/ACg8ocLQx_eNNVNgpEIVp1TuoMQ0dHP2OXVrl6vt1-R7EsRZZSQx=s120",
+    introduce: null,
+    isFollowingMe: false,
+    isFollowingYou: true,
+    pending: false,
+    private: false,
+    strategy: "google",
+    user_id: 3,
+    user_name: "hwanheejung",
+  },
+  todos: [
+    {
+      check: true,
+      content: "111",
+      date: "2024-02-10T15:21:55.577Z",
+      index: 1,
+      level: 2,
+      project_id: null,
+      stockitem_id: null,
+      todo_id: 2,
+      user_id: 3,
+    },
+    {
+      check: false,
+      content: "222",
+      date: "2024-02-10T15:21:55.577Z",
+      index: 2,
+      level: 0,
+      project_id: null,
+      stockitem_id: null,
+      todo_id: 3,
+      user_id: 3,
+    },
+  ],
+  values: [
+    {
+      date: "2024-02-11T15:00:00.000Z",
+      end: 52000,
+      high: 52000,
+      low: 48000,
+      start: 50000,
+      user_id: 3,
+      value_id: 5,
+    },
+  ],
+};
 
 const updateFriendStatus_follow = (friend, followingId) => {
   if (friend.user_id === followingId) {
@@ -184,7 +249,11 @@ const updateFriendStatus_unfollow = (friend, followingId) => {
 const friendSlice = createSlice({
   name: "getFriends",
   initialState: initialFriendState,
-  reducers: {},
+  reducers: {
+    addFriendBadges: (state, action) => {
+      state.badges = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(getFriendsThunk.pending, (state, action) => {
       state.loading = true;
@@ -366,4 +435,5 @@ const friendSlice = createSlice({
   },
 });
 
+export const { addFriendBadges } = friendSlice.actions;
 export default friendSlice.reducer;

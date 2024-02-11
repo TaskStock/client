@@ -47,6 +47,7 @@ const MyInfo = () => {
   } = useAppSelect((state) => state.user.user);
   const { strategy } = useAppSelect((state) => state.auth);
   const { badges } = useAppSelect((state) => state.badge);
+
   return (
     <Container>
       <FlexBox gap={spacing.offset} alignItems="center">
@@ -85,7 +86,10 @@ const MyInfo = () => {
           color={theme.text}
         />
         {badges.length > 0 && (
-          <BadgesPreview onPress={() => navigation.navigate("Badge")} />
+          <BadgesPreview
+            badges={badges}
+            onPress={() => navigation.navigate("Badge", { type: "me" })}
+          />
         )}
       </FlexBox>
     </Container>
