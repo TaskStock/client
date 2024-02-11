@@ -27,6 +27,7 @@ export default function StockDetailGraphSection({
     saturday,
     sunday,
   },
+  diffRate,
 }: {
   successRate: {
     mySuccessRate: number;
@@ -41,6 +42,7 @@ export default function StockDetailGraphSection({
     saturday: number;
     sunday: number;
   };
+  diffRate: number;
 }) {
   const theme = useTheme();
 
@@ -51,8 +53,8 @@ export default function StockDetailGraphSection({
 
   const data = [
     { x: "fake", y: 0, fake: true },
-    { x: "나", y: mySuccessRate },
-    { x: "평균", y: averageSuccessRate },
+    { x: "나", y: mySuccessRate, fake: false },
+    { x: "평균", y: averageSuccessRate, fake: false },
     { x: "fake123", y: 0, fake: true },
   ];
 
@@ -100,7 +102,7 @@ export default function StockDetailGraphSection({
     }
   };
 
-  const data2 = [
+  let data2 = [
     {
       x: "월",
       y: monday,
@@ -131,8 +133,43 @@ export default function StockDetailGraphSection({
     },
   ];
 
+  const data1NoData = data.every((point) => point.y === 0);
+  const data2NoData = data2.every((point) => point.y === 0);
+
   return (
     <>
+      {!data1NoData &&
+        (diffRate !== 0 ? (
+          <>
+            <Text size="xl" weight="regular">
+              <Text size="xl" weight="bold">
+                김땡땡님
+              </Text>
+              은 평균보다 달성률이
+            </Text>
+            <Text size="xl" weight="regular">
+              <Text size="xl" weight="bold">
+                {diffRate}%
+              </Text>
+              {diffRate > 0 ? " 높아요. 👏" : " 낮아요. 😥"}
+            </Text>
+          </>
+        ) : (
+          <>
+            <Text size="xl" weight="regular">
+              <Text size="xl" weight="bold">
+                김땡땡님
+              </Text>
+              은 평균과 달성률이
+            </Text>
+            <Text size="xl" weight="regular">
+              <Text size="xl" weight="bold">
+                같아요. 🤔
+              </Text>
+            </Text>
+          </>
+        ))}
+      <Margin margin={spacing.padding} />
       <GraphBox
         onLayout={(e) => {
           const { width, height } = e.nativeEvent.layout;
@@ -144,25 +181,31 @@ export default function StockDetailGraphSection({
           fillCondition={data1FillCondition}
           data={data}
           size={graphSize}
+          noData={data1NoData}
         />
       </GraphBox>
       <Margin margin={40} />
-      <Text size="xl" weight="regular">
-        <Text size="xl" weight="bold">
-          금요일
-        </Text>
-        엔 사람들이
-      </Text>
-      <Text size="xl" weight="regular">
-        가장 많이 실천해요
-      </Text>
-      <Margin margin={spacing.padding} />
+      {!data2NoData && (
+        <>
+          <Text size="xl" weight="regular">
+            <Text size="xl" weight="bold">
+              금요일
+            </Text>
+            엔 사람들이
+          </Text>
+          <Text size="xl" weight="regular">
+            가장 많이 실천해요
+          </Text>
+          <Margin margin={spacing.padding} />
+        </>
+      )}
 
       <GraphBox>
         <MarketAverageGraph
           fillCondition={data2FillCondition}
           data={data2}
           size={graphSize}
+          noData={data2NoData}
         />
       </GraphBox>
     </>

@@ -156,6 +156,9 @@ export default function StockDetailScreen({
                 style={{
                   padding: spacing.offset,
                   flex: 1,
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
                 }}
                 onLayout={(event) => {
                   const { width, height } = event.nativeEvent.layout;
@@ -169,8 +172,8 @@ export default function StockDetailScreen({
               >
                 <LineValueChart
                   data={chartData}
-                  width={graphSize.width}
-                  height={graphSize.height}
+                  width={graphSize.width - spacing.offset * 2}
+                  height={graphSize.height - spacing.offset * 2}
                 />
               </View>
             </View>
@@ -263,20 +266,8 @@ export default function StockDetailScreen({
               )}
             </FlexBox>
             <Divider color={theme.textDimmer} marginVertical={20} />
-            <Text size="xl" weight="regular">
-              <Text size="xl" weight="bold">
-                김땡땡님
-              </Text>
-              은 평균보다 달성률이
-            </Text>
-            <Text size="xl" weight="regular">
-              <Text size="xl" weight="bold">
-                {diffRate}%
-              </Text>
-              {diffRate > 0 ? " 높아요. 👏" : " 낮아요. 😥"}
-            </Text>
-            <Margin margin={spacing.padding} />
             <StockDetailGraphSection
+              diffRate={diffRate}
               successRate={{
                 mySuccessRate: mySuccessRate,
                 averageSuccessRate: totalSuccessRate,

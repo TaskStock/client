@@ -1,28 +1,23 @@
-import { Image, View } from "react-native";
-import React from "react";
-import { ScrollView } from "react-native";
-import { SearchBar, SearchBar2 } from "../../components/molecules/SearchBar";
-import ContentLayout from "../../components/atoms/ContentLayout";
-import FlexBox from "../../components/atoms/FlexBox";
-import { spacing } from "../../constants/spacing";
-import Margin from "../../components/atoms/Margin";
-import { AbsolutePageHeader } from "../../components/molecules/PageHeader";
-import Text from "../../components/atoms/Text";
-import { WishListButton } from "../../components/organisms/Market/WishListBtn";
-import { TextWithIcon } from "../../components/molecules/TextWithIcon";
-import { WithLocalSvg } from "react-native-svg";
-import styled, { useTheme } from "styled-components/native";
-import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
 import { useNavigation } from "@react-navigation/native";
-import { MarketStackParamList } from "../../navigators/MarketStack";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import React from "react";
+import { Image, ScrollView, View } from "react-native";
+import styled, { useTheme } from "styled-components/native";
 import LightLogo from "../../../assets/images/logo-light.png";
-import { MarketItemButton } from "../../components/organisms/Market/MarketButton";
-import FilterIcon from "../../../assets/icons/filterIcon.svg";
-import { useGetAllStocksQuery } from "../../store/modules/market/market";
-import SkeletonPlaceholder from "react-native-skeleton-placeholder";
+import ContentLayout from "../../components/atoms/ContentLayout";
 import CustomSkeleton from "../../components/atoms/CustomSkeleton";
+import FlexBox from "../../components/atoms/FlexBox";
+import Margin from "../../components/atoms/Margin";
+import Text from "../../components/atoms/Text";
+import { AbsolutePageHeader } from "../../components/molecules/PageHeader";
+import { SearchBar2 } from "../../components/molecules/SearchBar";
+import { MarketItemButton } from "../../components/organisms/Market/MarketButton";
+import { WishListButton } from "../../components/organisms/Market/WishListBtn";
+import { spacing } from "../../constants/spacing";
 import { upValue } from "../../constants/value";
+import { MarketStackParamList } from "../../navigators/MarketStack";
+import { useGetAllStocksQuery } from "../../store/modules/market/market";
+import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
 
 const PageHeaderBox = styled.View`
   height: ${useResponsiveFontSize(300)}px;
@@ -49,7 +44,7 @@ const RegularSizeText = styled.Text<{
 
 const MarketListItemInner = styled.View`
   flex: 1;
-  padding: 3px 2px;
+  padding: 1px 2px;
 `;
 
 const MarketListItem = ({
@@ -77,7 +72,8 @@ const MarketListItem = ({
           styles={{ flex: 1 }}
         >
           <Text size="md" weight={"extraBold"}>
-            {name}
+            {/* {name} */}
+            안녕하세요
           </Text>
           <FlexBox justifyContent="space-between" alignItems="flex-end">
             <Text size="md" weight="medium">
@@ -169,7 +165,7 @@ export default function MarketListScreen() {
             onPressSearchIcon={onPressSearchIcon}
             placeholder="종목명을 검색하세요."
           ></SearchBar2>
-          <Margin margin={spacing.offset}></Margin>
+          <Margin margin={spacing.padding}></Margin>
           {/* {isLoading || isError ? (
             <CustomSkeleton>
               <View

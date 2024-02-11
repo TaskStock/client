@@ -2,17 +2,20 @@ import React from "react";
 import { View } from "react-native";
 import { useTheme } from "styled-components/native";
 import { VictoryBar, VictoryChart, VictoryAxis } from "victory-native";
+import Text from "../../atoms/Text";
 
 const MarketAverageGraph = ({
   data,
   size: { width, height },
   fillCondition,
+  noData,
 }: {
   data: { x: string; y: number; fake: boolean }[];
   size: {
     width: number;
     height: number;
   };
+  noData: boolean;
   fillCondition: ({
     datum,
   }: {
@@ -30,34 +33,46 @@ const MarketAverageGraph = ({
 
   return (
     <View style={{ flex: 1 }}>
-      <VictoryChart width={width} height={height}>
-        {/* Bar chart */}
-        <VictoryBar
-          data={data}
+      {noData ? (
+        <View
           style={{
-            data: {
-              fill: fillCondition,
-            },
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
           }}
-        />
+        >
+          <Text size="md">아직 종목 데이터가 없어요.</Text>
+          <Text size="md">조금만 기다려주세요!</Text>
+        </View>
+      ) : (
+        <VictoryChart width={width} height={height}>
+          {/* Bar chart */}
+          <VictoryBar
+            data={data}
+            style={{
+              data: {
+                fill: fillCondition,
+              },
+            }}
+          />
 
-        {/* X-axis */}
-        <VictoryAxis
-          tickValues={[1, 2]}
-          // tickFormat={["", "me", "average", ""]}
-          tickFormat={tickFormat}
-          style={{
-            axis: { stroke: theme.textDimmer, strokeWidth: 1 },
-            ticks: { stroke: "transparent" },
-            tickLabels: { fontSize: 12, padding: 5 },
-          }}
-        />
+          {/* X-axis */}
+          <VictoryAxis
+            tickValues={[1, 2]}
+            // tickFormat={["", "me", "average", ""]}
+            tickFormat={tickFormat}
+            style={{
+              axis: { stroke: theme.textDimmer, strokeWidth: 1 },
+              ticks: { stroke: "transparent" },
+              tickLabels: { fontSize: 12, padding: 5, fill: theme.text },
+            }}
+          />
 
-        {/* Y-axis */}
-        {/* <VictoryAxis dependentAxis /> */}
+          {/* Y-axis */}
+          {/* <VictoryAxis dependentAxis /> */}
 
-        {/* Percentage labels above the bars */}
-        {/* {data.map((point) => (
+          {/* Percentage labels above the bars */}
+          {/* {data.map((point) => (
           <VictoryLabel
             key={point.x}
             x={point.x === "me" ? 1 : 2}
@@ -66,7 +81,8 @@ const MarketAverageGraph = ({
             style={{ fontSize: 12, fill: "black" }}
           />
         ))} */}
-      </VictoryChart>
+        </VictoryChart>
+      )}
     </View>
   );
 };

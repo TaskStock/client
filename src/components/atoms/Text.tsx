@@ -43,7 +43,7 @@ const TextStyling = styled.Text<{
 `;
 
 interface TextProps {
-  children: string | string[] | number;
+  children: string | string[] | number | React.ReactNode;
   size: SizeStyles;
   weight?: WeightStyles;
   color?: string;

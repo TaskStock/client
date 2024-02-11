@@ -127,6 +127,7 @@ export default function MarketMainScreen() {
               gap={spacing.gutter + spacing.offset}
               styles={{
                 flex: 1,
+                paddingBottom: spacing.offset,
               }}
             >
               <MarketSection
