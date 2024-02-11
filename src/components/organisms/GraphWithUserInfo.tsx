@@ -25,12 +25,14 @@ const Container = styled.View`
 `;
 
 const InnerContent = styled.View`
-  width: 90%;
-  height: 90%;
-  flex: 1;
+  width: 100%;
+  height: 100%;
+  /* padding: ${spacing.padding}px; */
+  /* flex: 1; */
   display: flex;
   align-items: center;
   justify-content: center;
+  /* background-color: red; */
 `;
 
 const IconContainer = styled.View`

@@ -9,10 +9,12 @@ import LoadingSpinner from "../../atoms/LoadingSpinner";
 import Text from "../../atoms/Text";
 import LineValueChart from "../../molecules/LineValueChart";
 import WagmiChart from "../../molecules/WagmiChart";
+import { spacing } from "../../../constants/spacing";
 
 const Container = styled.View`
   width: 100%;
   height: 100%;
+  padding: ${spacing.padding}px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -59,15 +61,22 @@ function HomeChart({
     data: data,
   });
 
+  const widthWithPadding = width - spacing.padding * 2;
+  const heightWithPadding = height - spacing.padding * 2;
+
   return (
     <Container>
       {isCandleStick ? (
-        <WagmiChart data={wagmiData} width={width} height={height}></WagmiChart>
+        <WagmiChart
+          data={wagmiData}
+          width={widthWithPadding}
+          height={heightWithPadding}
+        ></WagmiChart>
       ) : (
         <LineValueChart
           data={data}
-          width={width}
-          height={height}
+          width={widthWithPadding}
+          height={heightWithPadding}
         ></LineValueChart>
       )}
     </Container>
