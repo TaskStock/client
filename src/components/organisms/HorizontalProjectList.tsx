@@ -1,4 +1,4 @@
-import { View, Text, ScrollView } from "react-native";
+import { View, Text, ScrollView, Platform } from "react-native";
 import React from "react";
 import { spacing } from "../../constants/spacing";
 import styled from "styled-components/native";
@@ -7,7 +7,7 @@ import ProjectSelectBtn from "../molecules/Home/ProjectSelectBtn";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
 
 export const Projects = styled.View`
-  min-width: 100%;
+  ${Platform.OS === "android" ? "min-width: 500px;" : "min-width: 100%;"}
   padding-left: ${spacing.gutter}px;
   border-bottom-width: 1px;
   border-bottom-color: ${({ theme }) => theme.textDimmer};

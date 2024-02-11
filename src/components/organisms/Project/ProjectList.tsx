@@ -285,6 +285,9 @@ export default function ProjectList({
       ItemSeparatorComponent={() => {
         return <Margin margin={useResponsiveFontSize(20)} />;
       }}
+      style={{
+        flex: 1,
+      }}
     ></FlatList>
   );
 }
