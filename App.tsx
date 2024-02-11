@@ -15,6 +15,7 @@ import { checkTokenExistence } from "./src/store/modules/auth";
 import { startingTheme } from "./src/store/modules/theme";
 import { checkAndRenewTokens } from "./src/utils/authUtils/tokenUtils";
 import { removeData } from "./src/utils/asyncStorage";
+import { checkFirstTime } from "./src/store/modules/tutorial";
 import Toast from "react-native-toast-message";
 import { toastConfig } from "./src/config/toast";
 
@@ -44,6 +45,9 @@ export default function App() {
     }
   }, [isLoggedIn]);
 
+  // useEffect(() => {
+  //   removeData("firstTime");
+  // }, []);
   // useEffect(() => {
   //   removeData("accessToken");
   //   removeData("refreshToken");

@@ -29,6 +29,7 @@ export type IconProps = {
     left?: number;
     right?: number;
   };
+  style?: any;
 };
 
 const Icons: React.FC<IconProps> = ({
@@ -38,6 +39,7 @@ const Icons: React.FC<IconProps> = ({
   color = "black",
   onPress,
   hitSlop,
+  style,
 }) => {
   let IconComponent: any;
   if (type === "material") IconComponent = MaterialCommunityIcons;
@@ -50,7 +52,7 @@ const Icons: React.FC<IconProps> = ({
   else return null;
 
   return (
-    <TouchableOpacity onPress={onPress} hitSlop={hitSlop}>
+    <TouchableOpacity onPress={onPress} hitSlop={hitSlop} style={style}>
       <IconComponent
         name={name}
         size={useResponsiveFontSize(size)}

@@ -20,6 +20,7 @@ import Text from "../../atoms/Text";
 import { checkIsWithInCurrentCalcDay } from "../../../utils/checkIsSameLocalDay";
 import { useGetAllTodoArgs } from "../../../hooks/useGetAllTodoArgs";
 import { useGetValuesArg } from "../../../hooks/useGetValuesArg";
+import { setStep3 } from "../../../store/modules/tutorial";
 
 const THEME_CONSTANTS = {
   dark: {
@@ -153,8 +154,12 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
     });
   }, [itemRef.current]);
 
+  const { showTutorial, step3 } = useAppSelect((state) => state.tutorial);
   const toggleTodoCheck = useCallback(() => {
     setToggle(!toggle);
+    if (showTutorial && step3) {
+      dispatch(setStep3(false));
+    }
 
     toggleCheckTodo({
       todo_id: todo.todo_id,

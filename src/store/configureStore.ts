@@ -14,6 +14,7 @@ import getFriendsReducer, { getFriendsApi } from "./modules/getFriends";
 import { badgeReducer } from "./modules/badge";
 import { marketApi } from "./modules/market/market";
 import marketReducer from "./modules/market/market";
+import { tutorialReducer } from "./modules/tutorial";
 
 const store = configureStore({
   reducer: {
@@ -36,6 +37,7 @@ const store = configureStore({
     market: marketReducer,
     pushNoti: pushNotiReducer,
     badge: badgeReducer,
+    tutorial: tutorialReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
