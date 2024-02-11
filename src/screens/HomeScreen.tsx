@@ -28,6 +28,8 @@ const HomeScreen = ({ navigation }) => {
   // push notification
   usePushNotification();
 
+  console.log("HomeScreen");
+
   // tutorial
   const showTutorialIfFirst = async () => {
     const first = await checkFirstTime();
