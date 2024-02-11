@@ -150,13 +150,9 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
 
   const measureItemRef = useCallback(() => {
     itemRef.current?.measure((x, y, width, height, pageX, pageY) => {
-      console.log(pageX, pageY, "pageX, pageY");
-
       setModalPosition({ x: pageX, y: pageY });
     });
   }, [itemRef.current]);
-
-  console.log(modalPosition, "modalPosition");
 
   const { showTutorial, step3 } = useAppSelect((state) => state.tutorial);
   const toggleTodoCheck = useCallback(() => {
@@ -255,7 +251,7 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
   ]);
 
   return (
-    <View ref={itemRef}>
+    <View ref={itemRef} collapsable={false}>
       <FlexBox
         justifyContent="space-between"
         alignItems="center"
