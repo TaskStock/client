@@ -12,23 +12,23 @@ const ProfilePic = ({
   strategy: string;
   size?: number;
 }) => {
-  const SERVER_URL = getAPIHost();
-  let uri;
-  switch (strategy) {
-    case "local":
-    case "apple":
-      uri = convertSlash(SERVER_URL + image);
-      break;
-    default:
-      uri = convertSlash(image);
-  }
+  // const SERVER_URL = getAPIHost();
+  // let uri;
+  // switch (strategy) {
+  //   case "local":
+  //   case "apple":
+  //     uri = convertSlash(SERVER_URL + image);
+  //     break;
+  //   default:
+  //     uri = convertSlash(image);
+  // }
   return (
     <>
       {image ? (
         <Image
           style={{ width: size, height: size, borderRadius: 50 }}
           source={{
-            uri: uri,
+            uri: image,
           }}
         />
       ) : (

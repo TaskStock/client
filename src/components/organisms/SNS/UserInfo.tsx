@@ -19,6 +19,8 @@ import { IconsWithoutFeedBack } from "../../atoms/Icons";
 import PrivateLockIcon from "../../atoms/PrivateLockIcon";
 import ProfilePic from "../../atoms/ProfilePic";
 import Text from "../../atoms/Text";
+import BadgesPreview from "../../molecules/SNS/BadgesPreview";
+import { useNavigation } from "@react-navigation/native";
 
 const Container = styled.View`
   padding: ${spacing.padding}px ${spacing.offset}px ${spacing.offset}px;
@@ -44,8 +46,9 @@ const Info = ({ text, iconType, iconName, color }) => {
 const UserInfo = () => {
   const theme = useTheme();
   const dispatch = useAppDispatch();
-  const data = useAppSelect((state) => state.friends.targetUser);
+  const { targetUser: data, badges } = useAppSelect((state) => state.friends);
 
+  const navigation = useNavigation() as any;
   const handleFollow = () => {
     switch (data.button) {
       case "팔로우":
@@ -101,12 +104,12 @@ const UserInfo = () => {
             iconType={"materialIcons"}
             color={theme.text}
           />
-          <Info
-            text={`뱃지`}
-            iconName={"trophy-award"}
-            iconType={"material"}
-            color={theme.text}
-          />
+          {badges.length > 0 && (
+            <BadgesPreview
+              badges={badges}
+              onPress={() => navigation.navigate("Badge", { type: "friend" })}
+            />
+          )}
         </FlexBox>
         <FollowBtn onPress={handleFollow} text={data.button} />
       </FlexBox>
