@@ -1,40 +1,26 @@
-import { View, ScrollView } from "react-native";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
+import _ from "lodash";
 import React, { useRef } from "react";
-import styled, { useTheme } from "styled-components/native";
+import { ScrollView } from "react-native";
+import styled from "styled-components/native";
+import { DateString } from "../../../@types/calendar";
+import { Retrospect } from "../../../@types/retrospect";
+import { spacing } from "../../../constants/spacing";
+import { useProject } from "../../../hooks/useProject";
+import { ProjectStackParamList } from "../../../navigators/ProjectStack";
+import { useAppDispatch } from "../../../store/configureStore.hooks";
+import { editRetrospectForm } from "../../../store/modules/retrospect/retrospect";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import FlexBox from "../../atoms/FlexBox";
-import { spacing } from "../../../constants/spacing";
-import Text from "../../atoms/Text";
-import Margin from "../../atoms/Margin";
-import { editRetrospectForm } from "../../../store/modules/retrospect/retrospect";
 import LoadingSpinner from "../../atoms/LoadingSpinner";
-import { Retrospect } from "../../../@types/retrospect";
-import { useProject } from "../../../hooks/useProject";
-import {
-  NavigationProp,
-  useFocusEffect,
-  useNavigation,
-} from "@react-navigation/native";
-import { useAppDispatch } from "../../../store/configureStore.hooks";
-import { DateString } from "../../../@types/calendar";
-import { ProjectStackParamList } from "../../../navigators/ProjectStack";
-import _ from "lodash";
+import Margin from "../../atoms/Margin";
+import Text from "../../atoms/Text";
 
 const Box = styled.Pressable`
   background-color: ${({ theme }) => theme.box};
   padding: ${useResponsiveFontSize(20)}px;
   border-radius: 20px;
-
   flex: 1;
-
-  /* 안드로이드용 */
-  elevation: 2;
-
-  /* IOS용으로 추가 */
-  shadow-color: #000;
-  shadow-offset: 0px 4px;
-  /* shadow-opacity: 0.1; */
-  shadow-radius: 10px;
 `;
 
 function RetrospectItem({
@@ -49,7 +35,7 @@ function RetrospectItem({
   const formattedDate = item.created_date.slice(0, 10);
 
   return (
-    <Box onPress={onPressItem}>
+    <Box onPress={onPressItem} style={{}}>
       <FlexBox gap={spacing.small}>
         <Text size="xs" color="red">
           {projectName}

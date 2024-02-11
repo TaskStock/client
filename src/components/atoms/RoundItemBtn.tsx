@@ -30,9 +30,9 @@ const RoundItem = styled.View<{
   border-radius: ${({ size }) => {
     switch (size) {
       case "sm":
-        return `${useResponsiveFontSize(13)}px;`;
+        return `${useResponsiveFontSize(30)}px;`;
       case "md":
-        return `${useResponsiveFontSize(20)}px;`;
+        return `${useResponsiveFontSize(40)}px;`;
       case "xl":
         return `${useResponsiveFontSize(30)}px;`;
     }

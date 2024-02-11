@@ -11,7 +11,7 @@ export const ModalContainer = styled.View<{
   top: ${({ position }) => position.top}px;
   right: ${({ position }) => position.right}px;
   padding: ${spacing.padding}px;
-  z-index: 100;
+  /* z-index: 100; */
   border-radius: 10px;
   background-color: ${({ theme }) =>
     theme.name == "dark"

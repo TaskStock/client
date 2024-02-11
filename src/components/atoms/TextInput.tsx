@@ -120,8 +120,12 @@ export const TextAreaInput = ({
           placeholderTextColor={theme.textDim}
           value={value}
           numberOfLines={numberOfLines}
+          multiline
           onChangeText={onChangeText}
           autoCapitalize="none"
+          style={{
+            textAlignVertical: "top",
+          }}
           {...props}
         />
       </Container>

@@ -6,7 +6,6 @@ import ContentLayout from "../../components/atoms/ContentLayout";
 import { spacing } from "../../constants/spacing";
 import Section from "../../components/molecules/Section";
 import FlexBox from "../../components/atoms/FlexBox";
-import DateTimePicker from "@react-native-community/datetimepicker";
 import {
   TextAreaInput,
   TextInputWithBorder,
@@ -22,12 +21,7 @@ import Text from "../../components/atoms/Text";
 import { useRetrospectForm } from "../../hooks/useRetrospectForm";
 import { useNavigation } from "@react-navigation/native";
 import dayjs from "dayjs";
-
-const DatePickerBox = styled.View`
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-`;
+import { showErrorToast } from "../../utils/showToast";
 
 const NormalSection = ({ headerText, children }) => {
   return (
@@ -64,6 +58,16 @@ export default function RetrospectWriteScreen() {
   } = useRetrospectForm();
 
   const onPressSave = () => {
+    if (retrospectForm.content === "") {
+      showErrorToast("회고 내용을 입력해주세요");
+      return;
+    }
+
+    if (!retrospectForm.project_id) {
+      showErrorToast("프로젝트를 선택해주세요");
+      return;
+    }
+
     if (isEdit) onUpdateRetrospect();
     else onAddRetrospect();
 
@@ -95,7 +99,7 @@ export default function RetrospectWriteScreen() {
             </NormalSection>
             <NormalSection headerText="회고 내용">
               <TextAreaInput
-                numberOfLines={50}
+                numberOfLines={15}
                 minHeight={useResponsiveFontSize(260)}
                 placeholder="회고 내용을 입력해주세요"
                 value={retrospectForm.content}

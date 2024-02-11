@@ -4,10 +4,10 @@ import styled, { css } from "styled-components/native";
 import OutsidePressHandler from "react-native-outside-press";
 
 const ModalBox = styled.View`
-  width: 70%;
+  width: 80%;
   background-color: ${({ theme }) => theme.box};
   border-radius: 20px;
-  padding: 30px;
+  padding: 40px 30px;
 
   ${({ theme }) => css`
     ${Platform.OS === "ios" &&
