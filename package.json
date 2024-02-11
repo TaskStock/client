@@ -11,7 +11,6 @@
   "dependencies": {
     "@invertase/react-native-apple-authentication": "^2.3.0",
     "@react-native-async-storage/async-storage": "^1.21.0",
-    "@react-native-community/datetimepicker": "7.2.0",
     "@react-native-community/hooks": "^3.0.0",
     "@react-native-community/push-notification-ios": "^1.11.0",
     "@react-native-community/slider": "^4.5.0",
