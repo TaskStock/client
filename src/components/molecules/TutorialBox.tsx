@@ -2,6 +2,7 @@ import React from "react";
 import { Dimensions, Image, Pressable, View } from "react-native";
 import styled from "styled-components/native";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
+import { useAppSelect } from "../../store/configureStore.hooks";
 
 const { width: clientWidth } = Dimensions.get("window");
 
@@ -35,18 +36,29 @@ const TutorialBox = ({
   onPress?: () => void;
 }) => {
   let imageSource;
+  const theme = useAppSelect((state) => state.theme.value);
+
   switch (type) {
     case 1:
-      imageSource = require("../../../assets/images/tutorials/tutorial-1.png");
+      theme === "dark"
+        ? (imageSource = require("../../../assets/images/tutorials/tutorial-1-dark.png"))
+        : (imageSource = require("../../../assets/images/tutorials/tutorial-1.png"));
       break;
     case 2:
-      imageSource = require("../../../assets/images/tutorials/tutorial-2.png");
+      theme === "dark"
+        ? (imageSource = require("../../../assets/images/tutorials/tutorial-2-dark.png"))
+        : (imageSource = require("../../../assets/images/tutorials/tutorial-2.png"));
       break;
     case 3:
-      imageSource = require("../../../assets/images/tutorials/tutorial-3.png");
+      theme === "dark"
+        ? (imageSource = require("../../../assets/images/tutorials/tutorial-3-dark.png"))
+        : (imageSource = require("../../../assets/images/tutorials/tutorial-3.png"));
       break;
     case 4:
-      imageSource = require("../../../assets/images/tutorials/tutorial-4.png");
+      theme === "dark"
+        ? (imageSource = require("../../../assets/images/tutorials/tutorial-4-dark.png"))
+        : (imageSource = require("../../../assets/images/tutorials/tutorial-4.png"));
+
       break;
     case 5:
       imageSource = require("../../../assets/images/tutorials/tutorial-5.png");

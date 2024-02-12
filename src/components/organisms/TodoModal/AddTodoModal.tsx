@@ -252,12 +252,12 @@ export default function AddTodoModal() {
         setTutorialShown2(false);
       }}
     >
-      {/* {showTutorial && tutorialShown1 ? ( */}
-      {true ? (
+      {showTutorial && tutorialShown1 ? (
+        // {true ? (
         <TutorialBox
           type={2}
           style={{
-            top: useResponsiveFontSize(110),
+            top: useResponsiveFontSize(120),
             right: useResponsiveFontSize(0),
             height: useResponsiveFontSize(280),
             zIndex: 100,
@@ -277,6 +277,7 @@ export default function AddTodoModal() {
               }}
               type="ionicons"
               name="close"
+              color={theme.text}
               size={30}
             />
           </CloseBox>
@@ -351,7 +352,11 @@ export default function AddTodoModal() {
             {showTutorial && tutorialShown2 ? (
               <TutorialBox
                 type={3}
-                style={{ top: 50, left: 15, height: 150 }}
+                style={{
+                  top: useResponsiveFontSize(45),
+                  left: useResponsiveFontSize(15),
+                  height: 150,
+                }}
                 ratio={0.65}
               />
             ) : null}

@@ -103,8 +103,8 @@ const SettingsHomeScreen = ({ navigation }) => {
           icon={{ type: "ionicons", name: "information-circle" }}
         />
         <Menu text="로그아웃" onPress={askLogout} textColor={palette.red} />
-        <Menu text="asyncStorage check" onPress={checkStorage} />
-        <Menu text="redux check" onPress={checkRedux} />
+        {/* <Menu text="asyncStorage check" onPress={checkStorage} />
+        <Menu text="redux check" onPress={checkRedux} /> */}
       </Container>
     </>
   );
