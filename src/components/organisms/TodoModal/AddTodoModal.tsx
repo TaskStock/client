@@ -33,6 +33,7 @@ import { removeData } from "../../../utils/asyncStorage";
 import { setStep2, setStep3 } from "../../../store/modules/tutorial";
 import Margin from "../../atoms/Margin";
 import { showErrorToast } from "../../../utils/showToast";
+import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 
 const AddTodoOverlay = styled.Pressable`
   position: absolute;
@@ -147,6 +148,8 @@ export default function AddTodoModal() {
 
   const value = addTodoForm.level * 1000;
 
+  const inputRef = React.useRef(null);
+
   const {
     getValuesQueryArgs: { startDate, endDate },
   } = useValue();
@@ -249,11 +252,18 @@ export default function AddTodoModal() {
         setTutorialShown2(false);
       }}
     >
-      {showTutorial && tutorialShown1 ? (
+      {/* {showTutorial && tutorialShown1 ? ( */}
+      {true ? (
         <TutorialBox
           type={2}
-          style={{ top: 90, right: 20, height: 280, zIndex: 100 }}
+          style={{
+            top: useResponsiveFontSize(110),
+            right: useResponsiveFontSize(0),
+            height: useResponsiveFontSize(280),
+            zIndex: 100,
+          }}
           ratio={0.8}
+          onPress={() => inputRef.current.focus()}
         />
       ) : null}
       <InnerPressable>
@@ -290,6 +300,7 @@ export default function AddTodoModal() {
                   }
                 >
                   <TodoInput
+                    ref={inputRef}
                     placeholder="할 일을 입력해주세요."
                     placeholderTextColor={theme.textDim}
                     value={addTodoForm.content}
