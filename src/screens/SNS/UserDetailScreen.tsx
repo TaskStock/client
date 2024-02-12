@@ -53,7 +53,9 @@ const UserDetailScreen = ({ route, navigation }: UserDetailScreenProps) => {
     userId,
   });
 
-  const [selectedProjectId, setSelectedProjectId] = useState(null);
+  const [selectedProjectId, setSelectedProjectId] = useState<number | null>(
+    null
+  );
 
   const dispatch = useAppDispatch();
 
@@ -85,6 +87,10 @@ const UserDetailScreen = ({ route, navigation }: UserDetailScreenProps) => {
           else return todo.project_id == selectedProjectId;
         })
     : [];
+
+  const onPressProject = (id: number) => {
+    setSelectedProjectId(id);
+  };
 
   const values = data?.values;
   const userInfo = data?.targetData;
@@ -221,7 +227,7 @@ const UserDetailScreen = ({ route, navigation }: UserDetailScreenProps) => {
                 <HorizontalProjectList
                   selectedProjectId={selectedProjectId}
                   projects={projects}
-                  onPressProject={(id) => {}}
+                  onPressProject={onPressProject}
                 ></HorizontalProjectList>
                 <DrawerContent>
                   {currentDaySelectedProjectTodos.length > 0 ? (
