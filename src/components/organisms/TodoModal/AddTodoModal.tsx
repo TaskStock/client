@@ -249,11 +249,10 @@ export default function AddTodoModal() {
         setTutorialShown2(false);
       }}
     >
-      {/* {showTutorial && tutorialShown1 ? ( */}
-      {true ? (
+      {showTutorial && tutorialShown1 ? (
         <TutorialBox
           type={2}
-          style={{ top: 0, right: 20, height: 280, zIndex: 100 }}
+          style={{ top: 90, right: 20, height: 280, zIndex: 100 }}
           ratio={0.8}
         />
       ) : null}
