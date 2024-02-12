@@ -72,8 +72,7 @@ const MarketListItem = ({
           styles={{ flex: 1 }}
         >
           <Text size="md" weight={"extraBold"}>
-            {/* {name} */}
-            안녕하세요
+            {name}
           </Text>
           <FlexBox justifyContent="space-between" alignItems="flex-end">
             <Text size="md" weight="medium">
