@@ -1,11 +1,14 @@
 import React from "react";
 import Slider from "@react-native-community/slider";
 import SliderThumb from "../../../../assets/images/slider-thumb.png";
+import SliderThumbAndroid from "../../../../assets/images/slider-thumb_3.png";
+
 import styled, { useTheme } from "styled-components/native";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import { useDispatch } from "react-redux";
 import { setAddTodoForm } from "../../../store/modules/todo/todo";
 import { useAppSelect } from "../../../store/configureStore.hooks";
+import { Platform, View } from "react-native";
 
 const SliderLabel = styled.View`
   position: absolute;
@@ -24,7 +27,7 @@ const SliderLabelText = styled.Text`
 `;
 
 const SliderGrid = styled.View`
-  width: 3px;
+  width: 1px;
   height: 10px;
   background-color: ${({ theme }) => theme.mainBtnGray};
   pointer-events: none;
@@ -44,34 +47,62 @@ export default function ValueSlider() {
 
   const theme = useTheme();
 
+  const sliderThumbImage =
+    Platform.OS === "ios" ? SliderThumb : SliderThumbAndroid;
+
+  const maximumTrackTintColor =
+    Platform.OS === "ios" ? theme.mainBtnGray : theme.textDim;
+
   return (
-    <Slider
-      minimumValue={0}
-      maximumValue={5000}
-      onValueChange={onChangeSliderValue}
-      minimumTrackTintColor={theme.text}
-      maximumTrackTintColor={theme.mainBtnGray}
-      step={1000}
-      tapToSeek={true}
-      value={sliderValue * 1000}
-      thumbImage={SliderThumb}
-      style={{
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "space-between",
-      }}
+    <View
+      style={
+        {
+          // backgroundColor: "red",
+        }
+      }
     >
-      <SliderGrid />
-      <SliderGrid />
-      <SliderGrid />
-      <SliderGrid />
-      <SliderGrid />
-      <SliderGrid />
-      <SliderLabel>
-        <SliderLabelText>0</SliderLabelText>
-        <SliderLabelText>5000</SliderLabelText>
-      </SliderLabel>
-    </Slider>
+      <Slider
+        minimumValue={0}
+        maximumValue={5000}
+        onValueChange={onChangeSliderValue}
+        minimumTrackTintColor={theme.text}
+        maximumTrackTintColor={maximumTrackTintColor}
+        step={1000}
+        tapToSeek={true}
+        value={sliderValue * 1000}
+        thumbImage={sliderThumbImage}
+        style={
+          {
+            // backgroundColor: "red",
+            // display: "flex",
+            // flexDirection: "row",
+            // alignItems: "center",
+            // justifyContent: "space-between",
+          }
+        }
+      ></Slider>
+      <View
+        style={{
+          position: "absolute",
+          top: Platform.OS === "ios" ? 40 : 30,
+          width: "100%",
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        {/* <SliderGrid />
+        <SliderGrid />
+        <SliderGrid />
+        <SliderGrid />
+        <SliderGrid />
+        <SliderGrid /> */}
+        <SliderLabel>
+          <SliderLabelText>0</SliderLabelText>
+          <SliderLabelText>5000</SliderLabelText>
+        </SliderLabel>
+      </View>
+    </View>
   );
 }

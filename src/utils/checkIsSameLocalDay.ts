@@ -93,10 +93,10 @@ function checkIsWithInOneDay(value_date: string, todo_date: string) {
   // Calculate the difference in hours between inputA and inputB
   // const hoursDifference = Math.abs(dateA.diff(dateB, "hour"));
 
-  const hoursDifference = dateB.diff(dateA, "hour");
+  const diffInMilisec = dateB.diff(dateA);
 
   // Check if the difference is within 24 hours
-  return hoursDifference <= 24 && hoursDifference >= 0;
+  return diffInMilisec <= 86400000 && diffInMilisec >= 0;
 }
 
 export {

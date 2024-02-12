@@ -10,7 +10,7 @@ export const calculateUserDiffRate = (user: {
   };
 
   const toDivide =
-    data.value_yesterday_ago === 0 ? 100 : data.value_yesterday_ago;
+    data.value_yesterday_ago === 0 ? 10000 : data.value_yesterday_ago;
 
   const diff = data.cumulative_value - data.value_yesterday_ago;
   const diff_rate =

@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef } from "react";
-import { Pressable, ScrollView, TextInput, View } from "react-native";
+import { Platform, Pressable, ScrollView, TextInput, View } from "react-native";
 import { useDispatch } from "react-redux";
 import styled, { useTheme } from "styled-components/native";
 import { useProject } from "../../../hooks/useProject";
@@ -17,24 +17,25 @@ const ProjectItemContainer = styled.View<{ height?: number }>`
   flex-direction: row;
   flex-wrap: wrap;
   width: 100%;
-
   gap: 10px;
 `;
 
 const ProjectItem = styled.View<{ isSelected?: boolean }>`
   display: inline-flex;
   justify-content: center;
-  box-sizing: border-box;
   align-items: center;
+  box-sizing: border-box;
   flex-direction: row;
-  padding: 9px 20px;
+  padding: 0 20px;
+  padding-bottom: ${Platform.OS === "ios" ? 0 : 3}px;
   height: 36px;
-
+  /* height: ${Platform.OS === "ios" ? 36 : 38}px; */
   background-color: ${({ theme, isSelected }) =>
     theme.name == "gray" && isSelected
       ? theme.mainBtnReversed
       : theme.mainBtnGray};
-  border-radius: 20px;
+  border-radius: 18px;
+  /* border-radius: ${Platform.OS === "ios" ? 18 : 22}px; */
 
   border-color: ${({ theme, isSelected }) =>
     theme.name == "dark" && isSelected ? theme.text : "none"};

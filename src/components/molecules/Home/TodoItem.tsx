@@ -155,6 +155,7 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
   }, [itemRef.current]);
 
   const { showTutorial, step3 } = useAppSelect((state) => state.tutorial);
+
   const toggleTodoCheck = useCallback(() => {
     setToggle(!toggle);
     if (showTutorial && step3) {
@@ -250,6 +251,17 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
     ishomeDrawerOpen,
   ]);
 
+  const onPressDot = () => {
+    if (todo.stockitem_id) return;
+
+    if (!MeasurePositionTriggerRef.current) {
+      MeasurePositionTriggerRef.current = true;
+      measureItemRef();
+    } else {
+      setIsModalOpen(!isModalOpen);
+    }
+  };
+
   return (
     <View ref={itemRef} collapsable={false}>
       <FlexBox
@@ -296,14 +308,7 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
             name="dots-horizontal"
             size={24}
             color={styledTheme.textDimmer}
-            onPress={() => {
-              if (!MeasurePositionTriggerRef.current) {
-                MeasurePositionTriggerRef.current = true;
-                measureItemRef();
-              } else {
-                setIsModalOpen(!isModalOpen);
-              }
-            }}
+            onPress={onPressDot}
           />
         </FlexBox>
         {isModalOpen && (

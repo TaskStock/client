@@ -33,6 +33,7 @@ import ProjectItemList from "./ProjectItemList";
 import ValueSlider from "./ValueSlider";
 import { removeData } from "../../../utils/asyncStorage";
 import { setStep2, setStep3 } from "../../../store/modules/tutorial";
+import Margin from "../../atoms/Margin";
 
 const AddTodoOverlay = styled.Pressable`
   position: absolute;
@@ -258,13 +259,11 @@ export default function AddTodoModal() {
               size={30}
             />
           </CloseBox>
-
-          <View
+          <ScrollView
             style={{
-              marginBottom: spacing.offset,
               flex: 1,
+              marginBottom: spacing.padding,
             }}
-            // ref={scrollViewRef}
           >
             <KeyboardAvoidingView
               style={{ flex: 1 }}
@@ -314,120 +313,12 @@ export default function AddTodoModal() {
                       </Section.Header>
                     }
                   >
-                    <View style={{ zIndex: 2000 }}>
-                      <ValueSlider></ValueSlider>
-                    </View>
+                    {Platform.OS === "android" && (
+                      <Margin margin={spacing.padding}></Margin>
+                    )}
+                    <ValueSlider></ValueSlider>
                   </Section>
-                  {/* <Section
-                    header={
-                      <Section.Header>
-                        <Section.HeaderText systemTheme="dark">
-                          반복
-                        </Section.HeaderText>
-                        {dayList.map((item) => {
-                          const isSelected =
-                            addTodoForm.repeat_day &&
-                            addTodoForm.repeat_day.includes(item);
 
-                          if (isSelected)
-                            return <ValueText key={item}>{item}</ValueText>;
-                        })}
-                      </Section.Header>
-                    }
-                    gapSize="lg"
-                  >
-                    <FlexBox gap={10}>
-                      {dayList.map((item, index) => {
-                        const onPressDayItem = () => {
-                          dispatch(
-                            setAddTodoForm({
-                              name: "repeat_day",
-                              value: getNewRepeatDay(
-                                addTodoForm.repeat_day,
-                                index
-                              ),
-                            })
-                          );
-                        };
-
-                        const isSelected =
-                          addTodoForm.repeat_day[index] === "1";
-
-                        return (
-                          <RepeatDayItem
-                            onLayout={(e) => {
-                              if (dayItemWidth === 0)
-                                setDayItemWidth(e.nativeEvent.layout.width);
-                            }}
-                            key={index + item}
-                            isSelected={isSelected}
-                            onPress={onPressDayItem}
-                            size={dayItemWidth}
-                          >
-                            <Text
-                              size="md"
-                              color={
-                                theme.name == "gray"
-                                  ? isSelected
-                                    ? theme.textReverse
-                                    : theme.textDim
-                                  : "white"
-                              }
-                            >
-                              {item}
-                            </Text>
-                          </RepeatDayItem>
-                        );
-                      })}
-                    </FlexBox>
-                  </Section>
-                  <Section
-                    header={
-                      <Section.Header>
-                        <FlexBox
-                          justifyContent="space-between"
-                          alignItems="center"
-                          styles={{
-                            flex: 1,
-                            minHeight: useResponsiveFontSize(50),
-                          }}
-                        >
-                          <FlexBox
-                            justifyContent="center"
-                            alignItems="center"
-                            gap={10}
-                          >
-                            <Section.HeaderText>반복 종료</Section.HeaderText>
-                            <Switch
-                              onValueChange={toggleIsEndRepeat}
-                              value={isRepeatDateModalOpen}
-                              thumbColor={theme.textReverse}
-                              trackColor={{
-                                false: theme.palette.neutral600_gray,
-                                true:
-                                  theme.name == "gray"
-                                    ? theme.palette.neutral500_dark
-                                    : theme.text,
-                              }}
-                            ></Switch>
-                          </FlexBox>
-                          {isRepeatDateModalOpen && (
-                            <DatePickerBox>
-                              <DateTimePicker
-                                value={datePickerInitialDate}
-                                mode="date"
-                                display="default"
-                                onChange={onChangeDate}
-                                style={{
-                                  bottom: 0,
-                                }}
-                              />
-                            </DatePickerBox>
-                          )}
-                        </FlexBox>
-                      </Section.Header>
-                    }
-                  ></Section> */}
                   <Section
                     gapSize="lg"
                     header={
@@ -443,7 +334,7 @@ export default function AddTodoModal() {
                 </AddTodoContents>
               </Pressable>
             </KeyboardAvoidingView>
-          </View>
+          </ScrollView>
 
           <View>
             {showTutorial && tutorialShown2 ? (
