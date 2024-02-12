@@ -8,7 +8,7 @@ export const _IOS_API_HOST = `${LOCAL_API_HOST_IOS}`;
 // const _ANDROID_API_HOST = "http://10.0.2.2:8000/";
 
 export const getAPIHost = (): string => {
-  console.log(LOCAL_API_HOST_ANDROID);
+  // console.log(LOCAL_API_HOST_ANDROID);
   if (Platform.OS === "ios") {
     return _IOS_API_HOST;
   } else if (Platform.OS === "android") {
