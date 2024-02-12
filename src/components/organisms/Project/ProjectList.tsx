@@ -26,6 +26,7 @@ import styled, { useTheme } from "styled-components/native";
 import Margin from "../../atoms/Margin";
 import Text from "../../atoms/Text";
 import LoadingSpinner from "../../atoms/LoadingSpinner";
+import { getDarkTheme, getThemeElement } from "../../../utils/getThemeElement";
 
 const ProjectBox = styled.View<{ isFinished: boolean }>`
   border-radius: ${useResponsiveFontSize(20)}px;
@@ -219,7 +220,7 @@ function ProjectItem({ item }: { item: Project }) {
             }}
           >
             <ModalBtn isSelected onPress={onPressProjectManageBtn}>
-              <Text size="sm" color={theme.textReverse}>
+              <Text size="sm" color={getThemeElement(theme).reverseButtonText}>
                 프로젝트 관리
               </Text>
             </ModalBtn>

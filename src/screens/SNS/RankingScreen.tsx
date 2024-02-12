@@ -5,7 +5,7 @@ import MyInfo from "../../components/organisms/SNS/MyInfo";
 import RankingContainer from "../../components/organisms/SNS/RankingContainer";
 import { spacing } from "../../constants/spacing";
 import useHeight from "../../hooks/useHeight";
-import { useAppDispatch } from "../../store/configureStore.hooks";
+import { useAppDispatch, useAppSelect } from "../../store/configureStore.hooks";
 import { getFriendsThunk } from "../../store/modules/getFriends";
 import createBadgeDispatcher from "../../utils/badgeUtils/badge";
 
@@ -19,10 +19,20 @@ const Container = styled.View`
 const RankingScreen = ({ navigation }) => {
   const dispatch = useAppDispatch();
   const { NOTCH_TOP } = useHeight();
+  const { follower_count } = useAppSelect((state) => state.user.user);
 
   useEffect(() => {
     dispatch(getFriendsThunk());
   }, []);
+
+  const badgeDispatcher = createBadgeDispatcher(dispatch);
+
+  useEffect(() => {
+    // 팔로워 10명 돌파
+    if (follower_count >= 10) badgeDispatcher.reached10Followers();
+    // 팔로워 42명 돌파
+    if (follower_count >= 42) badgeDispatcher.reached42Followers();
+  }, [follower_count]);
 
   return (
     <Container style={{ paddingTop: NOTCH_TOP }}>

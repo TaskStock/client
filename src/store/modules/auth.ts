@@ -121,6 +121,25 @@ const authSlice = createSlice({
 
       console.log("소셜로그인 성공: ", state);
     },
+    setUnRegister: (state) => {
+      // asyncStorage에서 토큰 제거
+      AsyncStorage.removeItem("accessToken");
+      AsyncStorage.removeItem("refreshToken");
+      AsyncStorage.removeItem("accessExp");
+      AsyncStorage.removeItem("refreshExp");
+      AsyncStorage.removeItem("strategy");
+      AsyncStorage.removeItem("firstTime");
+      AsyncStorage.removeItem("deviceId");
+
+      state.accessToken = "";
+      state.accessExp = 0;
+      state.refreshExp = 0;
+      state.deviceId = "";
+      state.strategy = "";
+      state.isLoggedIn = false;
+      state.loading = false;
+      state.error = null;
+    },
   },
   extraReducers: (builder) => {
     // 이메일 회원가입
@@ -251,7 +270,12 @@ const authSlice = createSlice({
   },
 });
 
-export const { setAccessToken, setStrategy, setLoggedIn, setSocialLoggedIn } =
-  authSlice.actions;
+export const {
+  setAccessToken,
+  setStrategy,
+  setLoggedIn,
+  setSocialLoggedIn,
+  setUnRegister,
+} = authSlice.actions;
 
 export const authReducer = authSlice.reducer;

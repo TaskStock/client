@@ -227,11 +227,12 @@ const UserDetailScreen = ({ route, navigation }: UserDetailScreenProps) => {
                   {currentDaySelectedProjectTodos.length > 0 ? (
                     currentDaySelectedProjectTodos.map((todo) => (
                       <View
+                        key={todo.todo_id}
                         style={{
                           pointerEvents: "none",
                         }}
                       >
-                        <TodoItem key={todo.todo_id} todo={todo} />
+                        <TodoItem todo={todo} />
                       </View>
                     ))
                   ) : (

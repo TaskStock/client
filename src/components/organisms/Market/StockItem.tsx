@@ -34,7 +34,8 @@ export const StockItem = ({
   onPress: () => void;
 }) => {
   const theme = useTheme();
-  const percentFormat = percent.toFixed(2);
+  // const percentFormat = percent.toFixed(2);
+  const percentFormat = Math.floor(percent);
 
   return (
     <Pressable onPress={onPress}>
@@ -51,7 +52,11 @@ export const StockItem = ({
           </Text>
           <Margin margin={30}></Margin>
           <View>
-            <TextWithIcon text={percentFormat + "%"}>
+            <TextWithIcon
+              text={percentFormat + "%"}
+              size="sm"
+              textColor={percent > 0 ? theme.palette.red : theme.palette.blue}
+            >
               {percent > 0 ? (
                 <Icons
                   type="AntDesign"
@@ -93,7 +98,8 @@ export const StockItemSecond = ({
 }) => {
   const theme = useTheme();
 
-  const percentFormat = percent.toFixed(2);
+  // const percentFormat = percent.toFixed(2);
+  const percentFormat = Math.floor(percent);
 
   return (
     <Pressable onPress={onPress}>
@@ -103,11 +109,14 @@ export const StockItemSecond = ({
             {index}
           </Text>
           <View style={{ flex: 1 }}>
-            <Text size="md">
+            <Text size="md" weight="medium">
               {name.length > 15 ? name.slice(0, 15) + "..." : name}
             </Text>
           </View>
-          <TextWithIcon text={percentFormat + "%"}>
+          <TextWithIcon
+            text={percentFormat + "%"}
+            textColor={percent > 0 ? theme.palette.red : theme.palette.blue}
+          >
             {percent > 0 ? (
               <Icons
                 type="AntDesign"

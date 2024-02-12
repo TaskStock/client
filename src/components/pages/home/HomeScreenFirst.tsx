@@ -5,7 +5,12 @@ import useValue from "../../../hooks/useValue";
 import GraphWithUserInfo from "../../organisms/GraphWithUserInfo";
 
 function HomeScreenFirst() {
-  const { user, loading: userInfoLoading, error: userInfoError } = useUser();
+  const {
+    user,
+    loading: userInfoLoading,
+    error: userInfoError,
+    refetch: refetchUser,
+  } = useUser();
   const { data: values, error, isError, isLoading, refetch } = useValue();
 
   return (
@@ -16,6 +21,7 @@ function HomeScreenFirst() {
         nickname: user?.user_name,
         error: userInfoError,
         loading: userInfoLoading,
+        refetch: refetchUser,
       }}
       value={{
         data: values,

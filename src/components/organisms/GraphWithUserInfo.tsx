@@ -66,6 +66,7 @@ const GraphWithUserInfo = ({
     nickname?: string;
     loading: boolean;
     error: any;
+    refetch: () => void;
   };
   value: {
     data?: Value[];
@@ -111,6 +112,7 @@ const GraphWithUserInfo = ({
           }}
           isLoading={userInfo.loading}
           error={userInfo.error}
+          refetch={userInfo.refetch}
         />
         <IconContainer>
           <IconBox

@@ -1,6 +1,6 @@
 # Learn more https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
 
-
+keystore.properties    
 /android/gradle/gradle.properties
 my-upload-key.keystore
 /Todo.md

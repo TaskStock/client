@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { View } from "react-native";
+import { Pressable, View } from "react-native";
 import { useTheme } from "styled-components";
 import { spacing } from "../../../constants/spacing";
 import numberWithCommas from "../../../utils/useNumberWithCommas";
@@ -15,6 +15,7 @@ const HomeUserInfo = ({
   data,
   isLoading,
   error,
+  refetch,
 }: {
   data: {
     cumulative_value: number;
@@ -23,6 +24,7 @@ const HomeUserInfo = ({
   };
   isLoading: boolean;
   error: string | null;
+  refetch?: () => void;
 }) => {
   const theme = useTheme();
   const dispatch = useAppDispatch();
@@ -60,7 +62,7 @@ const HomeUserInfo = ({
 
   return (
     <FlexBox alignItems="flex-end">
-      {isLoading || error ? (
+      {isLoading ? (
         <CustomSkeleton>
           <SkeletonPlaceholder.Item>
             <SkeletonPlaceholder.Item
@@ -83,7 +85,7 @@ const HomeUserInfo = ({
             />
           </SkeletonPlaceholder.Item>
         </CustomSkeleton>
-      ) : (
+      ) : !error ? (
         <View>
           <Text size="xl" weight="bold">
             {data.nickname}님
@@ -108,6 +110,15 @@ const HomeUserInfo = ({
             </Text>
           </FlexBox>
         </View>
+      ) : (
+        <Pressable
+          onPress={() => {
+            refetch && refetch();
+          }}
+        >
+          <Text size="md">에러가 발생했어요</Text>
+          <Text size="md">다시 시도하기</Text>
+        </Pressable>
       )}
     </FlexBox>
   );

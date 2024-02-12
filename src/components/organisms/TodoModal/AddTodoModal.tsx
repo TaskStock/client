@@ -7,13 +7,11 @@ import {
   ScrollView,
   View,
 } from "react-native";
-import { useDispatch } from "react-redux";
 import styled, { useTheme } from "styled-components/native";
 import { IsoString } from "../../../@types/calendar";
 import { spacing } from "../../../constants/spacing";
 import useTodos from "../../../hooks/useTodos";
 import useValue from "../../../hooks/useValue";
-import { AppDispatch } from "../../../store/configureStore";
 import {
   useAppDispatch,
   useAppSelect,
@@ -34,6 +32,7 @@ import ValueSlider from "./ValueSlider";
 import { removeData } from "../../../utils/asyncStorage";
 import { setStep2, setStep3 } from "../../../store/modules/tutorial";
 import Margin from "../../atoms/Margin";
+import { showErrorToast } from "../../../utils/showToast";
 
 const AddTodoOverlay = styled.Pressable`
   position: absolute;
@@ -184,6 +183,11 @@ export default function AddTodoModal() {
   }, [value]);
 
   const onPressSubmitBtn = () => {
+    if (!addTodoForm.content) {
+      showErrorToast("할일을 입력해주세요!");
+      return;
+    }
+
     if (isEditMode) {
       editTodo({
         form: addTodoForm,
@@ -245,6 +249,14 @@ export default function AddTodoModal() {
         setTutorialShown2(false);
       }}
     >
+      {/* {showTutorial && tutorialShown1 ? ( */}
+      {true ? (
+        <TutorialBox
+          type={2}
+          style={{ top: 0, right: 20, height: 280, zIndex: 100 }}
+          ratio={0.8}
+        />
+      ) : null}
       <InnerPressable>
         <AddTodoBox systemTheme={systemTheme}>
           <CloseBox>
@@ -265,82 +277,71 @@ export default function AddTodoModal() {
               marginBottom: spacing.padding,
             }}
           >
-            <KeyboardAvoidingView
-              style={{ flex: 1 }}
-              behavior={Platform.OS === "ios" ? "padding" : "height"}
+            <Pressable
+              style={{
+                flex: 1,
+              }}
             >
-              <Pressable
-                style={{
-                  flex: 1,
-                }}
-              >
-                <AddTodoContents>
-                  <Section
-                    header={
-                      <Section.Header>
-                        <Section.HeaderText>할 일</Section.HeaderText>
-                      </Section.Header>
-                    }
-                  >
-                    <TodoInput
-                      placeholder="할 일을 입력해주세요."
-                      placeholderTextColor={theme.textDim}
-                      value={addTodoForm.content}
-                      onChange={(e) => {
-                        dispatch(
-                          setAddTodoForm({
-                            name: "content",
-                            value: e.nativeEvent.text,
-                          })
-                        );
-                      }}
-                    ></TodoInput>
-                  </Section>
-                  <Section
-                    header={
-                      <Section.Header>
-                        <>
-                          {showTutorial && tutorialShown1 ? (
-                            <TutorialBox
-                              type={2}
-                              style={{ bottom: -4, left: 30, height: 280 }}
-                              ratio={0.8}
-                            />
-                          ) : null}
-                          <Section.HeaderText>가치</Section.HeaderText>
-                        </>
-                        <ValueText>{value}원</ValueText>
-                      </Section.Header>
-                    }
-                  >
-                    {Platform.OS === "android" && (
-                      <Margin margin={spacing.padding}></Margin>
-                    )}
-                    <ValueSlider></ValueSlider>
-                  </Section>
+              <AddTodoContents>
+                <Section
+                  header={
+                    <Section.Header>
+                      <Section.HeaderText>할 일</Section.HeaderText>
+                    </Section.Header>
+                  }
+                >
+                  <TodoInput
+                    placeholder="할 일을 입력해주세요."
+                    placeholderTextColor={theme.textDim}
+                    value={addTodoForm.content}
+                    onChange={(e) => {
+                      dispatch(
+                        setAddTodoForm({
+                          name: "content",
+                          value: e.nativeEvent.text,
+                        })
+                      );
+                    }}
+                  ></TodoInput>
+                </Section>
+                <Section
+                  header={
+                    <Section.Header>
+                      <>
+                        <Section.HeaderText>가치</Section.HeaderText>
+                      </>
+                      <ValueText>{value}원</ValueText>
+                    </Section.Header>
+                  }
+                >
+                  {Platform.OS === "android" && (
+                    <Margin margin={spacing.padding}></Margin>
+                  )}
+                  <ValueSlider></ValueSlider>
+                </Section>
 
-                  <Section
-                    gapSize="lg"
-                    header={
-                      <Section.Header>
-                        <Section.HeaderText>프로젝트</Section.HeaderText>
-                      </Section.Header>
-                    }
-                  >
-                    <ProjectItemList
-                    // scrollViewRef={scrollViewRef}
-                    ></ProjectItemList>
-                  </Section>
-                </AddTodoContents>
-              </Pressable>
-            </KeyboardAvoidingView>
+                <Section
+                  gapSize="lg"
+                  header={
+                    <Section.Header>
+                      <Section.HeaderText>프로젝트</Section.HeaderText>
+                    </Section.Header>
+                  }
+                >
+                  <ProjectItemList></ProjectItemList>
+                </Section>
+              </AddTodoContents>
+            </Pressable>
           </ScrollView>
-
-          <View>
+          <View
+            style={{
+              zIndex: 1000,
+            }}
+          >
             {showTutorial && tutorialShown2 ? (
               <TutorialBox
                 type={3}
-                style={{ bottom: 37, left: 15, height: 150 }}
+                style={{ top: 50, left: 15, height: 150 }}
                 ratio={0.65}
               />
             ) : null}

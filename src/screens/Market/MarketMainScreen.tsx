@@ -120,7 +120,7 @@ export default function MarketMainScreen() {
             </InnerFloat>
           </FloatTitle>
           <View style={{ flex: 1, backgroundColor: theme.background }}>
-            <Margin margin={80}></Margin>
+            <Margin margin={100}></Margin>
             <FlexBox
               direction="column"
               alignItems="stretch"

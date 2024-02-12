@@ -57,8 +57,17 @@ const { width: clientWidth } = Dimensions.get("window");
 // badge.type === SORTED_BADGES[currentPage - 1].type
 // =======================================
 
-const BadgeScreen = ({ navigation }) => {
-  const { badges: reduxBadges } = useAppSelect((state) => state.badge);
+const BadgeScreen = ({ navigation, route }) => {
+  const { type } = route.params;
+  let reduxBadges;
+  const { badges: myBadges } = useAppSelect((state) => state.badge);
+  const { badges: friendBadges } = useAppSelect((state) => state.friends);
+
+  if (type === "me") {
+    reduxBadges = myBadges;
+  } else {
+    reduxBadges = friendBadges;
+  }
   // ===== 가지고 있는 뱃지는 먼저 배치하기 위해 새 배열 생성 =====
   const ownedTypes = new Set(reduxBadges.map((badge) => badge.type));
   // 뱃지 분류 (가지고 있는 뱃지, 가지고 있지 않은 뱃지)
@@ -100,7 +109,12 @@ const BadgeScreen = ({ navigation }) => {
       <Header
         currentPage={currentPage}
         totalPage={totalPage}
-        gridOnPress={() => {}}
+        gridOnPress={() => {
+          navigation.navigate("BadgeAll", {
+            type,
+            badges: SORTED_BADGES,
+          });
+        }}
         closeOnPress={() => navigation.goBack()}
       />
       <FlatList

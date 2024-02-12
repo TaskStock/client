@@ -36,9 +36,8 @@ const Badge = ({ type }) => {
   );
 };
 
-const BadgesPreview = ({ onPress }) => {
+const BadgesPreview = ({ onPress, badges }) => {
   const theme = useTheme();
-  const { badges } = useAppSelect((state) => state.badge);
 
   return (
     <Pressable onPress={onPress}>

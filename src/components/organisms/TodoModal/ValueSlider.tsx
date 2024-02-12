@@ -47,8 +47,8 @@ export default function ValueSlider() {
 
   const theme = useTheme();
 
-  const sliderThumbImage =
-    Platform.OS === "ios" ? SliderThumb : SliderThumbAndroid;
+  const sliderThumbImage = SliderThumb;
+  // Platform.OS === "ios" ? SliderThumb : SliderThumbAndroid;
 
   const maximumTrackTintColor =
     Platform.OS === "ios" ? theme.mainBtnGray : theme.textDim;
