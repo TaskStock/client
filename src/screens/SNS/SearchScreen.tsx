@@ -1,5 +1,5 @@
 import { useRefresh } from "@react-native-community/hooks";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FlatList } from "react-native";
 import { RefreshControl } from "react-native-gesture-handler";
 import { useTheme } from "styled-components";
@@ -78,6 +78,7 @@ const SearchScreen = () => {
   const [searchText, setSearchText] = useState("");
   const { accessToken } = useAppSelect((state) => state.auth);
   const { searchList } = useAppSelect((state) => state.friends);
+  let data;
 
   const { isRefreshing, onRefresh } = useRefresh(() =>
     dispatch(searchThunk(searchText))
@@ -93,6 +94,14 @@ const SearchScreen = () => {
     }
     dispatch(searchThunk(searchText));
   };
+  useEffect(() => {
+    dispatch(searchThunk(searchText));
+  }, []);
+  useEffect(() => {
+    if (searchText === "") {
+      dispatch(searchThunk(searchText));
+    }
+  }, [searchText]);
 
   const NoData = (
     <FlexBox
