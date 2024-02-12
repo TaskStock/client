@@ -49,7 +49,6 @@ export const ListContainer = ({ children }) => {
   return (
     <View
       style={{
-        paddingHorizontal: spacing.gutter,
         paddingTop: useResponsiveFontSize(15),
       }}
     >

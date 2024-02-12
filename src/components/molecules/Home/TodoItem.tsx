@@ -263,7 +263,11 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
   };
 
   return (
-    <View ref={itemRef} collapsable={false}>
+    <View
+      ref={itemRef}
+      collapsable={false}
+      style={{ paddingHorizontal: spacing.gutter }}
+    >
       <FlexBox
         justifyContent="space-between"
         alignItems="center"
