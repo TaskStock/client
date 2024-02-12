@@ -253,7 +253,6 @@ export default function AddTodoModal() {
       }}
     >
       {showTutorial && tutorialShown1 ? (
-        // {true ? (
         <TutorialBox
           type={2}
           style={{
