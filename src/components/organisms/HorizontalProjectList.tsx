@@ -39,14 +39,18 @@ export default function HorizontalProjectList({
           onPress={() => onPressProject(null)}
         />
         {projects &&
-          projects.map((project) => (
-            <ProjectSelectBtn
-              projectName={project.name}
-              key={project.project_id}
-              selected={selectedProjectId === project.project_id}
-              onPress={() => onPressProject(project.project_id)}
-            />
-          ))}
+          projects
+            .filter((project) => {
+              return project.finished === false;
+            })
+            .map((project) => (
+              <ProjectSelectBtn
+                projectName={project.name}
+                key={project.project_id}
+                selected={selectedProjectId === project.project_id}
+                onPress={() => onPressProject(project.project_id)}
+              />
+            ))}
       </Projects>
     </ScrollView>
   );
