@@ -1,7 +1,5 @@
 import React from "react";
 import { Image } from "react-native";
-import { convertSlash } from "../../utils/convertSlash";
-import { getAPIHost } from "../../utils/getAPIHost";
 
 const ProfilePic = ({
   image,

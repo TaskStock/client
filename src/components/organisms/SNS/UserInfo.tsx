@@ -1,5 +1,5 @@
-import React from "react";
-import { View } from "react-native";
+import React, { useState } from "react";
+import { Dimensions, TouchableOpacity, View } from "react-native";
 import styled, { useTheme } from "styled-components/native";
 import { spacing } from "../../../constants/spacing";
 import {
@@ -21,6 +21,7 @@ import ProfilePic from "../../atoms/ProfilePic";
 import Text from "../../atoms/Text";
 import BadgesPreview from "../../molecules/SNS/BadgesPreview";
 import { useNavigation } from "@react-navigation/native";
+import ZoomPicModal from "./ZoomPicModal";
 
 const Container = styled.View`
   padding: ${spacing.padding}px ${spacing.offset}px ${spacing.offset}px;
@@ -65,11 +66,25 @@ const UserInfo = () => {
         break;
     }
   };
+  const { width: clientWidth } = Dimensions.get("window");
 
+  const [picZoomModal, setPicZoomModal] = useState(false);
   return (
     <Container>
+      <ZoomPicModal
+        picZoomModal={picZoomModal}
+        setPicZoomModal={setPicZoomModal}
+      >
+        <ProfilePic
+          image={data.image}
+          strategy={data.strategy}
+          size={clientWidth * 0.6}
+        />
+      </ZoomPicModal>
       <FlexBox gap={spacing.offset} alignItems="center">
-        <ProfilePic image={data.image} strategy={data.strategy} />
+        <TouchableOpacity onPress={() => setPicZoomModal(true)}>
+          <ProfilePic image={data.image} strategy={data.strategy} />
+        </TouchableOpacity>
         <View>
           <FlexBox alignItems="center" gap={spacing.offset}>
             <Text

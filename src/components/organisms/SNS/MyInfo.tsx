@@ -1,6 +1,12 @@
 import { useNavigation } from "@react-navigation/native";
-import React from "react";
-import { View } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import {
+  Animated,
+  Dimensions,
+  Modal,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { useTheme } from "styled-components";
 import styled from "styled-components/native";
 import { spacing } from "../../../constants/spacing";
@@ -13,6 +19,8 @@ import PrivateLockIcon from "../../atoms/PrivateLockIcon";
 import ProfilePic from "../../atoms/ProfilePic";
 import Text from "../../atoms/Text";
 import BadgesPreview from "../../molecules/SNS/BadgesPreview";
+import CenterModal from "../../molecules/CenterModal";
+import ZoomPicModal from "./ZoomPicModal";
 
 const Container = styled.View`
   padding: ${spacing.offset}px 0;
@@ -32,6 +40,15 @@ const Info = ({ text, iconType, iconName, color }) => {
   );
 };
 
+const ModalOverlay = styled.Pressable`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.7);
+`;
+
 const MyInfo = () => {
   const theme = useTheme();
   const navigation = useNavigation() as any;
@@ -46,11 +63,27 @@ const MyInfo = () => {
   } = useAppSelect((state) => state.user.user);
   const { strategy } = useAppSelect((state) => state.auth);
   const { badges } = useAppSelect((state) => state.badge);
+  const { width: clientWidth } = Dimensions.get("window");
+
+  const [picZoomModal, setPicZoomModal] = useState(false);
 
   return (
     <Container>
+      <ZoomPicModal
+        picZoomModal={picZoomModal}
+        setPicZoomModal={setPicZoomModal}
+      >
+        <ProfilePic
+          image={image}
+          strategy={strategy}
+          size={clientWidth * 0.6}
+        />
+      </ZoomPicModal>
+
       <FlexBox gap={spacing.offset} alignItems="center">
-        <ProfilePic image={image} strategy={strategy} />
+        <TouchableOpacity onPress={() => setPicZoomModal(true)}>
+          <ProfilePic image={image} strategy={strategy} />
+        </TouchableOpacity>
         <View>
           <FlexBox alignItems="center" gap={spacing.offset}>
             <Text
