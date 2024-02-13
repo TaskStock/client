@@ -26,7 +26,7 @@ import styled, { useTheme } from "styled-components/native";
 import Margin from "../../atoms/Margin";
 import Text from "../../atoms/Text";
 import LoadingSpinner from "../../atoms/LoadingSpinner";
-import { getDarkTheme, getThemeElement } from "../../../utils/getThemeElement";
+import { getThemeElement } from "../../../utils/getThemeElement";
 
 const ProjectBox = styled.View<{ isFinished: boolean }>`
   border-radius: ${useResponsiveFontSize(20)}px;
@@ -159,28 +159,21 @@ function ProjectItem({ item }: { item: Project }) {
                 <Text size="xl" weight="bold">
                   {item.name}
                 </Text>
-                <ScrollView
-                  horizontal={true}
-                  style={{
-                    flexGrow: 0,
-                    paddingBottom: useResponsiveFontSize(10),
-                  }}
-                >
-                  <FlexBox gap={spacing.padding}>
-                    <RoundItemBtn size="sm" isSelected={false}>
-                      <Text size="sm">{item.todo_count + ""}개의 할일</Text>
-                    </RoundItemBtn>
-                    <RoundItemBtn size="sm" isSelected={false}>
-                      <Text size="sm">
-                        {item.retrospect_count + ""}
-                        개의 회고
-                      </Text>
-                    </RoundItemBtn>
-                    <RoundItemBtn size="sm" isSelected={false}>
-                      <Text size="sm">{publicText}</Text>
-                    </RoundItemBtn>
-                  </FlexBox>
-                </ScrollView>
+
+                <FlexBox gap={spacing.padding}>
+                  <RoundItemBtn size="sm" isSelected={false}>
+                    <Text size="xs">{item.todo_count + ""}개의 할일</Text>
+                  </RoundItemBtn>
+                  <RoundItemBtn size="sm" isSelected={false}>
+                    <Text size="xs">
+                      {item.retrospect_count + ""}
+                      개의 회고
+                    </Text>
+                  </RoundItemBtn>
+                  <RoundItemBtn size="sm" isSelected={false}>
+                    <Text size="xs">{publicText}</Text>
+                  </RoundItemBtn>
+                </FlexBox>
               </FlexBox>
               <View>
                 <Icons

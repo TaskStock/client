@@ -16,13 +16,13 @@ const RoundItem = styled.View<{
   padding: ${({ size }) => {
     switch (size) {
       case "sm":
-        return `${useResponsiveFontSize(4)}px ${useResponsiveFontSize(17)}px;`;
+        return `${useResponsiveFontSize(4)}px ${useResponsiveFontSize(15)}px;`;
       case "md":
         return `${useResponsiveFontSize(9)}px ${useResponsiveFontSize(20)}px;`;
       case "xl":
         return `${useResponsiveFontSize(17)}px ${useResponsiveFontSize(36)}px;`;
     }
-  }}
+  }};
   background-color: ${({ theme, isSelected }) =>
     theme.name == "gray" && isSelected
       ? theme.mainBtnReversed
@@ -36,7 +36,7 @@ const RoundItem = styled.View<{
       case "xl":
         return `${useResponsiveFontSize(30)}px;`;
     }
-  }}
+  }};
   border-color: ${({ theme, isSelected }) =>
     theme.name == "dark" && isSelected ? theme.text : "none"};
   border-width: ${({ isSelected }) => (isSelected ? "1px" : "0px")};
