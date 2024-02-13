@@ -63,6 +63,7 @@ export default function StockDetailScreen({
     data,
     isLoading: isGraphLoading,
     isError: isGraphError,
+    refetch,
   } = useGetStockSuccessRateQuery({
     stockitem_id: route.params.stockId,
   });
@@ -80,6 +81,7 @@ export default function StockDetailScreen({
     diffRate,
     mySuccessRate,
     totalSuccessRate,
+    refetch: refetchStockDetail,
   } = useStockDetail(route.params.stockId);
 
   const [addTodo] = useAddTodoMutation();
@@ -110,6 +112,9 @@ export default function StockDetailScreen({
         graph_today_date: graphQueryArg.endDate,
       },
     });
+
+    refetch();
+    refetchStockDetail();
 
     await analytics().logEvent("add_stock", {
       stockitem_id: route.params.stockId,

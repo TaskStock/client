@@ -2,7 +2,7 @@ import { StockDetail } from "../@types/stock";
 import { useGetStockDetailsQuery } from "../store/modules/market/market";
 
 export const useStockDetail = (stockId: number) => {
-  const { data, isLoading, isError } = useGetStockDetailsQuery({
+  const { data, isLoading, isError, refetch } = useGetStockDetailsQuery({
     id: stockId,
   });
 
@@ -38,6 +38,7 @@ export const useStockDetail = (stockId: number) => {
     diffRate,
     mySuccessRate,
     totalSuccessRate,
+    refetch,
   };
 };
 

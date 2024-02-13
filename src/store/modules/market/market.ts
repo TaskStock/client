@@ -99,7 +99,7 @@ export const {
 export const marketApi = createApi({
   reducerPath: "marketApi",
   baseQuery: myFetchFunction(""),
-  tagTypes: ["StockList", "WishList"],
+  tagTypes: ["StockList", "WishList", "StockDetail"],
   endpoints: (builder) => ({
     getCategorizedStocks: builder.query<
       {
@@ -159,6 +159,8 @@ export const marketApi = createApi({
           );
         }
       },
+      keepUnusedDataFor: 0,
+      providesTags: ["StockDetail"],
     }),
     getAllWishList: builder.query<
       {
@@ -210,6 +212,8 @@ export const marketApi = createApi({
           method: "GET",
         };
       },
+      providesTags: ["StockDetail"],
+      keepUnusedDataFor: 0,
     }),
     addWishList: builder.mutation<
       {
