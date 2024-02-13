@@ -11,7 +11,7 @@ import Margin from "../../atoms/Margin";
 
 const StockItemBox = styled(ContentItemBoxContainer)`
   width: ${useResponsiveFontSize(150)}px;
-  height: ${useResponsiveFontSize(170)}px;
+  height: ${useResponsiveFontSize(175)}px;
 `;
 
 const StockItemSecondBox = styled(ContentItemBoxContainer)`
@@ -48,9 +48,13 @@ export const StockItem = ({
           }}
         >
           <Text size="md" weight="bold" color={theme.textDim}>
-            {name.length > 15 ? name.slice(0, 15) + "..." : name}
+            {name.length > 17 ? name.slice(0, 17) + "..." : name}
           </Text>
-          <Margin margin={30}></Margin>
+          <View
+            style={{
+              flex: 1,
+            }}
+          ></View>
           <View>
             <TextWithIcon
               text={percentFormat + "%"}
