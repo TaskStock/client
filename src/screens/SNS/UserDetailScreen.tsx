@@ -1,5 +1,11 @@
 import { View, ScrollView, Dimensions, Pressable } from "react-native";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import {
   NavigationState,
   SceneRendererProps,
@@ -105,81 +111,85 @@ const UserDetailScreen = ({ route, navigation }: UserDetailScreenProps) => {
     return currentDate.format("MM월 DD일");
   }, [currentDate]);
 
-  const sceneMap = useMemo(() => {
-    return {
-      first: () => (
-        <UserDetailFirst
-          userInfo={{
-            cumulative_value: userInfo?.cumulative_value,
-            value_yesterday_ago: userInfo?.value_yesterday_ago,
-            nickname: userInfo?.user_name,
-            error: error,
-            loading: isLoading,
-            refetch: () => {
-              dispatch(getTargetUserThunk(userId));
-            },
-          }}
-          value={{
-            data: values,
-            isLoading: isLoading,
-            isError: isError,
-            error: error,
-            refetch: refetch,
-          }}
-        ></UserDetailFirst>
-      ),
-      second: () => (
-        <UserDetailSecond
-          todos={{
-            data: todos,
-            isLoading: isLoading,
-            isError: isError,
-          }}
-          user={{
-            value_yesterday_ago: userInfo?.value_yesterday_ago,
-            cumulative_value: userInfo?.cumulative_value,
-          }}
-        ></UserDetailSecond>
-      ),
-      third: () => (
-        <UserDetailThird
-          projects={{
-            data: projects,
-            isLoading: isLoading,
-            isError: isError,
-          }}
-        ></UserDetailThird>
-      ),
-    };
-  }, [data]);
-
-  const renderTabBar = (
-    props: SceneRendererProps & {
-      navigationState: NavigationState<{
-        key: string;
-        title: string;
-      }>;
-    }
-  ) => {
-    return (
-      <TabHeader
-        props={props}
-        onPressTab={(index) => {
-          onChangeIndex(index);
-        }}
-      />
-    );
-  };
+  const renderContent = useCallback(
+    (index: number) => {
+      switch (index) {
+        case 0:
+          return (
+            <UserDetailFirst
+              userInfo={{
+                cumulative_value: userInfo?.cumulative_value,
+                value_yesterday_ago: userInfo?.value_yesterday_ago,
+                nickname: userInfo?.user_name,
+                error: error,
+                loading: isLoading,
+                refetch: () => {
+                  dispatch(getTargetUserThunk(userId));
+                },
+              }}
+              value={{
+                data: values,
+                isLoading: isLoading,
+                isError: isError,
+                error: error,
+                refetch: refetch,
+              }}
+            ></UserDetailFirst>
+          );
+        case 1:
+          return (
+            <UserDetailSecond
+              todos={{
+                data: todos,
+                isLoading: isLoading,
+                isError: isError,
+              }}
+              user={{
+                value_yesterday_ago: userInfo?.value_yesterday_ago,
+                cumulative_value: userInfo?.cumulative_value,
+              }}
+            ></UserDetailSecond>
+          );
+        case 2:
+          return (
+            <UserDetailThird
+              projects={{
+                data: projects,
+                isLoading: isLoading,
+                isError: isError,
+              }}
+            ></UserDetailThird>
+          );
+      }
+    },
+    [
+      data,
+      isLoading,
+      isError,
+      error,
+      refetch,
+      dispatch,
+      userId,
+      userInfo,
+      values,
+      todos,
+      projects,
+    ]
+  );
 
   const theme = useTheme();
 
   const { index, onChangeIndex, renderScene, routes } = useTab({
     routeMap,
-    sceneMap,
+    sceneMap: {
+      first: () => <></>,
+      second: () => <></>,
+      third: () => <></>,
+    },
   });
 
   const clientHeight = Dimensions.get("window").height;
-  const minHeight = index <= 2 ? clientHeight * 0.48 : clientHeight * 0.7;
+  const minHeight = clientHeight * 0.48;
 
   const scrollViewRef = useRef<ScrollView>(null);
 
@@ -205,62 +215,60 @@ const UserDetailScreen = ({ route, navigation }: UserDetailScreenProps) => {
           <Icons type="entypo" name="share" size={28} color="black" />
         }
       />
-
       {!isPrivate ? (
-        <ScrollView ref={scrollViewRef}>
-          <Pressable onPress={() => {}}>
-            <UserInfo />
-          </Pressable>
+        <ScrollView ref={scrollViewRef} nestedScrollEnabled>
+          <UserInfo />
           <Margin margin={spacing.offset} />
-          <TabView
-            navigationState={{ index, routes }}
-            renderScene={renderScene}
-            onIndexChange={onChangeIndex}
-            renderTabBar={(props) => renderTabBar(props)}
-            onSwipeEnd={() => {}}
-            swipeEnabled={false}
+          <View
             style={{
-              minHeight: minHeight,
+              height: minHeight,
             }}
-          ></TabView>
-          {index <= 2 && (
-            <>
-              <Margin margin={spacing.padding} />
-              <View
-                style={{
-                  backgroundColor: theme.background,
-                  height: 1000,
-                }}
-              >
-                <DrawerHeader>
-                  <Text size="xl" weight="bold">
-                    {headerDate}
-                  </Text>
-                </DrawerHeader>
-                <HorizontalProjectList
-                  selectedProjectId={selectedProjectId}
-                  projects={projects}
-                  onPressProject={onPressProject}
-                ></HorizontalProjectList>
-                <DrawerContent>
-                  {currentDaySelectedProjectTodos.length > 0 ? (
-                    currentDaySelectedProjectTodos.map((todo) => (
-                      <View
-                        key={todo.todo_id}
-                        style={{
-                          pointerEvents: "none",
-                        }}
-                      >
-                        <TodoItem todo={todo} />
-                      </View>
-                    ))
-                  ) : (
-                    <Text size="md">등록된 투두가 없습니다.</Text>
-                  )}
-                </DrawerContent>
-              </View>
-            </>
-          )}
+          >
+            <TabHeader
+              props={{
+                navigationState: {
+                  index: index,
+                  routes: routes,
+                },
+              }}
+              onPressTab={onChangeIndex}
+            />
+            <View style={{ flex: 1 }}>{renderContent(index)}</View>
+          </View>
+          <Margin margin={spacing.padding} />
+          <View
+            style={{
+              backgroundColor: theme.background,
+              height: 1000,
+            }}
+          >
+            <DrawerHeader>
+              <Text size="xl" weight="bold">
+                {headerDate}
+              </Text>
+            </DrawerHeader>
+            <HorizontalProjectList
+              selectedProjectId={selectedProjectId}
+              projects={projects}
+              onPressProject={onPressProject}
+            ></HorizontalProjectList>
+            <DrawerContent>
+              {currentDaySelectedProjectTodos.length > 0 ? (
+                currentDaySelectedProjectTodos.map((todo) => (
+                  <View
+                    key={todo.todo_id}
+                    style={{
+                      pointerEvents: "none",
+                    }}
+                  >
+                    <TodoItem todo={todo} />
+                  </View>
+                ))
+              ) : (
+                <Text size="md">등록된 투두가 없습니다.</Text>
+              )}
+            </DrawerContent>
+          </View>
         </ScrollView>
       ) : (
         <CenterLayout>
@@ -276,3 +284,15 @@ const UserDetailScreen = ({ route, navigation }: UserDetailScreenProps) => {
 };
 
 export default UserDetailScreen;
+
+// <TabView
+//   navigationState={{ index, routes }}
+//   renderScene={renderScene}
+//   onIndexChange={onChangeIndex}
+//   renderTabBar={(props) => renderTabBar(props)}
+//   onSwipeEnd={() => {}}
+//   swipeEnabled={false}
+//   style={{
+//     minHeight: minHeight,
+//   }}
+// ></TabView>
