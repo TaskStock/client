@@ -150,7 +150,6 @@ export const getTargetUserThunk = createAsyncThunk(
     const { accessToken } = rootState.auth;
     try {
       const response = await client.get(`sns/users/${userId}`, { accessToken });
-      console.log(response);
       const { result, projects, targetData, todos, values, badges } = response;
       if (result === "success") {
         dispatch(addFriendBadges(badges));

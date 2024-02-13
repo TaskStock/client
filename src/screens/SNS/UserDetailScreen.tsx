@@ -73,7 +73,13 @@ const UserDetailScreen = ({ route, navigation }: UserDetailScreenProps) => {
     return false;
   });
 
-  const isPrivate = data?.targetData?.private;
+  // const isPrivate = data?.targetData?.private && ! (data.targetData.isFollowingYou && data.targetData.isFollowingMe);
+
+  const isPrivate = data?.targetData?.private
+    ? data.targetData.isFollowingYou && data.targetData.isFollowingMe
+      ? false
+      : true
+    : false;
 
   const todos = data?.todos;
 
