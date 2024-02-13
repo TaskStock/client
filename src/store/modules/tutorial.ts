@@ -21,7 +21,7 @@ export const checkFirstTime = async () => {
   // asyncStorage에 firstTime이라는 키가 있는지 확인
   // 없으면 처음 온 것이므로, asyncStorage에 이제 처음이 아니라는 뜻으로 firstTime: false를 저장하고,
   const firstTime = await getData("firstTime");
-  console.log("redux firstTime >>>> ", firstTime);
+  // console.log("redux firstTime >>>> ", firstTime);
   // firstTime이 없으면 처음 가입했단 뜻
   if (!firstTime) {
     await storeData("firstTime", "false");

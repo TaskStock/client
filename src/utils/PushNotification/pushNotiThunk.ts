@@ -8,6 +8,7 @@ export const toggleStateThunk = createAsyncThunk(
   async (isPushOn: boolean, { getState, rejectWithValue, dispatch }) => {
     await dispatch(checkAndRenewTokens());
     const { auth } = getState() as RootState;
+
     try {
       const res = await client.patch(
         "notice/setting/push",
