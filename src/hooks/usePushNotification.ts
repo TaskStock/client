@@ -7,6 +7,7 @@ import { setFcmToken } from "../store/modules/pushNoti";
 import { fcmService } from "../utils/PushNotification/push.fcm";
 import { localNotificationService } from "../utils/PushNotification/push.noti";
 import { useClient } from "./useClient";
+import { navigate } from "../utils/navigation";
 
 export default function usePushNotification() {
   const { accessToken } = useAppSelect((state) => state.auth);
@@ -109,9 +110,18 @@ export default function usePushNotification() {
 
       console.log(targetId, title, body);
 
-      // UI 그리기
       // 클릭하면 targetId 디테일페이지로 이동
-      Alert.alert("onOpenNotification:", targetId, title, body);
+      if (targetId) {
+        navigate("MainTab", {
+          screen: "SnsStack",
+          params: {
+            screen: "UserDetail",
+            params: { userId: targetId },
+          },
+        });
+      }
+
+      // Alert.alert("onOpenNotification:", targetId, title, body);
     }
   };
 }

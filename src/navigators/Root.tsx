@@ -7,24 +7,17 @@ import StackWithoutTab from "./StackWithoutTab";
 const Nav = createNativeStackNavigator();
 
 const Root = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
+  const initialRoute = isLoggedIn ? "MainTab" : "LoginStack";
   return (
     <Nav.Navigator
       screenOptions={{
         headerShown: false,
       }}
+      initialRouteName={initialRoute}
     >
-      {isLoggedIn ? (
-        <>
-          <Nav.Screen name="MainTab" component={MainTab} />
-          <Nav.Screen name="StackWithoutTab" component={StackWithoutTab} />
-        </>
-      ) : (
-        <>
-          <Nav.Screen name="LoginStack" component={LoginStack} />
-          <Nav.Screen name="MainTab" component={MainTab} />
-          <Nav.Screen name="StackWithoutTab" component={StackWithoutTab} />
-        </>
-      )}
+      <Nav.Screen name="LoginStack" component={LoginStack} />
+      <Nav.Screen name="MainTab" component={MainTab} />
+      <Nav.Screen name="StackWithoutTab" component={StackWithoutTab} />
     </Nav.Navigator>
   );
 };

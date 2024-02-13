@@ -56,11 +56,13 @@ const EmailRegisterScreen = ({ route, navigation }) => {
     }));
   };
 
-  // useEffect(() => {
-  //   if (isLoggedIn === true) {
-  //     setModalVisible(true);
-  //   }
-  // }, [isLoggedIn]);
+  useEffect(() => {
+    if (isLoggedIn === true) {
+      navigation.navigate("MainTab", {
+        screen: "Home",
+      });
+    }
+  }, [isLoggedIn]);
 
   const handleSignUp = async () => {
     if (user.password !== confirmPassword) {

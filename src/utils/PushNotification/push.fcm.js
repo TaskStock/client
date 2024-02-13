@@ -1,5 +1,5 @@
 import messaging from "@react-native-firebase/messaging";
-import { Alert, Platform } from "react-native";
+import { Platform } from "react-native";
 import { toggleStateThunk } from "./pushNotiThunk";
 
 class FCMService {
