@@ -25,10 +25,11 @@ class FCMService {
         this.getToken(onRegister);
         if (enabled) {
           console.log(Platform.OS, ">>>>>[FCMService] enabled 들어옴");
-          dispatch(toggleStateThunk(true));
+          // dispatch(toggleStateThunk(true));
         } else {
           console.log(Platform.OS, "disabled 들어옴");
           this.requestPermission(onRegister);
+          dispatch(toggleStateThunk(false));
         }
       })
       .catch((error) => {

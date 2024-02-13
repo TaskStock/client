@@ -52,7 +52,8 @@ export default function usePushNotification() {
   }, [fcmToken]);
 
   const onRegister = (tk) => {
-    console.log(Platform.OS, ">>>>>[FCMService] onRegister, fcmToken :", tk);
+    // console.log(Platform.OS, ">>>>>[FCMService] onRegister, fcmToken :", tk);
+
     if (tk) dispatch(setFcmToken(tk));
   };
 
