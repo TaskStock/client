@@ -21,6 +21,7 @@ import { useClient } from "../../hooks/useClient";
 import { useAppDispatch, useAppSelect } from "../../store/configureStore.hooks";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
 import { setUnRegister } from "../../store/modules/auth";
+import Toast from "react-native-toast-message";
 
 const THEME_CONSTANTS = {
   dark: {
@@ -65,7 +66,12 @@ const UnSubscribeScreen = () => {
 
   const handleUnSubscribe = async () => {
     if (!isChecked) {
-      Alert.alert("회원 탈퇴 유의사항에 동의해주세요.");
+      Toast.show({
+        type: "error",
+        text1: "회원 탈퇴 유의사항에 동의해주세요.",
+        visibilityTime: 2000,
+        keyboardOffset: 100,
+      });
     } else {
       try {
         const res = await client.delete(

@@ -34,6 +34,7 @@ import { setStep2, setStep3 } from "../../../store/modules/tutorial";
 import Margin from "../../atoms/Margin";
 import { showErrorToast } from "../../../utils/showToast";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
+import { palette } from "../../../constants/colors";
 
 const AddTodoOverlay = styled.Pressable`
   position: absolute;
@@ -74,14 +75,15 @@ const AddTodoContents = styled.View`
   gap: 30px;
 `;
 
-const AddTodoBtn = styled.TouchableOpacity`
+const AddTodoBtn = styled.TouchableOpacity<{ activate: boolean }>`
   border-radius: 8px;
   padding: 14px 75px;
   display: flex;
   justify-content: center;
   align-items: center;
-
-  background-color: ${({ theme }) => theme.background};
+  background-color: ${({ activate }) =>
+    activate ? "black" : palette.neutral600_gray};
+  opacity: ${({ activate }) => (activate ? 1 : 0.5)};
 `;
 
 const CloseBox = styled.View`
@@ -301,7 +303,11 @@ export default function AddTodoModal() {
                 >
                   <TodoInput
                     ref={inputRef}
-                    placeholder="할 일을 입력해주세요."
+                    placeholder={
+                      showTutorial
+                        ? "TaskStock 시작하기"
+                        : "할 일을 입력해주세요."
+                    }
                     placeholderTextColor={theme.textDim}
                     value={addTodoForm.content}
                     onChange={(e) => {
@@ -360,9 +366,15 @@ export default function AddTodoModal() {
               />
             ) : null}
 
-            <AddTodoBtn onPress={onPressSubmitBtn}>
-              <Text size="md">
-                {isEditMode ? "투두 수정하기" : "투두 추가하기"}
+            <AddTodoBtn
+              onPress={
+                addTodoForm.content !== "" ? onPressSubmitBtn : undefined
+              }
+              disabled={addTodoForm.content !== "" ? false : true}
+              activate={addTodoForm.content !== "" ? true : false}
+            >
+              <Text size="md" color={"white"}>
+                {isEditMode ? "할 일 수정하기" : "할 일 추가하기"}
               </Text>
             </AddTodoBtn>
           </View>

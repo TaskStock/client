@@ -105,6 +105,12 @@ const SettingsHomeScreen = ({ navigation }) => {
         <Menu text="로그아웃" onPress={askLogout} textColor={palette.red} />
         {/* <Menu text="asyncStorage check" onPress={checkStorage} />
         <Menu text="redux check" onPress={checkRedux} /> */}
+        <Menu
+          text="푸시알림"
+          onPress={() => {
+            console.log("redux pushNoti: ", isPushOn);
+          }}
+        />
       </Container>
     </>
   );

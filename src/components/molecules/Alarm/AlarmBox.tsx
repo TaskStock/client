@@ -1,13 +1,21 @@
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
+import Toast from "react-native-toast-message";
 import { useTheme } from "styled-components";
 import styled from "styled-components/native";
 import { spacing } from "../../../constants/spacing";
+import { useClient } from "../../../hooks/useClient";
+import { AlarmStackParamList } from "../../../navigators/AlarmStack";
 import { IAlarmData } from "../../../screens/Alarm/AlarmScreen";
 import {
   useAppDispatch,
   useAppSelect,
 } from "../../../store/configureStore.hooks";
+import {
+  addFollowerCount,
+  addFollowingCount,
+  subFollowingCount,
+} from "../../../store/modules/user";
 import {
   acceptRequestInAlarm,
   cancelRequestInAlarm,
@@ -21,14 +29,6 @@ import FlexBox from "../../atoms/FlexBox";
 import FollowBtn from "../../atoms/FollowBtn";
 import { IconProps, IconsWithoutFeedBack } from "../../atoms/Icons";
 import Text from "../../atoms/Text";
-import {
-  addFollowerCount,
-  addFollowingCount,
-  subFollowingCount,
-} from "../../../store/modules/user";
-import { Alert } from "react-native";
-import { AlarmStackParamList } from "../../../navigators/AlarmStack";
-import { useClient } from "../../../hooks/useClient";
 
 const AlarmContainer = styled.TouchableOpacity<{ read: boolean }>`
   flex-direction: row;
@@ -142,7 +142,12 @@ const AlarmBox = ({ item }: { item: IAlarmData }) => {
               dispatch(addFollowingCount());
             }
           } else {
-            Alert.alert("팔로우 실패", "서버 오류. 다시 시도해주세요.");
+            Toast.show({
+              type: "error",
+              text1: "서버에서 오류가 발생했습니다. 다시 시도해주세요.",
+              visibilityTime: 2000,
+              keyboardOffset: 100,
+            });
           }
 
           break;
@@ -159,7 +164,12 @@ const AlarmBox = ({ item }: { item: IAlarmData }) => {
             });
             dispatch(subFollowingCount());
           } else {
-            Alert.alert("언팔로우 실패", "서버 오류. 다시 시도해주세요.");
+            Toast.show({
+              type: "error",
+              text1: "서버에서 오류가 발생했습니다. 다시 시도해주세요.",
+              visibilityTime: 2000,
+              keyboardOffset: 100,
+            });
           }
           break;
         case "요청됨":
@@ -175,7 +185,12 @@ const AlarmBox = ({ item }: { item: IAlarmData }) => {
               isFollowingYou: false,
             });
           } else {
-            Alert.alert("요청 취소 실패", "서버 오류. 다시 시도해주세요.");
+            Toast.show({
+              type: "error",
+              text1: "서버에서 오류가 발생했습니다. 다시 시도해주세요.",
+              visibilityTime: 2000,
+              keyboardOffset: 100,
+            });
           }
           break;
         case "수락":
@@ -193,7 +208,12 @@ const AlarmBox = ({ item }: { item: IAlarmData }) => {
             });
             dispatch(addFollowerCount());
           } else {
-            Alert.alert("요청 수락 실패", "서버 오류. 다시 시도해주세요.");
+            Toast.show({
+              type: "error",
+              text1: "서버에서 오류가 발생했습니다. 다시 시도해주세요.",
+              visibilityTime: 2000,
+              keyboardOffset: 100,
+            });
           }
           break;
         default:

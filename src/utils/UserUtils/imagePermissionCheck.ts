@@ -1,5 +1,6 @@
 import { Alert, Linking, Platform } from "react-native";
 import { PERMISSIONS, RESULTS, check, request } from "react-native-permissions";
+import Toast from "react-native-toast-message";
 
 const imagePermissionCheck = async () => {
   let permission;
@@ -25,6 +26,7 @@ const imagePermissionCheck = async () => {
         console.log(
           "사용자가 권한을 거부했지만, 요청할 수 있음 (Android에서만 해당)"
         );
+
         Alert.alert(
           "권한 요청",
           "갤러리 접근 권한이 필요합니다. 설정에서 권한을 허용해주세요.",

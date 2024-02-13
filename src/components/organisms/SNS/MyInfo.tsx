@@ -1,18 +1,17 @@
+import { useNavigation } from "@react-navigation/native";
 import React from "react";
-import { Pressable, View } from "react-native";
+import { View } from "react-native";
 import { useTheme } from "styled-components";
 import styled from "styled-components/native";
 import { spacing } from "../../../constants/spacing";
+import { useAppSelect } from "../../../store/configureStore.hooks";
+import numberWithCommas from "../../../utils/useNumberWithCommas";
+import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import FlexBox from "../../atoms/FlexBox";
 import { IconsWithoutFeedBack } from "../../atoms/Icons";
+import PrivateLockIcon from "../../atoms/PrivateLockIcon";
 import ProfilePic from "../../atoms/ProfilePic";
 import Text from "../../atoms/Text";
-import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
-import numberWithCommas from "../../../utils/useNumberWithCommas";
-import { useAppSelect } from "../../../store/configureStore.hooks";
-import PrivateLockIcon from "../../atoms/PrivateLockIcon";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
-import { SnsStackParamList } from "../../../navigators/SnsStack";
 import BadgesPreview from "../../molecules/SNS/BadgesPreview";
 
 const Container = styled.View`

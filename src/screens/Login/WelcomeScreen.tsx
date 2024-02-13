@@ -18,6 +18,7 @@ import getDeviceId from "../../utils/getDeviceId";
 import { onAppleButtonPress } from "../../utils/authUtils/appleSignIn";
 import { getApiLevel } from "react-native-device-info";
 import { getAPIHost } from "../../utils/getAPIHost";
+import Toast from "react-native-toast-message";
 
 const Login = styled.View`
   gap: ${spacing.padding}px;
@@ -59,13 +60,23 @@ const WelcomeScreen = ({ navigation }) => {
         console.log("소셜로그인 성공", response);
         // navigation.navigate("MainTab", { screen: "Home" });
       } else if (response.result === "fail") {
-        Alert.alert(response.message, response.strategy);
+        Toast.show({
+          type: "error",
+          text1: `${(response.message, response.strategy)}`,
+          visibilityTime: 2000,
+          keyboardOffset: 100,
+        });
       } else {
         console.log("소셜로그인 실패", response);
       }
     } catch (e) {
       console.log(user?.strategy, "로그인 실패", e);
-      Alert.alert(e);
+      Toast.show({
+        type: "error",
+        text1: "로그인에 실패했습니다. 다시 시도해주세요.",
+        visibilityTime: 2000,
+        keyboardOffset: 100,
+      });
     }
   };
 
