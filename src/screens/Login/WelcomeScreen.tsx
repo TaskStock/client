@@ -114,12 +114,7 @@ const WelcomeScreen = ({ navigation }) => {
         />
       </Login>
 
-      <Policy
-        serviceOnPress={checkStorage}
-        privacyOnPress={() => {
-          navigation.navigate("MainTab", { screen: "Home" });
-        }}
-      />
+      <Policy serviceOnPress={() => {}} privacyOnPress={() => {}} />
     </LoginContainer>
   );
 };
