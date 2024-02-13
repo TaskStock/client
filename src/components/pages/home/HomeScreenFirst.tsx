@@ -15,6 +15,7 @@ function HomeScreenFirst() {
 
   return (
     <GraphWithUserInfo
+      isMyData={true}
       userInfo={{
         cumulative_value: user?.cumulative_value,
         value_yesterday_ago: user?.value_yesterday_ago,

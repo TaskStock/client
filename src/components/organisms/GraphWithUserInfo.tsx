@@ -59,6 +59,7 @@ const Divider = styled.View`
 const GraphWithUserInfo = ({
   userInfo,
   value,
+  isMyData = false,
 }: {
   userInfo: {
     cumulative_value?: number;
@@ -75,6 +76,7 @@ const GraphWithUserInfo = ({
     error: any;
     refetch: () => void;
   };
+  isMyData: boolean;
 }) => {
   const [isCandleStick, setIsCandleStick] = React.useState(true);
   const [size, setSize] = React.useState({
@@ -110,6 +112,7 @@ const GraphWithUserInfo = ({
             value_yesterday_ago: userInfo.value_yesterday_ago || 0,
             nickname: userInfo.nickname || "",
           }}
+          isMyData={isMyData}
           isLoading={userInfo.loading}
           error={userInfo.error}
           refetch={userInfo.refetch}

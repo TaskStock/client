@@ -13,6 +13,7 @@ export default function UserDetailFirst({
     nickname?: string;
     error: any;
     loading: boolean;
+    refetch: () => void;
   };
   value: {
     data: Value[] | undefined;
@@ -31,7 +32,9 @@ export default function UserDetailFirst({
           nickname: userInfo?.nickname,
           error: userInfo?.error,
           loading: userInfo?.loading,
+          refetch: userInfo?.refetch,
         }}
+        isMyData={false}
         value={{
           data: value?.data,
           isLoading: value.isLoading,

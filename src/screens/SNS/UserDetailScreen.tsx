@@ -1,5 +1,5 @@
-import { View, ScrollView, Dimensions } from "react-native";
-import React, { useEffect, useMemo, useState } from "react";
+import { View, ScrollView, Dimensions, Pressable } from "react-native";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
   NavigationState,
   SceneRendererProps,
@@ -115,6 +115,9 @@ const UserDetailScreen = ({ route, navigation }: UserDetailScreenProps) => {
             nickname: userInfo?.user_name,
             error: error,
             loading: isLoading,
+            refetch: () => {
+              dispatch(getTargetUserThunk(userId));
+            },
           }}
           value={{
             data: values,
@@ -178,6 +181,8 @@ const UserDetailScreen = ({ route, navigation }: UserDetailScreenProps) => {
   const clientHeight = Dimensions.get("window").height;
   const minHeight = index <= 2 ? clientHeight * 0.48 : clientHeight * 0.7;
 
+  const scrollViewRef = useRef<ScrollView>(null);
+
   if (isLoading || isError || !data) {
     return (
       <View style={{ flex: 1, backgroundColor: theme.background }}>
@@ -202,8 +207,10 @@ const UserDetailScreen = ({ route, navigation }: UserDetailScreenProps) => {
       />
 
       {!isPrivate ? (
-        <ScrollView>
-          <UserInfo />
+        <ScrollView ref={scrollViewRef}>
+          <Pressable onPress={() => {}}>
+            <UserInfo />
+          </Pressable>
           <Margin margin={spacing.offset} />
           <TabView
             navigationState={{ index, routes }}

@@ -4,17 +4,13 @@ export const calculateUserDiffRate = (user: {
   cumulative_value: IUserBox["cumulative_value"];
   value_yesterday_ago: IUserBox["value_yesterday_ago"];
 }) => {
-  const data = {
-    cumulative_value: user.cumulative_value,
-    value_yesterday_ago: user.value_yesterday_ago,
-  };
+  const current = user.cumulative_value;
+  const start = user.value_yesterday_ago;
 
-  const toDivide =
-    data.value_yesterday_ago === 0 ? 10000 : data.value_yesterday_ago;
+  const toDivide = start === 0 ? 10000 : start;
 
-  const diff = data.cumulative_value - data.value_yesterday_ago;
-  const diff_rate =
-    ((data.cumulative_value - data.value_yesterday_ago) * 100) / toDivide;
+  const diff = current - start;
+  const diff_rate = ((current - start) * 100) / toDivide;
 
   const renderDiffRate = diff_rate.toFixed(2);
 

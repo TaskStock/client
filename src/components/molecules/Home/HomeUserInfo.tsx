@@ -16,6 +16,7 @@ const HomeUserInfo = ({
   isLoading,
   error,
   refetch,
+  isMyData,
 }: {
   data: {
     cumulative_value: number;
@@ -25,6 +26,7 @@ const HomeUserInfo = ({
   isLoading: boolean;
   error: string | null;
   refetch?: () => void;
+  isMyData: boolean;
 }) => {
   const theme = useTheme();
   const dispatch = useAppDispatch();
@@ -37,6 +39,11 @@ const HomeUserInfo = ({
   const badgeFunctions = createBadgeDispatcher(dispatch);
 
   useEffect(() => {
+    if (!isMyData) {
+      console.log("다른 사람의 데이터입니다.");
+      return;
+    }
+
     if (data.cumulative_value >= 100000 && data.cumulative_value < 200000) {
       badgeFunctions.reached10K();
     } else if (

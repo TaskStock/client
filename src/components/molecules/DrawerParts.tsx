@@ -7,7 +7,7 @@ export function DrawerContent({ children }: { children: React.ReactNode }) {
   return (
     <View
       style={{
-        paddingHorizontal: spacing.gutter,
+        // paddingHorizontal: spacing.gutter,
         paddingTop: useResponsiveFontSize(15),
       }}
     >
