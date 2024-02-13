@@ -65,7 +65,7 @@ export const addTodoMutation = (builder: TodoApiBuilder) =>
         check: false,
         date: body.add_date,
         index: 0,
-        stockitem_id: null,
+        stockitem_id: body.stockitem_id,
       };
 
       const patchAddTodo = dispatch(

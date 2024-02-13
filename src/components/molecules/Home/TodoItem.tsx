@@ -21,6 +21,7 @@ import { checkIsWithInCurrentCalcDay } from "../../../utils/checkIsSameLocalDay"
 import { useGetAllTodoArgs } from "../../../hooks/useGetAllTodoArgs";
 import { useGetValuesArg } from "../../../hooks/useGetValuesArg";
 import { setStep3 } from "../../../store/modules/tutorial";
+import { showErrorToast } from "../../../utils/showToast";
 
 const THEME_CONSTANTS = {
   dark: {
@@ -252,7 +253,10 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
   ]);
 
   const onPressDot = () => {
-    if (todo.stockitem_id) return;
+    if (todo.stockitem_id) {
+      showErrorToast("종목으로 가져온 투두는 수정할 수 없어요.");
+      return;
+    }
 
     if (!MeasurePositionTriggerRef.current) {
       MeasurePositionTriggerRef.current = true;
