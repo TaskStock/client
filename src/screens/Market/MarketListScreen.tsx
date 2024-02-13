@@ -193,7 +193,7 @@ export default function MarketListScreen() {
             {!isLoading && filteredList ? (
               filteredList.length !== 0 ? (
                 filteredList.map((item, idx) => {
-                  if (idx % 4 == 0 && idx != 0) {
+                  if (idx % 10 == 0 && idx != 0) {
                     return (
                       <View key={item.stockitem_id}>
                         <MarketListItem
