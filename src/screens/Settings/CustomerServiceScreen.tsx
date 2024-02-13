@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Alert } from "react-native";
+import { Alert, KeyboardAvoidingView, Platform } from "react-native";
 import styled from "styled-components/native";
 import { BlackBtn } from "../../components/atoms/Buttons";
 import Margin from "../../components/atoms/Margin";
@@ -14,8 +14,9 @@ import { Shadow } from "react-native-shadow-2";
 import { palette } from "../../constants/colors";
 import FlexBox from "../../components/atoms/FlexBox";
 import { useClient } from "../../hooks/useClient";
+import Toast from "react-native-toast-message";
 
-const Container = styled.View`
+const Container = styled.ScrollView`
   padding: ${spacing.offset}px;
 `;
 
@@ -64,7 +65,13 @@ const CustomerServiceScreen = ({ navigation }) => {
   const sendToServer = async () => {
     // 내용 비어있으면 보내지 않음
     if (content === "") {
-      Alert.alert("내용을 입력해주세요");
+      Toast.show({
+        type: "error",
+        text1: "내용을 입력해주세요",
+        visibilityTime: 2000,
+        keyboardOffset: 100,
+      });
+
       return;
     } else {
       try {
@@ -105,21 +112,27 @@ const CustomerServiceScreen = ({ navigation }) => {
   return (
     <>
       <PageHeader title="고객센터" />
-      <Container>
-        <Text size="lg" weight="semibold">
-          에러 보고 및 문의 사항
-        </Text>
-        <Margin margin={spacing.offset} />
-        <TextAreaInput
-          numberOfLines={50}
-          minHeight={useResponsiveFontSize(400)}
-          placeholder="내용을 입력해주세요"
-          value={content}
-          onChangeText={onChangeContent}
-        ></TextAreaInput>
-        <Success visible={visible} message={message} />
-        <BlackBtn text="보내기" onPress={sendToServer} />
-      </Container>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={{ flex: 1 }}
+      >
+        <Container contentContainerStyle={{ flexGrow: 1 }}>
+          <Text size="lg" weight="semibold">
+            에러 보고 및 문의 사항
+          </Text>
+          <Margin margin={spacing.offset} />
+          <TextAreaInput
+            numberOfLines={50}
+            minHeight={useResponsiveFontSize(400)}
+            placeholder="내용을 입력해주세요"
+            value={content}
+            onChangeText={onChangeContent}
+          ></TextAreaInput>
+          <Success visible={visible} message={message} />
+          <BlackBtn text="보내기" onPress={sendToServer} />
+          <Margin margin={spacing.gutter} />
+        </Container>
+      </KeyboardAvoidingView>
     </>
   );
 };

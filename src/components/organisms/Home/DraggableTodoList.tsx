@@ -49,7 +49,6 @@ export const ListContainer = ({ children }) => {
   return (
     <View
       style={{
-        paddingHorizontal: spacing.gutter,
         paddingTop: useResponsiveFontSize(15),
       }}
     >
@@ -64,6 +63,7 @@ export default function DraggableTodoList({
   selectedProjectId: number | null;
 }) {
   const [changeTodoOrder, result] = useChangeOrderTodoMutation();
+  const theme = useTheme();
 
   const { currentDateString } = useAppSelect((state) => state.calendar);
 
@@ -190,7 +190,19 @@ export default function DraggableTodoList({
   return (
     <ListContainer>
       {todos && selectedTodos.length === 0 ? (
-        <Text size="md">여기에는 투두가 없어요</Text>
+        <FlexBox
+          direction="column"
+          alignItems="center"
+          gap={spacing.padding}
+          styles={{ paddingTop: spacing.padding }}
+        >
+          <Text size="md" color={theme.textDim}>
+            오늘은 할 일이 없어요.
+          </Text>
+          <Text size="md" color={theme.textDim}>
+            + 버튼을 눌러 할 일을 추가해보세요.
+          </Text>
+        </FlexBox>
       ) : (
         <DraggableFlatList
           data={selectedTodos}

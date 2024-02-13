@@ -25,6 +25,7 @@ import HorizontalProjectList from "../../organisms/HorizontalProjectList";
 import TutorialBox from "../TutorialBox";
 import BottomDrawer from "./BottomDrawer";
 import { setStep1 } from "../../../store/modules/tutorial";
+import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 
 export const DateContainer = styled.View`
   padding: ${spacing.small}px ${spacing.gutter}px 0;
@@ -73,7 +74,13 @@ const TodoContainer = () => {
             </Pressable>
             <View>
               {showTutorial && step1 ? (
-                <TutorialBox style={{ bottom: -30, right: -19 }} type={1} />
+                <TutorialBox
+                  style={{
+                    bottom: -useResponsiveFontSize(30),
+                    right: -useResponsiveFontSize(17),
+                  }}
+                  type={1}
+                />
               ) : null}
 
               <Icons
@@ -97,7 +104,13 @@ const TodoContainer = () => {
             </View>
           </FlexBox>
           {showTutorial && step3 ? (
-            <TutorialBox style={{ bottom: -80, left: 0 }} type={4} />
+            <TutorialBox
+              style={{
+                bottom: -useResponsiveFontSize(80),
+                left: useResponsiveFontSize(8),
+              }}
+              type={4}
+            />
           ) : null}
         </DateContainer>
 

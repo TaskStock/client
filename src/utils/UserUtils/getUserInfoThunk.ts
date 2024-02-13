@@ -3,8 +3,8 @@ import { client } from "../../services/api";
 import { RootState } from "../../store/configureStore";
 import { setStrategy } from "../../store/modules/auth";
 import { addBadge } from "../../store/modules/badge";
+import { updatePushState } from "../../store/modules/pushNoti";
 import { setTheme } from "../../store/modules/theme";
-import { toggleStateThunk } from "../PushNotification/pushNotiThunk";
 import { storeData } from "../asyncStorage";
 import { checkAndRenewTokens } from "../authUtils/tokenUtils";
 
@@ -58,8 +58,9 @@ export const getUserInfoThunk = createAsyncThunk(
       // [푸시알림] redux !== 서버 => 푸시알림 변경
       const clientPush = rootState.pushNoti.isPushOn;
       const serverPush = data.userData.is_push_on;
+
       if (clientPush !== serverPush) {
-        dispatch(toggleStateThunk(serverPush));
+        dispatch(updatePushState(serverPush));
       }
 
       // [strategy] redux !== 서버 => strategy 변경

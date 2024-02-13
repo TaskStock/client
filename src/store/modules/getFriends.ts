@@ -123,6 +123,7 @@ export const searchThunk = createAsyncThunk(
     await dispatch(checkAndRenewTokens());
     const rootState = getState() as RootState;
     const { accessToken } = rootState.auth;
+    if (searchText === "") return [];
     try {
       const response = await client.get(
         `sns/users/search/?searchScope=global&searchTarget=${searchText}`,

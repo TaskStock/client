@@ -38,7 +38,7 @@ const Info = ({ text, iconType, iconName, color }) => {
         size={17}
         color={color}
       />
-      <Text size="xs">{text}</Text>
+      <Text size="sm">{text}</Text>
     </FlexBox>
   );
 };
@@ -81,7 +81,7 @@ const UserInfo = () => {
             </Text>
             <PrivateLockIcon isPrivate={data.private} />
           </FlexBox>
-          <Text size="xs" color={theme.textDim}>
+          <Text size="sm" color={theme.textDim}>
             {data.introduce ? data.introduce : ""}
           </Text>
         </View>

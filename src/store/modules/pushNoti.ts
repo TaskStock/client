@@ -14,6 +14,9 @@ const pushNotiSlice = createSlice({
     setFcmToken: (state, action) => {
       state.fcmToken = action.payload;
     },
+    updatePushState: (state, action) => {
+      state.isPushOn = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(toggleStateThunk.fulfilled, (state, action) => {
@@ -27,6 +30,6 @@ const pushNotiSlice = createSlice({
   },
 });
 
-export const { setFcmToken } = pushNotiSlice.actions;
+export const { setFcmToken, updatePushState } = pushNotiSlice.actions;
 
 export const pushNotiReducer = pushNotiSlice.reducer;

@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { Alert, Pressable } from "react-native";
+import {
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
+  ScrollView,
+} from "react-native";
 import { useTheme } from "styled-components";
 import styled from "styled-components/native";
 import { BlackBtn } from "../../components/atoms/Buttons";
@@ -15,6 +21,7 @@ import { useClient } from "../../hooks/useClient";
 import { useAppDispatch, useAppSelect } from "../../store/configureStore.hooks";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
 import { setUnRegister } from "../../store/modules/auth";
+import Toast from "react-native-toast-message";
 
 const THEME_CONSTANTS = {
   dark: {
@@ -59,7 +66,12 @@ const UnSubscribeScreen = () => {
 
   const handleUnSubscribe = async () => {
     if (!isChecked) {
-      Alert.alert("회원 탈퇴 유의사항에 동의해주세요.");
+      Toast.show({
+        type: "error",
+        text1: "회원 탈퇴 유의사항에 동의해주세요.",
+        visibilityTime: 2000,
+        keyboardOffset: 100,
+      });
     } else {
       try {
         const res = await client.delete(
@@ -77,40 +89,54 @@ const UnSubscribeScreen = () => {
       }
     }
   };
+  const scrollViewRef = React.useRef<ScrollView>(null);
   return (
     <>
       <PageHeader title="회원 탈퇴" />
-      <Container>
-        <UnSubscribeNotice />
-        <Pressable
-          onPress={() => {
-            setIsChecked((prev) => !prev);
-          }}
-        >
-          <FlexBox
-            alignItems="center"
-            styles={{
-              paddingTop: spacing.gutter,
-              paddingBottom: spacing.padding,
-            }}
-          >
-            <Check isChecked={isChecked} theme={theme} />
-            <Text size="sm" color={isChecked ? uTheme.text : uTheme.textDim}>
-              회원 탈퇴 유의사항을 모두 확인하였으며 동의합니다.
-            </Text>
-          </FlexBox>
-        </Pressable>
-        <TextAreaInput
-          numberOfLines={30}
-          minHeight={useResponsiveFontSize(200)}
-          placeholder="탈퇴 사유를 알려주세요.
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={{ flex: 1 }}
+      >
+        <ScrollView contentContainerStyle={{ flexGrow: 1 }} ref={scrollViewRef}>
+          <Container>
+            <UnSubscribeNotice />
+            <Pressable
+              onPress={() => {
+                setIsChecked((prev) => !prev);
+              }}
+            >
+              <FlexBox
+                alignItems="center"
+                styles={{
+                  paddingTop: spacing.gutter,
+                  paddingBottom: spacing.padding,
+                }}
+              >
+                <Check isChecked={isChecked} theme={theme} />
+                <Text
+                  size="sm"
+                  color={isChecked ? uTheme.text : uTheme.textDim}
+                >
+                  회원 탈퇴 유의사항을 모두 확인하였으며 동의합니다.
+                </Text>
+              </FlexBox>
+            </Pressable>
+            <TextAreaInput
+              numberOfLines={30}
+              minHeight={useResponsiveFontSize(200)}
+              placeholder="탈퇴 사유를 알려주세요.
         고객님의 피드백을 담아 더 나은 TaskStock이 되도록 하겠습니다 :)"
-          value={reason}
-          onChangeText={(text) => setReason(text)}
-        ></TextAreaInput>
-        <Margin margin={spacing.gutter} />
-        <BlackBtn text="탈퇴하기" onPress={handleUnSubscribe} />
-      </Container>
+              value={reason}
+              onChangeText={(text) => setReason(text)}
+              onFocus={() => {
+                scrollViewRef.current?.scrollToEnd({ animated: true });
+              }}
+            ></TextAreaInput>
+            <Margin margin={spacing.gutter} />
+            <BlackBtn text="탈퇴하기" onPress={handleUnSubscribe} />
+          </Container>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </>
   );
 };
