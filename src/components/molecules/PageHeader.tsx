@@ -32,20 +32,27 @@ const PageHeader = ({
   headerLeftShown = true,
   headerRight,
   title,
+  headerLeftColorReverse = false,
 }: {
   headerLeftShown?: boolean;
   headerRight?: React.ReactNode;
   title?: string;
+  headerLeftColorReverse?: boolean;
 }) => {
   const { NOTCH_TOP } = useHeight();
   const theme = useTheme();
   const navigation = useNavigation();
+
+  const headerLeftColor = headerLeftColorReverse
+    ? theme.background
+    : theme.text;
+
   const HeaderLeft = () => (
     <Icons
       type="feather"
       name="chevron-left"
       size={35}
-      color={theme.text}
+      color={headerLeftColor}
       onPress={() => {
         navigation.goBack();
       }}
@@ -70,7 +77,13 @@ const PageHeader = ({
   );
 };
 
-export const AbsolutePageHeader = ({ title }: { title?: string }) => {
+export const AbsolutePageHeader = ({
+  title,
+  headerLeftColorReverse = false,
+}: {
+  title?: string;
+  headerLeftColorReverse?: boolean;
+}) => {
   return (
     <View
       style={{
@@ -81,7 +94,10 @@ export const AbsolutePageHeader = ({ title }: { title?: string }) => {
         zIndex: 100,
       }}
     >
-      <PageHeader title={title} />
+      <PageHeader
+        title={title}
+        headerLeftColorReverse={headerLeftColorReverse}
+      />
     </View>
   );
 };

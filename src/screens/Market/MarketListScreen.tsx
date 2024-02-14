@@ -3,7 +3,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React from "react";
 import { Image, ScrollView, View } from "react-native";
 import styled, { useTheme } from "styled-components/native";
-import LightLogo from "../../../assets/images/logo-light.png";
+import LightLogo from "../../../assets/images/logo-dark.png";
 import ContentLayout from "../../components/atoms/ContentLayout";
 import CustomSkeleton from "../../components/atoms/CustomSkeleton";
 import FlexBox from "../../components/atoms/FlexBox";
@@ -18,6 +18,7 @@ import { upValue } from "../../constants/value";
 import { MarketStackParamList } from "../../navigators/MarketStack";
 import { useGetAllStocksQuery } from "../../store/modules/market/market";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
+import marketListBanner from "../../../assets/images/marketTabListBanner.png";
 
 const PageHeaderBox = styled.View`
   height: ${useResponsiveFontSize(300)}px;
@@ -25,7 +26,6 @@ const PageHeaderBox = styled.View`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
   flex: 1;
 `;
 
@@ -128,13 +128,11 @@ export default function MarketListScreen() {
 
   return (
     <>
-      <AbsolutePageHeader />
+      <AbsolutePageHeader headerLeftColorReverse />
       <ScrollView style={{ flex: 1, backgroundColor: theme.background }}>
         <PageHeaderBox>
           <Image
-            source={{
-              uri: "https://3.bp.blogspot.com/-J7WhLOq4UWg/WN9MLrsxZ_I/AAAAAAAAHrU/OksmOzSqxTwAij6o_p77nZBL_3GMA6ARACLcB/s1600/DSC_0185.JPG",
-            }}
+            source={marketListBanner}
             style={{
               width: "100%",
               // height: "100%",
@@ -156,7 +154,7 @@ export default function MarketListScreen() {
             <Text size="md"># 실천 종목 리스트</Text>
           </PageInnerBox>
         </PageHeaderBox>
-        <Margin margin={spacing.padding}></Margin>
+        <Margin margin={spacing.small}></Margin>
         <ContentLayout>
           <SearchBar2
             text={searchText}

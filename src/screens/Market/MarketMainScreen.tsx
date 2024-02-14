@@ -147,6 +147,7 @@ export default function MarketMainScreen() {
               >
                 미라클 모닝 성공률은 어떻게 될까?
               </Text>
+              <Margin margin={5}></Margin>
               <BannerFloatSubTitle>매일 도전하는</BannerFloatSubTitle>
               <BannerFloatTitle>데일리 종목</BannerFloatTitle>
             </BannerFloatContainer>
