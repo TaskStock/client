@@ -45,7 +45,7 @@ const Policy = ({ serviceOnPress, privacyOnPress }) => {
           }}
         >
           <Text size="xs" color={theme.text}>
-            개인정보 보호정책
+            개인정보 처리방침
           </Text>
         </TouchableOpacity>
         <Text size="xs" color={theme.textDim}>

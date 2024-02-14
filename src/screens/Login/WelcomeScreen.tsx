@@ -1,5 +1,6 @@
 import React from "react";
-import { Alert, Platform } from "react-native";
+import { Linking, Platform } from "react-native";
+import Toast from "react-native-toast-message";
 import { useTheme } from "styled-components";
 import styled from "styled-components/native";
 import Divider from "../../components/molecules/Login/Divider";
@@ -11,14 +12,10 @@ import { spacing } from "../../constants/spacing";
 import { client } from "../../services/api";
 import { useAppDispatch, useAppSelect } from "../../store/configureStore.hooks";
 import { setSocialLoggedIn } from "../../store/modules/auth";
-import { checkStorage } from "../../utils/asyncStorage";
+import { onAppleButtonPress } from "../../utils/authUtils/appleSignIn";
 import { onGoogleButtonPress } from "../../utils/authUtils/googleSignIn";
 import { onKakaoButtonPress } from "../../utils/authUtils/kakaoSignIn";
 import getDeviceId from "../../utils/getDeviceId";
-import { onAppleButtonPress } from "../../utils/authUtils/appleSignIn";
-import { getApiLevel } from "react-native-device-info";
-import { getAPIHost } from "../../utils/getAPIHost";
-import Toast from "react-native-toast-message";
 
 const Login = styled.View`
   gap: ${spacing.padding}px;
@@ -58,7 +55,7 @@ const WelcomeScreen = ({ navigation }) => {
 
         dispatch(setSocialLoggedIn(returnValue));
         console.log("소셜로그인 성공", response);
-        // navigation.navigate("MainTab", { screen: "Home" });
+        navigation.navigate("MainTab", { screen: "Home" });
       } else if (response.result === "fail") {
         Toast.show({
           type: "error",
@@ -114,7 +111,18 @@ const WelcomeScreen = ({ navigation }) => {
         />
       </Login>
 
-      <Policy serviceOnPress={() => {}} privacyOnPress={() => {}} />
+      <Policy
+        serviceOnPress={() => {
+          Linking.openURL(
+            "https://stingy-law-ab2.notion.site/TASKSTOCK-82abb4f1382e489d90921414ad1f6595?pvs=4"
+          );
+        }}
+        privacyOnPress={() => {
+          Linking.openURL(
+            "https://stingy-law-ab2.notion.site/01acf34630f64e948bad39d86e71b9f3?pvs=4"
+          );
+        }}
+      />
     </LoginContainer>
   );
 };
