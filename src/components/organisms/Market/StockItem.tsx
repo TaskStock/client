@@ -47,7 +47,7 @@ export const StockItem = ({
             flex: 1,
           }}
         >
-          <Text size="md" weight="bold" color={theme.textDim}>
+          <Text size="md" weight="bold" color={theme.text}>
             {name.length > 17 ? name.slice(0, 17) + "..." : name}
           </Text>
           <View

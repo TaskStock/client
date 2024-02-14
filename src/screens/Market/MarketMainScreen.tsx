@@ -1,8 +1,9 @@
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React from "react";
-import { Pressable, ScrollView, View } from "react-native";
+import { Image, Pressable, ScrollView, View } from "react-native";
 import styled, { useTheme } from "styled-components/native";
+import MarketBannerImage from "../../../assets/images/marketTabBanner.png";
 import ContentItemBox from "../../components/atoms/ContentItemBox";
 import ContentLayout from "../../components/atoms/ContentLayout";
 import CustomSkeleton from "../../components/atoms/CustomSkeleton";
@@ -23,16 +24,55 @@ import { useGetCategorizedStocksQuery } from "../../store/modules/market/market"
 
 const MainRectangle = styled.View`
   width: 100%;
-  padding-bottom: 100%;
+  /* padding-bottom: 100%; */
   background-color: ${({ theme }) =>
     theme.name == "dark" ? "#2E2E2E" : theme.palette.neutral400_gray};
+`;
+
+const BannerFloatOverlay = styled.View`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  right: 0;
+  justify-content: flex-end;
+  align-items: center;
+  z-index: 10;
+  background-color: rgba(0, 0, 0, 0.33);
+`;
+
+const BannerFloatContainer = styled.View`
+  position: absolute;
+  width: 100%;
+  top: 100;
+  right: 20;
+  /* justify-content: flex-end; */
+  /* align-items: center; */
+  align-items: flex-end;
+  flex-direction: column;
+  gap: 4px;
+
+  z-index: 1;
+`;
+
+const BannerFloatTitle = styled.Text`
+  font-family: "extraBold";
+  font-size: 36px;
+  font-weight: bold;
+  color: ${({ theme }) => theme.palette.neutral100_gray};
+`;
+
+const BannerFloatSubTitle = styled(BannerFloatTitle)`
+  font-family: "medium";
+  font-size: 36px;
+  font-weight: bold;
 `;
 
 const FloatTitle = styled.Pressable`
   width: 100%;
   position: absolute;
   top: -35px;
-  z-index: 2;
+  z-index: 20;
   justify-content: center;
   align-items: center;
 `;
@@ -86,7 +126,33 @@ export default function MarketMainScreen() {
           flex: 1,
         }}
       >
-        <MainRectangle />
+        <View
+          style={{
+            position: "relative",
+            width: "100%",
+            height: 400,
+          }}
+        >
+          <Image
+            source={MarketBannerImage}
+            style={{ width: "100%", height: "100%" }}
+            resizeMode="contain"
+          ></Image>
+          <BannerFloatOverlay>
+            <BannerFloatContainer>
+              <Text
+                size="md"
+                weight="bold"
+                color={theme.palette.neutral100_gray}
+              >
+                미라클 모닝 성공률은 어떻게 될까?
+              </Text>
+              <BannerFloatSubTitle>매일 도전하는</BannerFloatSubTitle>
+              <BannerFloatTitle>데일리 종목</BannerFloatTitle>
+            </BannerFloatContainer>
+          </BannerFloatOverlay>
+        </View>
+
         <View>
           <FloatTitle>
             <InnerFloat>
