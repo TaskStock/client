@@ -12,6 +12,7 @@ import { setLoggedIn } from "../../store/modules/auth";
 import { getAPIHost } from "../../utils/getAPIHost";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
 import getDeviceId from "../../utils/getDeviceId";
+import Toast from "react-native-toast-message";
 
 const EmailLoginScreen = ({ navigation }) => {
   const theme = useTheme();
@@ -53,9 +54,16 @@ const EmailLoginScreen = ({ navigation }) => {
       console.log("이메일 응답", responseData);
       if (responseData.result === "success") {
         dispatch(setLoggedIn({ ...responseData, deviceId }));
+      } else if (responseData.result === "fail") {
+        setAlert(responseData.message);
       }
     } catch (e) {
-      setAlert("이메일 혹은 비밀번호가 일치하지 않습니다.");
+      Toast.show({
+        type: "error",
+        text1: "서버와의 연결이 원활하지 않습니다.",
+        visibilityTime: 2000,
+        keyboardOffset: 100,
+      });
     }
   };
 

@@ -1,13 +1,13 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { client } from "../../services/api";
-import { RootState } from "../../store/configureStore";
+import { TRootState } from "../../store/configureStore";
 import { checkAndRenewTokens } from "../authUtils/tokenUtils";
 
 const badgeThunk = createAsyncThunk(
   "badge/requestBadge",
   async (type: number, { getState, rejectWithValue, dispatch }) => {
     await dispatch(checkAndRenewTokens());
-    const rootState = getState() as RootState;
+    const rootState = getState() as TRootState;
     const { accessToken } = rootState.auth;
     const { user_id } = rootState.user.user;
     const { badges } = rootState.badge;

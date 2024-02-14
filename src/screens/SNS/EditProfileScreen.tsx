@@ -64,6 +64,8 @@ const TextInputContainer = ({
         placeholder={placeholder}
         onChangeText={onChangeText}
         multiline={multiline}
+        autoCorrect={false}
+        autoCapitalize="none"
       />
     </InputContainer>
   );
@@ -87,11 +89,24 @@ const EditProfileScreen = ({ navigation }) => {
   };
 
   const handleSaveText = () => {
+    const trimmedUserName = data.user_name.trimEnd();
+    const trimmedIntroduce = data.introduce.trimEnd();
+
     if (
-      data.user_name !== myInfo.user_name ||
-      data.introduce !== myInfo.introduce
+      trimmedUserName !== myInfo.user_name ||
+      trimmedIntroduce !== myInfo.introduce
     ) {
-      dispatch(editUserInfoThunk(data));
+      setData({
+        user_name: trimmedUserName,
+        introduce: trimmedIntroduce,
+      });
+
+      dispatch(
+        editUserInfoThunk({
+          user_name: trimmedUserName,
+          introduce: trimmedIntroduce,
+        })
+      );
     }
     navigation.goBack();
   };

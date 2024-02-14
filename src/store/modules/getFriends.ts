@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { client } from "../../services/api";
-import { RootState } from "../configureStore";
+import { TRootState } from "../configureStore";
 import { buttonRender } from "../../utils/UserUtils/buttonRender";
 import {
   cancelRequestThunk,
@@ -103,7 +103,7 @@ export const getFriendsThunk = createAsyncThunk(
   "sns/getFriendsThunk",
   async (_, { rejectWithValue, getState, dispatch }) => {
     await dispatch(checkAndRenewTokens());
-    const rootState = getState() as RootState;
+    const rootState = getState() as TRootState;
     const { accessToken } = rootState.auth;
 
     try {
@@ -121,7 +121,7 @@ export const searchThunk = createAsyncThunk(
   "sns/searchThunk",
   async (searchText: string, { rejectWithValue, getState, dispatch }) => {
     await dispatch(checkAndRenewTokens());
-    const rootState = getState() as RootState;
+    const rootState = getState() as TRootState;
     const { accessToken } = rootState.auth;
     if (searchText === "") return [];
     try {
@@ -146,7 +146,7 @@ export const getTargetUserThunk = createAsyncThunk(
   "sns/getTargetUserThunk",
   async (userId: number, { rejectWithValue, getState, dispatch }) => {
     await dispatch(checkAndRenewTokens());
-    const rootState = getState() as RootState;
+    const rootState = getState() as TRootState;
     const { accessToken } = rootState.auth;
     try {
       const response = await client.get(`sns/users/${userId}`, { accessToken });

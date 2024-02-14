@@ -28,6 +28,7 @@ interface initialState {
   };
   loading: boolean;
   error: string | null;
+  userInfoLoaded: boolean;
 }
 
 const initialUserState: initialState = {
@@ -51,6 +52,7 @@ const initialUserState: initialState = {
   },
   loading: false,
   error: null,
+  userInfoLoaded: false,
 };
 
 const userSlice = createSlice({
@@ -89,6 +91,7 @@ const userSlice = createSlice({
     builder.addCase(getUserInfoThunk.fulfilled, (state, action) => {
       state.loading = false;
       state.user = action.payload.userData;
+      state.userInfoLoaded = true;
     });
     builder.addCase(editUserInfoThunk.pending, (state, action) => {
       state.loading = true;

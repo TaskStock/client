@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { client } from "../../services/api";
-import { RootState } from "../../store/configureStore";
+import { TRootState } from "../../store/configureStore";
 import { addFollowingCount, subFollowingCount } from "../../store/modules/user";
 import { checkAndRenewTokens } from "../authUtils/tokenUtils";
 
@@ -11,7 +11,7 @@ export const followThunk = createAsyncThunk(
     { rejectWithValue, getState, dispatch }
   ) => {
     await dispatch(checkAndRenewTokens());
-    const rootState = getState() as RootState;
+    const rootState = getState() as TRootState;
     const { accessToken } = rootState.auth;
 
     try {
@@ -45,7 +45,7 @@ export const unfollowThunk = createAsyncThunk(
   "user/unfollowThunk",
   async (followingId: Number, { rejectWithValue, getState, dispatch }) => {
     await dispatch(checkAndRenewTokens());
-    const rootState = getState() as RootState;
+    const rootState = getState() as TRootState;
     const { accessToken } = rootState.auth;
 
     try {
@@ -75,7 +75,7 @@ export const cancelRequestThunk = createAsyncThunk(
   "user/cancelRequest",
   async (targetId: Number, { rejectWithValue, getState, dispatch }) => {
     await dispatch(checkAndRenewTokens());
-    const rootState = getState() as RootState;
+    const rootState = getState() as TRootState;
     const { accessToken } = rootState.auth;
 
     try {

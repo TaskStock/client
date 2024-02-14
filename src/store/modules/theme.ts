@@ -2,7 +2,7 @@ import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { Appearance } from "react-native";
 import { getData, storeData } from "../../utils/asyncStorage";
 import { client } from "../../services/api";
-import { RootState } from "../configureStore";
+import { TRootState } from "../configureStore";
 import { checkAndRenewTokens } from "../../utils/authUtils/tokenUtils";
 
 export const startingTheme = createAsyncThunk(
@@ -29,7 +29,7 @@ export const pickTheme = createAsyncThunk(
   "theme/pickTheme",
   async (theme: string, { rejectWithValue, getState, dispatch }) => {
     await dispatch(checkAndRenewTokens());
-    const state = getState() as RootState;
+    const state = getState() as TRootState;
     const { accessToken } = state.auth;
     try {
       const res = await client.patch(
