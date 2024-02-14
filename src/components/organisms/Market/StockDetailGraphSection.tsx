@@ -7,6 +7,7 @@ import MarketAverageGraph from "./MarketAverageGraph";
 import Margin from "../../atoms/Margin";
 import Text from "../../atoms/Text";
 import { spacing } from "../../../constants/spacing";
+import FlexBox from "../../atoms/FlexBox";
 
 const GraphBox = styled(ContentItemBoxContainer)`
   width: 100%;
@@ -90,18 +91,6 @@ export default function StockDetailGraphSection({
     }
   })();
 
-  const data2FillCondition = ({
-    datum,
-  }: {
-    datum: { x: string; y: number };
-  }) => {
-    if (datum.x === currentDay) {
-      return theme.palette.red;
-    } else {
-      return theme.textDimmer;
-    }
-  };
-
   let data2 = [
     {
       x: "월",
@@ -133,6 +122,22 @@ export default function StockDetailGraphSection({
     },
   ];
 
+  const data2Max = Math.max(...data2.map((point) => point.y));
+
+  const data2FillCondition = ({
+    datum,
+  }: {
+    datum: { x: string; y: number };
+  }) => {
+    if (datum.y === data2Max) {
+      return theme.palette.red;
+    } else {
+      return theme.textDimmer;
+    }
+  };
+
+  const maxDay = data2.find((point) => point.y === data2Max)?.x;
+
   const data1NoData = data.every((point) => point.y === 0);
   const data2NoData = data2.every((point) => point.y === 0);
 
@@ -141,32 +146,44 @@ export default function StockDetailGraphSection({
       {!data1NoData &&
         (diffRate !== 0 ? (
           <>
-            <Text size="xl" weight="regular">
-              <Text size="xl" weight="bold">
-                김땡땡님
+            <FlexBox
+              direction="column"
+              alignItems="stretch"
+              gap={spacing.small}
+            >
+              <Text size="xl" weight="regular">
+                <Text size="xl" weight="bold">
+                  김땡땡님
+                </Text>
+                은 평균보다 달성률이
               </Text>
-              은 평균보다 달성률이
-            </Text>
-            <Text size="xl" weight="regular">
-              <Text size="xl" weight="bold">
-                {diffRate}%
+              <Text size="xl" weight="regular">
+                <Text size="xl" weight="bold">
+                  {diffRate}%
+                </Text>
+                {diffRate > 0 ? " 높아요. 👏" : " 낮아요. 😥"}
               </Text>
-              {diffRate > 0 ? " 높아요. 👏" : " 낮아요. 😥"}
-            </Text>
+            </FlexBox>
           </>
         ) : (
           <>
-            <Text size="xl" weight="regular">
-              <Text size="xl" weight="bold">
-                김땡땡님
+            <FlexBox
+              direction="column"
+              alignItems="stretch"
+              gap={spacing.small}
+            >
+              <Text size="xl" weight="regular">
+                <Text size="xl" weight="bold">
+                  김땡땡님
+                </Text>
+                은 평균과 달성률이
               </Text>
-              은 평균과 달성률이
-            </Text>
-            <Text size="xl" weight="regular">
-              <Text size="xl" weight="bold">
-                같아요. 🤔
+              <Text size="xl" weight="regular">
+                <Text size="xl" weight="bold">
+                  같아요. 🤔
+                </Text>
               </Text>
-            </Text>
+            </FlexBox>
           </>
         ))}
       <Margin margin={spacing.padding} />
@@ -182,20 +199,23 @@ export default function StockDetailGraphSection({
           data={data}
           size={graphSize}
           noData={data1NoData}
+          labelType="percentage"
         />
       </GraphBox>
       <Margin margin={40} />
       {!data2NoData && (
         <>
-          <Text size="xl" weight="regular">
-            <Text size="xl" weight="bold">
-              금요일
+          <FlexBox direction="column" alignItems="stretch" gap={spacing.small}>
+            <Text size="xl" weight="regular">
+              <Text size="xl" weight="bold">
+                {maxDay}요일
+              </Text>
+              엔 사람들이
             </Text>
-            엔 사람들이
-          </Text>
-          <Text size="xl" weight="regular">
-            가장 많이 실천해요
-          </Text>
+            <Text size="xl" weight="regular">
+              가장 많이 실천해요
+            </Text>
+          </FlexBox>
           <Margin margin={spacing.padding} />
         </>
       )}
@@ -206,6 +226,7 @@ export default function StockDetailGraphSection({
           data={data2}
           size={graphSize}
           noData={data2NoData}
+          labelType="people"
         />
       </GraphBox>
     </>

@@ -1,7 +1,12 @@
 import React from "react";
 import { View } from "react-native";
 import { useTheme } from "styled-components/native";
-import { VictoryBar, VictoryChart, VictoryAxis } from "victory-native";
+import {
+  VictoryBar,
+  VictoryChart,
+  VictoryAxis,
+  VictoryLabel,
+} from "victory-native";
 import Text from "../../atoms/Text";
 
 const MarketAverageGraph = ({
@@ -9,12 +14,14 @@ const MarketAverageGraph = ({
   size: { width, height },
   fillCondition,
   noData,
+  labelType = "percentage",
 }: {
-  data: { x: string; y: number; fake: boolean }[];
+  data: { x: string; y: number; fake?: boolean }[];
   size: {
     width: number;
     height: number;
   };
+  labelType: "percentage" | "people";
   noData: boolean;
   fillCondition: ({
     datum,
@@ -29,6 +36,15 @@ const MarketAverageGraph = ({
       return "";
     }
     return point.x;
+  });
+
+  const label = labelType === "percentage" ? "%" : "명";
+
+  const barLabels = data.map((point) => {
+    if (point.fake) {
+      return ""; // 가짜 데이터에는 라벨 표시 안 함
+    }
+    return `${point.y}` + label; // y 값에 % 추가
   });
 
   return (
@@ -53,7 +69,9 @@ const MarketAverageGraph = ({
               data: {
                 fill: fillCondition,
               },
+              labels: { fill: theme.text },
             }}
+            labels={barLabels} // 막대 위에 표시할 라벨
           />
 
           {/* X-axis */}
@@ -72,15 +90,6 @@ const MarketAverageGraph = ({
           {/* <VictoryAxis dependentAxis /> */}
 
           {/* Percentage labels above the bars */}
-          {/* {data.map((point) => (
-          <VictoryLabel
-            key={point.x}
-            x={point.x === "me" ? 1 : 2}
-            y={point.y + 2} // Adjust the position as needed
-            text={`${point.y}%`}
-            style={{ fontSize: 12, fill: "black" }}
-          />
-        ))} */}
         </VictoryChart>
       )}
     </View>
