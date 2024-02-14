@@ -7,7 +7,7 @@ import Text from "../../components/atoms/Text";
 import { TextAreaInput } from "../../components/atoms/TextInput";
 import PageHeader from "../../components/molecules/PageHeader";
 import { spacing } from "../../constants/spacing";
-import { RootState } from "../../store/configureStore";
+// import { RootState } from "../../store/configureStore";
 import { useAppDispatch, useAppSelect } from "../../store/configureStore.hooks";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
 import { Shadow } from "react-native-shadow-2";
@@ -15,6 +15,7 @@ import { palette } from "../../constants/colors";
 import FlexBox from "../../components/atoms/FlexBox";
 import { useClient } from "../../hooks/useClient";
 import Toast from "react-native-toast-message";
+import { TRootState } from "../../store/configureStore";
 
 const Container = styled.ScrollView`
   padding: ${spacing.offset}px;
@@ -53,8 +54,8 @@ const Success = ({ visible, message }) => (
 
 const CustomerServiceScreen = ({ navigation }) => {
   const [content, setContent] = useState("");
-  const { accessToken } = useAppSelect((state: RootState) => state.auth);
-  const { email } = useAppSelect((state: RootState) => state.user.user);
+  const { accessToken } = useAppSelect((state: TRootState) => state.auth);
+  const { email } = useAppSelect((state: TRootState) => state.user.user);
 
   const [visible, setVisible] = useState(false);
   const [message, setMessage] = useState("");
