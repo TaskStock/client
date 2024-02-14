@@ -7,6 +7,7 @@ import PageHeader from "../../components/molecules/PageHeader";
 import Menu from "../../components/molecules/Settings/Menu";
 import { spacing } from "../../constants/spacing";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
+import { Linking } from "react-native";
 
 const Container = styled.View`
   flex: 1;
@@ -33,12 +34,20 @@ const InfoScreen = ({ navigation }) => {
         <Version version={appVersion} />
         <Menu
           text="개인정보 처리방침"
-          onPress={() => {}}
+          onPress={() => {
+            Linking.openURL(
+              "https://stingy-law-ab2.notion.site/01acf34630f64e948bad39d86e71b9f3?pvs=4"
+            );
+          }}
           icon={{ type: "material", name: "shield-account-variant" }}
         />
         <Menu
           text="이용 약관"
-          onPress={() => {}}
+          onPress={() => {
+            Linking.openURL(
+              "https://stingy-law-ab2.notion.site/TASKSTOCK-82abb4f1382e489d90921414ad1f6595?pvs=4"
+            );
+          }}
           icon={{ type: "material", name: "file-document" }}
         />
         <Menu
