@@ -18,6 +18,7 @@ import TextWithRadio from "../../molecules/TextWithRadioBtn";
 import { ScrollView } from "react-native-gesture-handler";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import Margin from "../../atoms/Margin";
+import { IconsWithoutFeedBack } from "../../atoms/Icons";
 
 export default function RetrospectContainer({
   selectedFilter,
@@ -89,11 +90,12 @@ export default function RetrospectContainer({
             <TextWithIcon
               text={selectedFilter === "latest" ? "최신순" : "오래된순"}
             >
-              <WithLocalSvg
-                width={13}
-                height={13}
-                asset={filterIcon}
-              ></WithLocalSvg>
+              <IconsWithoutFeedBack
+                type="ionicons"
+                name="filter"
+                color={theme.text}
+                size={spacing.offset}
+              />
             </TextWithIcon>
           </Pressable>
           {isAllRetrospects &&
@@ -104,11 +106,12 @@ export default function RetrospectContainer({
                 }}
               >
                 <TextWithIcon text="프로젝트">
-                  <WithLocalSvg
-                    width={13}
-                    height={13}
-                    asset={ProjectFilterIcon}
-                  ></WithLocalSvg>
+                  <IconsWithoutFeedBack
+                    type="AntDesign"
+                    name="filter"
+                    color={theme.text}
+                    size={spacing.offset}
+                  />
                 </TextWithIcon>
               </Pressable>
             ) : (
@@ -121,11 +124,7 @@ export default function RetrospectContainer({
                   text={selectedProjectName || ""}
                   textColor={theme.palette.red}
                 >
-                  <WithLocalSvg
-                    width={13}
-                    height={13}
-                    asset={ProjectFilterIcon}
-                  ></WithLocalSvg>
+                  <></>
                 </TextWithIcon>
               </Pressable>
             ))}

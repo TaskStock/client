@@ -188,7 +188,12 @@ function ProjectItem({ item }: { item: Project }) {
             {currentUserId == item.user_id && (
               <MoreBtn onPress={onPressProjectDetailBtn}>
                 <Text size="sm">프로젝트 더보기</Text>
-                <Icons type="entypo" name="chevron-thin-right" size={15} />
+                <Icons
+                  type="entypo"
+                  name="chevron-thin-right"
+                  size={15}
+                  color={theme.text}
+                />
               </MoreBtn>
             )}
           </View>

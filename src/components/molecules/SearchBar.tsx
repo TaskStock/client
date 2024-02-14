@@ -1,19 +1,20 @@
-import styled, { useTheme } from "styled-components/native";
-import Icons from "../atoms/Icons";
-import { TextInput } from "react-native-gesture-handler";
-import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
-import { WithLocalSvg } from "react-native-svg";
-import SearchIcon from "../../../assets/icons/search.svg";
-import { spacing } from "../../constants/spacing";
-import { Pressable } from "react-native";
 import React from "react";
+import { Image, Pressable } from "react-native";
+import { TextInput } from "react-native-gesture-handler";
+import { WithLocalSvg } from "react-native-svg";
+import styled, { useTheme } from "styled-components/native";
+import SearchDarkIcon from "../../../assets/icons/Search_dark.png";
+import SearchIcon from "../../../assets/icons/Search_gray.png";
+import { spacing } from "../../constants/spacing";
+import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
+import Icons, { IconsWithoutFeedBack } from "../atoms/Icons";
 
 const Container = styled.View`
   display: flex;
   flex-direction: row;
-  padding: 7px 13px;
+  padding: ${spacing.padding}px ${useResponsiveFontSize(12)}px;
   gap: ${spacing.small}px;
-  border-radius: 10px;
+  border-radius: 12px;
   background-color: ${({ theme }) => theme.box};
 `;
 
@@ -26,12 +27,19 @@ export const SearchBar = ({
 }) => {
   const theme = useTheme();
 
+  const iconColor = theme.text;
+
   const [text, setText] = React.useState("");
 
   return (
     <Container>
       <Pressable onPress={onPressSearchIcon}>
-        <WithLocalSvg asset={SearchIcon} width={34} height={34} />
+        <Icons
+          type="materialIcons"
+          name="search"
+          size={useResponsiveFontSize(36)}
+          color={iconColor}
+        />
       </Pressable>
       <TextInput
         value={text}
@@ -44,6 +52,7 @@ export const SearchBar = ({
         style={{
           fontSize: useResponsiveFontSize(16),
           flex: 1,
+          color: theme.text,
         }}
       ></TextInput>
     </Container>
@@ -63,14 +72,16 @@ export const SearchBar2 = ({
 }) => {
   const theme = useTheme();
 
+  const iconColor = theme.text;
+
   return (
     <Container>
       <Pressable onPress={onPressSearchIcon}>
-        <WithLocalSvg
-          asset={SearchIcon}
-          width={34}
-          height={34}
-          fill={theme.text}
+        <Icons
+          type="materialIcons"
+          name="search"
+          size={useResponsiveFontSize(36)}
+          color={iconColor}
         />
       </Pressable>
       <TextInput
@@ -81,6 +92,7 @@ export const SearchBar2 = ({
         style={{
           fontSize: useResponsiveFontSize(16),
           flex: 1,
+          color: theme.text,
         }}
       ></TextInput>
     </Container>

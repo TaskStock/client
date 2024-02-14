@@ -76,6 +76,7 @@ export const IconsWithoutFeedBack: React.FC<IconProps> = ({
   else if (type === "feather") IconComponent = Feather;
   else if (type === "entypo") IconComponent = Entypo;
   else if (type === "materialIcons") IconComponent = MaterialIcons;
+  else if (type === "AntDesign") IconComponent = AntDesign;
   else return null;
 
   return (
