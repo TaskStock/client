@@ -52,7 +52,8 @@ export default function LineValueChart({
 
   const lineData = data.map((item, index) => ({
     x: index,
-    y: item.end,
+    // y: item.end,
+    y: Math.floor(item.end * 1000) / 1000,
   }));
 
   const maxY = Math.max(...lineData.map((item) => item.y));
