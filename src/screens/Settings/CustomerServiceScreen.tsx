@@ -7,7 +7,6 @@ import Text from "../../components/atoms/Text";
 import { TextAreaInput } from "../../components/atoms/TextInput";
 import PageHeader from "../../components/molecules/PageHeader";
 import { spacing } from "../../constants/spacing";
-// import { RootState } from "../../store/configureStore";
 import { useAppDispatch, useAppSelect } from "../../store/configureStore.hooks";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
 import { Shadow } from "react-native-shadow-2";

@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { RootState } from "../store/configureStore";
+import { TRootState } from "../store/configureStore";
 import { useAppDispatch, useAppSelect } from "../store/configureStore.hooks";
 import {
   resetAllRetrospectQueries,
@@ -12,7 +12,7 @@ import {
 export const useRetrospectForm = () => {
   const dispatch = useAppDispatch();
   const retrospectForm = useAppSelect(
-    (state: RootState) => state.retrospect.retrospectForm
+    (state: TRootState) => state.retrospect.retrospectForm
   );
 
   const retrospectDate = dayjs(retrospectForm.date).toDate();

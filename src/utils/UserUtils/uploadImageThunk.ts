@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { Asset } from "react-native-image-picker";
-import { RootState } from "../../store/configureStore";
+import { TRootState } from "../../store/configureStore";
 import { getAPIHost } from "../getAPIHost";
 import { client } from "../../services/api";
 import { checkAndRenewTokens } from "../authUtils/tokenUtils";
@@ -9,7 +9,7 @@ export const uploadImageThunk = createAsyncThunk(
   "user/uploadImageThunk",
   async (image: Asset, { getState, rejectWithValue, dispatch }) => {
     await dispatch(checkAndRenewTokens());
-    const state = getState() as RootState;
+    const state = getState() as TRootState;
     const { accessToken } = state.auth;
 
     const formData = new FormData() as any;
@@ -53,7 +53,7 @@ export const setToDefaultImageThunk = createAsyncThunk(
   "user/setToDefaultImageThunk",
   async (_, { getState, rejectWithValue, dispatch }) => {
     await dispatch(checkAndRenewTokens());
-    const state = getState() as RootState;
+    const state = getState() as TRootState;
     const { accessToken } = state.auth;
 
     try {

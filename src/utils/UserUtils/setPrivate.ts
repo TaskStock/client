@@ -1,13 +1,13 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { client } from "../../services/api";
-import { RootState } from "../../store/configureStore";
+import { TRootState } from "../../store/configureStore";
 import { checkAndRenewTokens } from "../authUtils/tokenUtils";
 
 export const setPrivateThunk = createAsyncThunk(
   "user/setPrivateThunk",
   async (isPrivate: boolean, { rejectWithValue, getState, dispatch }) => {
     await dispatch(checkAndRenewTokens());
-    const rootState = getState() as RootState;
+    const rootState = getState() as TRootState;
     const { accessToken } = rootState.auth;
 
     try {

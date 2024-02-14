@@ -1,5 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { RootState } from "../../store/configureStore";
+import { TRootState } from "../../store/configureStore";
 import { useAppDispatch } from "../../store/configureStore.hooks";
 import { getData } from "../asyncStorage";
 import { getAPIHost } from "../getAPIHost";
@@ -38,7 +38,7 @@ const requestNewTokens = async (accessToken: string, refreshToken: string) => {
 export const checkAndRenewTokens = createAsyncThunk(
   "auth/checkAndRenewTokens",
   async (_, { getState, rejectWithValue, dispatch }) => {
-    const state = getState() as RootState;
+    const state = getState() as TRootState;
 
     const {
       auth: { accessToken, accessExp, refreshExp },

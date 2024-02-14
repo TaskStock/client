@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { IRegisterUser } from "../../screens/Login/EmailRegisterScreen";
 import { client } from "../../services/api";
-import { RootState } from "../../store/configureStore";
+import { TRootState } from "../../store/configureStore";
 import getDeviceId from "../getDeviceId";
 import { checkAndRenewTokens } from "./tokenUtils";
 
@@ -83,7 +83,7 @@ export const logout = createAsyncThunk(
   async (_, { getState, rejectWithValue, dispatch }) => {
     await dispatch(checkAndRenewTokens());
     try {
-      const state = getState() as RootState;
+      const state = getState() as TRootState;
       const { accessToken, deviceId } = state.auth;
       const accessToSend = accessToken.replace(/^"|"$/g, "");
 
