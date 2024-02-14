@@ -58,7 +58,7 @@ const WelcomeScreen = ({ navigation }) => {
 
         dispatch(setSocialLoggedIn(returnValue));
         console.log("소셜로그인 성공", response);
-        // navigation.navigate("MainTab", { screen: "Home" });
+        navigation.navigate("MainTab", { screen: "Home" });
       } else if (response.result === "fail") {
         Toast.show({
           type: "error",

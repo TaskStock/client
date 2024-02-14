@@ -23,7 +23,7 @@ const Version = ({ version }) => (
     <Text size="md">{version}</Text>
   </FlexBox>
 );
-const InfoScreen = () => {
+const InfoScreen = ({ navigation }) => {
   const appVersion = DeviceInfo.getVersion();
 
   return (
@@ -43,7 +43,7 @@ const InfoScreen = () => {
         />
         <Menu
           text="오픈소스 라이선스"
-          onPress={() => {}}
+          onPress={() => navigation.navigate("OssLicense")}
           icon={{ type: "entypo", name: "open-book" }}
         />
       </Container>

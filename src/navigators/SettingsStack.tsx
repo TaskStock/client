@@ -1,15 +1,16 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
+import { useTheme } from "styled-components";
+import FindPwSetNewPwScreen from "../screens/Login/FindPwSetNewPwScreen";
+import AccountScreen from "../screens/Settings/AccountScreen";
+import ChangePwCheckPwScreen from "../screens/Settings/ChangePwCheckPwScreen";
+import CustomerServiceScreen from "../screens/Settings/CustomerServiceScreen";
+import InfoScreen from "../screens/Settings/InfoScreen";
+import OssLicenseScreen from "../screens/Settings/OssLicenseScreen";
 import SettingsHomeScreen from "../screens/Settings/SettingsHomeScreen";
 import ThemeScreen from "../screens/Settings/ThemeScreen";
-import AccountScreen from "../screens/Settings/AccountScreen";
-import { useTheme } from "styled-components";
-import InfoScreen from "../screens/Settings/InfoScreen";
-import CustomerServiceScreen from "../screens/Settings/CustomerServiceScreen";
-import ChangePwCheckPwScreen from "../screens/Settings/ChangePwCheckPwScreen";
-import Icons from "../components/atoms/Icons";
-import FindPwSetNewPwScreen from "../screens/Login/FindPwSetNewPwScreen";
 import UnSubscribeScreen from "../screens/Settings/UnSubscribeScreen";
+import LicenseDetailScreen from "../screens/Settings/LicenseDetailScreen";
 
 const NativeStack = createNativeStackNavigator();
 
@@ -38,6 +39,11 @@ const SettingsStack = () => {
       />
       <NativeStack.Screen name="SetNewPw" component={FindPwSetNewPwScreen} />
       <NativeStack.Screen name="UnSubscribe" component={UnSubscribeScreen} />
+      <NativeStack.Screen name="OssLicense" component={OssLicenseScreen} />
+      <NativeStack.Screen
+        name="OssLicenseDetail"
+        component={LicenseDetailScreen}
+      />
     </NativeStack.Navigator>
   );
 };
