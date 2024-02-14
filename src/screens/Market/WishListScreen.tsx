@@ -113,7 +113,7 @@ export default function WishListScreen() {
                   return (
                     <View key={v.wishlist_id + "wish"}>
                       <StockItemForWishList
-                        left={i}
+                        left={i + 1}
                         likes={v.like_count}
                         name={v.name}
                         isLiked={v.is_liked}
