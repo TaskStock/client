@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { client } from "../../services/api";
-import { RootState } from "../../store/configureStore";
+import { TRootState } from "../../store/configureStore";
 import { setStrategy } from "../../store/modules/auth";
 import { addBadge } from "../../store/modules/badge";
 import { updatePushState } from "../../store/modules/pushNoti";
@@ -38,7 +38,7 @@ export const getUserInfoThunk = createAsyncThunk(
   "user/getUserInfo",
   async (_, { rejectWithValue, getState, dispatch }) => {
     await dispatch(checkAndRenewTokens());
-    const rootState = getState() as RootState;
+    const rootState = getState() as TRootState;
 
     const accessToSend = rootState.auth.accessToken.replace(/^"|"$/g, "");
     // console.log("getUserInfoThunk accessToken: ", accessToSend);

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Modal, TouchableOpacity, View, Pressable } from "react-native";
 import styled from "styled-components/native";
 import HeaderTop from "../components/molecules/Home/HeaderTop";
@@ -25,9 +25,6 @@ const HomeScreen = ({ navigation }) => {
   const isAddModalOpen = useAppSelect((state) => state.todo.isAddModalOpen);
   const dispatch = useAppDispatch();
 
-  // push notification
-  usePushNotification();
-
   // tutorial
   const showTutorialIfFirst = async () => {
     const first = await checkFirstTime();
@@ -40,6 +37,8 @@ const HomeScreen = ({ navigation }) => {
     dispatch(getUserInfoThunk());
     showTutorialIfFirst();
   }, []);
+
+  usePushNotification();
 
   useFlushSavedValues();
 

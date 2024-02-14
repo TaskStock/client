@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { toggleStateThunk } from "../../utils/PushNotification/pushNotiThunk";
 
 const initialNotiState = {
+  allowed: false,
   isPushOn: false,
   fcmToken: "",
   error: "",
@@ -17,10 +18,13 @@ const pushNotiSlice = createSlice({
     updatePushState: (state, action) => {
       state.isPushOn = action.payload;
     },
+    setAllowed: (state, action) => {
+      state.allowed = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(toggleStateThunk.fulfilled, (state, action) => {
-      // console.log("푸시알림 설정 변경 성공", action.payload);
+      console.log("푸시알림 설정 변경 성공", action.payload);
       state.isPushOn = action.payload as boolean;
     });
     builder.addCase(toggleStateThunk.rejected, (state, action) => {
@@ -30,6 +34,7 @@ const pushNotiSlice = createSlice({
   },
 });
 
-export const { setFcmToken, updatePushState } = pushNotiSlice.actions;
+export const { setFcmToken, updatePushState, setAllowed } =
+  pushNotiSlice.actions;
 
 export const pushNotiReducer = pushNotiSlice.reducer;

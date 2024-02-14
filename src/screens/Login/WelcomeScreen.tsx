@@ -22,10 +22,6 @@ const Login = styled.View`
   width: 100%;
 `;
 const WelcomeScreen = ({ navigation }) => {
-  // 임시 설정
-  // 서비스 약관 누르면 asyncStorage에 저장된 토큰 확인
-  // 개인정보 보호정책 누르면 메인 화면으로 이동
-
   const getTheme = useAppSelect((state) => state.theme.value);
   const dispatch = useAppDispatch();
 

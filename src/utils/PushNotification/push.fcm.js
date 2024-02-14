@@ -1,6 +1,7 @@
 import messaging from "@react-native-firebase/messaging";
 import { Platform } from "react-native";
 import { toggleStateThunk } from "./pushNotiThunk";
+import { setAllowed } from "../../store/modules/pushNoti";
 
 class FCMService {
   register = (onRegister, onNotification, onOpenNotification, dispatch) => {
@@ -25,10 +26,11 @@ class FCMService {
         this.getToken(onRegister);
         if (enabled) {
           console.log(Platform.OS, ">>>>>[FCMService] enabled 들어옴");
-          // dispatch(toggleStateThunk(true));
+          dispatch(setAllowed(true));
         } else {
           console.log(Platform.OS, "disabled 들어옴");
           this.requestPermission(onRegister);
+          dispatch(setAllowed(true));
           dispatch(toggleStateThunk(false));
         }
       })
