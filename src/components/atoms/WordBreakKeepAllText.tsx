@@ -5,14 +5,16 @@ import Text from "./Text";
 const WordBreakKeepAllText = ({
   text,
   textStyles,
+  size = "md",
 }: {
   text: string;
   textStyles?: TextStyle;
+  size?: "sm" | "md" | "lg" | "xl";
 }) => {
   return (
     <View style={styles.container}>
       {text.split(" ").map((word, index) => (
-        <Text size="md" key={index} styles={textStyles}>
+        <Text size={size} key={index} styles={textStyles}>
           {word}{" "}
         </Text>
       ))}
