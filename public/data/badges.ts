@@ -21,7 +21,7 @@ export const BADGES = [
   {
     type: 1,
     title: "셀럽으로 가는 길",
-    description: "팔로워 10명 돌파",
+    description: "팔로워 10명 돌파하기",
     image: badge1,
     background: badgebg1,
   },
@@ -29,7 +29,7 @@ export const BADGES = [
   {
     type: 2,
     title: "우리 무슨 사이?",
-    description: "팔로워 42명",
+    description: "팔로워 42명 돌파하기",
     image: badge2,
     background: badgebg2,
   },
@@ -37,7 +37,7 @@ export const BADGES = [
   {
     type: 3,
     title: "개미의 선택",
-    description: "가치 10만원 돌파",
+    description: "가치 10만원 돌파하기",
     image: badge3,
     background: badgebg3,
   },
@@ -45,7 +45,7 @@ export const BADGES = [
   {
     type: 4,
     title: "슈퍼개미의 선택",
-    description: "가치 20만원 돌파",
+    description: "가치 20만원 돌파하기",
     image: badge4,
     background: badgebg4,
   },
@@ -53,7 +53,7 @@ export const BADGES = [
   {
     type: 5,
     title: "워렌 버핏의 선택",
-    description: "가치 50만원 돌파",
+    description: "가치 50만원 돌파하기",
     image: badge5,
     background: badgebg5,
   },
@@ -61,7 +61,7 @@ export const BADGES = [
   {
     type: 6,
     title: "화성 갈끄니까..",
-    description: "가치 100만원 돌파",
+    description: "가치 100만원 돌파하기",
     image: badge6,
     background: badgebg6,
   },
@@ -77,7 +77,7 @@ export const BADGES = [
   {
     type: 8,
     title: "급등주",
-    description: "상승률 50% 돌파",
+    description: "상승률 50% 돌파하기",
     image: badge8,
     background: badgebg8,
   },
@@ -85,7 +85,7 @@ export const BADGES = [
   {
     type: 9,
     title: "Rising Star",
-    description: "첫 투두 완료",
+    description: "첫 할 일 완료하기",
     image: badge9,
     background: badgebg9,
   },

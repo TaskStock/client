@@ -1,13 +1,12 @@
 import React from "react";
-import { Switch } from "react-native";
-import { useTheme } from "styled-components";
+import { Platform, Switch } from "react-native";
 import { useAppSelect } from "../../store/configureStore.hooks";
 
 const CONSTANTS = {
   dark: {
     on: "#4DDE48",
-    off: "#fff",
-    ball: "#000",
+    off: Platform.OS === "android" ? "#5b5a5a" : "#fff",
+    ball: Platform.OS === "android" ? "#fff" : "#000",
   },
   gray: {
     on: "#000",

@@ -26,8 +26,8 @@ function WagmiChart({
         <CandlestickChart width={width} height={height}>
           <CandlestickChartCandles
             useAnimations={true}
-            positiveColor={theme.palette.red}
-            negativeColor={theme.palette.blue}
+            positiveColor={theme.high}
+            negativeColor={theme.low}
             lineColor={theme.palette.neutral600_gray}
           />
           <CandlestickChartCrosshair>

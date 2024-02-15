@@ -59,21 +59,21 @@ export const StockItem = ({
             <TextWithIcon
               text={percentFormat + "%"}
               size="sm"
-              textColor={percent > 0 ? theme.palette.red : theme.palette.blue}
+              textColor={percent > 0 ? theme.high : theme.low}
             >
               {percent > 0 ? (
                 <Icons
                   type="AntDesign"
                   name="caretup"
                   size={14}
-                  color={theme.palette.red}
+                  color={theme.high}
                 ></Icons>
               ) : (
                 <Icons
                   type="AntDesign"
                   name="caretdown"
                   size={14}
-                  color={theme.palette.blue}
+                  color={theme.low}
                 ></Icons>
               )}
             </TextWithIcon>
@@ -119,21 +119,21 @@ export const StockItemSecond = ({
           </View>
           <TextWithIcon
             text={percentFormat + "%"}
-            textColor={percent > 0 ? theme.palette.red : theme.palette.blue}
+            textColor={percent > 0 ? theme.high : theme.low}
           >
             {percent > 0 ? (
               <Icons
                 type="AntDesign"
                 name="caretup"
                 size={14}
-                color={theme.palette.red}
+                color={theme.high}
               />
             ) : (
               <Icons
                 type="AntDesign"
                 name="caretdown"
                 size={14}
-                color={theme.palette.blue}
+                color={theme.low}
               />
             )}
           </TextWithIcon>

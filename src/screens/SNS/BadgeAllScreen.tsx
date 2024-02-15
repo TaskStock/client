@@ -7,6 +7,8 @@ import BadgeItemForAll from "../../components/organisms/Badge/BadgeItemForAll";
 import { spacing } from "../../constants/spacing";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
 import Margin from "../../components/atoms/Margin";
+import useHeight from "../../hooks/useHeight";
+import { Platform } from "react-native";
 
 const Container = styled.View`
   background-color: ${({ theme }) => theme.background};
@@ -38,9 +40,12 @@ const Wrapper = styled.View`
 const BadgeAllScreen = ({ route, navigation }) => {
   const { type, badges: allBadges } = route.params;
   const theme = useTheme();
+  const { NOTCH_TOP } = useHeight();
 
   return (
-    <Container>
+    <Container
+      style={{ paddingTop: Platform.OS === "android" ? NOTCH_TOP : 0 }}
+    >
       <Header theme={theme} onPress={() => navigation.goBack()} />
       <ScrollView>
         <Wrapper>
