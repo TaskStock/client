@@ -68,6 +68,7 @@ const BadgeScreen = ({ navigation, route }) => {
   } else {
     reduxBadges = friendBadges;
   }
+
   // ===== 가지고 있는 뱃지는 먼저 배치하기 위해 새 배열 생성 =====
   const ownedTypes = new Set(reduxBadges.map((badge) => badge.type));
   // 뱃지 분류 (가지고 있는 뱃지, 가지고 있지 않은 뱃지)
@@ -122,7 +123,7 @@ const BadgeScreen = ({ navigation, route }) => {
         ref={flatListRef}
         keyExtractor={(item) => item.type.toString()}
         horizontal
-        renderItem={({ item }) => <BadgeItem item={item} />}
+        renderItem={({ item }) => <BadgeItem item={item} type={type} />}
         pagingEnabled
         onScroll={handleScroll}
         scrollEventThrottle={16}

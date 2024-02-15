@@ -8,6 +8,7 @@ import Margin from "../../atoms/Margin";
 import Text from "../../atoms/Text";
 import { spacing } from "../../../constants/spacing";
 import FlexBox from "../../atoms/FlexBox";
+import { useAppSelect } from "../../../store/configureStore.hooks";
 
 const GraphBox = styled(ContentItemBoxContainer)`
   width: 100%;
@@ -46,6 +47,7 @@ export default function StockDetailGraphSection({
   diffRate: number;
 }) {
   const theme = useTheme();
+  const { user_name } = useAppSelect((state) => state.user.user);
 
   const [graphSize, setGraphSize] = React.useState({
     width: 0,
@@ -153,11 +155,9 @@ export default function StockDetailGraphSection({
             >
               <Text size="xl" weight="regular">
                 <Text size="xl" weight="bold">
-                  김땡땡님
+                  {user_name}님
                 </Text>
-                은 평균보다 달성률이
-              </Text>
-              <Text size="xl" weight="regular">
+                은 평균보다 달성률이{" "}
                 <Text size="xl" weight="bold">
                   {diffRate}%
                 </Text>
@@ -174,7 +174,7 @@ export default function StockDetailGraphSection({
             >
               <Text size="xl" weight="regular">
                 <Text size="xl" weight="bold">
-                  김땡땡님
+                  {user_name}님
                 </Text>
                 은 평균과 달성률이
               </Text>
@@ -210,7 +210,7 @@ export default function StockDetailGraphSection({
               <Text size="xl" weight="bold">
                 {maxDay}요일
               </Text>
-              엔 사람들이
+              에 사람들이
             </Text>
             <Text size="xl" weight="regular">
               가장 많이 실천해요

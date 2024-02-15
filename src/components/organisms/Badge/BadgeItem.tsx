@@ -33,9 +33,18 @@ const formatToLocal = (
   };
 };
 
-const BadgeItem = ({ item }) => {
+const BadgeItem = ({ item, type }) => {
   // redux에 저장된 type과 일치하면 BADGES의 해당 type의 image를 사용
-  const { badges: reduxBadges } = useAppSelect((state) => state.badge);
+  let reduxBadges;
+  const { badges: myBadges } = useAppSelect((state) => state.badge);
+  const { badges: friendBadges } = useAppSelect((state) => state.friends);
+
+  if (type === "me") {
+    reduxBadges = myBadges;
+  } else {
+    reduxBadges = friendBadges;
+  }
+
   const givenBadge = reduxBadges.find((badge) => badge.type === item.type);
 
   let image;
