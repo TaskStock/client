@@ -1,8 +1,7 @@
 import dayjs from "dayjs";
-import { RootState } from "../store/configureStore";
+import { TRootState } from "../store/configureStore";
 import { useAppDispatch, useAppSelect } from "../store/configureStore.hooks";
 import {
-  resetAllRetrospectQueries,
   setRetrospectForm,
   useAddRetrospectMutation,
   useDelteRetrospectMutation,
@@ -12,7 +11,7 @@ import {
 export const useRetrospectForm = () => {
   const dispatch = useAppDispatch();
   const retrospectForm = useAppSelect(
-    (state: RootState) => state.retrospect.retrospectForm
+    (state: TRootState) => state.retrospect.retrospectForm
   );
 
   const retrospectDate = dayjs(retrospectForm.date).toDate();
@@ -68,7 +67,7 @@ export const useRetrospectForm = () => {
   };
 
   const onDeleteRetrospect = () => {
-    if (!retrospectForm.retrospect_id) return;
+    if (!retrospectForm.retrospect_id || !retrospectForm.project_id) return;
 
     deleteRetrospect({
       retrospect_id: retrospectForm.retrospect_id,
@@ -90,6 +89,7 @@ export const useRetrospectForm = () => {
     updateRetrospect({
       retrospect_id: retrospectForm.retrospect_id,
       content: retrospectForm.content,
+      project_id: retrospectForm.project_id,
     });
   };
 

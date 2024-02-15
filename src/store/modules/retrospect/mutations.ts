@@ -79,6 +79,7 @@ export const updateRetrospectMutation = (builder: Builder) =>
     {},
     {
       retrospect_id: number;
+      project_id: number;
       content: string;
     }
   >({
