@@ -23,7 +23,7 @@ export default function ShadowForProject({
   return (
     <Shadow
       distance={7}
-      offset={[0, 5]}
+      offset={[0, 4]}
       startColor={palette.shadow}
       style={{
         borderRadius: radius ? radius : spacing.gutter,
@@ -45,8 +45,8 @@ export function ShadowForRetrospect({
 }) {
   return (
     <Shadow
-      distance={8}
-      offset={[0, 4]}
+      distance={3}
+      offset={[0, 0]}
       startColor={palette.shadow}
       style={{
         borderRadius: radius ? radius : spacing.gutter,
@@ -68,8 +68,31 @@ export function ShadowForStockItem({
 }) {
   return (
     <Shadow
-      distance={8}
-      offset={[0, 4]}
+      distance={6}
+      offset={[0, 2]}
+      startColor={palette.shadow}
+      style={{
+        borderRadius: radius ? radius : spacing.gutter,
+        // flex: 1,
+        width: "100%",
+      }}
+    >
+      {children}
+    </Shadow>
+  );
+}
+
+export function ShadowForStockItem2({
+  children,
+  radius,
+}: {
+  children: React.ReactNode;
+  radius?: number;
+}) {
+  return (
+    <Shadow
+      distance={5}
+      offset={[0, 2]}
       startColor={palette.shadow}
       style={{
         borderRadius: radius ? radius : spacing.gutter,

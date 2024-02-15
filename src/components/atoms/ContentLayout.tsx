@@ -15,7 +15,7 @@ export default function ContentLayout({
     <View
       style={{
         paddingHorizontal: spacing.gutter,
-        paddingVertical: noVerticalPadding ? 0 : spacing.gutter,
+        paddingVertical: noVerticalPadding ? 0 : spacing.offset,
         flex: noFlex ? 0 : 1,
       }}
     >

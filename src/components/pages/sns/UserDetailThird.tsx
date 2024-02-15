@@ -20,7 +20,7 @@ export default function SnsDetailThird({
     <View
       style={{
         flex: 1,
-        paddingVertical: spacing.gutter,
+        paddingVertical: spacing.padding,
       }}
     >
       <ProjectList

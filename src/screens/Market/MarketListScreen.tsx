@@ -19,6 +19,10 @@ import { MarketStackParamList } from "../../navigators/MarketStack";
 import { useGetAllStocksQuery } from "../../store/modules/market/market";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
 import marketListBanner from "../../../assets/images/marketTabListBanner.png";
+import {
+  ShadowForStockItem,
+  ShadowForStockItem2,
+} from "../../components/atoms/CustomShadow";
 
 const PageHeaderBox = styled.View`
   height: ${useResponsiveFontSize(300)}px;
@@ -63,32 +67,34 @@ const MarketListItem = ({
   const theme = useTheme();
 
   return (
-    <MarketItemButton onPress={onPress}>
-      <MarketListItemInner>
-        <FlexBox
-          direction="column"
-          justifyContent="space-between"
-          alignItems="stretch"
-          styles={{ flex: 1 }}
-        >
-          <Text size="md" weight={"extraBold"}>
-            {name}
-          </Text>
-          <FlexBox justifyContent="space-between" alignItems="flex-end">
-            <Text size="md" weight="medium">
-              {price.toLocaleString()}원
+    <ShadowForStockItem2 radius={20}>
+      <MarketItemButton onPress={onPress}>
+        <MarketListItemInner>
+          <FlexBox
+            direction="column"
+            justifyContent="space-between"
+            alignItems="stretch"
+            styles={{ flex: 1 }}
+          >
+            <Text size="md" weight={"extraBold"}>
+              {name}
             </Text>
-            <RegularSizeText>
-              오늘{" "}
-              <RegularSizeText color={theme.palette.red}>
-                {participants.toLocaleString()}명
+            <FlexBox justifyContent="space-between" alignItems="flex-end">
+              <Text size="md" weight="medium">
+                {price.toLocaleString()}원
+              </Text>
+              <RegularSizeText>
+                오늘{" "}
+                <RegularSizeText color={theme.palette.red}>
+                  {participants.toLocaleString()}명
+                </RegularSizeText>
+                이 실천중🔥
               </RegularSizeText>
-              이 실천중🔥
-            </RegularSizeText>
+            </FlexBox>
           </FlexBox>
-        </FlexBox>
-      </MarketListItemInner>
-    </MarketItemButton>
+        </MarketListItemInner>
+      </MarketItemButton>
+    </ShadowForStockItem2>
   );
 };
 
@@ -135,7 +141,7 @@ export default function MarketListScreen() {
             source={marketListBanner}
             style={{
               width: "100%",
-              // height: "100%",
+              height: "100%",
               position: "absolute",
               top: 0,
               left: 0,
@@ -181,7 +187,6 @@ export default function MarketListScreen() {
               />
             </TextWithIcon>
           )} */}
-
           <Margin margin={spacing.padding}></Margin>
           <FlexBox
             direction="column"

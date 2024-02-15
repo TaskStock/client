@@ -18,8 +18,8 @@ const SectionHeaderText = styled.Text<{
   weight?: "bold" | "normal";
   size?: number;
 }>`
+  font-family: "bold";
   font-size: ${({ size }) => (size ? size : useResponsiveFontSize(18))}px;
-  font-weight: ${({ weight }) => (weight ? weight : "bold")};
   color: ${({ theme, isMainText }) =>
     theme.name === "dark"
       ? theme.text
@@ -31,6 +31,7 @@ const SectionHeaderText = styled.Text<{
 const SectionHeaderSubText = styled.Text<{
   size?: number;
 }>`
+  font-family: "regular";
   font-size: ${({ size }) => (size ? size : useResponsiveFontSize(14))}px;
   color: ${({ theme }) =>
     theme.name === "dark" ? theme.textDimReverse : theme.textDim};

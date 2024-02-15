@@ -8,6 +8,10 @@ import Text from "../../atoms/Text";
 import { TextWithIcon } from "../../molecules/TextWithIcon";
 import Icons from "../../atoms/Icons";
 import Margin from "../../atoms/Margin";
+import {
+  ShadowForStockItem,
+  ShadowForStockItem2,
+} from "../../atoms/CustomShadow";
 
 const StockItemBox = styled(ContentItemBoxContainer)`
   width: ${useResponsiveFontSize(150)}px;
@@ -39,50 +43,52 @@ export const StockItem = ({
 
   return (
     <Pressable onPress={onPress}>
-      <StockItemBox>
-        <FlexBox
-          direction="column"
-          justifyContent="space-between"
-          styles={{
-            flex: 1,
-          }}
-        >
-          <Text size="md" weight="bold" color={theme.text}>
-            {name.length > 17 ? name.slice(0, 17) + "..." : name}
-          </Text>
-          <View
-            style={{
+      <ShadowForStockItem radius={20}>
+        <StockItemBox>
+          <FlexBox
+            direction="column"
+            justifyContent="space-between"
+            styles={{
               flex: 1,
             }}
-          ></View>
-          <View>
-            <TextWithIcon
-              text={percentFormat + "%"}
-              size="sm"
-              textColor={percent > 0 ? theme.palette.red : theme.palette.blue}
-            >
-              {percent > 0 ? (
-                <Icons
-                  type="AntDesign"
-                  name="caretup"
-                  size={14}
-                  color={theme.palette.red}
-                ></Icons>
-              ) : (
-                <Icons
-                  type="AntDesign"
-                  name="caretdown"
-                  size={14}
-                  color={theme.palette.blue}
-                ></Icons>
-              )}
-            </TextWithIcon>
-            <Text size="xl" weight="bold">
-              {price.toLocaleString()}
+          >
+            <Text size="md" weight="bold" color={theme.text}>
+              {name.length > 17 ? name.slice(0, 17) + "..." : name}
             </Text>
-          </View>
-        </FlexBox>
-      </StockItemBox>
+            <View
+              style={{
+                flex: 1,
+              }}
+            ></View>
+            <View>
+              <TextWithIcon
+                text={percentFormat + "%"}
+                size="sm"
+                textColor={percent > 0 ? theme.palette.red : theme.palette.blue}
+              >
+                {percent > 0 ? (
+                  <Icons
+                    type="AntDesign"
+                    name="caretup"
+                    size={14}
+                    color={theme.palette.red}
+                  ></Icons>
+                ) : (
+                  <Icons
+                    type="AntDesign"
+                    name="caretdown"
+                    size={14}
+                    color={theme.palette.blue}
+                  ></Icons>
+                )}
+              </TextWithIcon>
+              <Text size="xl" weight="bold">
+                {price.toLocaleString()}
+              </Text>
+            </View>
+          </FlexBox>
+        </StockItemBox>
+      </ShadowForStockItem>
     </Pressable>
   );
 };
@@ -107,6 +113,7 @@ export const StockItemSecond = ({
 
   return (
     <Pressable onPress={onPress}>
+      {/* <ShadowForStockItem2 radius={20}> */}
       <StockItemSecondBox>
         <FlexBox gap={spacing.offset}>
           <Text size="md" weight="bold">
@@ -139,6 +146,7 @@ export const StockItemSecond = ({
           </TextWithIcon>
         </FlexBox>
       </StockItemSecondBox>
+      {/* </ShadowForStockItem2> */}
     </Pressable>
   );
 };

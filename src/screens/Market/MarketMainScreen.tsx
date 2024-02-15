@@ -22,6 +22,7 @@ import { upValue } from "../../constants/value";
 import { MarketStackParamList } from "../../navigators/MarketStack";
 import { useGetCategorizedStocksQuery } from "../../store/modules/market/market";
 import { useAppSelect } from "../../store/configureStore.hooks";
+import { ShadowForStockItem } from "../../components/atoms/CustomShadow";
 
 const MainRectangle = styled.View`
   width: 100%;
@@ -46,7 +47,7 @@ const BannerFloatContainer = styled.View`
   position: absolute;
   width: 100%;
   top: 100px;
-  right: ${spacing.offset}px;
+  right: ${spacing.gutter}px;
   /* justify-content: flex-end; */
   /* align-items: center; */
   align-items: flex-end;
@@ -76,10 +77,12 @@ const FloatTitle = styled.Pressable`
   z-index: 20;
   justify-content: center;
   align-items: center;
+  padding-left: ${spacing.gutter}px;
+  padding-right: ${spacing.gutter}px;
 `;
 
 const InnerFloat = styled.View`
-  width: 80%;
+  width: 100%;
 `;
 
 export default function MarketMainScreen() {
@@ -160,35 +163,38 @@ export default function MarketMainScreen() {
         <View>
           <FloatTitle>
             <InnerFloat>
-              <Pressable onPress={onPressCheckStockList}>
-                <ContentItemBox>
-                  <FlexBox
-                    alignItems="center"
-                    justifyContent="space-between"
-                    styles={{
-                      paddingHorizontal: spacing.small,
-                    }}
-                  >
-                    <View>
-                      <Text size="xs" color={theme.palette.red}>
-                        갓생 도전!!
-                      </Text>
-                      <Margin margin={5}></Margin>
-                      <Text size="xl" weight="bold">
-                        장 종목 확인하기
-                      </Text>
-                    </View>
-                    <Icons
-                      type="material"
-                      name="chevron-right"
-                      size={30}
-                      color={theme.textDim}
-                    />
-                  </FlexBox>
-                </ContentItemBox>
-              </Pressable>
+              <ShadowForStockItem>
+                <Pressable onPress={onPressCheckStockList}>
+                  <ContentItemBox>
+                    <FlexBox
+                      alignItems="center"
+                      justifyContent="space-between"
+                      styles={{
+                        paddingHorizontal: spacing.small,
+                      }}
+                    >
+                      <View>
+                        <Text size="xs" color={theme.palette.red}>
+                          갓생 도전!!
+                        </Text>
+                        <Margin margin={5}></Margin>
+                        <Text size="xl" weight="bold">
+                          장 종목 확인하기
+                        </Text>
+                      </View>
+                      <Icons
+                        type="material"
+                        name="chevron-right"
+                        size={30}
+                        color={theme.textDim}
+                      />
+                    </FlexBox>
+                  </ContentItemBox>
+                </Pressable>
+              </ShadowForStockItem>
             </InnerFloat>
           </FloatTitle>
+
           <View style={{ flex: 1, backgroundColor: theme.background }}>
             <Margin margin={100}></Margin>
             <FlexBox
@@ -210,6 +216,7 @@ export default function MarketMainScreen() {
                     columnGap: spacing.padding + spacing.small,
                     paddingHorizontal: spacing.gutter,
                     paddingBottom: spacing.offset,
+                    paddingTop: 3,
                   }}
                   style={{
                     flexGrow: 0,
@@ -258,6 +265,7 @@ export default function MarketMainScreen() {
                 headerText="오늘의 인기 종목"
                 subText="오늘 사람들이 많이 추가한 종목이에요"
               >
+                <Margin margin={spacing.small}></Margin>
                 <ContentLayout noVerticalPadding>
                   <FlexBox direction={"column"} alignItems="stretch" gap={10}>
                     {section2Data ? (
@@ -309,6 +317,7 @@ export default function MarketMainScreen() {
                   horizontal
                   contentContainerStyle={{
                     columnGap: spacing.padding + spacing.small,
+                    paddingTop: 3,
                     paddingBottom: spacing.offset,
                     paddingHorizontal: spacing.gutter,
                   }}

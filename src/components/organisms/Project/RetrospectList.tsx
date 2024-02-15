@@ -15,6 +15,7 @@ import FlexBox from "../../atoms/FlexBox";
 import LoadingSpinner from "../../atoms/LoadingSpinner";
 import Margin from "../../atoms/Margin";
 import Text from "../../atoms/Text";
+import { ShadowForRetrospect } from "../../atoms/CustomShadow";
 
 const Box = styled.Pressable`
   background-color: ${({ theme }) => theme.box};
@@ -35,20 +36,22 @@ function RetrospectItem({
   const formattedDate = item.created_date.slice(0, 10);
 
   return (
-    <Box onPress={onPressItem} style={{}}>
-      <FlexBox gap={spacing.small}>
-        <Text size="xs" color="red">
-          {projectName}
+    <ShadowForRetrospect>
+      <Box onPress={onPressItem} style={{}}>
+        <FlexBox gap={spacing.small}>
+          <Text size="xs" color="red">
+            {projectName}
+          </Text>
+          <Text size="xs">{formattedDate}</Text>
+        </FlexBox>
+        <Margin margin={spacing.small}></Margin>
+        <Text size="md">
+          {item.content.length > 100
+            ? item.content.slice(0, 100) + "..."
+            : item.content}
         </Text>
-        <Text size="xs">{formattedDate}</Text>
-      </FlexBox>
-      <Margin margin={spacing.small}></Margin>
-      <Text size="md">
-        {item.content.length > 100
-          ? item.content.slice(0, 100) + "..."
-          : item.content}
-      </Text>
-    </Box>
+      </Box>
+    </ShadowForRetrospect>
   );
 }
 
