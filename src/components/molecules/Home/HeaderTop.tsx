@@ -40,8 +40,8 @@ const NewAlarmDot = () => (
       borderRadius: 7,
       backgroundColor: palette.red,
       position: "absolute",
-      top: 1,
-      right: 0,
+      top: 4,
+      right: 4,
     }}
   />
 );
