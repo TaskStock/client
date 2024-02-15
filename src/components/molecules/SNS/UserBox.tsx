@@ -69,12 +69,9 @@ const UserBox = ({
       <Container
         onPress={() => {
           console.log("userId", userId);
-          navigation.navigate("StackWithoutTab", {
-            screen: "SnsStack",
-            params: {
-              screen: "UserDetail",
-              params: { userId: userId },
-            },
+          navigation.navigate("SnsStack", {
+            screen: "UserDetail",
+            params: { userId: userId },
           });
         }}
       >

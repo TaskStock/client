@@ -88,17 +88,20 @@ export default function MarketMainScreen() {
     useNavigation<NativeStackNavigationProp<MarketStackParamList>>();
 
   const onPressCheckStockList = () => {
-    navigation.navigate("MarketListScreen");
+    navigation.navigate("MarketStack", { screen: "MarketListScreen" });
   };
 
   const onPressStockItem = (id: number) => {
-    navigation.navigate("StockDetailScreen", {
-      stockId: id,
+    navigation.navigate("MarketStack", {
+      screen: "StockDetailScreen",
+      params: {
+        stockId: id,
+      },
     });
   };
 
   const onPressWishList = () => {
-    navigation.navigate("WishListScreen");
+    navigation.navigate("MarketStack", { screen: "WishListScreen" });
   };
 
   const { data, isError, isLoading, error } = useGetCategorizedStocksQuery();

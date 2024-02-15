@@ -39,10 +39,7 @@ const RankingScreen = ({ navigation }) => {
       <MyInfo />
       <BlackBtn
         onPress={() => {
-          navigation.navigate("StackWithoutTab", {
-            screen: "SnsStack",
-            params: { screen: "EditProfile" },
-          });
+          navigation.navigate("SnsStack", { screen: "EditProfile" });
         }}
         text={"프로필 편집"}
         style={{ marginBottom: spacing.offset }}

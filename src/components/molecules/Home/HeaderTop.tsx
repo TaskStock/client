@@ -62,11 +62,8 @@ function HeaderTop({ navigation }) {
             source={THEME_SOURCES[theme]?.bell}
             size={30}
             onPress={() =>
-              navigation.navigate("StackWithoutTab", {
-                screen: "AlarmStack",
-                params: {
-                  screen: "Alarm",
-                },
+              navigation.navigate("AlarmStack", {
+                screen: "Alarm",
               })
             }
           />
@@ -75,10 +72,7 @@ function HeaderTop({ navigation }) {
             name="settings"
             size={26}
             onPress={() => {
-              navigation.navigate("StackWithoutTab", {
-                screen: "SettingsStack",
-                params: { screen: "Settings" },
-              });
+              navigation.navigate("SettingsStack", { screen: "Settings" });
             }}
             color={styledTheme.text}
           />

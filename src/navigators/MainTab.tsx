@@ -10,6 +10,7 @@ import ProjectStack from "./ProjectStack";
 import SnsStack from "./SnsStack";
 import MarketStack from "./MarketStack";
 import RankingScreen from "../screens/SNS/RankingScreen";
+import MarketMainScreen from "../screens/Market/MarketMainScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -53,8 +54,8 @@ function MainTab() {
           }}
         />
         <Tab.Screen
-          name="MarketStack"
-          component={MarketStack}
+          name="MarketMainScreen"
+          component={MarketMainScreen}
           options={{
             headerShown: false,
             tabBarIcon: ({ focused, color, size }) => (

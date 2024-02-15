@@ -25,7 +25,6 @@ const MarketStack = () => (
       headerShown: false,
     }}
   >
-    <NativeStack.Screen name="MarketMainScreen" component={MarketMainScreen} />
     <NativeStack.Screen name="MarketListScreen" component={MarketListScreen} />
     <NativeStack.Screen
       name="StockDetailScreen"
