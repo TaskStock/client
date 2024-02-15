@@ -9,6 +9,7 @@ import { ComponentHeightProvider } from "../utils/ComponentHeightContext";
 import ProjectStack from "./ProjectStack";
 import SnsStack from "./SnsStack";
 import MarketStack from "./MarketStack";
+import RankingScreen from "../screens/SNS/RankingScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -85,8 +86,8 @@ function MainTab() {
         />
 
         <Tab.Screen
-          name="SnsStack"
-          component={SnsStack}
+          name="Ranking"
+          component={RankingScreen}
           options={{
             headerShown: false,
             tabBarIcon: ({ color, size }) => (
