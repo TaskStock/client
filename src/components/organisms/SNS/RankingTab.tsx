@@ -32,7 +32,7 @@ const RankingTab = ({ data }) => {
   const theme = useTheme();
   return (
     <>
-      <Filter onPress={() => {}} iconColor={theme.text} />
+      {/* <Filter onPress={() => {}} iconColor={theme.text} /> */}
       <FlatList<IFriend>
         data={data}
         renderItem={({ item }) => (
