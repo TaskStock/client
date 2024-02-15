@@ -97,10 +97,11 @@ export default function ProjectManageScreen() {
     >
       <PageHeader />
       <ContentLayout>
-        <FlexBox direction="column" gap={spacing.offset} alignItems="stretch">
+        <FlexBox direction="column" gap={spacing.gutter} alignItems="stretch">
           <ProjectSection headerText="프로젝트 이름">
             <TextInputWithBorder
               value={form.name}
+              placeholderTextColor={theme.textDim}
               onChangeText={onChangeProjectName}
               placeholder="프로젝트 이름을 입력하세요"
             ></TextInputWithBorder>
@@ -114,7 +115,7 @@ export default function ProjectManageScreen() {
                   isSelected={form.public_range === item.value ? true : false}
                 >
                   <Text
-                    size="md"
+                    size="sm"
                     color={
                       theme.name == "dark"
                         ? theme.text
@@ -139,7 +140,7 @@ export default function ProjectManageScreen() {
                     isSelected={form.finished === item.value}
                   >
                     <Text
-                      size="md"
+                      size="sm"
                       color={
                         form.finished === item.value
                           ? theme.textReverse

@@ -3,14 +3,11 @@ import React from "react";
 import { useTheme } from "styled-components";
 import { IconsWithoutFeedBack } from "../components/atoms/Icons";
 import useHeight from "../hooks/useHeight";
-import GroupScreen from "../screens/GroupScreen";
 import HomeScreen from "../screens/HomeScreen";
+import MarketMainScreen from "../screens/Market/MarketMainScreen";
+import RankingScreen from "../screens/SNS/RankingScreen";
 import { ComponentHeightProvider } from "../utils/ComponentHeightContext";
 import ProjectStack from "./ProjectStack";
-import SnsStack from "./SnsStack";
-import MarketStack from "./MarketStack";
-import RankingScreen from "../screens/SNS/RankingScreen";
-import MarketMainScreen from "../screens/Market/MarketMainScreen";
 
 const Tab = createBottomTabNavigator();
 
