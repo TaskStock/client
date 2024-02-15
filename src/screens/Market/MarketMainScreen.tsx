@@ -21,6 +21,7 @@ import { spacing } from "../../constants/spacing";
 import { upValue } from "../../constants/value";
 import { MarketStackParamList } from "../../navigators/MarketStack";
 import { useGetCategorizedStocksQuery } from "../../store/modules/market/market";
+import { useAppSelect } from "../../store/configureStore.hooks";
 
 const MainRectangle = styled.View`
   width: 100%;
@@ -44,8 +45,8 @@ const BannerFloatOverlay = styled.View`
 const BannerFloatContainer = styled.View`
   position: absolute;
   width: 100%;
-  top: 100;
-  right: 20;
+  top: 100px;
+  right: ${spacing.offset}px;
   /* justify-content: flex-end; */
   /* align-items: center; */
   align-items: flex-end;
@@ -118,6 +119,8 @@ export default function MarketMainScreen() {
   const section1Data = data?.myinterest;
   const section2Data = data?.todaypopular;
   const section3Data = data?.todayrecommend;
+
+  const { user_name } = useAppSelect((state) => state.user.user);
 
   return (
     <View style={{ flex: 1, backgroundColor: theme.background }}>
@@ -199,7 +202,7 @@ export default function MarketMainScreen() {
             >
               <MarketSection
                 headerText="나의 관심 종목"
-                subText="장준석님이 자주 추가하는 종목이에요"
+                subText={`${user_name}님이 자주 추가하는 종목이에요`}
               >
                 <ScrollView
                   horizontal

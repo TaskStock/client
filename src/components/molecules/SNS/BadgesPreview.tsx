@@ -1,13 +1,12 @@
-import { Pressable, Image } from "react-native";
 import React from "react";
-import { IconsWithoutFeedBack } from "../../atoms/Icons";
-import { spacing } from "../../../constants/spacing";
+import { Image, Pressable } from "react-native";
 import { useTheme } from "styled-components";
-import FlexBox from "../../atoms/FlexBox";
 import styled from "styled-components/native";
-import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import { BADGES } from "../../../../public/data/badges";
-import { useAppSelect } from "../../../store/configureStore.hooks";
+import { spacing } from "../../../constants/spacing";
+import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
+import FlexBox from "../../atoms/FlexBox";
+import { IconsWithoutFeedBack } from "../../atoms/Icons";
 
 const BadgeContainer = styled.View`
   width: ${useResponsiveFontSize(27)}px;

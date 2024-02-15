@@ -136,6 +136,7 @@ export default function AddTodoModal() {
   const theme = useTheme();
   const dispatch = useAppDispatch();
   const addTodoForm = useAppSelect((state) => state.todo.addTodoForm);
+
   const isEditMode = Boolean(
     useAppSelect((state) => state.todo.addTodoForm.todo_id)
   );
@@ -168,6 +169,16 @@ export default function AddTodoModal() {
   // tutorial
   const { showTutorial, step2 } = useAppSelect((state) => state.tutorial);
   // const showTutorial = true;
+  useEffect(() => {
+    if (showTutorial) {
+      dispatch(
+        setAddTodoForm({
+          name: "content",
+          value: "TaskStock 시작하기",
+        })
+      );
+    }
+  }, [showTutorial]);
 
   const [tutorialShown1, setTutorialShown1] = useState(false);
   const [tutorialShown2, setTutorialShown2] = useState(false);
@@ -303,11 +314,9 @@ export default function AddTodoModal() {
                 >
                   <TodoInput
                     ref={inputRef}
-                    placeholder={
-                      showTutorial
-                        ? "TaskStock 시작하기"
-                        : "할 일을 입력해주세요."
-                    }
+                    placeholder={"할 일을 입력해주세요."}
+                    autoComplete="off"
+                    autoCapitalize="none"
                     placeholderTextColor={theme.textDim}
                     value={addTodoForm.content}
                     onChange={(e) => {

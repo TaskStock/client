@@ -1,12 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { useEffect, useRef, useState } from "react";
-import {
-  Animated,
-  Dimensions,
-  Modal,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import React, { useState } from "react";
+import { Dimensions, TouchableOpacity, View } from "react-native";
 import { useTheme } from "styled-components";
 import styled from "styled-components/native";
 import { spacing } from "../../../constants/spacing";
@@ -19,7 +13,6 @@ import PrivateLockIcon from "../../atoms/PrivateLockIcon";
 import ProfilePic from "../../atoms/ProfilePic";
 import Text from "../../atoms/Text";
 import BadgesPreview from "../../molecules/SNS/BadgesPreview";
-import CenterModal from "../../molecules/CenterModal";
 import ZoomPicModal from "./ZoomPicModal";
 
 const Container = styled.View`

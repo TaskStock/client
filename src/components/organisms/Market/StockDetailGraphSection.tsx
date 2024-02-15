@@ -158,11 +158,9 @@ export default function StockDetailGraphSection({
             >
               <Text size="xl" weight="regular">
                 <Text size="xl" weight="bold">
-                  김땡땡님
+                  {username}님
                 </Text>
-                은 평균보다 달성률이
-              </Text>
-              <Text size="xl" weight="regular">
+                은 평균보다 달성률이{" "}
                 <Text size="xl" weight="bold">
                   {diffRate}%
                 </Text>
@@ -215,7 +213,7 @@ export default function StockDetailGraphSection({
               <Text size="xl" weight="bold">
                 {maxDay}요일
               </Text>
-              엔 사람들이
+              에 사람들이
             </Text>
             <Text size="xl" weight="regular">
               가장 많이 실천해요
