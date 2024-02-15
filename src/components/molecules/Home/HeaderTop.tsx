@@ -1,15 +1,20 @@
 import React, { useContext } from "react";
-import { Image } from "react-native";
+import { Image, View } from "react-native";
+import { useTheme } from "styled-components";
 import styled from "styled-components/native";
+import { palette } from "../../../constants/colors";
 import { spacing } from "../../../constants/spacing";
 import useHeight from "../../../hooks/useHeight";
-import { useAppSelect } from "../../../store/configureStore.hooks";
+import { useResizeLayoutOnFocus } from "../../../hooks/useResizeLayoutOnFocus";
+import {
+  useAppDispatch,
+  useAppSelect,
+} from "../../../store/configureStore.hooks";
+import { setNewNotice } from "../../../store/modules/user";
 import { ComponentHeightContext } from "../../../utils/ComponentHeightContext";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import FlexBox from "../../atoms/FlexBox";
 import Icons, { IconsPic } from "../../atoms/Icons";
-import { useTheme } from "styled-components";
-import { useResizeLayoutOnFocus } from "../../../hooks/useResizeLayoutOnFocus";
 
 const Container = styled.View<{ notchTop: number }>`
   background-color: ${({ theme }) => theme.background};
@@ -27,8 +32,24 @@ const THEME_SOURCES = {
   },
 };
 
+const NewAlarmDot = () => (
+  <View
+    style={{
+      width: 7,
+      height: 7,
+      borderRadius: 7,
+      backgroundColor: palette.red,
+      position: "absolute",
+      top: 1,
+      right: 0,
+    }}
+  />
+);
+
 function HeaderTop({ navigation }) {
   const { setHeaderHeight } = useContext(ComponentHeightContext);
+  const { is_new_notice } = useAppSelect((state) => state.user.user);
+  const dispatch = useAppDispatch();
 
   const { NOTCH_TOP } = useHeight();
   const theme = useAppSelect((state) => state.theme.value);
@@ -58,15 +79,19 @@ function HeaderTop({ navigation }) {
           }}
         />
         <FlexBox gap={spacing.offset} alignItems="center">
-          <IconsPic
-            source={THEME_SOURCES[theme]?.bell}
-            size={30}
-            onPress={() =>
-              navigation.navigate("AlarmStack", {
-                screen: "Alarm",
-              })
-            }
-          />
+          <View>
+            <IconsPic
+              source={THEME_SOURCES[theme]?.bell}
+              size={30}
+              onPress={() => {
+                navigation.navigate("AlarmStack", {
+                  screen: "Alarm",
+                });
+                dispatch(setNewNotice(false));
+              }}
+            />
+            {is_new_notice && <NewAlarmDot />}
+          </View>
           <Icons
             type="feather"
             name="settings"
