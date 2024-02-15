@@ -120,7 +120,7 @@ export default function RetrospectWriteScreen() {
                       }
                     >
                       <Text
-                        size="md"
+                        size="sm"
                         color={
                           // project.project_id === retrospectForm.project_id
                           //   ? theme.textReverse

@@ -28,7 +28,6 @@ const SnsStack = () => {
         headerShown: false,
       }}
     >
-      <NativeStack.Screen name="Ranking" component={RankingScreen} />
       <NativeStack.Screen name="EditProfile" component={EditProfileScreen} />
       <NativeStack.Screen name="Search" component={SearchScreen} />
       <NativeStack.Screen name="UserDetail" component={UserDetailScreen} />

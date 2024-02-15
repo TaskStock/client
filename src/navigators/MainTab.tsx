@@ -3,12 +3,11 @@ import React from "react";
 import { useTheme } from "styled-components";
 import { IconsWithoutFeedBack } from "../components/atoms/Icons";
 import useHeight from "../hooks/useHeight";
-import GroupScreen from "../screens/GroupScreen";
 import HomeScreen from "../screens/HomeScreen";
+import MarketMainScreen from "../screens/Market/MarketMainScreen";
+import RankingScreen from "../screens/SNS/RankingScreen";
 import { ComponentHeightProvider } from "../utils/ComponentHeightContext";
 import ProjectStack from "./ProjectStack";
-import SnsStack from "./SnsStack";
-import MarketStack from "./MarketStack";
 
 const Tab = createBottomTabNavigator();
 
@@ -52,8 +51,8 @@ function MainTab() {
           }}
         />
         <Tab.Screen
-          name="MarketStack"
-          component={MarketStack}
+          name="MarketMainScreen"
+          component={MarketMainScreen}
           options={{
             headerShown: false,
             tabBarIcon: ({ focused, color, size }) => (
@@ -85,8 +84,8 @@ function MainTab() {
         />
 
         <Tab.Screen
-          name="SnsStack"
-          component={SnsStack}
+          name="Ranking"
+          component={RankingScreen}
           options={{
             headerShown: false,
             tabBarIcon: ({ color, size }) => (

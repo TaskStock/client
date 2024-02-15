@@ -87,7 +87,7 @@ function ProjectItem({ item }: { item: Project }) {
         finished: item.finished,
       })
     );
-    navigation.navigate("ProjectManage");
+    navigation.navigate("ProjectStackWithoutTab", { screen: "ProjectManage" });
   };
 
   const onPressProjectDetailBtn = () => {

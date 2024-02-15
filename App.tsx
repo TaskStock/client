@@ -74,7 +74,12 @@ export default function App() {
             </GestureHandlerRootView>
           </NavigationContainer>
           <Toast config={toastConfig}></Toast>
-          <StatusBar barStyle={THEME[theme].barStyle} />
+          {/* <StatusBar barStyle={THEME[theme].barStyle} /> */}
+          <StatusBar
+            translucent
+            backgroundColor="transparent"
+            barStyle={THEME[theme].barStyle}
+          />
         </EventProvider>
       </SafeAreaProvider>
     </ThemeProvider>

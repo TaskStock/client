@@ -34,7 +34,9 @@ const ProjectScreenSecond = () => {
         project_id: 0,
       })
     );
-    navigation.navigate("RetrospectWrite");
+    navigation.navigate("ProjectStackWithoutTab", {
+      screen: "RetrospectWrite",
+    });
   };
 
   return (

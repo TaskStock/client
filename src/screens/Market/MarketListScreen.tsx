@@ -129,7 +129,10 @@ export default function MarketListScreen() {
   return (
     <>
       <AbsolutePageHeader headerLeftColorReverse />
-      <ScrollView style={{ flex: 1, backgroundColor: theme.background }}>
+      <ScrollView
+        style={{ flex: 1, backgroundColor: theme.background }}
+        contentContainerStyle={{ paddingBottom: 100 }}
+      >
         <PageHeaderBox>
           <Image
             source={marketListBanner}

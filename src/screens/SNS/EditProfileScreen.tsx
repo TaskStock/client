@@ -142,7 +142,10 @@ const EditProfileScreen = ({ navigation }) => {
         subText="이름"
         value={data.user_name}
         placeholder="이름"
-        onChangeText={(text) => handleChange("user_name", text)}
+        onChangeText={(text) => {
+          const limittedText = text.length > 15 ? text.slice(0, 15) : text;
+          handleChange("user_name", limittedText);
+        }}
         subTextColor={theme.textDim}
       />
       <TextInputContainer
