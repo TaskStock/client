@@ -1,3 +1,4 @@
+import analytics from "@react-native-firebase/analytics";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React from "react";
 import { Dimensions, ScrollView, View } from "react-native";
@@ -23,7 +24,6 @@ import { useStockDetail } from "../../hooks/useStockDetail";
 import { MarketStackParamList } from "../../navigators/MarketStack";
 import { useGetStockSuccessRateQuery } from "../../store/modules/market/market";
 import { useAddTodoMutation } from "../../store/modules/todo/todo";
-import analytics from "@react-native-firebase/analytics";
 
 type StockDetailScreenProps = NativeStackScreenProps<
   MarketStackParamList,

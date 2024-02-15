@@ -8,7 +8,7 @@ import Margin from "../../atoms/Margin";
 import Text from "../../atoms/Text";
 import { spacing } from "../../../constants/spacing";
 import FlexBox from "../../atoms/FlexBox";
-import { useAppSelect } from "../../../store/configureStore.hooks";
+import useUser from "../../../hooks/useUser";
 
 const GraphBox = styled(ContentItemBoxContainer)`
   width: 100%;
@@ -47,7 +47,6 @@ export default function StockDetailGraphSection({
   diffRate: number;
 }) {
   const theme = useTheme();
-  const { user_name } = useAppSelect((state) => state.user.user);
 
   const [graphSize, setGraphSize] = React.useState({
     width: 0,
@@ -124,6 +123,10 @@ export default function StockDetailGraphSection({
     },
   ];
 
+  const {
+    user: { user_name: username },
+  } = useUser();
+
   const data2Max = Math.max(...data2.map((point) => point.y));
 
   const data2FillCondition = ({
@@ -155,7 +158,7 @@ export default function StockDetailGraphSection({
             >
               <Text size="xl" weight="regular">
                 <Text size="xl" weight="bold">
-                  {user_name}님
+                  {username}님
                 </Text>
                 은 평균보다 달성률이{" "}
                 <Text size="xl" weight="bold">
@@ -174,7 +177,7 @@ export default function StockDetailGraphSection({
             >
               <Text size="xl" weight="regular">
                 <Text size="xl" weight="bold">
-                  {user_name}님
+                  {username}님
                 </Text>
                 은 평균과 달성률이
               </Text>
