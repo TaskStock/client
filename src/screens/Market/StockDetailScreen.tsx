@@ -124,172 +124,171 @@ export default function StockDetailScreen({
   return (
     <View style={{ flex: 1, backgroundColor: theme.background }}>
       <PageHeader />
-      <ContentLayout>
-        <ScrollView style={{ flex: 1 }}>
-          {!isLoading && info ? (
-            <>
-              <Section.HeaderText size={24} isMainText={true}>
-                {info.name}
-              </Section.HeaderText>
-              <Section.HeaderText size={24} isMainText={true}>
-                {info.level * upValue}원
-              </Section.HeaderText>
-              <Margin margin={spacing.small} />
-              <Section.HeaderSubText size={15}>
-                현재 {info.take_count}명이 투자중
-              </Section.HeaderSubText>
-            </>
-          ) : (
-            <>
-              <CustomSkeleton>
-                <View
-                  style={{
-                    width: "100%",
-                    height: 50,
-                    borderRadius: 10,
-                    marginBottom: 10,
-                  }}
-                />
-              </CustomSkeleton>
-            </>
-          )}
-          <Margin margin={spacing.padding} />
-          {!isLoading && info ? (
-            <View style={{ height: graphHeight }}>
-              <GradientOverlay />
-              <View
-                style={{
-                  padding: spacing.offset,
-                  flex: 1,
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-                onLayout={(event) => {
-                  const { width, height } = event.nativeEvent.layout;
-
-                  if (graphSize.width !== width || graphSize.height !== height)
-                    setGraphSize({
-                      width: width,
-                      height: height,
-                    });
-                }}
-              >
-                <LineValueChart
-                  data={chartData}
-                  width={graphSize.width - spacing.offset * 2}
-                  height={graphSize.height - spacing.offset * 2}
-                />
-              </View>
-            </View>
-          ) : (
+      {/* <ContentLayout noVerticalPadding> */}
+      <ScrollView
+        style={{ flex: 1 }}
+        contentContainerStyle={{
+          paddingTop: spacing.padding,
+          paddingBottom: spacing.gutter,
+          paddingHorizontal: spacing.gutter,
+        }}
+      >
+        {!isLoading && info ? (
+          <>
+            <Section.HeaderText size={24} isMainText={true}>
+              {info.name}
+            </Section.HeaderText>
+            <Section.HeaderText size={24} isMainText={true}>
+              {info.level * upValue}원
+            </Section.HeaderText>
+            <Margin margin={spacing.small} />
+            <Section.HeaderSubText size={15}>
+              현재 {info.take_count}명이 투자중
+            </Section.HeaderSubText>
+          </>
+        ) : (
+          <>
             <CustomSkeleton>
               <View
                 style={{
                   width: "100%",
-                  height: graphHeight,
+                  height: 50,
                   borderRadius: 10,
                   marginBottom: 10,
                 }}
               />
             </CustomSkeleton>
-          )}
-          <Margin margin={spacing.offset} />
-          {!isLoading && info ? (
-            info.is_add_today ? (
-              <GrayBtn text="오늘 할 일에 추가 완료" onPress={() => {}} />
-            ) : (
-              <BlackBtnForProject text="투자하기" onPress={onPressAddStock} />
-            )
-          ) : (
-            <>
-              <CustomSkeleton>
-                <View
-                  style={{
-                    width: "100%",
-                    height: 50,
-                    borderRadius: 10,
-                    marginBottom: 10,
-                  }}
-                />
-              </CustomSkeleton>
-            </>
-          )}
-          <Margin margin={spacing.gutter} />
-          <FlexBox
-            direction="column"
-            alignItems="stretch"
-            gap={spacing.padding}
-          >
-            <FlexBox
-              direction="column"
-              alignItems="stretch"
-              gap={spacing.offset}
-            >
-              {!isLoading && info ? (
-                <>
-                  <Text size="md" weight="regular">
-                    ✋{"  "}하루 평균{" "}
-                    <Text size="md" weight="bold">
-                      {average}명
-                    </Text>
-                    이 실천해요.
-                  </Text>
-                  <Text size="md" weight="regular">
-                    👍{"  "}나는 지금까지{" "}
-                    <Text size="md" weight="bold">
-                      {info.my_success_count || 0}회
-                    </Text>{" "}
-                    실천했어요.
-                  </Text>
-                  <Text size="md" weight="regular">
-                    ❤️{"  "}이 종목은 매주{" "}
-                    <Text size="md" weight="bold">
-                      {maxWeekday}
-                    </Text>
-                    에 인기가 많아요.
-                  </Text>
-                </>
-              ) : (
-                <>
-                  {[1, 2, 3].map((_, index) => (
-                    <View key={index + "textSkel"}>
-                      <CustomSkeleton>
-                        <View
-                          key={index + "textSkel"}
-                          style={{
-                            width: "100%",
-                            height: 30,
-                            borderRadius: 10,
-                            marginBottom: 10,
-                          }}
-                        />
-                      </CustomSkeleton>
-                    </View>
-                  ))}
-                </>
-              )}
-            </FlexBox>
-            <Divider color={theme.textDimmer} marginVertical={20} />
-            <StockDetailGraphSection
-              diffRate={diffRate}
-              successRate={{
-                mySuccessRate: mySuccessRate,
-                averageSuccessRate: totalSuccessRate,
+          </>
+        )}
+        <Margin margin={spacing.padding} />
+        {!isLoading && info ? (
+          <View style={{ height: graphHeight }}>
+            <GradientOverlay />
+            <View
+              style={{
+                padding: spacing.offset,
+                flex: 1,
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
               }}
-              weekdaySuccessCount={{
-                monday: stat?.s_monday || 0,
-                tuesday: stat?.s_tuesday || 0,
-                wednesday: stat?.s_wednesday || 0,
-                thursday: stat?.s_thursday || 0,
-                friday: stat?.s_friday || 0,
-                saturday: stat?.s_saturday || 0,
-                sunday: stat?.s_sunday || 0,
+              onLayout={(event) => {
+                const { width, height } = event.nativeEvent.layout;
+
+                if (graphSize.width !== width || graphSize.height !== height)
+                  setGraphSize({
+                    width: width,
+                    height: height,
+                  });
+              }}
+            >
+              <LineValueChart
+                data={chartData}
+                width={graphSize.width - spacing.offset * 2}
+                height={graphSize.height - spacing.offset * 2}
+              />
+            </View>
+          </View>
+        ) : (
+          <CustomSkeleton>
+            <View
+              style={{
+                width: "100%",
+                height: graphHeight,
+                borderRadius: 10,
+                marginBottom: 10,
               }}
             />
+          </CustomSkeleton>
+        )}
+        <Margin margin={spacing.offset} />
+        {!isLoading && info ? (
+          info.is_add_today ? (
+            <GrayBtn text="오늘 할 일에 추가 완료" onPress={() => {}} />
+          ) : (
+            <BlackBtnForProject text="투자하기" onPress={onPressAddStock} />
+          )
+        ) : (
+          <>
+            <CustomSkeleton>
+              <View
+                style={{
+                  width: "100%",
+                  height: 50,
+                  borderRadius: 10,
+                  marginBottom: 10,
+                }}
+              />
+            </CustomSkeleton>
+          </>
+        )}
+        <Margin margin={spacing.gutter} />
+        <FlexBox direction="column" alignItems="stretch" gap={spacing.padding}>
+          <FlexBox direction="column" alignItems="stretch" gap={spacing.offset}>
+            {!isLoading && info ? (
+              <>
+                <Text size="md" weight="regular">
+                  ✋{"  "}하루 평균{" "}
+                  <Text size="md" weight="bold">
+                    {average}명
+                  </Text>
+                  이 실천해요.
+                </Text>
+                <Text size="md" weight="regular">
+                  👍{"  "}나는 지금까지{" "}
+                  <Text size="md" weight="bold">
+                    {info.my_success_count || 0}회
+                  </Text>{" "}
+                  실천했어요.
+                </Text>
+                <Text size="md" weight="regular">
+                  ❤️{"  "}이 종목은 매주{" "}
+                  <Text size="md" weight="bold">
+                    {maxWeekday}
+                  </Text>
+                  에 인기가 많아요.
+                </Text>
+              </>
+            ) : (
+              <>
+                {[1, 2, 3].map((_, index) => (
+                  <View key={index + "textSkel"}>
+                    <CustomSkeleton>
+                      <View
+                        key={index + "textSkel"}
+                        style={{
+                          width: "100%",
+                          height: 30,
+                          borderRadius: 10,
+                          marginBottom: 10,
+                        }}
+                      />
+                    </CustomSkeleton>
+                  </View>
+                ))}
+              </>
+            )}
           </FlexBox>
-        </ScrollView>
-      </ContentLayout>
+          <Divider color={theme.textDimmer} marginVertical={20} />
+          <StockDetailGraphSection
+            diffRate={diffRate}
+            successRate={{
+              mySuccessRate: mySuccessRate,
+              averageSuccessRate: totalSuccessRate,
+            }}
+            weekdaySuccessCount={{
+              monday: stat?.s_monday || 0,
+              tuesday: stat?.s_tuesday || 0,
+              wednesday: stat?.s_wednesday || 0,
+              thursday: stat?.s_thursday || 0,
+              friday: stat?.s_friday || 0,
+              saturday: stat?.s_saturday || 0,
+              sunday: stat?.s_sunday || 0,
+            }}
+          />
+        </FlexBox>
+      </ScrollView>
+      {/* </ContentLayout> */}
     </View>
   );
 }

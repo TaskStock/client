@@ -1,13 +1,13 @@
 import { BaseQueryFn, fetchBaseQuery } from "@reduxjs/toolkit/query";
 import { setAccessToken } from "./modules/auth";
 import { LOCAL_API_HOST_IOS } from "@env";
-import { RootState } from "./configureStore";
+import { TRootState } from "./configureStore";
 import { checkAndRenewTokens } from "../utils/authUtils/tokenUtils";
 
 const originalBaseQuery = fetchBaseQuery({
   baseUrl: LOCAL_API_HOST_IOS,
   prepareHeaders: (headers, { getState, endpoint, extra, type, forced }) => {
-    const rootState = getState() as RootState;
+    const rootState = getState() as TRootState;
 
     const token = rootState.auth.accessToken;
 

@@ -13,51 +13,49 @@ const LicenseDetailScreen = ({ route }) => {
   return (
     <>
       <PageHeader />
-      <ScrollView contentContainerStyle={{ paddingBottom: 100 }}>
-        <View
-          style={{
-            paddingLeft: spacing.gutter,
-            paddingVertical: spacing.padding,
-          }}
+      <ScrollView
+        contentContainerStyle={{
+          paddingBottom: 100,
+          paddingHorizontal: spacing.offset,
+        }}
+      >
+        <Text
+          size="sm"
+          weight="bold"
+          styles={{ paddingBottom: spacing.padding }}
         >
+          {item.libraryName}
+        </Text>
+        <Text
+          size="sm"
+          color={theme.textDim}
+          styles={{ paddingBottom: spacing.padding }}
+        >
+          {item.version} | {item._license}
+        </Text>
+        <Text
+          size="sm"
+          color={theme.textDim}
+          styles={{ paddingBottom: spacing.padding }}
+        >
+          {item._licenseContent}
+        </Text>
+        <Text
+          size="sm"
+          color={theme.textDim}
+          styles={{ paddingBottom: spacing.padding }}
+        >
+          {item._description}
+        </Text>
+        <TouchableOpacity onPress={() => Linking.openURL(item.homepage)}>
           <Text
             size="sm"
-            weight="bold"
-            styles={{ paddingBottom: spacing.padding }}
+            color={"#2980b9"}
+            styles={{ textDecorationLine: "underline" }}
           >
-            {item.libraryName}
+            {item.homepage}
           </Text>
-          <Text
-            size="sm"
-            color={theme.textDim}
-            styles={{ paddingBottom: spacing.padding }}
-          >
-            {item.version} | {item._license}
-          </Text>
-          <Text
-            size="sm"
-            color={theme.textDim}
-            styles={{ paddingBottom: spacing.padding }}
-          >
-            {item._licenseContent}
-          </Text>
-          <Text
-            size="sm"
-            color={theme.textDim}
-            styles={{ paddingBottom: spacing.padding }}
-          >
-            {item._description}
-          </Text>
-          <TouchableOpacity onPress={() => Linking.openURL(item.homepage)}>
-            <Text
-              size="sm"
-              color={"#2980b9"}
-              styles={{ textDecorationLine: "underline" }}
-            >
-              {item.homepage}
-            </Text>
-          </TouchableOpacity>
-        </View>
+        </TouchableOpacity>
       </ScrollView>
     </>
   );

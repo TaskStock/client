@@ -12,7 +12,7 @@ import { navigate } from "../utils/navigation";
 export default function usePushNotification() {
   const { accessToken } = useAppSelect((state) => state.auth);
   const { isPushOn, fcmToken } = useAppSelect((state) => state.pushNoti);
-
+  const { userInfoLoaded } = useAppSelect((state) => state.user);
   const dispatch = useAppDispatch();
   const client = useClient(dispatch);
 
@@ -46,11 +46,11 @@ export default function usePushNotification() {
   }, []);
 
   useEffect(() => {
-    if (fcmToken) {
+    if (fcmToken && userInfoLoaded) {
       // TODO 푸시알림 토큰을 서버로 보내서 저장
       sendTokenToServer(fcmToken, isPushOn);
     }
-  }, [fcmToken]);
+  }, [fcmToken, userInfoLoaded]);
 
   const onRegister = (tk) => {
     // console.log(Platform.OS, ">>>>>[FCMService] onRegister, fcmToken :", tk);
