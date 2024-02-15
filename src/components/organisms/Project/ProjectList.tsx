@@ -1,16 +1,13 @@
-import { View, FlatList, ScrollView } from "react-native";
-import React from "react";
-import { Project } from "../../../@types/project";
-import Icons from "../../atoms/Icons";
-import { spacing } from "../../../constants/spacing";
-import FlexBox from "../../atoms/FlexBox";
-import RoundItemBtn from "../../atoms/RoundItemBtn";
-import { WithLocalSvg } from "react-native-svg";
-import ProjectIcon from "../../../../assets/icons/Chart_white.svg";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
-import { ProjectStackParamList } from "../../../navigators/ProjectStack";
-import { ModalBtn, ModalContainer } from "../../atoms/FloatModal";
+import React from "react";
+import { FlatList, View } from "react-native";
 import OutsidePressHandler from "react-native-outside-press";
+import { WithLocalSvg } from "react-native-svg";
+import styled, { useTheme } from "styled-components/native";
+import ProjectIcon from "../../../../assets/icons/Chart_white.svg";
+import { Project } from "../../../@types/project";
+import { spacing } from "../../../constants/spacing";
+import { ProjectStackParamList } from "../../../navigators/ProjectStack";
 import {
   useAppDispatch,
   useAppSelect,
@@ -21,19 +18,27 @@ import {
   useUpdateProjectMutation,
 } from "../../../store/modules/project/project";
 import { resetProjectRetrospectQueries } from "../../../store/modules/retrospect/retrospect";
-import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
-import styled, { useTheme } from "styled-components/native";
-import Margin from "../../atoms/Margin";
-import Text from "../../atoms/Text";
-import LoadingSpinner from "../../atoms/LoadingSpinner";
 import { getThemeElement } from "../../../utils/getThemeElement";
+import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
+import FlexBox from "../../atoms/FlexBox";
+import { ModalBtn, ModalContainer } from "../../atoms/FloatModal";
+import Icons from "../../atoms/Icons";
+import LoadingSpinner from "../../atoms/LoadingSpinner";
+import Margin from "../../atoms/Margin";
+import RoundItemBtn from "../../atoms/RoundItemBtn";
+import Text from "../../atoms/Text";
+import { Shadow } from "react-native-shadow-2";
+import { palette } from "../../../constants/colors";
+import ShadowForProject from "../../atoms/CustomShadow";
 
-const ProjectBox = styled.View<{ isFinished: boolean }>`
+const ProjectBox = styled.Pressable<{ isFinished: boolean }>`
   border-radius: ${useResponsiveFontSize(20)}px;
   height: ${useResponsiveFontSize(179)}px;
   background-color: ${(props) =>
     props.isFinished ? props.theme.background : props.theme.box};
   padding: ${useResponsiveFontSize(20)}px;
+  border-width: ${({ theme, isFinished }) => (isFinished ? 2 : 0)}px;
+  border-color: ${({ theme }) => theme.projectItemBorder};
   overflow: visible;
 `;
 
@@ -47,7 +52,7 @@ const BoxIcon = styled.View`
   align-items: center;
 `;
 
-const MoreBtn = styled.TouchableOpacity`
+const MoreBtn = styled.View`
   position: absolute;
   right: 0;
   bottom: 0;
@@ -91,6 +96,10 @@ function ProjectItem({ item }: { item: Project }) {
   };
 
   const onPressProjectDetailBtn = () => {
+    if (item.user_id !== currentUserId) {
+      return;
+    }
+
     setIsModalOpen(false);
     dispatch(resetProjectRetrospectQueries());
     navigation.navigate("ProjectDetail", {
@@ -125,113 +134,239 @@ function ProjectItem({ item }: { item: Project }) {
   };
 
   return (
-    <View style={{ flex: 1 }}>
-      <ProjectBox isFinished={item.finished}>
-        <FlexBox
-          gap={spacing.padding}
-          styles={{
-            flex: 1,
-          }}
-        >
-          <BoxIcon>
-            <WithLocalSvg asset={ProjectIcon} />
-          </BoxIcon>
-          <View
-            style={{
-              flex: 1,
-              marginLeft: useResponsiveFontSize(5),
-            }}
+    <View style={{ flex: 1, paddingHorizontal: spacing.gutter }}>
+      {!item.finished ? (
+        <ShadowForProject radius={useResponsiveFontSize(20)}>
+          <ProjectBox
+            isFinished={item.finished}
+            onPress={onPressProjectDetailBtn}
           >
-            <Margin margin={useResponsiveFontSize(5)}></Margin>
             <FlexBox
-              justifyContent="space-between"
+              gap={spacing.padding}
               styles={{
                 flex: 1,
               }}
             >
-              <FlexBox
-                direction="column"
-                gap={spacing.padding}
-                styles={{
+              <BoxIcon>
+                <WithLocalSvg asset={ProjectIcon} />
+              </BoxIcon>
+              <View
+                style={{
                   flex: 1,
+                  marginLeft: useResponsiveFontSize(5),
                 }}
               >
-                <Text size="xl" weight="bold">
-                  {item.name}
-                </Text>
-
-                <FlexBox gap={spacing.padding}>
-                  <RoundItemBtn size="sm" isSelected={false}>
-                    <Text size="xs">{item.todo_count + ""}개의 할일</Text>
-                  </RoundItemBtn>
-                  <RoundItemBtn size="sm" isSelected={false}>
-                    <Text size="xs">
-                      {item.retrospect_count + ""}
-                      개의 회고
+                <Margin margin={useResponsiveFontSize(5)}></Margin>
+                <FlexBox
+                  justifyContent="space-between"
+                  styles={{
+                    flex: 1,
+                  }}
+                >
+                  <FlexBox
+                    direction="column"
+                    gap={spacing.padding}
+                    styles={{
+                      flex: 1,
+                    }}
+                  >
+                    <Text size="xl" weight="bold">
+                      {item.name}
                     </Text>
-                  </RoundItemBtn>
-                  <RoundItemBtn size="sm" isSelected={false}>
-                    <Text size="xs">{publicText}</Text>
-                  </RoundItemBtn>
+
+                    <FlexBox gap={spacing.padding}>
+                      <RoundItemBtn size="sm" isSelected={false}>
+                        <Text size="xs">{item.todo_count + ""}개의 할일</Text>
+                      </RoundItemBtn>
+                      <RoundItemBtn size="sm" isSelected={false}>
+                        <Text size="xs">
+                          {item.retrospect_count + ""}
+                          개의 회고
+                        </Text>
+                      </RoundItemBtn>
+                      <RoundItemBtn size="sm" isSelected={false}>
+                        <Text size="xs">{publicText}</Text>
+                      </RoundItemBtn>
+                    </FlexBox>
+                  </FlexBox>
+                  <View>
+                    <Icons
+                      type="feather"
+                      name="more-horizontal"
+                      size={useResponsiveFontSize(20)}
+                      onPress={onPressMoreDot}
+                    />
+                  </View>
                 </FlexBox>
-              </FlexBox>
-              <View>
-                <Icons
-                  type="feather"
-                  name="more-horizontal"
-                  size={useResponsiveFontSize(20)}
-                  onPress={onPressMoreDot}
-                />
+
+                {currentUserId == item.user_id && (
+                  <MoreBtn>
+                    <Text size="sm">프로젝트 더보기</Text>
+                    <Icons
+                      type="entypo"
+                      name="chevron-thin-right"
+                      size={15}
+                      color={theme.text}
+                    />
+                  </MoreBtn>
+                )}
               </View>
             </FlexBox>
-
-            {currentUserId == item.user_id && (
-              <MoreBtn onPress={onPressProjectDetailBtn}>
-                <Text size="sm">프로젝트 더보기</Text>
-                <Icons
-                  type="entypo"
-                  name="chevron-thin-right"
-                  size={15}
-                  color={theme.text}
-                />
-              </MoreBtn>
-            )}
-          </View>
-        </FlexBox>
-      </ProjectBox>
-      {isModalOpen && (
-        <OutsidePressHandler
-          onOutsidePress={() => {
-            setIsModalOpen(false);
-          }}
-          style={{
-            position: "absolute",
-            top: 0,
-            right: 0,
-            zIndex: 100,
-          }}
-        >
-          <ModalContainer
-            position={{
-              top: 10,
-              right: 10,
-            }}
+          </ProjectBox>
+          {isModalOpen && (
+            <OutsidePressHandler
+              onOutsidePress={() => {
+                setIsModalOpen(false);
+              }}
+              style={{
+                position: "absolute",
+                top: 0,
+                right: 0,
+                zIndex: 100,
+              }}
+            >
+              <ModalContainer
+                position={{
+                  top: 10,
+                  right: 10,
+                }}
+              >
+                <ModalBtn isSelected onPress={onPressProjectManageBtn}>
+                  <Text
+                    size="sm"
+                    color={getThemeElement(theme).reverseButtonText}
+                  >
+                    프로젝트 관리
+                  </Text>
+                </ModalBtn>
+                {!item.finished && (
+                  <ModalBtn onPress={onPressProjectCompleteBtn}>
+                    <Text size="sm">완료로 이동</Text>
+                  </ModalBtn>
+                )}
+                <ModalBtn onPress={onPressProjectDeleteBtn}>
+                  <Text size="sm">삭제하기</Text>
+                </ModalBtn>
+              </ModalContainer>
+            </OutsidePressHandler>
+          )}
+        </ShadowForProject>
+      ) : (
+        <>
+          <ProjectBox
+            isFinished={item.finished}
+            onPress={onPressProjectDetailBtn}
           >
-            <ModalBtn isSelected onPress={onPressProjectManageBtn}>
-              <Text size="sm" color={getThemeElement(theme).reverseButtonText}>
-                프로젝트 관리
-              </Text>
-            </ModalBtn>
-            {!item.finished && (
-              <ModalBtn onPress={onPressProjectCompleteBtn}>
-                <Text size="sm">완료로 이동</Text>
-              </ModalBtn>
-            )}
-            <ModalBtn onPress={onPressProjectDeleteBtn}>
-              <Text size="sm">삭제하기</Text>
-            </ModalBtn>
-          </ModalContainer>
-        </OutsidePressHandler>
+            <FlexBox
+              gap={spacing.padding}
+              styles={{
+                flex: 1,
+              }}
+            >
+              <BoxIcon>
+                <WithLocalSvg asset={ProjectIcon} />
+              </BoxIcon>
+              <View
+                style={{
+                  flex: 1,
+                  marginLeft: useResponsiveFontSize(5),
+                }}
+              >
+                <Margin margin={useResponsiveFontSize(5)}></Margin>
+                <FlexBox
+                  justifyContent="space-between"
+                  styles={{
+                    flex: 1,
+                  }}
+                >
+                  <FlexBox
+                    direction="column"
+                    gap={spacing.padding}
+                    styles={{
+                      flex: 1,
+                    }}
+                  >
+                    <Text size="xl" weight="bold">
+                      {item.name}
+                    </Text>
+
+                    <FlexBox gap={spacing.padding}>
+                      <RoundItemBtn size="sm" isSelected={false}>
+                        <Text size="xs">{item.todo_count + ""}개의 할일</Text>
+                      </RoundItemBtn>
+                      <RoundItemBtn size="sm" isSelected={false}>
+                        <Text size="xs">
+                          {item.retrospect_count + ""}
+                          개의 회고
+                        </Text>
+                      </RoundItemBtn>
+                      <RoundItemBtn size="sm" isSelected={false}>
+                        <Text size="xs">{publicText}</Text>
+                      </RoundItemBtn>
+                    </FlexBox>
+                  </FlexBox>
+                  <View>
+                    <Icons
+                      type="feather"
+                      name="more-horizontal"
+                      size={useResponsiveFontSize(20)}
+                      onPress={onPressMoreDot}
+                    />
+                  </View>
+                </FlexBox>
+
+                {currentUserId == item.user_id && (
+                  <MoreBtn>
+                    <Text size="sm">프로젝트 더보기</Text>
+                    <Icons
+                      type="entypo"
+                      name="chevron-thin-right"
+                      size={15}
+                      color={theme.text}
+                    />
+                  </MoreBtn>
+                )}
+              </View>
+            </FlexBox>
+          </ProjectBox>
+          {isModalOpen && (
+            <OutsidePressHandler
+              onOutsidePress={() => {
+                setIsModalOpen(false);
+              }}
+              style={{
+                position: "absolute",
+                top: 0,
+                right: 0,
+                zIndex: 100,
+              }}
+            >
+              <ModalContainer
+                position={{
+                  top: 10,
+                  right: 10,
+                }}
+              >
+                <ModalBtn isSelected onPress={onPressProjectManageBtn}>
+                  <Text
+                    size="sm"
+                    color={getThemeElement(theme).reverseButtonText}
+                  >
+                    프로젝트 관리
+                  </Text>
+                </ModalBtn>
+                {!item.finished && (
+                  <ModalBtn onPress={onPressProjectCompleteBtn}>
+                    <Text size="sm">완료로 이동</Text>
+                  </ModalBtn>
+                )}
+                <ModalBtn onPress={onPressProjectDeleteBtn}>
+                  <Text size="sm">삭제하기</Text>
+                </ModalBtn>
+              </ModalContainer>
+            </OutsidePressHandler>
+          )}
+        </>
       )}
     </View>
   );
@@ -282,6 +417,9 @@ export default function ProjectList({
       data={sortedProjects}
       keyExtractor={(item) => item.project_id.toString()}
       ItemSeparatorComponent={() => {
+        return <Margin margin={useResponsiveFontSize(20)} />;
+      }}
+      ListFooterComponent={() => {
         return <Margin margin={useResponsiveFontSize(20)} />;
       }}
       style={{

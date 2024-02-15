@@ -4,6 +4,7 @@ import ContentLayout from "../../atoms/ContentLayout";
 import ProjectList from "../../organisms/Project/ProjectList";
 import { useProject } from "../../../hooks/useProject";
 import { Project } from "../../../@types/project";
+import { spacing } from "../../../constants/spacing";
 
 export default function SnsDetailThird({
   projects,
@@ -15,12 +16,20 @@ export default function SnsDetailThird({
   };
 }) {
   return (
-    <ContentLayout>
+    // <ContentLayout>
+    <View
+      style={{
+        flex: 1,
+        paddingVertical: spacing.gutter,
+      }}
+    >
       <ProjectList
         projects={projects.data}
         isLoading={projects.isLoading}
         isError={projects.isError}
       ></ProjectList>
-    </ContentLayout>
+    </View>
+
+    // </ContentLayout>
   );
 }

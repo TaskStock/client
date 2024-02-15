@@ -1,6 +1,8 @@
 import { View, Text } from "react-native";
 import React from "react";
 import { Shadow } from "react-native-shadow-2";
+import { spacing } from "../../constants/spacing";
+import { palette } from "../../constants/colors";
 
 /* 안드로이드용 */
 /* elevation: 2; */
@@ -11,13 +13,70 @@ import { Shadow } from "react-native-shadow-2";
 /* shadow-opacity: 0.1; */
 // shadow-radius: 10px;
 
-export default function CustomShadow({
+export default function ShadowForProject({
   children,
+  radius,
 }: {
   children: React.ReactNode;
+  radius?: number;
 }) {
   return (
-    <Shadow startColor="rgba(0,0,0,0)" offset={[0, 4]}>
+    <Shadow
+      distance={7}
+      offset={[0, 5]}
+      startColor={palette.shadow}
+      style={{
+        borderRadius: radius ? radius : spacing.gutter,
+        // flex: 1,
+        width: "100%",
+      }}
+    >
+      {children}
+    </Shadow>
+  );
+}
+
+export function ShadowForRetrospect({
+  children,
+  radius,
+}: {
+  children: React.ReactNode;
+  radius?: number;
+}) {
+  return (
+    <Shadow
+      distance={8}
+      offset={[0, 4]}
+      startColor={palette.shadow}
+      style={{
+        borderRadius: radius ? radius : spacing.gutter,
+        // flex: 1,
+        width: "100%",
+      }}
+    >
+      {children}
+    </Shadow>
+  );
+}
+
+export function ShadowForStockItem({
+  children,
+  radius,
+}: {
+  children: React.ReactNode;
+  radius?: number;
+}) {
+  return (
+    <Shadow
+      distance={8}
+      offset={[0, 4]}
+      startColor={palette.shadow}
+      style={{
+        borderRadius: radius ? radius : spacing.gutter,
+        // flex: 1,
+        width: "100%",
+      }}
+    >
       {children}
     </Shadow>
   );

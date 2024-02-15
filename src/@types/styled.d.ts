@@ -19,5 +19,6 @@ declare module "styled-components/native" {
     high: string;
     low: string;
     projectIconBg: string;
+    projectItemBorder: string;
   }
 }
