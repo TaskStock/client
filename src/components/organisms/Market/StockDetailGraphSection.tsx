@@ -8,6 +8,7 @@ import Margin from "../../atoms/Margin";
 import Text from "../../atoms/Text";
 import { spacing } from "../../../constants/spacing";
 import FlexBox from "../../atoms/FlexBox";
+import useUser from "../../../hooks/useUser";
 
 const GraphBox = styled(ContentItemBoxContainer)`
   width: 100%;
@@ -122,6 +123,10 @@ export default function StockDetailGraphSection({
     },
   ];
 
+  const {
+    user: { user_name: username },
+  } = useUser();
+
   const data2Max = Math.max(...data2.map((point) => point.y));
 
   const data2FillCondition = ({
@@ -174,7 +179,7 @@ export default function StockDetailGraphSection({
             >
               <Text size="xl" weight="regular">
                 <Text size="xl" weight="bold">
-                  김땡땡님
+                  {username}님
                 </Text>
                 은 평균과 달성률이
               </Text>
