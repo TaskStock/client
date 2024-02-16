@@ -142,7 +142,7 @@ export default function MarketMainScreen() {
           <Image
             source={MarketBannerImage}
             style={{ width: "100%", height: "100%" }}
-            resizeMode="contain"
+            resizeMode="cover"
           ></Image>
           <BannerFloatOverlay>
             <BannerFloatContainer>

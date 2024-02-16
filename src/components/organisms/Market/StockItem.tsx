@@ -64,22 +64,37 @@ export const StockItem = ({
               <TextWithIcon
                 text={percentFormat + "%"}
                 size="sm"
-                textColor={percent > 0 ? theme.palette.red : theme.palette.blue}
+                textColor={
+                  percent == 0
+                    ? theme.textDim
+                    : percent > 0
+                    ? theme.palette.red
+                    : theme.palette.blue
+                }
               >
-                {percent > 0 ? (
-                  <Icons
-                    type="AntDesign"
-                    name="caretup"
-                    size={14}
-                    color={theme.palette.red}
-                  ></Icons>
+                {percent != 0 ? (
+                  percent > 0 ? (
+                    <Icons
+                      type="AntDesign"
+                      name="caretup"
+                      size={14}
+                      color={theme.palette.red}
+                    ></Icons>
+                  ) : (
+                    <Icons
+                      type="AntDesign"
+                      name="caretdown"
+                      size={14}
+                      color={theme.palette.blue}
+                    ></Icons>
+                  )
                 ) : (
                   <Icons
-                    type="AntDesign"
-                    name="caretdown"
+                    type="materialIcons"
+                    name="horizontal-rule"
                     size={14}
-                    color={theme.palette.blue}
-                  ></Icons>
+                    color={theme.textDim}
+                  />
                 )}
               </TextWithIcon>
               <Text size="xl" weight="bold">
@@ -111,6 +126,13 @@ export const StockItemSecond = ({
   // const percentFormat = percent.toFixed(2);
   const percentFormat = Math.floor(percent);
 
+  const textColor =
+    percent != 0
+      ? percent > 0
+        ? theme.palette.red
+        : theme.palette.blue
+      : theme.textDim;
+
   return (
     <Pressable onPress={onPress}>
       {/* <ShadowForStockItem2 radius={20}> */}
@@ -124,23 +146,29 @@ export const StockItemSecond = ({
               {name.length > 15 ? name.slice(0, 15) + "..." : name}
             </Text>
           </View>
-          <TextWithIcon
-            text={percentFormat + "%"}
-            textColor={percent > 0 ? theme.palette.red : theme.palette.blue}
-          >
-            {percent > 0 ? (
-              <Icons
-                type="AntDesign"
-                name="caretup"
-                size={14}
-                color={theme.palette.red}
-              />
+          <TextWithIcon text={percentFormat + "%"} textColor={textColor}>
+            {percent != 0 ? (
+              percent > 0 ? (
+                <Icons
+                  type="AntDesign"
+                  name="caretup"
+                  size={14}
+                  color={theme.palette.red}
+                />
+              ) : (
+                <Icons
+                  type="AntDesign"
+                  name="caretdown"
+                  size={14}
+                  color={theme.palette.blue}
+                />
+              )
             ) : (
               <Icons
-                type="AntDesign"
-                name="caretdown"
+                type="materialIcons"
+                name="horizontal-rule"
                 size={14}
-                color={theme.palette.blue}
+                color={theme.textDim}
               />
             )}
           </TextWithIcon>

@@ -12,7 +12,7 @@
     </intent>
   </queries>
   
-  <application android:name=".MainApplication" android:label="@string/app_name" android:icon="@mipmap/ic_launcher" android:roundIcon="@mipmap/ic_launcher_round" android:allowBackup="true" android:theme="@style/AppTheme" android:requestLegacyExternalStorage="true">
+  <application android:name=".MainApplication" android:label="@string/app_name" android:icon="@mipmap/ic_main" android:roundIcon="@mipmap/ic_main_round" android:allowBackup="true" android:theme="@style/AppTheme" android:requestLegacyExternalStorage="true">
     <!-- FirebaseMessagingService 확장 -->
     <service
         android:name=".MyFirebaseMessagingService"

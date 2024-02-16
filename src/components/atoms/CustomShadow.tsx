@@ -22,8 +22,8 @@ export default function ShadowForProject({
 }) {
   return (
     <Shadow
-      distance={7}
-      offset={[0, 4]}
+      distance={4}
+      offset={[0, 2]}
       startColor={palette.shadow}
       style={{
         borderRadius: radius ? radius : spacing.gutter,
@@ -68,8 +68,8 @@ export function ShadowForStockItem({
 }) {
   return (
     <Shadow
-      distance={6}
-      offset={[0, 2]}
+      distance={9}
+      offset={[0, 5]}
       startColor={palette.shadow}
       style={{
         borderRadius: radius ? radius : spacing.gutter,
@@ -91,8 +91,8 @@ export function ShadowForStockItem2({
 }) {
   return (
     <Shadow
-      distance={5}
-      offset={[0, 2]}
+      distance={8}
+      offset={[0, 4]}
       startColor={palette.shadow}
       style={{
         borderRadius: radius ? radius : spacing.gutter,
