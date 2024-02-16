@@ -1,4 +1,6 @@
-import React, { useContext } from "react";
+import React from "react";
+import { Circle, Line, Svg } from "react-native-svg";
+import { useTheme } from "styled-components/native";
 import {
   VictoryAxis,
   VictoryChart,
@@ -7,9 +9,6 @@ import {
   VictoryTheme,
   VictoryZoomContainer,
 } from "victory-native";
-import { useTheme } from "styled-components/native";
-import { Value } from "../../@types/chart";
-import { Circle, Svg } from "react-native-svg";
 import { palette } from "../../constants/colors";
 import { View } from "react-native";
 
@@ -18,7 +17,6 @@ const DotDataComponent = (props: any) => {
 
   return (
     <Svg>
-      {/* Outer transparent circle */}
       <Circle
         cx={x}
         cy={y}
@@ -48,11 +46,32 @@ export default function LineValueChart({
 }) {
   const theme = useTheme();
 
-  if (data.length === 0) return <></>;
+  if (data.length === 0) {
+    const oneThirdLineHeight = height / 3;
+    const twoThirdLineHeight = (height * 2) / 3;
+
+    return (
+      <Svg>
+        <Line
+          x1={0}
+          x2={width}
+          y1={oneThirdLineHeight}
+          y2={oneThirdLineHeight}
+          stroke={theme.palette.neutral500_gray}
+        />
+        <Line
+          x1={0}
+          x2={width}
+          y1={twoThirdLineHeight}
+          y2={twoThirdLineHeight}
+          stroke={theme.palette.neutral500_gray}
+        />
+      </Svg>
+    );
+  }
 
   const lineData = data.map((item, index) => ({
     x: index,
-    // y: item.end,
     y: Math.floor(item.end * 1000) / 1000,
   }));
 

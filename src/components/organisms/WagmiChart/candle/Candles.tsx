@@ -43,15 +43,17 @@ export function CandlestickChartCandles({
   const oneThirdLineHeight = interpolate(oneThirdDomainValue, domain, [
     height,
     0,
-  ]);
+  ])
+    ? interpolate(oneThirdDomainValue, domain, [height, 0])
+    : height / 3;
 
   const twoThirdDomainValue = domain[0] + ((domain[1] - domain[0]) * 2) / 3;
   const twoThirdLineHeight = interpolate(twoThirdDomainValue, domain, [
     height,
     0,
-  ]);
-
-  ////////////////////////////////////////////////
+  ])
+    ? interpolate(twoThirdDomainValue, domain, [height, 0])
+    : (height / 3) * 2;
 
   return (
     <Svg width={width} height={height} {...props}>

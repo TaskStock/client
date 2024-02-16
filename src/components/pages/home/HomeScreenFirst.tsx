@@ -25,7 +25,9 @@ function HomeScreenFirst() {
         refetch: refetchUser,
       }}
       value={{
-        data: values,
+        // data: values,
+        data: [],
+        // data: undefined,
         isLoading,
         isError,
         error,
