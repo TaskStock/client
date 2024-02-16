@@ -1,6 +1,6 @@
 import { NavigationProp, useNavigation } from "@react-navigation/native";
-import React from "react";
-import { FlatList, View } from "react-native";
+import React, { useState } from "react";
+import { FlatList, Modal, Pressable, View } from "react-native";
 import OutsidePressHandler from "react-native-outside-press";
 import { WithLocalSvg } from "react-native-svg";
 import styled, { useTheme } from "styled-components/native";
@@ -28,6 +28,7 @@ import LoadingSpinner from "../../atoms/LoadingSpinner";
 import Margin from "../../atoms/Margin";
 import RoundItemBtn from "../../atoms/RoundItemBtn";
 import Text from "../../atoms/Text";
+import CenterModal from "../../molecules/CenterModal";
 
 const ProjectBox = styled.Pressable<{ isFinished: boolean }>`
   border-radius: ${useResponsiveFontSize(20)}px;
@@ -62,6 +63,8 @@ const MoreBtn = styled.View`
 
 function ProjectItem({ item, zIndex }: { item: Project; zIndex?: number }) {
   const navigation = useNavigation<NavigationProp<ProjectStackParamList>>();
+
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   const zIndexOfModal = zIndex ? zIndex * 1000 : 1000;
 
@@ -122,11 +125,15 @@ function ProjectItem({ item, zIndex }: { item: Project; zIndex?: number }) {
     });
   };
 
-  const onPressProjectDeleteBtn = () => {
+  const onPressProjectDeleteModalBtn = () => {
     setIsModalOpen(false);
     deleteProject({
       project_id: item.project_id,
     });
+  };
+
+  const onPressProjectDeleteBtn = () => {
+    setIsDeleteModalOpen(true);
   };
 
   const onPressMoreDot = () => {
@@ -262,7 +269,7 @@ function ProjectItem({ item, zIndex }: { item: Project; zIndex?: number }) {
           )}
         </ShadowForProject>
       ) : (
-        <>
+        <View>
           <ProjectBox
             isFinished={item.finished}
             onPress={onPressProjectDetailBtn}
@@ -376,7 +383,52 @@ function ProjectItem({ item, zIndex }: { item: Project; zIndex?: number }) {
               </ModalContainer>
             </OutsidePressHandler>
           )}
-        </>
+        </View>
+      )}
+      {isDeleteModalOpen && (
+        <CenterModal
+          onPressOutside={() => {
+            setIsDeleteModalOpen(false);
+          }}
+        >
+          <FlexBox direction="column" alignItems="center" gap={spacing.gutter}>
+            <Text size="sm" weight="medium">
+              해당 프로젝트를 삭제하시겠습니까?
+            </Text>
+            <View
+              style={{
+                width: "100%",
+              }}
+            >
+              <Text size="sm" weight="regular">
+                오늘 이후의 할 일이 함께 삭제됩니다.
+              </Text>
+            </View>
+            <Margin margin={spacing.padding}></Margin>
+            <FlexBox
+              justifyContent="flex-end"
+              styles={{
+                width: "100%",
+              }}
+              gap={spacing.offset}
+            >
+              <Pressable
+                onPress={() => {
+                  setIsDeleteModalOpen(false);
+                }}
+              >
+                <Text weight={"medium"} size="md" color={theme.text}>
+                  취소
+                </Text>
+              </Pressable>
+              <Pressable onPress={onPressProjectDeleteModalBtn}>
+                <Text weight={"medium"} size="md" color={theme.palette.red}>
+                  삭제
+                </Text>
+              </Pressable>
+            </FlexBox>
+          </FlexBox>
+        </CenterModal>
       )}
     </View>
   );

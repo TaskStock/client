@@ -26,8 +26,6 @@ function HomeScreenFirst() {
       }}
       value={{
         data: values,
-        // data: [],
-        // data: undefined,
         isLoading,
         isError,
         error,
