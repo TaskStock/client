@@ -2,6 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import { client } from "../../services/api";
 import { TRootState } from "../../store/configureStore";
 import { checkAndRenewTokens } from "../authUtils/tokenUtils";
+import { showSuccessToast } from "../showToast";
 
 const badgeThunk = createAsyncThunk(
   "badge/requestBadge",
@@ -27,6 +28,7 @@ const badgeThunk = createAsyncThunk(
       );
       if (res.result === "success") {
         // {”result”: “success”, “badges”: [1, 2, 3]}
+        showSuccessToast("새로운 뱃지를 획득했어요!🔥");
         return res.badges;
       } else {
         return rejectWithValue(res.result);

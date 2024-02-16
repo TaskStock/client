@@ -484,7 +484,7 @@ export default function ProjectList({
       ListFooterComponent={() => {
         return <Margin margin={useResponsiveFontSize(20)} />;
       }}
-      // contentContainerStyle={{ padding: spacing.gutter }}
+      contentContainerStyle={{ paddingVertical: spacing.gutter }}
     ></FlatList>
   );
 }
