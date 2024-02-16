@@ -265,7 +265,13 @@ const UserDetailScreen = ({ route, navigation }: UserDetailScreenProps) => {
                   </View>
                 ))
               ) : (
-                <Text size="md">등록된 투두가 없습니다.</Text>
+                <Text
+                  size="md"
+                  color={theme.textDim}
+                  styles={{ textAlign: "center", paddingTop: spacing.gutter }}
+                >
+                  등록된 투두가 없습니다.
+                </Text>
               )}
             </DrawerContent>
           </View>

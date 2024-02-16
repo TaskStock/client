@@ -31,13 +31,7 @@ const SnsStack = () => {
       <NativeStack.Screen name="EditProfile" component={EditProfileScreen} />
       <NativeStack.Screen name="Search" component={SearchScreen} />
       <NativeStack.Screen name="UserDetail" component={UserDetailScreen} />
-      <NativeStack.Screen
-        name="Badge"
-        component={BadgeScreen}
-        options={{
-          presentation: "modal",
-        }}
-      />
+      <NativeStack.Screen name="Badge" component={BadgeScreen} />
       <NativeStack.Screen
         name="BadgeAll"
         component={BadgeAllScreen}

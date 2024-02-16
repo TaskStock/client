@@ -34,9 +34,7 @@ const Header = ({
       width: "100%",
       padding: spacing.offset,
       paddingTop:
-        Platform.OS === "android"
-          ? spacing.offset + paddingTop
-          : spacing.offset,
+        Platform.OS === "android" ? spacing.offset + paddingTop : paddingTop,
     }}
   >
     <Icons

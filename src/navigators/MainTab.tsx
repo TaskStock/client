@@ -40,6 +40,7 @@ function MainTab() {
           component={HomeScreen}
           options={{
             headerShown: false,
+
             tabBarIcon: ({ color, size }) => (
               <IconsWithoutFeedBack
                 type="material"

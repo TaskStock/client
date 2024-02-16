@@ -20,7 +20,11 @@ const Root = ({ isLoggedIn }: { isLoggedIn: boolean }) => {
       initialRouteName={initialRoute}
     >
       <Nav.Screen name="LoginStack" component={LoginStack} />
-      <Nav.Screen name="MainTab" component={MainTab} />
+      <Nav.Screen
+        name="MainTab"
+        component={MainTab}
+        options={{ gestureEnabled: false }}
+      />
       <Nav.Screen name="SettingsStack" component={SettingsStack} />
       <Nav.Screen name="AlarmStack" component={AlarmStack} />
       <Nav.Screen name="SnsStack" component={SnsStack} />

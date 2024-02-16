@@ -287,6 +287,7 @@ export default function ProjectList({
       style={{
         flex: 1,
       }}
+      contentContainerStyle={{ padding: spacing.gutter }}
     ></FlatList>
   );
 }
