@@ -20,6 +20,7 @@ import {
 import { resetProjectRetrospectQueries } from "../../../store/modules/retrospect/retrospect";
 import { getThemeElement } from "../../../utils/getThemeElement";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
+import ShadowForProject from "../../atoms/CustomShadow";
 import FlexBox from "../../atoms/FlexBox";
 import { ModalBtn, ModalContainer } from "../../atoms/FloatModal";
 import Icons from "../../atoms/Icons";
@@ -27,9 +28,6 @@ import LoadingSpinner from "../../atoms/LoadingSpinner";
 import Margin from "../../atoms/Margin";
 import RoundItemBtn from "../../atoms/RoundItemBtn";
 import Text from "../../atoms/Text";
-import { Shadow } from "react-native-shadow-2";
-import { palette } from "../../../constants/colors";
-import ShadowForProject from "../../atoms/CustomShadow";
 
 const ProjectBox = styled.Pressable<{ isFinished: boolean }>`
   border-radius: ${useResponsiveFontSize(20)}px;
@@ -39,8 +37,6 @@ const ProjectBox = styled.Pressable<{ isFinished: boolean }>`
   padding: ${useResponsiveFontSize(20)}px;
   border-width: ${({ theme, isFinished }) => (isFinished ? 1 : 0)}px;
   border-color: ${({ theme }) => theme.projectItemBorder};
-  overflow: visible;
-  z-index: 10;
 `;
 
 const BoxIcon = styled.View`
@@ -64,8 +60,10 @@ const MoreBtn = styled.View`
   align-items: center;
 `;
 
-function ProjectItem({ item }: { item: Project }) {
+function ProjectItem({ item, zIndex }: { item: Project; zIndex?: number }) {
   const navigation = useNavigation<NavigationProp<ProjectStackParamList>>();
+
+  const zIndexOfModal = zIndex ? zIndex * 1000 : 1000;
 
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [deleteProject] = useDeleteProjectMutation();
@@ -74,6 +72,11 @@ function ProjectItem({ item }: { item: Project }) {
   const currentUserId = useAppSelect((state) => state.user.user.user_id);
 
   const theme = useTheme();
+
+  const modalPosition = {
+    top: 20,
+    right: 10,
+  };
 
   const publicText =
     item.public_range === "all"
@@ -135,7 +138,13 @@ function ProjectItem({ item }: { item: Project }) {
   };
 
   return (
-    <View style={{ flex: 1, paddingHorizontal: spacing.gutter }}>
+    <View
+      style={{
+        flex: 1,
+        paddingHorizontal: spacing.gutter,
+        zIndex: zIndexOfModal,
+      }}
+    >
       {!item.finished ? (
         <ShadowForProject radius={useResponsiveFontSize(20)}>
           <ProjectBox
@@ -224,13 +233,12 @@ function ProjectItem({ item }: { item: Project }) {
                 position: "absolute",
                 top: 0,
                 right: 0,
-                zIndex: 100,
               }}
             >
               <ModalContainer
                 position={{
-                  top: 50,
-                  right: 10,
+                  top: modalPosition.top,
+                  right: modalPosition.right,
                 }}
               >
                 <ModalBtn isSelected onPress={onPressProjectManageBtn}>
@@ -341,13 +349,12 @@ function ProjectItem({ item }: { item: Project }) {
                 position: "absolute",
                 top: 0,
                 right: 0,
-                zIndex: 100,
               }}
             >
               <ModalContainer
                 position={{
-                  top: 10,
-                  right: 10,
+                  top: modalPosition.top,
+                  right: modalPosition.right,
                 }}
               >
                 <ModalBtn isSelected onPress={onPressProjectManageBtn}>
@@ -407,8 +414,8 @@ export default function ProjectList({
     );
   }
 
-  const renderItem = ({ item }: { item: Project }) => {
-    return <ProjectItem item={item} />;
+  const renderItem = ({ item, index }: { item: Project; index: number }) => {
+    return <ProjectItem item={item} zIndex={index} />;
   };
 
   const sortedProjects = [...projects].sort((a, b) => {
@@ -425,10 +432,12 @@ export default function ProjectList({
       ListFooterComponent={() => {
         return <Margin margin={useResponsiveFontSize(20)} />;
       }}
-      style={{
-        flex: 1,
-        overflow: "visible",
-      }}
+      style={
+        {
+          // flex: 1,
+          // overflow: "visible",
+        }
+      }
     ></FlatList>
   );
 }

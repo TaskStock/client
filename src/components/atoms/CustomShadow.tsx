@@ -22,12 +22,11 @@ export default function ShadowForProject({
 }) {
   return (
     <Shadow
-      distance={5}
+      distance={7}
       offset={[0, 2]}
       startColor={palette.shadow}
       style={{
         borderRadius: radius ? radius : spacing.gutter,
-        // flex: 1,
         width: "100%",
       }}
     >

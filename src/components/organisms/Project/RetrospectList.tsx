@@ -36,22 +36,22 @@ function RetrospectItem({
   const formattedDate = item.created_date.slice(0, 10);
 
   return (
-    <ShadowForRetrospect radius={20}>
-      <Box onPress={onPressItem} style={{}}>
-        <FlexBox gap={spacing.small}>
-          <Text size="xs" color="red">
-            {projectName}
-          </Text>
-          <Text size="xs">{formattedDate}</Text>
-        </FlexBox>
-        <Margin margin={spacing.small}></Margin>
-        <Text size="md">
-          {item.content.length > 100
-            ? item.content.slice(0, 100) + "..."
-            : item.content}
+    // <ShadowForRetrospect radius={20}>
+    <Box onPress={onPressItem} style={{}}>
+      <FlexBox gap={spacing.small}>
+        <Text size="xs" color="red">
+          {projectName}
         </Text>
-      </Box>
-    </ShadowForRetrospect>
+        <Text size="xs">{formattedDate}</Text>
+      </FlexBox>
+      <Margin margin={spacing.small}></Margin>
+      <Text size="md">
+        {item.content.length > 100
+          ? item.content.slice(0, 100) + "..."
+          : item.content}
+      </Text>
+    </Box>
+    // </ShadowForRetrospect>
   );
 }
 

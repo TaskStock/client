@@ -6,6 +6,7 @@ import { spacing } from "../../constants/spacing";
 
 export const ModalContainer = styled.View<{
   position: { top?: number; bottom?: number; left?: number; right?: number };
+  zIndex?: number;
 }>`
   position: absolute;
   top: ${({ position }) => position.top}px;
@@ -21,7 +22,7 @@ export const ModalContainer = styled.View<{
       ? theme.palette.neutral500_dark
       : theme.palette.neutral100_gray};
   flex-direction: column;
-  z-index: 100;
+  z-index: ${({ zIndex }) => (zIndex ? zIndex : 100)};
   gap: 10px;
   ${Platform.select({
     ios: `
@@ -59,7 +60,7 @@ const ModalBtnContainer = styled.TouchableOpacity<{ isSelected?: boolean }>`
   justify-content: center;
   align-items: center;
 
-  padding: ${useResponsiveFontSize(13)}px ${useResponsiveFontSize(38)}px;
+  padding: ${useResponsiveFontSize(10)}px ${useResponsiveFontSize(22)}px;
 `;
 
 export function ModalBtn({
