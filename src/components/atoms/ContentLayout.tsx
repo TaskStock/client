@@ -6,15 +6,17 @@ export default function ContentLayout({
   children,
   noFlex = false,
   noVerticalPadding = false,
+  noHorizontalPadding = false,
 }: {
   children: React.ReactNode;
   noFlex?: boolean;
   noVerticalPadding?: boolean;
+  noHorizontalPadding?: boolean;
 }) {
   return (
     <View
       style={{
-        paddingHorizontal: spacing.gutter,
+        paddingHorizontal: noHorizontalPadding ? 0 : spacing.gutter,
         paddingVertical: noVerticalPadding ? 0 : spacing.gutter,
         flex: noFlex ? 0 : 1,
       }}
