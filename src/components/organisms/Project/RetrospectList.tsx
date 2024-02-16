@@ -103,7 +103,9 @@ export default function RetrospectList({
         date: item.created_date.slice(0, 10) as DateString,
       })
     );
-    navigation.navigate("RetrospectWrite");
+    navigation.navigate("ProjectStackWithoutTab", {
+      screen: "RetrospectWrite",
+    });
   };
 
   return (

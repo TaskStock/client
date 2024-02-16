@@ -25,6 +25,7 @@ interface initialState {
     region: string;
     // strategy: string;
     is_push_on: boolean;
+    is_new_notice: boolean;
   };
   loading: boolean;
   error: string | null;
@@ -49,6 +50,7 @@ const initialUserState: initialState = {
     region: "",
     // strategy: "",
     is_push_on: false,
+    is_new_notice: false,
   },
   loading: false,
   error: null,
@@ -77,6 +79,9 @@ const userSlice = createSlice({
     },
     subFollowerCount: (state) => {
       state.user.follower_count -= 1;
+    },
+    setNewNotice: (state, action) => {
+      state.user.is_new_notice = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -162,4 +167,5 @@ export const {
   addFollowerCount,
   subFollowerCount,
   TestSetUserValueTo,
+  setNewNotice,
 } = userSlice.actions;

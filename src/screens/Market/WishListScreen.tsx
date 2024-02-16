@@ -40,7 +40,7 @@ export default function WishListScreen() {
     useNavigation<NativeStackNavigationProp<MarketStackParamList>>();
 
   const onPressRegister = () => {
-    navigation.navigate("WishRegisterScreen");
+    navigation.navigate("MarketStack", { screen: "WishRegisterScreen" });
   };
 
   const tabHeaderProps = {

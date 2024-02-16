@@ -99,7 +99,7 @@ function ProjectItem({ item, zIndex }: { item: Project; zIndex?: number }) {
         finished: item.finished,
       })
     );
-    navigation.navigate("ProjectManage");
+    navigation.navigate("ProjectStackWithoutTab", { screen: "ProjectManage" });
   };
 
   const onPressProjectDetailBtn = () => {
@@ -484,12 +484,7 @@ export default function ProjectList({
       ListFooterComponent={() => {
         return <Margin margin={useResponsiveFontSize(20)} />;
       }}
-      style={
-        {
-          // flex: 1,
-          // overflow: "visible",
-        }
-      }
+      // contentContainerStyle={{ padding: spacing.gutter }}
     ></FlatList>
   );
 }

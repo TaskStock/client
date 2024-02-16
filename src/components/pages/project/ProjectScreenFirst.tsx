@@ -9,21 +9,13 @@ export default function ProjectScreenFirst() {
   const { projects, isError, isLoading } = useProject();
   return (
     <>
-      {/* <ContentLayout> */}
-      <View
-        style={{
-          flex: 1,
-          paddingTop: 20,
-        }}
-      >
+      <ContentLayout noHorizontalPadding>
         <ProjectList
           projects={projects}
           isLoading={isLoading}
           isError={isError}
         ></ProjectList>
-      </View>
-
-      {/* </ContentLayout> */}
+      </ContentLayout>
     </>
   );
 }

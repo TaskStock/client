@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Modal, TouchableOpacity, View } from "react-native";
+import { Modal, Platform, TouchableOpacity, View } from "react-native";
 import { Shadow } from "react-native-shadow-2";
 import { useTheme } from "styled-components";
 import styled from "styled-components/native";
@@ -54,6 +54,7 @@ const TextInputContainer = ({
   subTextColor: string;
   multiline?: boolean;
 }) => {
+  const theme = useTheme();
   return (
     <InputContainer>
       <Text size="md" color={subTextColor}>
@@ -66,6 +67,7 @@ const TextInputContainer = ({
         multiline={multiline}
         autoCorrect={false}
         autoCapitalize="none"
+        placeholderTextColor={theme.textDim}
       />
     </InputContainer>
   );
@@ -142,7 +144,10 @@ const EditProfileScreen = ({ navigation }) => {
         subText="이름"
         value={data.user_name}
         placeholder="이름"
-        onChangeText={(text) => handleChange("user_name", text)}
+        onChangeText={(text) => {
+          const limittedText = text.length > 15 ? text.slice(0, 15) : text;
+          handleChange("user_name", limittedText);
+        }}
         subTextColor={theme.textDim}
       />
       <TextInputContainer

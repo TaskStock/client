@@ -65,7 +65,9 @@ const ProjectScreen = () => {
           color={theme.text}
           onPress={() => {
             dispatch(resetProjectForm());
-            navigation.navigate("ProjectManage");
+            navigation.navigate("ProjectStackWithoutTab", {
+              screen: "ProjectManage",
+            });
           }}
         />
       </PageMainHeader>

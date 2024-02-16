@@ -106,7 +106,7 @@ export default function LineValueChart({
         }}
         style={{
           data: {
-            stroke: theme.palette.red,
+            stroke: theme.high,
             strokeWidth: 4,
           },
         }}
@@ -117,7 +117,7 @@ export default function LineValueChart({
         data={[lineData[lineData.length - 1]]}
         style={{
           data: {
-            fill: theme.palette.red,
+            fill: theme.high,
           },
         }}
       ></VictoryScatter>

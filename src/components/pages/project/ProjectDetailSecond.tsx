@@ -30,7 +30,9 @@ const ProjectDetailSecond = memo(({ projectId }: { projectId: number }) => {
         project_id: projectId,
       })
     );
-    navigation.navigate("RetrospectWrite");
+    navigation.navigate("ProjectStackWithoutTab", {
+      screen: "RetrospectWrite",
+    });
   };
 
   return (

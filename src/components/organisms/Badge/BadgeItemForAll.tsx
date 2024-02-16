@@ -74,7 +74,10 @@ const BadgeItemForAll = ({
         {title}
       </Text>
       <View
-        style={{ paddingHorizontal: spacing.gutter, paddingTop: spacing.small }}
+        style={{
+          paddingHorizontal: useResponsiveFontSize(43),
+          paddingTop: spacing.small,
+        }}
       >
         <Text size="md" color={theme.textDim} styles={{ textAlign: "center" }}>
           {description}

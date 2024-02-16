@@ -1,8 +1,10 @@
-import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { View } from "react-native";
 import { useTheme } from "styled-components";
 import styled from "styled-components/native";
 import { spacing } from "../../../constants/spacing";
+import { SnsStackParamList } from "../../../navigators/SnsStack";
 import { useAppDispatch } from "../../../store/configureStore.hooks";
 import {
   cancelRequestThunk,
@@ -12,16 +14,10 @@ import {
 import numberWithCommas from "../../../utils/useNumberWithCommas";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import FlexBox from "../../atoms/FlexBox";
+import FollowBtn from "../../atoms/FollowBtn";
 import PrivateLockIcon from "../../atoms/PrivateLockIcon";
 import ProfilePic from "../../atoms/ProfilePic";
 import Text from "../../atoms/Text";
-import { SnsStackParamList } from "../../../navigators/SnsStack";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import FollowBtn from "../../atoms/FollowBtn";
-import {
-  addFollowingCount,
-  subFollowingCount,
-} from "../../../store/modules/user";
 
 const Container = styled.TouchableOpacity`
   flex-direction: row;
@@ -73,9 +69,9 @@ const UserBox = ({
       <Container
         onPress={() => {
           console.log("userId", userId);
-
-          navigation.navigate("UserDetail", {
-            userId: userId,
+          navigation.navigate("SnsStack", {
+            screen: "UserDetail",
+            params: { userId: userId },
           });
         }}
       >

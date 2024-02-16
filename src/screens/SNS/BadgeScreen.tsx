@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { Dimensions, FlatList, Image } from "react-native";
+import { Dimensions, FlatList, Image, Platform } from "react-native";
 import styled from "styled-components/native";
 import { BADGES } from "../../../public/data/badges";
 import FlexBox from "../../components/atoms/FlexBox";
@@ -12,6 +12,7 @@ import { palette } from "../../constants/colors";
 import { spacing } from "../../constants/spacing";
 import { useAppSelect } from "../../store/configureStore.hooks";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
+import useHeight from "../../hooks/useHeight";
 
 const Container = styled.View`
   flex: 1;
@@ -19,13 +20,21 @@ const Container = styled.View`
   background-color: ${palette.neutral600_gray};
 `;
 
-const Header = ({ currentPage, totalPage, gridOnPress, closeOnPress }) => (
+const Header = ({
+  currentPage,
+  totalPage,
+  gridOnPress,
+  closeOnPress,
+  paddingTop,
+}) => (
   <FlexBox
     alignItems="center"
     justifyContent="space-between"
     styles={{
       width: "100%",
       padding: spacing.offset,
+      paddingTop:
+        Platform.OS === "android" ? spacing.offset + paddingTop : paddingTop,
     }}
   >
     <Icons
@@ -58,6 +67,7 @@ const { width: clientWidth } = Dimensions.get("window");
 // =======================================
 
 const BadgeScreen = ({ navigation, route }) => {
+  const { NOTCH_TOP } = useHeight();
   const { type } = route.params;
   let reduxBadges;
   const { badges: myBadges } = useAppSelect((state) => state.badge);
@@ -117,6 +127,7 @@ const BadgeScreen = ({ navigation, route }) => {
           });
         }}
         closeOnPress={() => navigation.goBack()}
+        paddingTop={NOTCH_TOP}
       />
       <FlatList
         data={SORTED_BADGES}

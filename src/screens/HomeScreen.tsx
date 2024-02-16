@@ -1,20 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { Modal, TouchableOpacity, View, Pressable } from "react-native";
+import React, { useEffect } from "react";
+import { BackHandler, Modal, TouchableOpacity } from "react-native";
 import styled from "styled-components/native";
 import HeaderTop from "../components/molecules/Home/HeaderTop";
 import TodoContainer from "../components/molecules/Home/TodoContainer";
+import TutorialBox from "../components/molecules/TutorialBox";
 import GCContainer from "../components/organisms/Home/GCContainer";
 import AddTodoModal from "../components/organisms/TodoModal/AddTodoModal";
 import { useFlushSavedValues } from "../hooks/useFlushSavedValues";
-import { useAppDispatch, useAppSelect } from "../store/configureStore.hooks";
-import { getUserInfoThunk } from "../utils/UserUtils/getUserInfoThunk";
 import usePushNotification from "../hooks/usePushNotification";
-import { checkAndRenewTokens } from "../utils/authUtils/tokenUtils";
+import { useAppDispatch, useAppSelect } from "../store/configureStore.hooks";
 import { checkFirstTime, setTutorial } from "../store/modules/tutorial";
-import TutorialBox from "../components/molecules/TutorialBox";
-import Toast from "react-native-toast-message";
-import Text from "../components/atoms/Text";
-import { showErrorToast, showSuccessToast } from "../utils/showToast";
+import { getUserInfoThunk } from "../utils/UserUtils/getUserInfoThunk";
 
 const Container = styled.View`
   background-color: ${({ theme }) => theme.background};
@@ -24,6 +20,20 @@ const Container = styled.View`
 const HomeScreen = ({ navigation }) => {
   const isAddModalOpen = useAppSelect((state) => state.todo.isAddModalOpen);
   const dispatch = useAppDispatch();
+
+  // 뒤로가기 막기 AOS
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      () => {
+        // true를 반환하여 뒤로 가기(기본동작) 막기
+        return true;
+      }
+    );
+
+    // 컴포넌트가 언마운트될 때 리스너 제거
+    return () => backHandler.remove();
+  }, []);
 
   // tutorial
   const showTutorialIfFirst = async () => {

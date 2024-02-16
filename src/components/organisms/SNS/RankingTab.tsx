@@ -32,7 +32,7 @@ const RankingTab = ({ data }) => {
   const theme = useTheme();
   return (
     <>
-      <Filter onPress={() => {}} iconColor={theme.text} />
+      {/* <Filter onPress={() => {}} iconColor={theme.text} /> */}
       <FlatList<IFriend>
         data={data}
         renderItem={({ item }) => (
@@ -49,7 +49,10 @@ const RankingTab = ({ data }) => {
             button={item.button}
           />
         )}
-        style={{ flex: 1 }}
+        contentContainerStyle={{
+          paddingVertical: spacing.padding,
+          flex: 1,
+        }}
         keyExtractor={(item) => item.user_id.toString()}
         refreshControl={
           <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />

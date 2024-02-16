@@ -97,7 +97,7 @@ export default function SnsTabHeader({
         name="search"
         size={useResponsiveFontSize(36)}
         color={theme.text}
-        onPress={() => navigation.navigate("Search")}
+        onPress={() => navigation.navigate("SnsStack", { screen: "Search" })}
       />
     </FlexBox>
   );

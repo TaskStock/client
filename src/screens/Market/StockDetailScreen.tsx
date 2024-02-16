@@ -126,10 +126,9 @@ export default function StockDetailScreen({
       <PageHeader />
       {/* <ContentLayout noVerticalPadding> */}
       <ScrollView
-        style={{ flex: 1 }}
         contentContainerStyle={{
           paddingTop: spacing.padding,
-          paddingBottom: spacing.gutter,
+          paddingBottom: 200,
           paddingHorizontal: spacing.gutter,
         }}
       >
