@@ -1,8 +1,8 @@
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import _ from "lodash";
 import React, { useRef } from "react";
-import { ScrollView } from "react-native";
-import styled from "styled-components/native";
+import { ScrollView, View } from "react-native";
+import styled, { useTheme } from "styled-components/native";
 import { DateString } from "../../../@types/calendar";
 import { Retrospect } from "../../../@types/retrospect";
 import { spacing } from "../../../constants/spacing";
@@ -35,23 +35,27 @@ function RetrospectItem({
 }) {
   const formattedDate = item.created_date.slice(0, 10);
 
+  const theme = useTheme();
+
   return (
-    // <ShadowForRetrospect radius={20}>
-    <Box onPress={onPressItem} style={{}}>
-      <FlexBox gap={spacing.small}>
-        <Text size="xs" color="red">
-          {projectName}
+    <ShadowForRetrospect radius={20}>
+      <Box onPress={onPressItem} style={{}}>
+        <FlexBox gap={spacing.small}>
+          <Text size="xs" color={theme.palette.red}>
+            {projectName}
+          </Text>
+          <Text size="xs" color={theme.textDim}>
+            {formattedDate}
+          </Text>
+        </FlexBox>
+        <Margin margin={spacing.small}></Margin>
+        <Text size="md">
+          {item.content.length > 100
+            ? item.content.slice(0, 100) + "..."
+            : item.content}
         </Text>
-        <Text size="xs">{formattedDate}</Text>
-      </FlexBox>
-      <Margin margin={spacing.small}></Margin>
-      <Text size="md">
-        {item.content.length > 100
-          ? item.content.slice(0, 100) + "..."
-          : item.content}
-      </Text>
-    </Box>
-    // </ShadowForRetrospect>
+      </Box>
+    </ShadowForRetrospect>
   );
 }
 
@@ -107,8 +111,8 @@ export default function RetrospectList({
       onScroll={handleScroll}
       scrollEventThrottle={50} //
       style={{
-        paddingHorizontal: 2,
-        paddingTop: 2,
+        paddingHorizontal: 3,
+        paddingTop: 3,
       }}
     >
       <FlexBox

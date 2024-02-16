@@ -71,7 +71,7 @@ export default function RetrospectContainer({
       <FlexBox
         direction="column"
         alignItems="stretch"
-        gap={spacing.offset}
+        gap={spacing.padding + spacing.small}
         styles={{
           flex: 1,
         }}
@@ -89,6 +89,7 @@ export default function RetrospectContainer({
           <Pressable onPress={onPressFilter}>
             <TextWithIcon
               text={selectedFilter === "latest" ? "최신순" : "오래된순"}
+              size="sm"
             >
               <IconsWithoutFeedBack
                 type="ionicons"
@@ -105,7 +106,7 @@ export default function RetrospectContainer({
                   setIsProjectFilterOpen((prev) => !prev);
                 }}
               >
-                <TextWithIcon text="프로젝트">
+                <TextWithIcon text="프로젝트" size="sm">
                   <IconsWithoutFeedBack
                     type="AntDesign"
                     name="filter"
@@ -123,6 +124,7 @@ export default function RetrospectContainer({
                 <TextWithIcon
                   text={selectedProjectName || ""}
                   textColor={theme.palette.red}
+                  size="sm"
                 >
                   <></>
                 </TextWithIcon>

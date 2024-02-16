@@ -85,6 +85,12 @@ const InnerFloat = styled.View`
   width: 100%;
 `;
 
+const StockItem1Skeleton = styled.View`
+  width: 150px;
+  height: 150px;
+  border-radius: 10px;
+`;
+
 export default function MarketMainScreen() {
   const theme = useTheme();
   const navigation =
@@ -120,8 +126,11 @@ export default function MarketMainScreen() {
   //   );
 
   const section1Data = data?.myinterest;
+  // const section1Data = undefined;
+
   const section2Data = data?.todaypopular;
   const section3Data = data?.todayrecommend;
+  // const section3Data = undefined;
 
   const { user_name } = useAppSelect((state) => state.user.user);
 
@@ -249,9 +258,9 @@ export default function MarketMainScreen() {
                           <CustomSkeleton>
                             <View
                               style={{
-                                width: 100,
-                                height: 100,
-                                borderRadius: 10,
+                                width: 150,
+                                height: 160,
+                                borderRadius: 20,
                               }}
                             ></View>
                           </CustomSkeleton>
@@ -352,9 +361,9 @@ export default function MarketMainScreen() {
                           <CustomSkeleton>
                             <View
                               style={{
-                                width: 100,
-                                height: 100,
-                                borderRadius: 10,
+                                width: 150,
+                                height: 160,
+                                borderRadius: 20,
                               }}
                             ></View>
                           </CustomSkeleton>

@@ -1,4 +1,4 @@
-import { View, Text } from "react-native";
+import { View, Text, Platform } from "react-native";
 import React from "react";
 import { Shadow } from "react-native-shadow-2";
 import { spacing } from "../../constants/spacing";
@@ -22,8 +22,8 @@ export default function ShadowForProject({
 }) {
   return (
     <Shadow
-      distance={7}
-      offset={[0, 2]}
+      distance={5}
+      offset={[0, 2.5]}
       startColor={palette.shadow}
       style={{
         borderRadius: radius ? radius : spacing.gutter,
@@ -42,19 +42,27 @@ export function ShadowForRetrospect({
   children: React.ReactNode;
   radius?: number;
 }) {
-  return (
+  return Platform.OS === "ios" ? (
     <Shadow
-      distance={4}
-      offset={[0, 1.7]}
+      distance={6}
+      offset={[0, 2.8]}
       startColor={palette.shadow}
       style={{
         borderRadius: radius ? radius : spacing.gutter,
-        // flex: 1,
         width: "100%",
       }}
     >
       {children}
     </Shadow>
+  ) : (
+    <View
+      style={{
+        borderRadius: radius ? radius : spacing.gutter,
+        width: "100%",
+      }}
+    >
+      {children}
+    </View>
   );
 }
 
