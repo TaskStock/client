@@ -1,62 +1,46 @@
-import { Alert, Linking, Platform } from "react-native";
-import { PERMISSIONS, RESULTS, check, request } from "react-native-permissions";
-import Toast from "react-native-toast-message";
+import { Alert, Linking, PermissionsAndroid, Platform } from "react-native";
 
 const imagePermissionCheck = async () => {
-  let permission;
-
-  // 플랫폼별 권한 정의
+  // iOS의 경우, 별도의 권한 확인 없이 true를 반환
   if (Platform.OS === "ios") {
-    permission = PERMISSIONS.IOS.PHOTO_LIBRARY;
-  } else if (Platform.OS === "android") {
-    permission = PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE;
+    return true; // iOS에서는 react-native-image-picker가 권한 관리
   }
 
+  // Android SDK 버전 체크 및 적절한 권한 요청
+  const sdkVersion =
+    typeof Platform.Version === "number"
+      ? Platform.Version
+      : parseInt(Platform.Version, 10);
+  const permission = sdkVersion
+    ? PermissionsAndroid.PERMISSIONS.READ_MEDIA_IMAGES
+    : PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE;
+
   try {
-    // 권한 상태 확인
-    const result = await check(permission);
+    const granted = await PermissionsAndroid.request(permission, {
+      title: "갤러리 접근 권한",
+      message: "TASKSTOCK이 사진 저장소에 접근하려고 합니다.",
+      buttonNegative: "취소",
+      buttonPositive: "허용",
+    });
 
-    switch (result) {
-      case RESULTS.UNAVAILABLE:
-        console.log(
-          "접근 불가능한 상태 (Android에서는 사용자가 권한을 부여하지 않음, iOS에서는 권한이 없음)"
-        );
-        return false;
-      case RESULTS.DENIED:
-        console.log(
-          "사용자가 권한을 거부했지만, 요청할 수 있음 (Android에서만 해당)"
-        );
-
-        Alert.alert(
-          "권한 요청",
-          "갤러리 접근 권한이 필요합니다. 설정에서 권한을 허용해주세요.",
-          [
-            {
-              text: "나중에",
-              style: "cancel",
-            },
-            {
-              text: "설정으로 이동",
-              onPress: () => Linking.openSettings(),
-            },
-          ]
-        );
-        // 권한 요청
-        const requestResult = await request(permission);
-        console.log("requestResult: ", requestResult);
-        return requestResult === RESULTS.GRANTED;
-      case RESULTS.LIMITED:
-        console.log("접근 가능하지만, 권한이 제한됨 (iOS에서만 해당)");
-        return true;
-      case RESULTS.GRANTED:
-        console.log("권한이 부여됨");
-        return true;
-      case RESULTS.BLOCKED:
-        console.log("사용자가 권한을 거부했고, 더 이상 요청할 수 없음");
-        return false;
+    if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+      console.log("The permission to access media images is granted");
+      return true;
+    } else {
+      console.log("The permission to access media images is denied");
+      Alert.alert(
+        "갤러리 접근 권한 거부됨",
+        "사진을 선택하려면 저장소 접근 권한이 필요합니다. 설정에서 권한을 허용해주세요.",
+        [
+          { text: "취소", style: "cancel" },
+          { text: "설정으로 이동", onPress: () => Linking.openSettings() },
+        ],
+        { cancelable: false }
+      );
+      return false;
     }
   } catch (error) {
-    console.warn(error);
+    console.warn("PermissionsAndroid request error:", error);
     return false;
   }
 };
