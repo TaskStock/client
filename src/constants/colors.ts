@@ -25,6 +25,7 @@ export const palette = {
   kakao: "#FEE500",
   google: "#4285F4",
   shadow: "rgba(0, 0, 0, 0.10)",
+  shadowStart: "rgba(0, 0, 0, 0.15)",
 } as const;
 
 export const grayTheme = {
@@ -74,5 +75,5 @@ export const darkTheme = {
   loadingBtn: palette.neutral400_dark,
   emailLoginBtn: palette.neutral200_dark,
   projectIconBg: palette.neutral500_dark,
-  projectItemBorder: palette.neutral500_dark,
+  projectItemBorder: palette.neutral100_gray,
 };

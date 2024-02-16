@@ -37,9 +37,10 @@ const ProjectBox = styled.Pressable<{ isFinished: boolean }>`
   background-color: ${(props) =>
     props.isFinished ? props.theme.background : props.theme.box};
   padding: ${useResponsiveFontSize(20)}px;
-  border-width: ${({ theme, isFinished }) => (isFinished ? 2 : 0)}px;
+  border-width: ${({ theme, isFinished }) => (isFinished ? 1 : 0)}px;
   border-color: ${({ theme }) => theme.projectItemBorder};
   overflow: visible;
+  z-index: 10;
 `;
 
 const BoxIcon = styled.View`
@@ -195,6 +196,7 @@ function ProjectItem({ item }: { item: Project }) {
                       name="more-horizontal"
                       size={useResponsiveFontSize(20)}
                       onPress={onPressMoreDot}
+                      color={theme.text}
                     />
                   </View>
                 </FlexBox>
@@ -227,7 +229,7 @@ function ProjectItem({ item }: { item: Project }) {
             >
               <ModalContainer
                 position={{
-                  top: 10,
+                  top: 50,
                   right: 10,
                 }}
               >
@@ -311,6 +313,7 @@ function ProjectItem({ item }: { item: Project }) {
                       name="more-horizontal"
                       size={useResponsiveFontSize(20)}
                       onPress={onPressMoreDot}
+                      color={theme.text}
                     />
                   </View>
                 </FlexBox>
@@ -424,6 +427,7 @@ export default function ProjectList({
       }}
       style={{
         flex: 1,
+        overflow: "visible",
       }}
     ></FlatList>
   );

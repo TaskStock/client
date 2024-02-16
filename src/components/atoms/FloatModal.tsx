@@ -13,11 +13,15 @@ export const ModalContainer = styled.View<{
   padding: ${spacing.padding}px;
   /* z-index: 100; */
   border-radius: 10px;
+  border-width: 1px;
+  border-color: ${({ theme }) =>
+    theme.name == "dark" ? theme.palette.neutral100_gray : "transparent"};
   background-color: ${({ theme }) =>
     theme.name == "dark"
       ? theme.palette.neutral500_dark
       : theme.palette.neutral100_gray};
   flex-direction: column;
+  z-index: 100;
   gap: 10px;
   ${Platform.select({
     ios: `

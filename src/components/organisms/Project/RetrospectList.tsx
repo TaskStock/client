@@ -36,7 +36,7 @@ function RetrospectItem({
   const formattedDate = item.created_date.slice(0, 10);
 
   return (
-    <ShadowForRetrospect>
+    <ShadowForRetrospect radius={20}>
       <Box onPress={onPressItem} style={{}}>
         <FlexBox gap={spacing.small}>
           <Text size="xs" color="red">
@@ -106,6 +106,10 @@ export default function RetrospectList({
     <ScrollView
       onScroll={handleScroll}
       scrollEventThrottle={50} //
+      style={{
+        paddingHorizontal: 2,
+        paddingTop: 2,
+      }}
     >
       <FlexBox
         gap={spacing.offset}

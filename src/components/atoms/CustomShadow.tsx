@@ -22,7 +22,7 @@ export default function ShadowForProject({
 }) {
   return (
     <Shadow
-      distance={4}
+      distance={5}
       offset={[0, 2]}
       startColor={palette.shadow}
       style={{
@@ -45,8 +45,8 @@ export function ShadowForRetrospect({
 }) {
   return (
     <Shadow
-      distance={3}
-      offset={[0, 0]}
+      distance={4}
+      offset={[0, 1.7]}
       startColor={palette.shadow}
       style={{
         borderRadius: radius ? radius : spacing.gutter,
