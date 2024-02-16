@@ -7,7 +7,7 @@ export const ContentItemBoxContainer = styled.View<{
   height?: number;
 }>`
   border-radius: 20px;
-  height: ${({ height }) => height + "px" || "auto"};
+  height: ${({ height }) => (height ? height + "px" : "auto")};
   background-color: ${({ bgColor, theme }) => bgColor || theme.box};
   padding: ${spacing.padding + spacing.small * 2.5}px ${spacing.offset}px;
 `;

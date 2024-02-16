@@ -287,7 +287,7 @@ export default function MarketMainScreen() {
                           <View key={item.stockitem_id}>
                             <StockItemSecond
                               id={item.stockitem_id}
-                              index={index}
+                              index={index + 1}
                               name={item.name}
                               percent={successRate}
                               onPress={() => {
