@@ -103,6 +103,7 @@ export default function ProjectManageScreen() {
               value={form.name}
               onChangeText={onChangeProjectName}
               placeholder="프로젝트 이름을 입력하세요"
+              maxLength={25}
             ></TextInputWithBorder>
           </ProjectSection>
           <ProjectSection headerText="공개설정">
