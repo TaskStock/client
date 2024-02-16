@@ -1,4 +1,4 @@
-import { View, ScrollView, Dimensions, Pressable } from "react-native";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React, {
   useCallback,
   useEffect,
@@ -6,40 +6,36 @@ import React, {
   useRef,
   useState,
 } from "react";
-import {
-  NavigationState,
-  SceneRendererProps,
-  TabView,
-} from "react-native-tab-view";
-import TabHeader from "../../components/molecules/TabHeader";
-import { useTab } from "../../hooks/useTab";
-import PageHeader from "../../components/molecules/PageHeader";
+import { Dimensions, ScrollView, View } from "react-native";
+import { useTheme } from "styled-components/native";
+import CenterLayout from "../../components/atoms/CenterLayout";
 import Icons from "../../components/atoms/Icons";
-import UserDetailFirst from "../../components/pages/sns/UserDetailFirst";
-import UserDetailSecond from "../../components/pages/sns/UserDetailSecond";
-import UserDetailThird from "../../components/pages/sns/UserDetailThird";
+import LoadingSpinner from "../../components/atoms/LoadingSpinner";
 import Margin from "../../components/atoms/Margin";
+import Text from "../../components/atoms/Text";
 import {
   DrawerContent,
   DrawerHeader,
 } from "../../components/molecules/DrawerParts";
-import { spacing } from "../../constants/spacing";
-import Text from "../../components/atoms/Text";
+import TodoItem from "../../components/molecules/Home/TodoItem";
+import PageHeader from "../../components/molecules/PageHeader";
+import TabHeader from "../../components/molecules/TabHeader";
 import HorizontalProjectList from "../../components/organisms/HorizontalProjectList";
+import UserInfo from "../../components/organisms/SNS/UserInfo";
+import UserDetailFirst from "../../components/pages/sns/UserDetailFirst";
+import UserDetailSecond from "../../components/pages/sns/UserDetailSecond";
+import UserDetailThird from "../../components/pages/sns/UserDetailThird";
+import { spacing } from "../../constants/spacing";
+import { useCurrentDate } from "../../hooks/useCurrentDate";
+import { useTab } from "../../hooks/useTab";
+import { SnsStackParamList } from "../../navigators/SnsStack";
+import { useAppDispatch } from "../../store/configureStore.hooks";
 import {
   getTargetUserThunk,
   useGetFriendInfoQuery,
 } from "../../store/modules/getFriends";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { SnsStackParamList } from "../../navigators/SnsStack";
-import CenterLayout from "../../components/atoms/CenterLayout";
-import LoadingSpinner from "../../components/atoms/LoadingSpinner";
-import { useCurrentDate } from "../../hooks/useCurrentDate";
-import TodoItem from "../../components/molecules/Home/TodoItem";
-import { useTheme } from "styled-components/native";
-import UserInfo from "../../components/organisms/SNS/UserInfo";
-import { useAppDispatch } from "../../store/configureStore.hooks";
 import { checkIsSameLocalDay } from "../../utils/checkIsSameLocalDay";
+import { Todo } from "../../@types/todo";
 
 const routeMap = [
   { key: "first", title: "그래프" },
@@ -239,7 +235,7 @@ const UserDetailScreen = ({ route, navigation }: UserDetailScreenProps) => {
           <View
             style={{
               backgroundColor: theme.background,
-              height: 1000,
+              minHeight: 700,
             }}
           >
             <DrawerHeader>
