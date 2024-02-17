@@ -9,7 +9,7 @@ import {
 const limit = 10;
 
 export const useWishList = () => {
-  const { filterIndex, list, offset } = useAppSelect(
+  const { filterIndex, list, offset, refetchCount } = useAppSelect(
     (state) => state.market.wish
   );
 
@@ -22,9 +22,11 @@ export const useWishList = () => {
       filter: filterIndex === 0 ? "like" : "latest",
       offset: offset * limit,
       limit,
-      timestamp: timestamp.current,
+      count: refetchCount,
     },
-    {}
+    {
+      refetchOnMountOrArgChange: true,
+    }
   );
 
   const incomingWishList = data?.wishlist;
