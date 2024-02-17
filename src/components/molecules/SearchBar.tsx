@@ -1,13 +1,10 @@
 import React from "react";
-import { Image, Pressable } from "react-native";
+import { Pressable } from "react-native";
 import { TextInput } from "react-native-gesture-handler";
-import { WithLocalSvg } from "react-native-svg";
 import styled, { useTheme } from "styled-components/native";
-import SearchDarkIcon from "../../../assets/icons/Search_dark.png";
-import SearchIcon from "../../../assets/icons/Search_gray.png";
 import { spacing } from "../../constants/spacing";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
-import Icons, { IconsWithoutFeedBack } from "../atoms/Icons";
+import Icons from "../atoms/Icons";
 
 const Container = styled.View`
   display: flex;

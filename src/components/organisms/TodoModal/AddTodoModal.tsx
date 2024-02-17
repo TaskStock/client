@@ -53,8 +53,8 @@ const InnerPressable = styled.Pressable`
   height: 50%;
 `;
 
-const AddTodoBox = styled.View<{ systemTheme: string }>`
-  height: 100%;
+const AddTodoBox = styled.Pressable<{ systemTheme: string }>`
+  flex: 1;
   border-radius: 20px;
   padding: ${spacing.offset}px;
   background-color: ${({ theme }) => theme.box};
@@ -279,7 +279,12 @@ export default function AddTodoModal() {
         />
       ) : null}
       <InnerPressable>
-        <AddTodoBox systemTheme={systemTheme}>
+        <AddTodoBox
+          systemTheme={systemTheme}
+          onPress={() => {
+            inputRef.current.blur();
+          }}
+        >
           <CloseBox>
             <Icons
               onPress={() => {

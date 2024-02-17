@@ -1,14 +1,14 @@
 import React from "react";
+import { View } from "react-native";
+import { Shadow } from "react-native-shadow-2";
+import { useTheme } from "styled-components";
 import styled from "styled-components/native";
+import { palette } from "../../../constants/colors";
+import { spacing } from "../../../constants/spacing";
 import { useAppSelect } from "../../../store/configureStore.hooks";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
+import Icons from "../../atoms/Icons";
 import ProfilePic from "../../atoms/ProfilePic";
-import { spacing } from "../../../constants/spacing";
-import { IconsWithoutFeedBack } from "../../atoms/Icons";
-import { useTheme } from "styled-components";
-import { Shadow } from "react-native-shadow-2";
-import { palette } from "../../../constants/colors";
-import { View } from "react-native";
 
 const Container = styled.TouchableOpacity``;
 
@@ -41,7 +41,7 @@ const EditImage = ({ onPress }) => {
           }}
         >
           <Pencil>
-            <IconsWithoutFeedBack
+            <Icons
               type="material"
               name="pencil"
               size={spacing.offset}

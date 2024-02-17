@@ -1,3 +1,4 @@
+import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import { Dimensions, TouchableOpacity, View } from "react-native";
 import styled, { useTheme } from "styled-components/native";
@@ -15,12 +16,11 @@ import numberWithCommas from "../../../utils/useNumberWithCommas";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import FlexBox from "../../atoms/FlexBox";
 import FollowBtn from "../../atoms/FollowBtn";
-import { IconsWithoutFeedBack } from "../../atoms/Icons";
+import Icons from "../../atoms/Icons";
 import PrivateLockIcon from "../../atoms/PrivateLockIcon";
 import ProfilePic from "../../atoms/ProfilePic";
 import Text from "../../atoms/Text";
 import BadgesPreview from "../../molecules/SNS/BadgesPreview";
-import { useNavigation } from "@react-navigation/native";
 import ZoomPicModal from "./ZoomPicModal";
 
 const Container = styled.View`
@@ -33,12 +33,7 @@ const Container = styled.View`
 const Info = ({ text, iconType, iconName, color }) => {
   return (
     <FlexBox alignItems="center" gap={spacing.padding}>
-      <IconsWithoutFeedBack
-        name={iconName}
-        type={iconType}
-        size={17}
-        color={color}
-      />
+      <Icons name={iconName} type={iconType} size={17} color={color} />
       <Text size="sm">{text}</Text>
     </FlexBox>
   );

@@ -153,7 +153,10 @@ export default function DraggableTodoList({
 
     return (
       <ScaleDecorator>
-        <Pressable onLongPress={drag}>
+        <Pressable
+          onLongPress={drag}
+          style={{ paddingHorizontal: spacing.gutter }}
+        >
           <TodoItem key={item.todo_id} todo={item} />
         </Pressable>
       </ScaleDecorator>

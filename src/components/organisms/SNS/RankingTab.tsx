@@ -1,19 +1,19 @@
 import { useRefresh } from "@react-native-community/hooks";
 import React from "react";
 import { FlatList, RefreshControl, TouchableOpacity } from "react-native";
+import { useTheme } from "styled-components";
 import { spacing } from "../../../constants/spacing";
 import { useAppDispatch } from "../../../store/configureStore.hooks";
 import { IFriend, getFriendsThunk } from "../../../store/modules/getFriends";
 import FlexBox from "../../atoms/FlexBox";
-import { IconsWithoutFeedBack } from "../../atoms/Icons";
+import Icons from "../../atoms/Icons";
 import Text from "../../atoms/Text";
 import UserBox from "../../molecules/SNS/UserBox";
-import { useTheme } from "styled-components";
 
 const Filter = ({ onPress, iconColor }) => (
   <TouchableOpacity onPress={onPress} style={{ marginTop: spacing.padding }}>
     <FlexBox alignItems="center" gap={spacing.small}>
-      <IconsWithoutFeedBack
+      <Icons
         type="ionicons"
         name="filter"
         color={iconColor}

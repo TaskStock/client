@@ -125,7 +125,7 @@ const TodoContainer = () => {
         <View
           style={{
             flex: 1,
-            paddingHorizontal: spacing.gutter,
+            // paddingHorizontal: spacing.gutter,
           }}
         >
           <DraggableTodoList selectedProjectId={selectedProjectId} />

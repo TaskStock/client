@@ -5,7 +5,7 @@ import styled from "styled-components/native";
 import { palette } from "../../../constants/colors";
 import { spacing } from "../../../constants/spacing";
 import FlexBox from "../../atoms/FlexBox";
-import { IconsWithoutFeedBack } from "../../atoms/Icons";
+import Icons from "../../atoms/Icons";
 import Text from "../../atoms/Text";
 
 const Container = styled.TouchableOpacity`
@@ -21,12 +21,7 @@ const Title = ({ title }) => (
     alignItems="center"
     styles={{ paddingBottom: spacing.padding }}
   >
-    <IconsWithoutFeedBack
-      type="material"
-      name="pin"
-      size={24}
-      color={palette.red}
-    />
+    <Icons type="material" name="pin" size={24} color={palette.red} />
     <Text size="md">{title}</Text>
   </FlexBox>
 );
