@@ -67,158 +67,164 @@ export default function RetrospectContainer({
   })?.name;
 
   return (
-    <ContentLayout>
-      <FlexBox
-        direction="column"
-        alignItems="stretch"
-        gap={spacing.padding + spacing.small}
-        styles={{
-          flex: 1,
-        }}
-      >
-        <SearchBar
-          onChangeText={onChangeSearchKeyword}
-          onPressSearchIcon={onPressSearchIcon}
-        ></SearchBar>
+    <>
+      <ContentLayout>
         <FlexBox
-          justifyContent="space-between"
+          direction="column"
+          alignItems="stretch"
+          gap={spacing.padding + spacing.small}
           styles={{
-            paddingHorizontal: spacing.small,
+            flex: 1,
           }}
         >
-          <Pressable onPress={onPressFilter}>
-            <TextWithIcon
-              text={selectedFilter === "latest" ? "최신순" : "오래된순"}
-              size="sm"
-            >
-              <IconsWithoutFeedBack
-                type="ionicons"
-                name="filter"
-                color={theme.text}
-                size={spacing.offset}
-              />
-            </TextWithIcon>
-          </Pressable>
-          {isAllRetrospects &&
-            (!selectedProjectId ? (
-              <Pressable
-                onPress={() => {
-                  setIsProjectFilterOpen((prev) => !prev);
-                }}
-              >
-                <TextWithIcon text="프로젝트" size="sm">
-                  <IconsWithoutFeedBack
-                    type="AntDesign"
-                    name="filter"
-                    color={theme.text}
-                    size={spacing.offset}
-                  />
-                </TextWithIcon>
-              </Pressable>
-            ) : (
-              <Pressable
-                onPress={() => {
-                  setIsProjectFilterOpen(true);
-                }}
-              >
-                <TextWithIcon
-                  text={selectedProjectName || ""}
-                  textColor={theme.palette.red}
-                  size="sm"
-                >
-                  <></>
-                </TextWithIcon>
-              </Pressable>
-            ))}
-          {isProjectFilterOpen && (
-            <CenterModal
-              onPressOutside={() => {
-                setIsProjectFilterOpen(false);
-              }}
-            >
-              <ScrollView
-                style={{
-                  height: useResponsiveFontSize(200),
-                }}
-              >
-                <TextWithRadio
-                  value={"전체"}
-                  id={null}
-                  selectedId={selectedTempId}
-                  onPressRadio={() => {
-                    setSelectedTempId(null);
-                  }}
-                ></TextWithRadio>
-                {projects.map((project) => (
-                  <TextWithRadio
-                    key={project.project_id + "project"}
-                    id={project.project_id}
-                    selectedId={selectedTempId}
-                    value={project.name}
-                    onPressRadio={() => {
-                      setSelectedTempId(project.project_id);
-                    }}
-                  ></TextWithRadio>
-                ))}
-              </ScrollView>
-              <Margin margin={spacing.offset}></Margin>
-              <FlexBox
-                justifyContent="flex-end"
-                styles={{
-                  paddingHorizontal: spacing.offset,
-                }}
-              >
-                <Pressable
-                  onPress={() => {
-                    setIsProjectFilterOpen(false);
-
-                    if (!selectedTempId) {
-                      onPressSelectedProjectFilter?.();
-                    } else {
-                      onPressProjectItem(selectedTempId);
-                    }
-                  }}
-                >
-                  <Text weight={"medium"} size="md" color={theme.text}>
-                    확인
-                  </Text>
-                </Pressable>
-              </FlexBox>
-            </CenterModal>
-          )}
-        </FlexBox>
-        <RetrospectList
-          onScrollBottom={onScrollListBottom}
-          list={data}
-          isLoading={isLoading}
-          isError={isError}
-        ></RetrospectList>
-
-        {((isAllRetrospects && projects.length != 0) || !isAllRetrospects) && (
-          <View
-            style={{
-              position: "absolute",
-              bottom: 0,
-              left: 0,
-              right: 0,
+          <SearchBar
+            onChangeText={onChangeSearchKeyword}
+            onPressSearchIcon={onPressSearchIcon}
+          ></SearchBar>
+          <FlexBox
+            justifyContent="space-between"
+            styles={{
               paddingHorizontal: spacing.small,
-              paddingBottom: spacing.small,
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
             }}
           >
-            <RoundItemBtn onPress={onPressWriteProject} size="xl" isSelected>
-              <Text
-                size="md"
-                color={theme.name == "gray" ? theme.textReverse : theme.text}
+            <Pressable onPress={onPressFilter}>
+              <TextWithIcon
+                text={selectedFilter === "latest" ? "최신순" : "오래된순"}
+                size="sm"
               >
-                회고 작성하기
+                <IconsWithoutFeedBack
+                  type="ionicons"
+                  name="filter"
+                  color={theme.text}
+                  size={spacing.offset}
+                />
+              </TextWithIcon>
+            </Pressable>
+            {isAllRetrospects &&
+              (!selectedProjectId ? (
+                <Pressable
+                  onPress={() => {
+                    setIsProjectFilterOpen((prev) => !prev);
+                  }}
+                >
+                  <TextWithIcon text="프로젝트" size="sm">
+                    <IconsWithoutFeedBack
+                      type="AntDesign"
+                      name="filter"
+                      color={theme.text}
+                      size={spacing.offset}
+                    />
+                  </TextWithIcon>
+                </Pressable>
+              ) : (
+                <Pressable
+                  onPress={() => {
+                    setIsProjectFilterOpen(true);
+                  }}
+                >
+                  <TextWithIcon
+                    text={selectedProjectName || ""}
+                    textColor={theme.palette.red}
+                    size="sm"
+                  >
+                    <></>
+                  </TextWithIcon>
+                </Pressable>
+              ))}
+          </FlexBox>
+          <RetrospectList
+            onScrollBottom={onScrollListBottom}
+            list={data}
+            isLoading={isLoading}
+            isError={isError}
+          ></RetrospectList>
+
+          {((isAllRetrospects && projects.length != 0) ||
+            !isAllRetrospects) && (
+            <View
+              style={{
+                position: "absolute",
+                bottom: 0,
+                left: 0,
+                right: 0,
+                paddingHorizontal: spacing.small,
+                paddingBottom: spacing.small,
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <RoundItemBtn onPress={onPressWriteProject} size="xl" isSelected>
+                <Text
+                  size="md"
+                  color={theme.name == "gray" ? theme.textReverse : theme.text}
+                >
+                  회고 작성하기
+                </Text>
+              </RoundItemBtn>
+            </View>
+          )}
+        </FlexBox>
+      </ContentLayout>
+      {isProjectFilterOpen && (
+        <CenterModal
+          onPressOutside={() => {
+            setIsProjectFilterOpen(false);
+          }}
+        >
+          <ScrollView
+            style={{
+              height: useResponsiveFontSize(200),
+              minWidth: 250,
+            }}
+          >
+            <View style={{ left: -5 }}>
+              <TextWithRadio
+                value={"전체"}
+                id={null}
+                selectedId={selectedTempId}
+                onPressRadio={() => {
+                  setSelectedTempId(null);
+                }}
+              ></TextWithRadio>
+              {projects.map((project) => (
+                <TextWithRadio
+                  key={project.project_id + "project"}
+                  id={project.project_id}
+                  selectedId={selectedTempId}
+                  value={project.name}
+                  onPressRadio={() => {
+                    setSelectedTempId(project.project_id);
+                  }}
+                ></TextWithRadio>
+              ))}
+            </View>
+          </ScrollView>
+          <Margin margin={spacing.offset}></Margin>
+          <FlexBox
+            justifyContent="flex-end"
+            styles={{
+              paddingHorizontal: spacing.offset,
+            }}
+          >
+            <Pressable
+              onPress={() => {
+                setIsProjectFilterOpen(false);
+
+                if (!selectedTempId) {
+                  onPressSelectedProjectFilter?.();
+                } else {
+                  onPressProjectItem(selectedTempId);
+                }
+              }}
+            >
+              <Text weight={"medium"} size="md" color={theme.text}>
+                확인
               </Text>
-            </RoundItemBtn>
-          </View>
-        )}
-      </FlexBox>
-    </ContentLayout>
+            </Pressable>
+          </FlexBox>
+        </CenterModal>
+      )}
+    </>
   );
 }
