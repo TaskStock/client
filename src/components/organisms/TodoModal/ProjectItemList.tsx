@@ -45,7 +45,7 @@ const ProjectItem = styled.View<{ isSelected?: boolean }>`
 `;
 
 const ProjectItemText = styled.Text<{ isSelected?: boolean }>`
-  font-size: ${useResponsiveFontSize(18)}px;
+  font-size: ${useResponsiveFontSize(16)}px;
   color: ${({ theme, isSelected }) =>
     theme.name === "gray" && isSelected ? theme.textReverse : theme.text};
 `;

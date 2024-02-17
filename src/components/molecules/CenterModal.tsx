@@ -5,12 +5,13 @@ import OutsidePressHandler from "react-native-outside-press";
 import { Shadow } from "react-native-shadow-2";
 import { palette } from "../../constants/colors";
 import { spacing } from "../../constants/spacing";
+import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
 
 const ModalBox = styled.View`
   width: 80%;
   background-color: ${({ theme }) => theme.box};
   border-radius: 20px;
-  padding: 45px 40px;
+  padding: ${spacing.gutter}px ${useResponsiveFontSize(20)}px;
   border-width: ${({ theme }) => (theme.name == "dark" ? 1 : 0)}px;
   border-color: ${({ theme }) => theme.background};
 

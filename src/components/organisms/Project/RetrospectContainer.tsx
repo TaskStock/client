@@ -1,12 +1,10 @@
 import _ from "lodash";
 import React from "react";
-import { Pressable, View } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
+import { Pressable, ScrollView, View } from "react-native";
 import { useTheme } from "styled-components/native";
 import { Project } from "../../../@types/project";
 import { Retrospect } from "../../../@types/retrospect";
 import { spacing } from "../../../constants/spacing";
-import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import ContentLayout from "../../atoms/ContentLayout";
 import FlexBox from "../../atoms/FlexBox";
 import Icons from "../../atoms/Icons";
@@ -17,6 +15,7 @@ import CenterModal from "../../molecules/CenterModal";
 import { SearchBar } from "../../molecules/SearchBar";
 import { TextWithIcon } from "../../molecules/TextWithIcon";
 import TextWithRadio from "../../molecules/TextWithRadioBtn";
+import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import RetrospectList from "./RetrospectList";
 
 export default function RetrospectContainer({

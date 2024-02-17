@@ -244,7 +244,9 @@ export default function MarketListScreen() {
                   );
                 })
               ) : (
-                <Text size="md">종목이 없습니다.</Text>
+                <Text size="md" color={theme.textDim}>
+                  종목이 없습니다.
+                </Text>
               )
             ) : (
               <>
