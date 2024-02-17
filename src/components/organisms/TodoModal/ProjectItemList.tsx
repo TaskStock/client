@@ -8,6 +8,7 @@ import { setAddTodoForm } from "../../../store/modules/todo/todo";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import Icons from "../../atoms/Icons";
 import { Project } from "../../../@types/project";
+import OutsidePressHandler from "react-native-outside-press";
 
 const ProjectItemContainer = styled.View<{ height?: number }>`
   flex: 1;
@@ -168,17 +169,19 @@ export default function ProjectItemList({}: // scrollViewRef,
       })}
       {isAddProject && (
         <ProjectItemComponent>
-          <TextInput
-            ref={textInputRef}
-            cursorColor={theme.text}
-            style={{
-              color: theme.text,
-            }}
-            placeholderTextColor={theme.text}
-            value={newProjectInput}
-            onChange={onChangeNewProjectName}
-            onSubmitEditing={fetchAddProject}
-          ></TextInput>
+          <OutsidePressHandler onOutsidePress={fetchAddProject}>
+            <TextInput
+              ref={textInputRef}
+              cursorColor={theme.text}
+              style={{
+                color: theme.text,
+              }}
+              placeholderTextColor={theme.text}
+              value={newProjectInput}
+              onChange={onChangeNewProjectName}
+              onSubmitEditing={fetchAddProject}
+            ></TextInput>
+          </OutsidePressHandler>
         </ProjectItemComponent>
       )}
       <ProjectItemComponent isSelected={false}>
