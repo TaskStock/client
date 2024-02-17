@@ -65,16 +65,16 @@ export default function RetrospectContainer({
   })?.name;
 
   return (
-    <>
-      <ContentLayout>
-        <FlexBox
-          direction="column"
-          alignItems="stretch"
-          gap={spacing.padding + spacing.small}
-          styles={{
-            flex: 1,
-          }}
-        >
+    <ContentLayout noVerticalPadding>
+      <FlexBox
+        direction="column"
+        alignItems="stretch"
+        gap={spacing.padding + spacing.small}
+        styles={{
+          flex: 1,
+          paddingTop: spacing.padding,
+        }}
+      >
           <SearchBar
             onChangeText={onChangeSearchKeyword}
             onPressSearchIcon={onPressSearchIcon}
@@ -172,8 +172,15 @@ export default function RetrospectContainer({
         >
           <ScrollView
             style={{
-              height: useResponsiveFontSize(200),
-              minWidth: 250,
+              position: "absolute",
+              bottom: 30,
+              left: 0,
+              right: 0,
+              paddingHorizontal: spacing.small,
+              paddingBottom: spacing.small,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
             }}
           >
             <View style={{ left: -5 }}>

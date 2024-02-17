@@ -37,6 +37,11 @@ const EmailLoginScreen = ({ navigation }) => {
     const url = `${SERVER_URL}account/login/email`;
     const deviceId = await getDeviceId();
 
+    if (!user.email || !user.password) {
+      setAlert("이메일과 비밀번호를 입력해주세요.");
+      return;
+    }
+
     try {
       const response = await fetch(url, {
         method: "POST",
