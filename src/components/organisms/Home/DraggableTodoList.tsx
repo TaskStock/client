@@ -166,8 +166,10 @@ export default function DraggableTodoList({
   if (isLoading) {
     return (
       <ListContainer>
-        <SkeletonTodoItem />
-        <SkeletonTodoItem />
+        <View style={{ paddingHorizontal: spacing.gutter }}>
+          <SkeletonTodoItem />
+          <SkeletonTodoItem />
+        </View>
       </ListContainer>
     );
   }
