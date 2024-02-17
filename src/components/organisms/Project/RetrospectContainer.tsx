@@ -64,13 +64,14 @@ export default function RetrospectContainer({
   })?.name;
 
   return (
-    <ContentLayout>
+    <ContentLayout noVerticalPadding>
       <FlexBox
         direction="column"
         alignItems="stretch"
         gap={spacing.padding + spacing.small}
         styles={{
           flex: 1,
+          paddingTop: spacing.padding,
         }}
       >
         <SearchBar
@@ -187,7 +188,7 @@ export default function RetrospectContainer({
           <View
             style={{
               position: "absolute",
-              bottom: 0,
+              bottom: 30,
               left: 0,
               right: 0,
               paddingHorizontal: spacing.small,

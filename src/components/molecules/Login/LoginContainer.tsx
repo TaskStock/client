@@ -1,5 +1,5 @@
 import React from "react";
-import { Image } from "react-native";
+import { Image, Keyboard } from "react-native";
 import { useTheme } from "styled-components";
 import styled from "styled-components/native";
 import { spacing } from "../../../constants/spacing";
@@ -16,7 +16,7 @@ const THEME_SOURCES = {
   },
 };
 
-const Container = styled.View<{ background?: string }>`
+const Container = styled.Pressable<{ background?: string }>`
   flex: 1;
   justify-content: center;
   align-items: center;
@@ -51,7 +51,11 @@ const LoginContainer = ({
   const styledTheme = useTheme();
 
   return (
-    <Container background={background}>
+    <Container
+      background={background}
+      onPress={Keyboard.dismiss}
+      accessible={false}
+    >
       <Logo>
         <Image
           source={THEME_SOURCES[theme]?.logo}

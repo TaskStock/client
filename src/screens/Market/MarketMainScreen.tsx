@@ -236,7 +236,7 @@ export default function MarketMainScreen() {
                   }}
                   showsHorizontalScrollIndicator={false}
                 >
-                  {!section1Data ? (
+                  {section1Data ? (
                     section1Data.map((item) => {
                       let value = (item.success_count / item.take_count) * 100;
 
