@@ -1,5 +1,5 @@
 import { NavigationProp, useNavigation } from "@react-navigation/native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FlatList, Pressable, View } from "react-native";
 import OutsidePressHandler from "react-native-outside-press";
 import { WithLocalSvg } from "react-native-svg";
@@ -30,7 +30,7 @@ import RoundItemBtn from "../../atoms/RoundItemBtn";
 import Text from "../../atoms/Text";
 import CenterModal from "../../molecules/CenterModal";
 
-const ProjectBox = styled.Pressable<{ isFinished: boolean }>`
+export const ProjectBox = styled.Pressable<{ isFinished: boolean }>`
   border-radius: ${useResponsiveFontSize(15)}px;
   background-color: ${(props) =>
     props.isFinished ? props.theme.background : props.theme.box};
@@ -39,7 +39,7 @@ const ProjectBox = styled.Pressable<{ isFinished: boolean }>`
   border-color: ${({ theme }) => theme.projectItemBorder};
 `;
 
-const BoxIcon = styled.View`
+export const BoxIcon = styled.View`
   width: ${useResponsiveFontSize(45)}px;
   height: ${useResponsiveFontSize(45)}px;
   border-radius: ${useResponsiveFontSize(45)}px;
@@ -60,7 +60,13 @@ const MoreBtn = styled.View`
   align-items: center;
 `;
 
-function ProjectItem({ item, zIndex }: { item: Project; zIndex?: number }) {
+export function ProjectItem({
+  item,
+  zIndex,
+}: {
+  item: Project;
+  zIndex?: number;
+}) {
   const navigation = useNavigation<NavigationProp<ProjectStackParamList>>();
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -233,18 +239,6 @@ function ProjectItem({ item, zIndex }: { item: Project; zIndex?: number }) {
                     />
                   </View>
                 </FlexBox>
-
-                {/* {currentUserId == item.user_id && (
-                  <MoreBtn>
-                    <Text size="sm">프로젝트 더보기</Text>
-                    <Icons
-                      type="entypo"
-                      name="chevron-thin-right"
-                      size={15}
-                      color={theme.text}
-                    />
-                  </MoreBtn>
-                )} */}
               </View>
             </FlexBox>
           </ProjectBox>

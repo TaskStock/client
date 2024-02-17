@@ -24,7 +24,7 @@ import BadgesPreview from "../../molecules/SNS/BadgesPreview";
 import ZoomPicModal from "./ZoomPicModal";
 
 const Container = styled.View`
-  padding: ${spacing.padding}px ${spacing.offset}px ${spacing.offset}px;
+  padding: ${spacing.padding}px ${spacing.gutter}px ${spacing.offset}px;
   border-width: 1px;
   border-color: transparent;
   border-bottom-color: ${({ theme }) => theme.textDimmer};

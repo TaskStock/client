@@ -6,7 +6,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { Dimensions, ScrollView, View } from "react-native";
+import { Dimensions, RefreshControl, ScrollView, View } from "react-native";
 import { useTheme } from "styled-components/native";
 import CenterLayout from "../../components/atoms/CenterLayout";
 import Icons from "../../components/atoms/Icons";
@@ -35,7 +35,7 @@ import {
   useGetFriendInfoQuery,
 } from "../../store/modules/getFriends";
 import { checkIsSameLocalDay } from "../../utils/checkIsSameLocalDay";
-import { Todo } from "../../@types/todo";
+import { useRefresh } from "@react-native-community/hooks";
 
 const routeMap = [
   { key: "first", title: "그래프" },
@@ -50,6 +50,9 @@ type UserDetailScreenProps = NativeStackScreenProps<
 
 const UserDetailScreen = ({ route, navigation }: UserDetailScreenProps) => {
   const { userId } = route.params;
+  const { isRefreshing, onRefresh } = useRefresh(() =>
+    dispatch(getTargetUserThunk(userId))
+  );
 
   const { data, isLoading, isError, error, refetch } = useGetFriendInfoQuery({
     userId,
@@ -212,7 +215,13 @@ const UserDetailScreen = ({ route, navigation }: UserDetailScreenProps) => {
       // }
       />
       {!isPrivate ? (
-        <ScrollView ref={scrollViewRef} nestedScrollEnabled>
+        <ScrollView
+          ref={scrollViewRef}
+          nestedScrollEnabled
+          refreshControl={
+            <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
+          }
+        >
           <UserInfo />
           <Margin margin={spacing.offset} />
           <View
