@@ -4,6 +4,7 @@ import { TRootState } from "../../store/configureStore";
 import { getAPIHost } from "../getAPIHost";
 import { client } from "../../services/api";
 import { checkAndRenewTokens } from "../authUtils/tokenUtils";
+import { showErrorToast } from "../showToast";
 
 export const uploadImageThunk = createAsyncThunk(
   "user/uploadImageThunk",
@@ -44,6 +45,7 @@ export const uploadImageThunk = createAsyncThunk(
       return imagePath;
     } catch (error) {
       console.log("이미지 업로드 실패: ", error);
+      showErrorToast("10MB 이하의 이미지를 업로드해주세요.");
       return rejectWithValue(error.response.data);
     }
   }
@@ -68,6 +70,7 @@ export const setToDefaultImageThunk = createAsyncThunk(
       }
     } catch (error) {
       console.log("기본이미지 변경 실패: ", error);
+      showErrorToast("기본이미지 변경에 실패했습니다. 다시 시도해주세요.");
       return rejectWithValue(error.response.data);
     }
   }

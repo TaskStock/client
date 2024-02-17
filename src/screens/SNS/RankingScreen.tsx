@@ -32,12 +32,10 @@ const RankingScreen = ({ navigation }) => {
     // 팔로워 10명 돌파
     if (follower_count >= 10) {
       badgeDispatcher.reached10Followers();
-      showSuccessToast("새로운 뱃지를 획득했어요!🔥");
     }
     // 팔로워 42명 돌파
     if (follower_count >= 42) {
       badgeDispatcher.reached42Followers();
-      showSuccessToast("새로운 뱃지를 획득했어요!🔥");
     }
   }, [follower_count]);
 

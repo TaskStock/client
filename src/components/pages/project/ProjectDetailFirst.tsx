@@ -20,6 +20,7 @@ import { spacing } from "../../../constants/spacing";
 import TodoItem from "../../molecules/Home/TodoItem";
 import styled from "styled-components/native";
 import useUser from "../../../hooks/useUser";
+import { useTheme } from "styled-components";
 
 const ProjectBox = styled.View`
   padding: ${spacing.padding}px;
@@ -45,6 +46,7 @@ function ProjectSection({
 }
 
 function ProjectDetailFirst({ projectId }: { projectId: number }) {
+  const theme = useTheme();
   const { currentDate, currentDateString, subtract1Month, add1Month } =
     useCurrentDate();
   const onPressLeft = subtract1Month;
@@ -135,7 +137,9 @@ function ProjectDetailFirst({ projectId }: { projectId: number }) {
                   <TodoItem key={todo.todo_id} todo={todo}></TodoItem>
                 ))
               ) : (
-                <Text size="md">할 일이 없습니다.</Text>
+                <Text size="md" color={theme.textDim}>
+                  할 일이 없습니다.
+                </Text>
               )}
             </ProjectSection>
             <ProjectSection title="회고">
@@ -145,7 +149,14 @@ function ProjectDetailFirst({ projectId }: { projectId: number }) {
                 ) : isError ? (
                   <Text size="md">회고를 불러오는중 에러가 발생했습니다.</Text>
                 ) : (
-                  <Text size="md">
+                  <Text
+                    size="md"
+                    color={
+                      currentProjectRetrospects && currentProjectRetrospects[0]
+                        ? theme.text
+                        : theme.textDim
+                    }
+                  >
                     {currentProjectRetrospects && currentProjectRetrospects[0]
                       ? currentProjectRetrospects[0].content.length > 10
                         ? currentProjectRetrospects[0].content.slice(0, 10) +

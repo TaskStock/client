@@ -27,7 +27,7 @@ import { formatToLocalMonthDay } from "../../../utils/convertUTCtoLocal";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import FlexBox from "../../atoms/FlexBox";
 import FollowBtn from "../../atoms/FollowBtn";
-import { IconProps, IconsWithoutFeedBack } from "../../atoms/Icons";
+import Icons, { IconProps } from "../../atoms/Icons";
 import Text from "../../atoms/Text";
 
 const AlarmContainer = styled.TouchableOpacity<{ read: boolean }>`
@@ -63,7 +63,7 @@ const Icon = ({ theme, type }) => {
   }
   return (
     <IconContainer>
-      <IconsWithoutFeedBack
+      <Icons
         type={iconType}
         name={iconName}
         size={iconSize}

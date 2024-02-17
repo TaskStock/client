@@ -3,7 +3,7 @@ import { toggleStateThunk } from "../../utils/PushNotification/pushNotiThunk";
 
 const initialNotiState = {
   allowed: false,
-  isPushOn: false,
+  isPushOn: true,
   fcmToken: "",
   error: "",
 };

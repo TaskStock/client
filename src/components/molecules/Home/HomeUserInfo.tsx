@@ -47,30 +47,24 @@ const HomeUserInfo = ({
 
     if (data.cumulative_value >= 100000 && data.cumulative_value < 200000) {
       badgeFunctions.reached10K();
-      showSuccessToast("새로운 뱃지를 획득했어요!🔥");
     } else if (
       data.cumulative_value >= 200000 &&
       data.cumulative_value < 500000
     ) {
       badgeFunctions.reached20K();
-      showSuccessToast("새로운 뱃지를 획득했어요!🔥");
     } else if (
       data.cumulative_value >= 500000 &&
       data.cumulative_value < 1000000
     ) {
       badgeFunctions.reached50K();
-      showSuccessToast("새로운 뱃지를 획득했어요!🔥");
     } else if (data.cumulative_value >= 1000000) {
       badgeFunctions.reached100K();
-      showSuccessToast("새로운 뱃지를 획득했어요!🔥");
     }
 
     if (diff_rate == 11) {
       badgeFunctions.reached11Percent();
-      showSuccessToast("새로운 뱃지를 획득했어요!🔥");
     } else if (diff_rate >= 50) {
       badgeFunctions.reached50Percent();
-      showSuccessToast("새로운 뱃지를 획득했어요!🔥");
     }
   }, [data.cumulative_value, diff_rate]);
 

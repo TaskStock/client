@@ -212,6 +212,7 @@ export const StockItemForWishList = ({
                 name="heart"
                 size={18}
                 color={"red"}
+                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
               />
             ) : (
               <Icons
@@ -220,6 +221,7 @@ export const StockItemForWishList = ({
                 name="hearto"
                 size={18}
                 color={"red"}
+                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
               />
             )}
             <Margin

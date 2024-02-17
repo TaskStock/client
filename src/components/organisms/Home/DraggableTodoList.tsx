@@ -46,15 +46,7 @@ const SkeletonTodoItem = () => {
 };
 
 export const ListContainer = ({ children }) => {
-  return (
-    <View
-      style={{
-        paddingTop: useResponsiveFontSize(15),
-      }}
-    >
-      {children}
-    </View>
-  );
+  return <View>{children}</View>;
 };
 
 export default function DraggableTodoList({
@@ -153,7 +145,10 @@ export default function DraggableTodoList({
 
     return (
       <ScaleDecorator>
-        <Pressable onLongPress={drag}>
+        <Pressable
+          onLongPress={drag}
+          style={{ paddingHorizontal: spacing.gutter }}
+        >
           <TodoItem key={item.todo_id} todo={item} />
         </Pressable>
       </ScaleDecorator>
@@ -173,7 +168,9 @@ export default function DraggableTodoList({
     return (
       <ListContainer>
         <FlexBox direction="column" alignItems="center">
-          <Text size="md">할일을 불러오는 중 에러가 발생했어요</Text>
+          <Text size="md" color={theme.textDim}>
+            할일을 불러오는 중 에러가 발생했어요
+          </Text>
           <Margin margin={5} />
           <Pressable
             onPress={() => {
@@ -211,6 +208,10 @@ export default function DraggableTodoList({
           }
           keyExtractor={(item: Todo) => item.todo_id.toString()}
           onDragEnd={onDragEnd}
+          contentContainerStyle={{
+            paddingVertical: spacing.padding,
+            height: "100%",
+          }}
         ></DraggableFlatList>
       )}
     </ListContainer>

@@ -1,6 +1,6 @@
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
-import { FlatList, Modal, Pressable, View } from "react-native";
+import { FlatList, Pressable, View } from "react-native";
 import OutsidePressHandler from "react-native-outside-press";
 import { WithLocalSvg } from "react-native-svg";
 import styled, { useTheme } from "styled-components/native";
@@ -31,19 +31,18 @@ import Text from "../../atoms/Text";
 import CenterModal from "../../molecules/CenterModal";
 
 const ProjectBox = styled.Pressable<{ isFinished: boolean }>`
-  border-radius: ${useResponsiveFontSize(20)}px;
-  height: ${useResponsiveFontSize(179)}px;
+  border-radius: ${useResponsiveFontSize(15)}px;
   background-color: ${(props) =>
     props.isFinished ? props.theme.background : props.theme.box};
-  padding: ${useResponsiveFontSize(20)}px;
+  padding: ${spacing.offset}px;
   border-width: ${({ theme, isFinished }) => (isFinished ? 1 : 0)}px;
   border-color: ${({ theme }) => theme.projectItemBorder};
 `;
 
 const BoxIcon = styled.View`
-  width: ${useResponsiveFontSize(40)}px;
-  height: ${useResponsiveFontSize(40)}px;
-  border-radius: ${useResponsiveFontSize(20)}px;
+  width: ${useResponsiveFontSize(45)}px;
+  height: ${useResponsiveFontSize(45)}px;
+  border-radius: ${useResponsiveFontSize(45)}px;
   background-color: ${(props) => props.theme.projectIconBg};
   display: flex;
   justify-content: center;
@@ -163,6 +162,7 @@ function ProjectItem({ item, zIndex }: { item: Project; zIndex?: number }) {
               styles={{
                 flex: 1,
               }}
+              alignItems="center"
             >
               <BoxIcon>
                 <WithLocalSvg asset={ProjectIcon} />
@@ -173,12 +173,12 @@ function ProjectItem({ item, zIndex }: { item: Project; zIndex?: number }) {
                   marginLeft: useResponsiveFontSize(5),
                 }}
               >
-                <Margin margin={useResponsiveFontSize(5)}></Margin>
                 <FlexBox
                   justifyContent="space-between"
                   styles={{
                     flex: 1,
                   }}
+                  alignItems="center"
                 >
                   <FlexBox
                     direction="column"
@@ -186,24 +186,40 @@ function ProjectItem({ item, zIndex }: { item: Project; zIndex?: number }) {
                     styles={{
                       flex: 1,
                     }}
+                    justifyContent="center"
                   >
-                    <Text size="xl" weight="bold">
+                    <Text size="lg" weight="bold">
                       {item.name}
                     </Text>
 
                     <FlexBox gap={spacing.padding}>
-                      <RoundItemBtn size="sm" isSelected={false}>
-                        <Text size="xs">{item.todo_count + ""}개의 할일</Text>
-                      </RoundItemBtn>
-                      <RoundItemBtn size="sm" isSelected={false}>
-                        <Text size="xs">
-                          {item.retrospect_count + ""}
-                          개의 회고
-                        </Text>
-                      </RoundItemBtn>
-                      <RoundItemBtn size="sm" isSelected={false}>
-                        <Text size="xs">{publicText}</Text>
-                      </RoundItemBtn>
+                      <Text size="xs" color={theme.textDim}>
+                        {item.todo_count + ""}개의 할일
+                      </Text>
+
+                      <View
+                        style={{
+                          width: 1,
+                          height: "100%",
+                          backgroundColor: theme.textDim,
+                        }}
+                      />
+
+                      <Text size="xs" color={theme.textDim}>
+                        {item.retrospect_count + ""}
+                        개의 회고
+                      </Text>
+                      <View
+                        style={{
+                          width: 1,
+                          height: "100%",
+                          backgroundColor: theme.textDim,
+                        }}
+                      />
+
+                      <Text size="xs" color={theme.textDim}>
+                        {publicText}
+                      </Text>
                     </FlexBox>
                   </FlexBox>
                   <View>
@@ -213,11 +229,12 @@ function ProjectItem({ item, zIndex }: { item: Project; zIndex?: number }) {
                       size={useResponsiveFontSize(20)}
                       onPress={onPressMoreDot}
                       color={theme.text}
+                      hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                     />
                   </View>
                 </FlexBox>
 
-                {currentUserId == item.user_id && (
+                {/* {currentUserId == item.user_id && (
                   <MoreBtn>
                     <Text size="sm">프로젝트 더보기</Text>
                     <Icons
@@ -227,7 +244,7 @@ function ProjectItem({ item, zIndex }: { item: Project; zIndex?: number }) {
                       color={theme.text}
                     />
                   </MoreBtn>
-                )}
+                )} */}
               </View>
             </FlexBox>
           </ProjectBox>
@@ -279,6 +296,7 @@ function ProjectItem({ item, zIndex }: { item: Project; zIndex?: number }) {
               styles={{
                 flex: 1,
               }}
+              alignItems="center"
             >
               <BoxIcon>
                 <WithLocalSvg asset={ProjectIcon} />
@@ -289,12 +307,12 @@ function ProjectItem({ item, zIndex }: { item: Project; zIndex?: number }) {
                   marginLeft: useResponsiveFontSize(5),
                 }}
               >
-                <Margin margin={useResponsiveFontSize(5)}></Margin>
                 <FlexBox
                   justifyContent="space-between"
                   styles={{
                     flex: 1,
                   }}
+                  alignItems="center"
                 >
                   <FlexBox
                     direction="column"
@@ -303,23 +321,33 @@ function ProjectItem({ item, zIndex }: { item: Project; zIndex?: number }) {
                       flex: 1,
                     }}
                   >
-                    <Text size="xl" weight="bold">
+                    <Text size="lg" weight="bold">
                       {item.name}
                     </Text>
 
                     <FlexBox gap={spacing.padding}>
-                      <RoundItemBtn size="sm" isSelected={false}>
-                        <Text size="xs">{item.todo_count + ""}개의 할일</Text>
-                      </RoundItemBtn>
-                      <RoundItemBtn size="sm" isSelected={false}>
-                        <Text size="xs">
-                          {item.retrospect_count + ""}
-                          개의 회고
-                        </Text>
-                      </RoundItemBtn>
-                      <RoundItemBtn size="sm" isSelected={false}>
-                        <Text size="xs">{publicText}</Text>
-                      </RoundItemBtn>
+                      <Text size="xs">{item.todo_count + ""}개의 할일</Text>
+                      <View
+                        style={{
+                          width: 1,
+                          height: "100%",
+                          backgroundColor: theme.textDim,
+                        }}
+                      />
+
+                      <Text size="xs">
+                        {item.retrospect_count + ""}
+                        개의 회고
+                      </Text>
+                      <View
+                        style={{
+                          width: 1,
+                          height: "100%",
+                          backgroundColor: theme.textDim,
+                        }}
+                      />
+
+                      <Text size="xs">{publicText}</Text>
                     </FlexBox>
                   </FlexBox>
                   <View>
@@ -329,21 +357,10 @@ function ProjectItem({ item, zIndex }: { item: Project; zIndex?: number }) {
                       size={useResponsiveFontSize(20)}
                       onPress={onPressMoreDot}
                       color={theme.text}
+                      hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                     />
                   </View>
                 </FlexBox>
-
-                {currentUserId == item.user_id && (
-                  <MoreBtn>
-                    <Text size="sm">프로젝트 더보기</Text>
-                    <Icons
-                      type="entypo"
-                      name="chevron-thin-right"
-                      size={15}
-                      color={theme.text}
-                    />
-                  </MoreBtn>
-                )}
               </View>
             </FlexBox>
           </ProjectBox>
@@ -443,6 +460,7 @@ export default function ProjectList({
   isLoading: boolean;
   isError: boolean;
 }) {
+  const theme = useTheme();
   if (!projects || isLoading || isError) {
     return (
       <>
@@ -461,7 +479,9 @@ export default function ProjectList({
           padding: useResponsiveFontSize(20),
         }}
       >
-        <Text size="lg">프로젝트가 없습니다.</Text>
+        <Text size="md" color={theme.textDim}>
+          프로젝트가 없습니다.
+        </Text>
       </View>
     );
   }
@@ -484,7 +504,7 @@ export default function ProjectList({
       ListFooterComponent={() => {
         return <Margin margin={useResponsiveFontSize(20)} />;
       }}
-      // contentContainerStyle={{ padding: spacing.gutter }}
+      contentContainerStyle={{ paddingVertical: spacing.offset }}
     ></FlatList>
   );
 }

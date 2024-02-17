@@ -6,7 +6,7 @@ import { BADGES } from "../../../../public/data/badges";
 import { spacing } from "../../../constants/spacing";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import FlexBox from "../../atoms/FlexBox";
-import { IconsWithoutFeedBack } from "../../atoms/Icons";
+import Icons from "../../atoms/Icons";
 
 const BadgeContainer = styled.View`
   width: ${useResponsiveFontSize(27)}px;
@@ -41,7 +41,7 @@ const BadgesPreview = ({ onPress, badges }) => {
   return (
     <Pressable onPress={onPress}>
       <FlexBox gap={spacing.padding} alignItems="center">
-        <IconsWithoutFeedBack
+        <Icons
           name="trophy-award"
           type="material"
           size={spacing.offset}
