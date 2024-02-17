@@ -65,16 +65,17 @@ export default function RetrospectContainer({
   })?.name;
 
   return (
-    <ContentLayout noVerticalPadding>
-      <FlexBox
-        direction="column"
-        alignItems="stretch"
-        gap={spacing.padding + spacing.small}
-        styles={{
-          flex: 1,
-          paddingTop: spacing.padding,
-        }}
-      >
+    <>
+      <ContentLayout noVerticalPadding>
+        <FlexBox
+          direction="column"
+          alignItems="stretch"
+          gap={spacing.padding + spacing.small}
+          styles={{
+            flex: 1,
+            paddingTop: spacing.padding,
+          }}
+        >
           <SearchBar
             onChangeText={onChangeSearchKeyword}
             onPressSearchIcon={onPressSearchIcon}
