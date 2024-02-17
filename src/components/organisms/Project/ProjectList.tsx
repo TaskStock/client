@@ -217,6 +217,7 @@ function ProjectItem({ item, zIndex }: { item: Project; zIndex?: number }) {
                       size={useResponsiveFontSize(20)}
                       onPress={onPressMoreDot}
                       color={theme.text}
+                      hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                     />
                   </View>
                 </FlexBox>
@@ -333,6 +334,7 @@ function ProjectItem({ item, zIndex }: { item: Project; zIndex?: number }) {
                       size={useResponsiveFontSize(20)}
                       onPress={onPressMoreDot}
                       color={theme.text}
+                      hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                     />
                   </View>
                 </FlexBox>
@@ -488,7 +490,7 @@ export default function ProjectList({
       ListFooterComponent={() => {
         return <Margin margin={useResponsiveFontSize(20)} />;
       }}
-      // contentContainerStyle={{ padding: spacing.gutter }}
+      contentContainerStyle={{ paddingVertical: spacing.gutter }}
     ></FlatList>
   );
 }

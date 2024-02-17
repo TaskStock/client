@@ -63,6 +63,7 @@ const ProjectScreen = () => {
           name="circle-with-plus"
           size={28}
           color={theme.text}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           onPress={() => {
             dispatch(resetProjectForm());
             navigation.navigate("ProjectStackWithoutTab", {

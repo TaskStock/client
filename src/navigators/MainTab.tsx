@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import React from "react";
 import { useTheme } from "styled-components";
-import { IconsWithoutFeedBack } from "../components/atoms/Icons";
+import Icons from "../components/atoms/Icons";
 import useHeight from "../hooks/useHeight";
 import HomeScreen from "../screens/HomeScreen";
 import MarketMainScreen from "../screens/Market/MarketMainScreen";
@@ -42,7 +42,7 @@ function MainTab() {
             headerShown: false,
 
             tabBarIcon: ({ color, size }) => (
-              <IconsWithoutFeedBack
+              <Icons
                 type="material"
                 name="home"
                 size={size * 1.2}
@@ -57,7 +57,7 @@ function MainTab() {
           options={{
             headerShown: false,
             tabBarIcon: ({ focused, color, size }) => (
-              <IconsWithoutFeedBack
+              <Icons
                 type="feather"
                 name="shopping-bag"
                 size={size * 1.2}
@@ -74,7 +74,7 @@ function MainTab() {
             headerShown: false,
             // header: () => <PageMainHeader title="프로젝트" />,
             tabBarIcon: ({ color, size }) => (
-              <IconsWithoutFeedBack
+              <Icons
                 type="ionicons"
                 name="file-tray"
                 size={size * 1.2}
@@ -90,7 +90,7 @@ function MainTab() {
           options={{
             headerShown: false,
             tabBarIcon: ({ color, size }) => (
-              <IconsWithoutFeedBack
+              <Icons
                 type="material"
                 name="account"
                 size={size * 1.2}

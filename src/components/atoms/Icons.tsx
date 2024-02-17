@@ -52,7 +52,12 @@ const Icons: React.FC<IconProps> = ({
   else return null;
 
   return (
-    <TouchableOpacity onPress={onPress} hitSlop={hitSlop} style={style}>
+    <TouchableOpacity
+      onPress={onPress ? onPress : undefined}
+      disabled={!onPress}
+      hitSlop={hitSlop}
+      style={style}
+    >
       <IconComponent
         name={name}
         size={useResponsiveFontSize(size)}
@@ -64,43 +69,27 @@ const Icons: React.FC<IconProps> = ({
 
 export default Icons;
 
-export const IconsWithoutFeedBack: React.FC<IconProps> = ({
-  type = "material",
-  name,
-  size = useResponsiveFontSize(20),
-  color = "black",
-}) => {
-  let IconComponent: any;
-  if (type === "material") IconComponent = MaterialCommunityIcons;
-  else if (type === "ionicons") IconComponent = Ionicons;
-  else if (type === "feather") IconComponent = Feather;
-  else if (type === "entypo") IconComponent = Entypo;
-  else if (type === "materialIcons") IconComponent = MaterialIcons;
-  else if (type === "AntDesign") IconComponent = AntDesign;
-  else return null;
-
-  return (
-    <IconComponent
-      name={name}
-      size={useResponsiveFontSize(size)}
-      color={color}
-    />
-  );
-};
-
 export const IconsPic = ({
   source,
   size,
   onPress,
+  hitSlop,
 }: {
   source: any;
   size: number;
   onPress?: () => void;
+  hitSlop?: {
+    top?: number;
+    bottom?: number;
+    left?: number;
+    right?: number;
+  };
 }) => {
   return (
     <TouchableOpacity
       onPress={onPress ? onPress : undefined}
       disabled={!onPress}
+      hitSlop={hitSlop}
     >
       <Image
         source={source}

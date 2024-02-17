@@ -148,8 +148,8 @@ export default function StockDetailGraphSection({
 
   return (
     <>
-      {!data1NoData &&
-        (diffRate !== 0 ? (
+      {!data1NoData ? (
+        diffRate !== 0 ? (
           <>
             <FlexBox
               direction="column"
@@ -188,7 +188,13 @@ export default function StockDetailGraphSection({
               </Text>
             </FlexBox>
           </>
-        ))}
+        )
+      ) : (
+        <Text size="xl" weight="regular">
+          할 일을 완료해 이 종목의 첫 투자자가 되어보세요!
+        </Text>
+      )}
+
       <Margin margin={spacing.padding} />
       <GraphBox
         onLayout={(e) => {

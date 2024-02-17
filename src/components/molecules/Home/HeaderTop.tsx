@@ -89,6 +89,7 @@ function HeaderTop({ navigation }) {
                 });
                 dispatch(setNewNotice(false));
               }}
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
             />
             {is_new_notice && <NewAlarmDot />}
           </View>
@@ -100,6 +101,7 @@ function HeaderTop({ navigation }) {
               navigation.navigate("SettingsStack", { screen: "Settings" });
             }}
             color={styledTheme.text}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
           />
         </FlexBox>
       </FlexBox>

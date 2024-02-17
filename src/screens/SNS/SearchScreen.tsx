@@ -5,7 +5,7 @@ import { RefreshControl } from "react-native-gesture-handler";
 import { useTheme } from "styled-components";
 import styled from "styled-components/native";
 import FlexBox from "../../components/atoms/FlexBox";
-import { IconsWithoutFeedBack } from "../../components/atoms/Icons";
+import Icons from "../../components/atoms/Icons";
 import Text from "../../components/atoms/Text";
 import PageHeader from "../../components/molecules/PageHeader";
 import UserBox from "../../components/molecules/SNS/UserBox";
@@ -53,7 +53,7 @@ const TextInputContainer = ({
   const theme = useTheme();
   return (
     <InputContainer>
-      <IconsWithoutFeedBack
+      <Icons
         type="materialIcons"
         name="search"
         color={theme.text}

@@ -5,7 +5,7 @@ import styled from "styled-components/native";
 import { spacing } from "../../constants/spacing";
 import { useAppSelect } from "../../store/configureStore.hooks";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
-import { IconsWithoutFeedBack } from "../atoms/Icons";
+import Icons from "../atoms/Icons";
 import Text from "../atoms/Text";
 
 const Overlay = styled.View`
@@ -77,7 +77,7 @@ const PopupModal = ({
           <BackgroundPressable onPress={() => handleClose()} />
           <Children reduxTheme={reduxTheme}>
             <Upper>
-              <IconsWithoutFeedBack
+              <Icons
                 type="ionicons"
                 name="checkmark-circle-outline"
                 size={useResponsiveFontSize(100)}

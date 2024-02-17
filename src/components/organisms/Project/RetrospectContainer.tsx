@@ -1,24 +1,23 @@
-import { View, Pressable } from "react-native";
+import _ from "lodash";
 import React from "react";
-import FlexBox from "../../atoms/FlexBox";
+import { Pressable, View } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
+import { useTheme } from "styled-components/native";
+import { Project } from "../../../@types/project";
+import { Retrospect } from "../../../@types/retrospect";
 import { spacing } from "../../../constants/spacing";
+import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
+import ContentLayout from "../../atoms/ContentLayout";
+import FlexBox from "../../atoms/FlexBox";
+import Icons from "../../atoms/Icons";
+import Margin from "../../atoms/Margin";
+import RoundItemBtn from "../../atoms/RoundItemBtn";
+import Text from "../../atoms/Text";
+import CenterModal from "../../molecules/CenterModal";
 import { SearchBar } from "../../molecules/SearchBar";
 import { TextWithIcon } from "../../molecules/TextWithIcon";
-import { WithLocalSvg } from "react-native-svg";
-import RetrospectList from "./RetrospectList";
-import RoundItemBtn from "../../atoms/RoundItemBtn";
-import { useTheme } from "styled-components/native";
-import ContentLayout from "../../atoms/ContentLayout";
-import Text from "../../atoms/Text";
-import { Retrospect } from "../../../@types/retrospect";
-import { Project } from "../../../@types/project";
-import _ from "lodash";
-import CenterModal from "../../molecules/CenterModal";
 import TextWithRadio from "../../molecules/TextWithRadioBtn";
-import { ScrollView } from "react-native-gesture-handler";
-import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
-import Margin from "../../atoms/Margin";
-import { IconsWithoutFeedBack } from "../../atoms/Icons";
+import RetrospectList from "./RetrospectList";
 
 export default function RetrospectContainer({
   selectedFilter,
@@ -92,7 +91,7 @@ export default function RetrospectContainer({
                 text={selectedFilter === "latest" ? "최신순" : "오래된순"}
                 size="sm"
               >
-                <IconsWithoutFeedBack
+                <Icons
                   type="ionicons"
                   name="filter"
                   color={theme.text}
@@ -108,7 +107,7 @@ export default function RetrospectContainer({
                   }}
                 >
                   <TextWithIcon text="프로젝트" size="sm">
-                    <IconsWithoutFeedBack
+                    <Icons
                       type="AntDesign"
                       name="filter"
                       color={theme.text}

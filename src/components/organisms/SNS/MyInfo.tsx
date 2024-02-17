@@ -8,7 +8,7 @@ import { useAppSelect } from "../../../store/configureStore.hooks";
 import numberWithCommas from "../../../utils/useNumberWithCommas";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import FlexBox from "../../atoms/FlexBox";
-import { IconsWithoutFeedBack } from "../../atoms/Icons";
+import Icons from "../../atoms/Icons";
 import PrivateLockIcon from "../../atoms/PrivateLockIcon";
 import ProfilePic from "../../atoms/ProfilePic";
 import Text from "../../atoms/Text";
@@ -22,7 +22,7 @@ const Container = styled.View`
 const Info = ({ text, iconType, iconName, color }) => {
   return (
     <FlexBox alignItems="center" gap={spacing.padding}>
-      <IconsWithoutFeedBack
+      <Icons
         name={iconName}
         type={iconType}
         size={spacing.offset}

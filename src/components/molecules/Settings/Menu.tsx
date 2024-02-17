@@ -4,7 +4,7 @@ import styled from "styled-components/native";
 import { spacing } from "../../../constants/spacing";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import FlexBox from "../../atoms/FlexBox";
-import { IconProps, IconsWithoutFeedBack } from "../../atoms/Icons";
+import Icons, { IconProps } from "../../atoms/Icons";
 import Text from "../../atoms/Text";
 import ToggleSwitch from "../../atoms/ToggleSwitch";
 
@@ -40,7 +40,7 @@ const Menu = ({
     <Container onPress={onPress ? onPress : undefined} disabled={!onPress}>
       <FlexBox alignItems="center" gap={useResponsiveFontSize(16)}>
         {icon && (
-          <IconsWithoutFeedBack
+          <Icons
             type={icon.type}
             name={icon.name}
             size={spacing.gutter}
@@ -58,7 +58,7 @@ const Menu = ({
           toggleSwitch={toggle.toggleSwitch}
         />
       ) : (
-        <IconsWithoutFeedBack
+        <Icons
           type="materialIcons"
           name="chevron-right"
           size={spacing.gutter}

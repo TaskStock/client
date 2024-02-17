@@ -9,7 +9,7 @@ export default function ProjectScreenFirst() {
   const { projects, isError, isLoading } = useProject();
   return (
     <>
-      <ContentLayout noHorizontalPadding>
+      <ContentLayout noHorizontalPadding noVerticalPadding>
         <ProjectList
           projects={projects}
           isLoading={isLoading}

@@ -1,9 +1,7 @@
-import { View } from "react-native";
-import Text from "../atoms/Text";
-import Icons from "../atoms/Icons";
-import FlexBox from "../atoms/FlexBox";
-import { spacing } from "../../constants/spacing";
 import React from "react";
+import { spacing } from "../../constants/spacing";
+import FlexBox from "../atoms/FlexBox";
+import Text from "../atoms/Text";
 
 export const TextWithIcon = ({
   text,

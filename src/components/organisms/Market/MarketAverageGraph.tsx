@@ -57,8 +57,12 @@ const MarketAverageGraph = ({
             alignItems: "center",
           }}
         >
-          <Text size="md">아직 종목 데이터가 없어요.</Text>
-          <Text size="md">조금만 기다려주세요!</Text>
+          <Text size="md" color={theme.textDim}>
+            아직 종목 데이터가 없어요.
+          </Text>
+          <Text size="md" color={theme.textDim}>
+            조금만 기다려주세요!
+          </Text>
         </View>
       ) : (
         <VictoryChart width={width} height={height}>
