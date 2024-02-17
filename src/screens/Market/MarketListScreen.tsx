@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import React from "react";
+import React, { useState } from "react";
 import { Image, ScrollView, View } from "react-native";
 import styled, { useTheme } from "styled-components/native";
 import LightLogo from "../../../assets/images/logo-dark.png";
@@ -132,12 +132,27 @@ export default function MarketListScreen() {
     setSearchText("");
   };
 
+  const [isPageHeaderColorReverse, setIsPageHeaderColorReverse] =
+    useState(true);
+
   return (
     <>
-      <AbsolutePageHeader headerLeftColorReverse />
+      <AbsolutePageHeader
+        headerLeftColorReverse={
+          theme.name === "gray" ? isPageHeaderColorReverse : false
+        }
+      />
       <ScrollView
         style={{ flex: 1, backgroundColor: theme.background }}
         contentContainerStyle={{ paddingBottom: 100 }}
+        onScroll={(e) => {
+          if (e.nativeEvent.contentOffset.y > 100) {
+            setIsPageHeaderColorReverse(false);
+          } else {
+            setIsPageHeaderColorReverse(true);
+          }
+        }}
+        scrollEventThrottle={16}
       >
         <PageHeaderBox>
           <Image

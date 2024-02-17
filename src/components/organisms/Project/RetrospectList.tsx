@@ -38,24 +38,22 @@ function RetrospectItem({
   const theme = useTheme();
 
   return (
-    <ShadowForRetrospect radius={15}>
-      <Box onPress={onPressItem} style={{}}>
-        <FlexBox gap={spacing.small}>
-          <Text size="xs" color={theme.palette.red}>
-            {projectName}
-          </Text>
-          <Text size="xs" color={theme.textDim}>
-            {formattedDate}
-          </Text>
-        </FlexBox>
-        <Margin margin={spacing.small}></Margin>
-        <Text size="md">
-          {item.content.length > 100
-            ? item.content.slice(0, 100) + "..."
-            : item.content}
+    <Box onPress={onPressItem} style={{}}>
+      <FlexBox gap={spacing.small}>
+        <Text size="xs" color={theme.palette.red}>
+          {projectName}
         </Text>
-      </Box>
-    </ShadowForRetrospect>
+        <Text size="xs" color={theme.textDim}>
+          {formattedDate}
+        </Text>
+      </FlexBox>
+      <Margin margin={spacing.small}></Margin>
+      <Text size="md">
+        {item.content.length > 100
+          ? item.content.slice(0, 100) + "..."
+          : item.content}
+      </Text>
+    </Box>
   );
 }
 

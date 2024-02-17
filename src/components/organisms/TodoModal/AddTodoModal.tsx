@@ -91,9 +91,10 @@ const CloseBox = styled.View`
   align-items: flex-end;
 `;
 
-const ValueText = styled(Section.HeaderText)`
+const ValueText = styled.Text`
+  font-family: "medium";
+  font-size: 18px;
   color: ${({ theme }) => theme.palette.red};
-  font-weight: normal;
 `;
 
 const TodoInput = styled.TextInput`

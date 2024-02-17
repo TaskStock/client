@@ -11,6 +11,7 @@ interface MarketState {
     list: Wish[];
     offset: number;
     filterIndex: number;
+    refetchCount: number;
   };
 }
 
@@ -19,6 +20,7 @@ const initialState: MarketState = {
     list: [],
     offset: 0,
     filterIndex: 0,
+    refetchCount: 0,
   },
 };
 
@@ -84,6 +86,10 @@ export const marketSlice = createSlice({
       state.wish.offset = 0;
       state.wish.filterIndex = 0;
     },
+    refreshWishList: (state) => {
+      state.wish.offset = 0;
+      state.wish.refetchCount += 1;
+    },
   },
 });
 
@@ -93,6 +99,7 @@ export const {
   toggleWishLike,
   increaseWishOffset,
   resetWishList,
+  refreshWishList,
   setFilterIndex,
 } = marketSlice.actions;
 
@@ -170,12 +177,12 @@ export const marketApi = createApi({
         offset: number;
         limit: number;
         filter: "like" | "latest";
-        timestamp: number;
+        count: number;
       }
     >({
-      query: ({ offset, limit, filter, timestamp }) => {
+      query: ({ offset, limit, filter, count }) => {
         return {
-          url: `/wishlist?offset=${offset}&limit=${limit}&filter=${filter}&timestamp=${timestamp}`,
+          url: `/wishlist?offset=${offset}&limit=${limit}&filter=${filter}&count=${count}`,
           method: "GET",
         };
       },
@@ -262,7 +269,7 @@ export const marketApi = createApi({
       onQueryStarted: async (arg, { dispatch, queryFulfilled }) => {
         try {
           const response = await queryFulfilled;
-          dispatch(toggleWishLike(arg.wishlist_id));
+          dispatch(refreshWishList());
         } catch (error) {
           console.log("Error", error);
           showErrorToast("잠시후에 다시 시도해주세요");

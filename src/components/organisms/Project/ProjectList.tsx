@@ -29,6 +29,7 @@ import Margin from "../../atoms/Margin";
 import RoundItemBtn from "../../atoms/RoundItemBtn";
 import Text from "../../atoms/Text";
 import CenterModal from "../../molecules/CenterModal";
+import { useGetAllTodoArgs } from "../../../hooks/useGetAllTodoArgs";
 
 export const ProjectBox = styled.Pressable<{ isFinished: boolean }>`
   border-radius: ${useResponsiveFontSize(15)}px;
@@ -130,10 +131,13 @@ export function ProjectItem({
     });
   };
 
+  const { date } = useGetAllTodoArgs();
+
   const onPressProjectDeleteModalBtn = () => {
     setIsModalOpen(false);
     deleteProject({
       project_id: item.project_id,
+      todo_query_arg: date,
     });
   };
 

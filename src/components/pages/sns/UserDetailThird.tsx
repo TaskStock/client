@@ -35,7 +35,6 @@ export default function SnsDetailThird({
     <View
       style={{
         flex: 1,
-        // paddingVertical: spacing.offset,
       }}
     >
       {/* <ProjectList

@@ -51,7 +51,7 @@ const store = configureStore({
       .concat(marketApi.middleware),
 });
 
-export type TRootState = ReturnType<typeof store.getState>;
+export type RT = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 
 export default store;
