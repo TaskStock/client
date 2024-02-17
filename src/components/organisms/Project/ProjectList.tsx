@@ -445,6 +445,7 @@ export default function ProjectList({
   isLoading: boolean;
   isError: boolean;
 }) {
+  const theme = useTheme();
   if (!projects || isLoading || isError) {
     return (
       <>
@@ -463,7 +464,9 @@ export default function ProjectList({
           padding: useResponsiveFontSize(20),
         }}
       >
-        <Text size="lg">프로젝트가 없습니다.</Text>
+        <Text size="md" color={theme.textDim}>
+          프로젝트가 없습니다.
+        </Text>
       </View>
     );
   }
