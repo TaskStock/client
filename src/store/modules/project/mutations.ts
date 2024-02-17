@@ -1,6 +1,15 @@
 import { EndpointBuilder } from "@reduxjs/toolkit/query";
 import { Project, publicType } from "../../../@types/project";
 import { showErrorToast } from "../../../utils/showToast";
+import { retrospectApi } from "../retrospect/retrospect";
+import { projectApi } from "./project";
+import {
+  DateString,
+  DateStringYYYYMM,
+  IsoString,
+} from "../../../@types/calendar";
+import { todoApi } from "../todo/todo";
+import dayjs from "dayjs";
 
 type MutationBuilder = EndpointBuilder<
   (
@@ -54,7 +63,13 @@ export const addProjectMutation = (builder: MutationBuilder) =>
   });
 
 export const deleteProjectMutation = (builder: MutationBuilder) =>
-  builder.mutation<Project, { project_id: number }>({
+  builder.mutation<
+    Project,
+    {
+      project_id: number;
+      todo_query_arg: DateStringYYYYMM;
+    }
+  >({
     query: (body) => ({
       url: `/project`,
       method: "DELETE",
@@ -66,6 +81,28 @@ export const deleteProjectMutation = (builder: MutationBuilder) =>
     onQueryStarted: async (arg, { dispatch, queryFulfilled }) => {
       try {
         await queryFulfilled;
+        dispatch(
+          todoApi.util.updateQueryData(
+            "getAllTodos",
+            {
+              date: arg.todo_query_arg,
+            },
+            (draft) => {
+              draft.todos = draft.todos.filter((todo) => {
+                if (todo.project_id !== arg.project_id) {
+                  return todo;
+                } else {
+                  if (dayjs(todo.date).isAfter(dayjs(), "date")) {
+                    return false;
+                  } else {
+                    todo.project_id = null;
+                    return todo;
+                  }
+                }
+              });
+            }
+          )
+        );
       } catch (error) {
         console.log("Error", error);
         showErrorToast("잠시후에 다시 시도해주세요.");
