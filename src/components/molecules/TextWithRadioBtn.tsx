@@ -20,7 +20,7 @@ export default function TextWithRadio({
 
   return (
     <Pressable onPress={onPressRadio}>
-      <FlexBox alignItems="center" styles={{}}>
+      <FlexBox alignItems="center" styles={{ paddingRight: 130 }}>
         <RadioButton
           selected={selectedId === id}
           id={id + ""}

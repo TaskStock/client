@@ -1,12 +1,10 @@
 import _ from "lodash";
 import React from "react";
 import { Pressable, View } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
 import { useTheme } from "styled-components/native";
 import { Project } from "../../../@types/project";
 import { Retrospect } from "../../../@types/retrospect";
 import { spacing } from "../../../constants/spacing";
-import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import ContentLayout from "../../atoms/ContentLayout";
 import FlexBox from "../../atoms/FlexBox";
 import Icons from "../../atoms/Icons";
@@ -135,11 +133,7 @@ export default function RetrospectContainer({
                 setIsProjectFilterOpen(false);
               }}
             >
-              <ScrollView
-                style={{
-                  height: useResponsiveFontSize(200),
-                }}
-              >
+              <View>
                 <TextWithRadio
                   value={"전체"}
                   id={null}
@@ -159,24 +153,20 @@ export default function RetrospectContainer({
                     }}
                   ></TextWithRadio>
                 ))}
-              </ScrollView>
+              </View>
+
               <Margin margin={spacing.offset}></Margin>
-              <FlexBox
-                justifyContent="flex-end"
-                styles={{
-                  paddingHorizontal: spacing.offset,
-                }}
-              >
+              <FlexBox justifyContent="flex-end">
                 <Pressable
                   onPress={() => {
                     setIsProjectFilterOpen(false);
-
                     if (!selectedTempId) {
                       onPressSelectedProjectFilter?.();
                     } else {
                       onPressProjectItem(selectedTempId);
                     }
                   }}
+                  style={{ paddingRight: 10 }}
                 >
                   <Text weight={"medium"} size="md" color={theme.text}>
                     확인

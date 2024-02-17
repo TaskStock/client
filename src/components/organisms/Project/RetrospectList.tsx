@@ -20,7 +20,7 @@ import { ShadowForRetrospect } from "../../atoms/CustomShadow";
 const Box = styled.Pressable`
   background-color: ${({ theme }) => theme.box};
   padding: ${useResponsiveFontSize(20)}px;
-  border-radius: 20px;
+  border-radius: 15px;
   flex: 1;
 `;
 
@@ -38,7 +38,7 @@ function RetrospectItem({
   const theme = useTheme();
 
   return (
-    <ShadowForRetrospect radius={20}>
+    <ShadowForRetrospect radius={15}>
       <Box onPress={onPressItem} style={{}}>
         <FlexBox gap={spacing.small}>
           <Text size="xs" color={theme.palette.red}>
