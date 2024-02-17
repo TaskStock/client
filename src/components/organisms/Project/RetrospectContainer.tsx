@@ -15,7 +15,6 @@ import CenterModal from "../../molecules/CenterModal";
 import { SearchBar } from "../../molecules/SearchBar";
 import { TextWithIcon } from "../../molecules/TextWithIcon";
 import TextWithRadio from "../../molecules/TextWithRadioBtn";
-import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import RetrospectList from "./RetrospectList";
 
 export default function RetrospectContainer({
@@ -147,7 +146,7 @@ export default function RetrospectContainer({
                 left: 0,
                 right: 0,
                 paddingHorizontal: spacing.small,
-                paddingBottom: spacing.small,
+                paddingBottom: spacing.gutter,
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
