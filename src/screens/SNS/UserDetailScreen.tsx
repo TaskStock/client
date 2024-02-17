@@ -193,9 +193,9 @@ const UserDetailScreen = ({ route, navigation }: UserDetailScreenProps) => {
     return (
       <View style={{ flex: 1, backgroundColor: theme.background }}>
         <PageHeader
-          headerRight={
-            <Icons type="entypo" name="share" size={28} color="black" />
-          }
+        // headerRight={
+        //   <Icons type="entypo" name="share" size={28} color="black" />
+        // }
         />
         <CenterLayout>
           <LoadingSpinner></LoadingSpinner>
@@ -207,9 +207,9 @@ const UserDetailScreen = ({ route, navigation }: UserDetailScreenProps) => {
   return (
     <View style={{ flex: 1, backgroundColor: theme.background }}>
       <PageHeader
-        headerRight={
-          <Icons type="entypo" name="share" size={28} color="black" />
-        }
+      // headerRight={
+      //   <Icons type="entypo" name="share" size={28} color="black" />
+      // }
       />
       {!isPrivate ? (
         <ScrollView ref={scrollViewRef} nestedScrollEnabled>
