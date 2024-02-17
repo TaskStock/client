@@ -75,6 +75,7 @@ export const DateInfo = ({
           name="chevron-thin-left"
           color={theme.text}
           size={useResponsiveFontSize(25)}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         />
         <Icons
           onPress={onPressRight}
@@ -82,6 +83,7 @@ export const DateInfo = ({
           name="chevron-thin-right"
           color={theme.text}
           size={useResponsiveFontSize(25)}
+          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
         />
       </FlexBox>
     </FlexBox>

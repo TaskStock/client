@@ -100,6 +100,7 @@ const TodoContainer = () => {
                   });
                 }}
                 style={{ zIndex: 1000 }}
+                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
               />
             </View>
           </FlexBox>
@@ -125,7 +126,6 @@ const TodoContainer = () => {
         <View
           style={{
             flex: 1,
-            // paddingHorizontal: spacing.gutter,
           }}
         >
           <DraggableTodoList selectedProjectId={selectedProjectId} />

@@ -43,6 +43,7 @@ const Header = ({
       size={useResponsiveFontSize(30)}
       color="white"
       onPress={gridOnPress}
+      hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
     />
     <Text size="lg" weight="semibold" color={"white"}>
       {currentPage} / {totalPage}
@@ -51,6 +52,7 @@ const Header = ({
       source={require("../../../assets/icons/badge-close.png")}
       size={45}
       onPress={closeOnPress}
+      hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
     />
   </FlexBox>
 );

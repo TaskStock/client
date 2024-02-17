@@ -73,15 +73,23 @@ export const IconsPic = ({
   source,
   size,
   onPress,
+  hitSlop,
 }: {
   source: any;
   size: number;
   onPress?: () => void;
+  hitSlop?: {
+    top?: number;
+    bottom?: number;
+    left?: number;
+    right?: number;
+  };
 }) => {
   return (
     <TouchableOpacity
       onPress={onPress ? onPress : undefined}
       disabled={!onPress}
+      hitSlop={hitSlop}
     >
       <Image
         source={source}

@@ -26,6 +26,7 @@ const Header = ({ theme, onPress }) => (
       size={35}
       color={theme.text}
       onPress={onPress}
+      hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
     />
   </SHeader>
 );
