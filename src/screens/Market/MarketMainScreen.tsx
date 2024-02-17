@@ -13,6 +13,7 @@ import Margin from "../../components/atoms/Margin";
 import Text from "../../components/atoms/Text";
 import { MarketSection } from "../../components/molecules/Section";
 import {
+  EmptyStockItem,
   StockItem,
   StockItemSecond,
 } from "../../components/organisms/Market/StockItem";
@@ -233,8 +234,9 @@ export default function MarketMainScreen() {
                   style={{
                     flexGrow: 0,
                   }}
+                  showsHorizontalScrollIndicator={false}
                 >
-                  {section1Data ? (
+                  {!section1Data ? (
                     section1Data.map((item) => {
                       let value = (item.success_count / item.take_count) * 100;
 
@@ -258,15 +260,7 @@ export default function MarketMainScreen() {
                     <>
                       {[1, 2, 3].map((id) => (
                         <View key={"section1skel" + id}>
-                          <CustomSkeleton>
-                            <View
-                              style={{
-                                width: 150,
-                                height: 160,
-                                borderRadius: 20,
-                              }}
-                            ></View>
-                          </CustomSkeleton>
+                          <EmptyStockItem />
                         </View>
                       ))}
                     </>

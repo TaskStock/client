@@ -234,3 +234,35 @@ export const StockItemForWishList = ({
     </StockItemSecondBox>
   );
 };
+
+export const EmptyStockItem = () => {
+  const theme = useTheme();
+  return (
+    <StockItemBox
+      bgColor={theme.name === "dark" ? theme.box : theme.background}
+      style={
+        theme.name === "gray" && { borderColor: theme.textDim, borderWidth: 1 }
+      }
+    >
+      <FlexBox
+        direction="column"
+        alignItems="center"
+        justifyContent="center"
+        styles={{ flex: 1 }}
+      >
+        <Text size="sm" color={theme.textDim}>
+          아직 추가한
+        </Text>
+        <Text size="sm" color={theme.textDim} styles={{ paddingBottom: 10 }}>
+          종목이 없어요.
+        </Text>
+        <Text size="xs" color={theme.textDim}>
+          ‘장 종목 확인하기’에서
+        </Text>
+        <Text size="xs" color={theme.textDim} styles={{ textAlign: "center" }}>
+          종목을 할 일로 추가해보세요!
+        </Text>
+      </FlexBox>
+    </StockItemBox>
+  );
+};
