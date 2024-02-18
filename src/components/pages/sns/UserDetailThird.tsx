@@ -1,23 +1,19 @@
-import { ScrollView, View } from "react-native";
 import React from "react";
-import ContentLayout from "../../atoms/ContentLayout";
-import ProjectList, {
-  BoxIcon,
-  ProjectBox,
-  ProjectItem,
-} from "../../organisms/Project/ProjectList";
-import { useProject } from "../../../hooks/useProject";
-import { Project } from "../../../@types/project";
-import { spacing } from "../../../constants/spacing";
-import ProjectItemList from "../../organisms/TodoModal/ProjectItemList";
-import FlexBox from "../../atoms/FlexBox";
+import { ScrollView, View } from "react-native";
 import { WithLocalSvg } from "react-native-svg";
-import Icons from "../../atoms/Icons";
-import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import { useTheme } from "styled-components";
 import ProjectIcon from "../../../../assets/icons/Chart_white.svg";
-import Text from "../../atoms/Text";
+import { Project } from "../../../@types/project";
+import { spacing } from "../../../constants/spacing";
+import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import ShadowForProject from "../../atoms/CustomShadow";
+import FlexBox from "../../atoms/FlexBox";
+import Text from "../../atoms/Text";
+import {
+  BoxIcon,
+  ProjectBox,
+  Separator,
+} from "../../organisms/Project/ProjectList";
 
 export default function SnsDetailThird({
   projects,
@@ -105,25 +101,13 @@ export default function SnsDetailThird({
                               {item.todo_count + ""}개의 할일
                             </Text>
 
-                            <View
-                              style={{
-                                width: 1,
-                                height: "100%",
-                                backgroundColor: theme.textDim,
-                              }}
-                            />
+                            <Separator />
 
                             <Text size="xs" color={theme.textDim}>
                               {item.retrospect_count + ""}
                               개의 회고
                             </Text>
-                            <View
-                              style={{
-                                width: 1,
-                                height: "100%",
-                                backgroundColor: theme.textDim,
-                              }}
-                            />
+                            <Separator />
 
                             <Text size="xs" color={theme.textDim}>
                               {item.public_range === "all"

@@ -3,6 +3,7 @@ import { client } from "../../services/api";
 import { TRootState } from "../../store/configureStore";
 import { checkAndRenewTokens } from "../authUtils/tokenUtils";
 import { showSuccessToast } from "../showToast";
+import { setNewNotice } from "../../store/modules/user";
 
 const badgeThunk = createAsyncThunk(
   "badge/requestBadge",
@@ -29,6 +30,7 @@ const badgeThunk = createAsyncThunk(
       if (res.result === "success") {
         // {”result”: “success”, “badges”: [1, 2, 3]}
         showSuccessToast("새로운 뱃지를 획득했어요!🔥");
+        dispatch(setNewNotice(true));
         return res.badges;
       } else {
         return rejectWithValue(res.result);

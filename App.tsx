@@ -20,6 +20,7 @@ import { checkTokenExistence } from "./src/store/modules/auth";
 import { startingTheme } from "./src/store/modules/theme";
 import { checkAndRenewTokens } from "./src/utils/authUtils/tokenUtils";
 import { removeData } from "./src/utils/asyncStorage";
+import { Host } from "react-native-portalize";
 
 const THEME = {
   dark: {
@@ -69,17 +70,19 @@ export default function App() {
     <ThemeProvider theme={THEME[theme].theme}>
       <SafeAreaProvider>
         <EventProvider>
-          <NavigationContainer ref={navigationRef}>
-            <GestureHandlerRootView style={{ flex: 1 }}>
-              <Root isLoggedIn={isLoggedIn} />
-            </GestureHandlerRootView>
-          </NavigationContainer>
-          <Toast config={toastConfig}></Toast>
-          <StatusBar
-            translucent
-            backgroundColor="transparent"
-            barStyle={THEME[theme].barStyle}
-          />
+          <Host>
+            <NavigationContainer ref={navigationRef}>
+              <GestureHandlerRootView style={{ flex: 1 }}>
+                <Root isLoggedIn={isLoggedIn} />
+              </GestureHandlerRootView>
+            </NavigationContainer>
+            <Toast config={toastConfig}></Toast>
+            <StatusBar
+              translucent
+              backgroundColor="transparent"
+              barStyle={THEME[theme].barStyle}
+            />
+          </Host>
         </EventProvider>
       </SafeAreaProvider>
     </ThemeProvider>

@@ -6346,6 +6346,11 @@ react-native-permissions@^4.0.4:
   resolved "https://registry.npmjs.org/react-native-permissions/-/react-native-permissions-4.1.0.tgz"
   integrity sha512-P07Ge+gxj0yLcKPE9YK5EQq6PEYDi78aHtJs8E6LAh0actAqe3r3CxnqyVHJ+w4NQbXCJwoqqGTLULYn7OeuhA==
 
+react-native-portalize@^1.0.7:
+  version "1.0.7"
+  resolved "https://registry.npmjs.org/react-native-portalize/-/react-native-portalize-1.0.7.tgz"
+  integrity sha512-icqopPh9ZSV+I8C5LlZN9pQJ0OMeBDNqHhP80+qDx0hOGEcsDC09wgjogbEMfJE0GcMDM7PDYtyQkqa9gIqd1g==
+
 react-native-push-notification@^8.1.1:
   version "8.1.1"
   resolved "https://registry.npmjs.org/react-native-push-notification/-/react-native-push-notification-8.1.1.tgz"
@@ -6445,7 +6450,7 @@ react-native-vector-icons@>7.0.0:
     prop-types "^15.7.2"
     yargs "^16.1.1"
 
-react-native@*, "react-native@^0.0.0-0 || >=0.60 <1.0", "react-native@>= 0.30.0", "react-native@>= 0.64.3", react-native@>=0.33, react-native@>=0.50.1, react-native@>=0.57, react-native@>=0.58.4, react-native@>=0.60.0, react-native@>=0.64.0, react-native@>=0.65, react-native@>=0.69, react-native@>=0.70.0, react-native@0.72.6:
+react-native@*, "react-native@^0.0.0-0 || >=0.60 <1.0", "react-native@> 0.50.0", "react-native@>= 0.30.0", "react-native@>= 0.64.3", react-native@>=0.33, react-native@>=0.50.1, react-native@>=0.57, react-native@>=0.58.4, react-native@>=0.60.0, react-native@>=0.64.0, react-native@>=0.65, react-native@>=0.69, react-native@>=0.70.0, react-native@0.72.6:
   version "0.72.6"
   resolved "https://registry.npmjs.org/react-native/-/react-native-0.72.6.tgz"
   integrity sha512-RafPY2gM7mcrFySS8TL8x+TIO3q7oAlHpzEmC7Im6pmXni6n1AuufGaVh0Narbr1daxstw7yW7T9BKW5dpVc2A==
@@ -6508,7 +6513,7 @@ react-shallow-renderer@^16.15.0:
     object-assign "^4.1.1"
     react-is "^16.12.0 || ^17.0.0 || ^18.0.0"
 
-react@*, "react@^16.0.0 || ^17.0.0 || ^18.0.0", "react@^16.8.0 || ^17.0.0 || ^18.0.0", "react@^16.9.0 || ^17.0.0 || ^18", react@^18.0, react@^18.2.0, "react@>= 15.2.1", "react@>= 16.8.0", "react@>= 17.0.1", react@>=0.14.8, react@>=16, react@>=16.13.1, react@>=16.6.0, react@>=16.6.3, react@>=16.8, react@>=17.0.0, react@>=17.0.2, react@>=18.1.0, react@18.2.0:
+react@*, "react@^16.0.0 || ^17.0.0 || ^18.0.0", "react@^16.8.0 || ^17.0.0 || ^18.0.0", "react@^16.9.0 || ^17.0.0 || ^18", react@^18.0, react@^18.2.0, "react@> 15.0.0", "react@>= 15.2.1", "react@>= 16.8.0", "react@>= 17.0.1", react@>=0.14.8, react@>=16, react@>=16.13.1, react@>=16.6.0, react@>=16.6.3, react@>=16.8, react@>=17.0.0, react@>=17.0.2, react@>=18.1.0, react@18.2.0:
   version "18.2.0"
   resolved "https://registry.npmjs.org/react/-/react-18.2.0.tgz"
   integrity sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ==
