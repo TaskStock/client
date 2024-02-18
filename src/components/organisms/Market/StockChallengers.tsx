@@ -10,6 +10,7 @@ import { spacing } from "../../../constants/spacing";
 import user from "../../../store/modules/user";
 import { Challengers } from "../../../@types/stock";
 import { Image } from "react-native";
+import ProfilePic from "../../atoms/ProfilePic";
 
 const CircleContainer = styled.View`
   width: ${useResponsiveFontSize(27)}px;
@@ -42,14 +43,7 @@ const StockChallengers = ({
         >
           {userListPreview.map((user) => (
             <CircleContainer key={user.user_id}>
-              <Image
-                source={{ uri: user.image }}
-                style={{
-                  width: useResponsiveFontSize(27),
-                  height: useResponsiveFontSize(27),
-                  resizeMode: "contain",
-                }}
-              />
+              <ProfilePic image={user.image} size={useResponsiveFontSize(27)} />
             </CircleContainer>
           ))}
           {userListPreview.length === 5 && (

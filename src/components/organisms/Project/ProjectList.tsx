@@ -105,6 +105,7 @@ export function ProjectItem({
         finished: item.finished,
       })
     );
+    setIsModalOpen(false);
     navigation.navigate("ProjectStackWithoutTab", { screen: "ProjectManage" });
   };
 
