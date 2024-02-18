@@ -24,6 +24,7 @@ import { useStockDetail } from "../../hooks/useStockDetail";
 import { MarketStackParamList } from "../../navigators/MarketStack";
 import { useGetStockSuccessRateQuery } from "../../store/modules/market/market";
 import { useAddTodoMutation } from "../../store/modules/todo/todo";
+import StockChallengers from "../../components/organisms/Market/StockChallengers";
 
 type StockDetailScreenProps = NativeStackScreenProps<
   MarketStackParamList,
@@ -74,6 +75,7 @@ export default function StockDetailScreen({
   const {
     info,
     stat,
+    userList,
     isLoading,
     average,
     maxValue,
@@ -121,6 +123,9 @@ export default function StockDetailScreen({
     });
   };
 
+  // userList 5명 이상이면 5명까지만 보여주기
+  const userListPreview = userList?.slice(0, 5);
+
   return (
     <View style={{ flex: 1, backgroundColor: theme.background }}>
       <PageHeader />
@@ -142,7 +147,7 @@ export default function StockDetailScreen({
             </Section.HeaderText>
             <Margin margin={spacing.small} />
             <Section.HeaderSubText size={15}>
-              현재 {info.take_count}명이 투자중
+              현재 {info.take_count}명이 실천중🔥
             </Section.HeaderSubText>
           </>
         ) : (
@@ -205,7 +210,10 @@ export default function StockDetailScreen({
           info.is_add_today ? (
             <GrayBtn text="오늘 할 일에 추가 완료" onPress={() => {}} />
           ) : (
-            <BlackBtnForProject text="투자하기" onPress={onPressAddStock} />
+            <BlackBtnForProject
+              text="오늘 할 일에 추가하기"
+              onPress={onPressAddStock}
+            />
           )
         ) : (
           <>
@@ -221,7 +229,22 @@ export default function StockDetailScreen({
             </CustomSkeleton>
           </>
         )}
-        <Margin margin={spacing.gutter} />
+        <Margin margin={spacing.offset} />
+        {info?.take_count && userListPreview && userList && (
+          <StockChallengers
+            count={info.take_count}
+            userListPreview={userListPreview}
+            onPress={() =>
+              navigation.navigate("StockChallengersDetailScreen", {
+                userList,
+                count: info.take_count,
+                name: info.name,
+              })
+            }
+          />
+        )}
+
+        <Divider color={theme.textDimmer} marginVertical={20} />
         <FlexBox direction="column" alignItems="stretch" gap={spacing.padding}>
           <FlexBox direction="column" alignItems="stretch" gap={spacing.offset}>
             {!isLoading && info ? (

@@ -244,7 +244,11 @@ export default function MarketListScreen() {
                   );
                 })
               ) : (
-                <Text size="md" color={theme.textDim}>
+                <Text
+                  size="md"
+                  color={theme.textDim}
+                  styles={{ textAlign: "center", paddingTop: 50 }}
+                >
                   종목이 없습니다.
                 </Text>
               )
