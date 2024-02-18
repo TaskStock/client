@@ -109,7 +109,7 @@ export default function ProjectManageScreen() {
             position: "absolute",
             right: 5,
             bottom: 5,
-            backgroundColor: emoji ? theme.text : "transparent",
+            backgroundColor: emoji ? "black" : "transparent",
             justifyContent: "center",
             alignItems: "center",
             padding: 5,
