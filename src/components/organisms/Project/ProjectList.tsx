@@ -50,6 +50,11 @@ export const BoxIcon = styled.View`
   align-items: center;
 `;
 
+export const Separator = styled.View`
+  width: 0.3px;
+  height: 100%;
+  background-color: ${({ theme }) => theme.textDim};
+`;
 const MoreBtn = styled.View`
   position: absolute;
   right: 0;
@@ -207,25 +212,13 @@ export function ProjectItem({
                         {item.todo_count + ""}개의 할일
                       </Text>
 
-                      <View
-                        style={{
-                          width: 1,
-                          height: "100%",
-                          backgroundColor: theme.textDim,
-                        }}
-                      />
+                      <Separator />
 
                       <Text size="xs" color={theme.textDim}>
                         {item.retrospect_count + ""}
                         개의 회고
                       </Text>
-                      <View
-                        style={{
-                          width: 1,
-                          height: "100%",
-                          backgroundColor: theme.textDim,
-                        }}
-                      />
+                      <Separator />
 
                       <Text size="xs" color={theme.textDim}>
                         {publicText}
@@ -325,25 +318,13 @@ export function ProjectItem({
 
                     <FlexBox gap={spacing.padding}>
                       <Text size="xs">{item.todo_count + ""}개의 할일</Text>
-                      <View
-                        style={{
-                          width: 1,
-                          height: "100%",
-                          backgroundColor: theme.textDim,
-                        }}
-                      />
+                      <Separator />
 
                       <Text size="xs">
                         {item.retrospect_count + ""}
                         개의 회고
                       </Text>
-                      <View
-                        style={{
-                          width: 1,
-                          height: "100%",
-                          backgroundColor: theme.textDim,
-                        }}
-                      />
+                      <Separator />
 
                       <Text size="xs">{publicText}</Text>
                     </FlexBox>
