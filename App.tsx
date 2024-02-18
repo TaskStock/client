@@ -14,11 +14,12 @@ import { toastConfig } from "./src/config/toast";
 import { darkTheme, grayTheme } from "./src/constants/colors";
 import { customFontsToLoad } from "./src/constants/typography";
 import Root from "./src/navigators/Root";
-import SplashScreen from "./src/screens/Login/SplashScreen";
+import RNSplashScreen from "./src/screens/Login/SplashScreen";
 import { useAppDispatch, useAppSelect } from "./src/store/configureStore.hooks";
 import { checkTokenExistence } from "./src/store/modules/auth";
 import { startingTheme } from "./src/store/modules/theme";
 import { checkAndRenewTokens } from "./src/utils/authUtils/tokenUtils";
+import SplashScreen from "react-native-splash-screen";
 
 const THEME = {
   dark: {
@@ -46,6 +47,10 @@ export default function App() {
     if (isLoggedIn) {
       dispatch(checkAndRenewTokens());
     }
+
+    setTimeout(() => {
+      SplashScreen.hide();
+    }, 3000);
   }, [isLoggedIn]);
 
   // useEffect(() => {
@@ -62,7 +67,7 @@ export default function App() {
 
   const [fontsLoaded] = Font.useFonts(customFontsToLoad);
 
-  if (!fontsLoaded) return <SplashScreen />;
+  if (!fontsLoaded) return <RNSplashScreen />;
 
   return (
     <ThemeProvider theme={THEME[theme].theme}>

@@ -4,6 +4,8 @@
 #import <React/RCTLinkingManager.h>
 #import <RNKakaoLogins.h>
 #import <UIKit/UIKit.h>
+#import "RNSplashScreen.h"  // here
+
 
 @implementation AppDelegate
 
@@ -19,7 +21,10 @@
   if ([FIRApp defaultApp] == nil) {
     [FIRApp configure];
   }
+
+  // [RNSplashScreen show];  // here
   
+  // return YES;
   return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
 
