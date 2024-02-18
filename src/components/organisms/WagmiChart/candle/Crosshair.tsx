@@ -1,24 +1,24 @@
-import * as React from 'react';
-import { StyleSheet, ViewProps } from 'react-native';
+import * as React from "react";
+import { StyleSheet, ViewProps } from "react-native";
 import {
   GestureEvent,
   LongPressGestureHandler,
   LongPressGestureHandlerEventPayload,
   LongPressGestureHandlerProps,
-} from 'react-native-gesture-handler';
+} from "react-native-gesture-handler";
 import Animated, {
   useAnimatedGestureHandler,
   useSharedValue,
   useAnimatedStyle,
   useAnimatedReaction,
   runOnJS,
-} from 'react-native-reanimated';
-import { clamp } from 'react-native-redash';
+} from "react-native-reanimated";
+import { clamp } from "react-native-redash";
 
-import { CandlestickChartDimensionsContext } from './Chart';
-import { CandlestickChartLine, CandlestickChartLineProps } from './Line';
-import { useCandlestickChart } from './useCandlestickChart';
-import { CandlestickChartCrosshairTooltipContext } from './CrosshairTooltip';
+import { CandlestickChartDimensionsContext } from "./Chart";
+import { CandlestickChartLine, CandlestickChartLineProps } from "./Line";
+import { useCandlestickChart } from "./useCandlestickChart";
+import { CandlestickChartCrosshairTooltipContext } from "./CrosshairTooltip";
 
 type CandlestickChartCrosshairProps = LongPressGestureHandlerProps & {
   color?: string;
@@ -41,7 +41,7 @@ export function CandlestickChartCrosshair({
   const { width, height } = React.useContext(CandlestickChartDimensionsContext);
   const { currentX, currentY, step } = useCandlestickChart();
 
-  const tooltipPosition = useSharedValue<'left' | 'right'>('left');
+  const tooltipPosition = useSharedValue<"left" | "right">("left");
 
   const opacity = useSharedValue(0);
   const onGestureEvent = useAnimatedGestureHandler<
@@ -50,9 +50,9 @@ export function CandlestickChartCrosshair({
     onActive: ({ x, y }) => {
       const boundedX = x <= width - 1 ? x : width - 1;
       if (boundedX < 100) {
-        tooltipPosition.value = 'right';
+        tooltipPosition.value = "right";
       } else {
-        tooltipPosition.value = 'left';
+        tooltipPosition.value = "left";
       }
       opacity.value = 1;
       currentY.value = clamp(y, 0, height);

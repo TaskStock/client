@@ -8,6 +8,9 @@ import {
 } from "../organisms/WagmiChart/candle";
 import { CandlestickChart } from "../organisms/WagmiChart/candle/Chart";
 import { WagmiData } from "../../@types/chart";
+import WagmiTooltips from "../organisms/WagmiChart/candle/WagmiCustomTooltips";
+import { WagmiCustomTooltipItem } from "../organisms/WagmiChart/candle/WagmiCustomTooltipItem";
+import Text from "../atoms/Text";
 
 function WagmiChart({
   data,
@@ -30,13 +33,18 @@ function WagmiChart({
             negativeColor={theme.low}
             lineColor={theme.palette.neutral600_gray}
           />
-          <CandlestickChartCrosshair>
+          {/* <WagmiTooltips>
+            <WagmiCustomTooltipItem>
+              <Text size="md">dfdf</Text>
+            </WagmiCustomTooltipItem>
+          </WagmiTooltips> */}
+          {/* <CandlestickChartCrosshair>
             <CandlestickChartCrosshairTooltip
               textStyle={{
                 color: theme.text,
               }}
             />
-          </CandlestickChartCrosshair>
+          </CandlestickChartCrosshair> */}
         </CandlestickChart>
       </CandlestickChartProvider>
     </>

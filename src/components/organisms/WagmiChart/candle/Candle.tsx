@@ -2,16 +2,35 @@ import React from "react";
 import Animated, {
   withTiming,
   useAnimatedProps,
+  FadeIn,
+  FadeOut,
 } from "react-native-reanimated";
-import { Line, LineProps, NumberProp, Rect, RectProps } from "react-native-svg";
+import {
+  Circle,
+  Line,
+  LineProps,
+  NumberProp,
+  Rect,
+  RectProps,
+  Svg,
+} from "react-native-svg";
 
 import type { TCandle, TDomain } from "./types";
 import { getY, getHeight } from "./utils";
-import { ColorValue } from "react-native";
-import { useTheme } from "styled-components/native";
+import { ColorValue, Pressable, View } from "react-native";
+import styled, { useTheme } from "styled-components/native";
+import dayjs from "dayjs";
+import Text from "../../../atoms/Text";
+import { Shadow } from "react-native-shadow-2";
 
 const AnimatedRect = Animated.createAnimatedComponent(Rect);
 const AnimatedLine = Animated.createAnimatedComponent(Line);
+
+const TooltipText = styled.Text`
+  font-family: "semibold";
+  font-size: 15px;
+  color: white;
+`;
 
 export type CandlestickChartCandleProps = {
   candle: TCandle;
@@ -71,17 +90,19 @@ export const CandlestickChartCandle = ({
   index,
   width,
   useAnimations = true,
-  renderLine = (props) =>
-    props.useAnimations ? <AnimatedLine {...props} /> : <Line {...props} />,
-  renderRect = (props) =>
-    props.useAnimations ? <AnimatedRect {...props} /> : <Rect {...props} />,
-}: CandlestickChartCandleProps) => {
-  const { close, open, high, low } = candle;
+}: // renderLine = (props) =>
+//   props.useAnimations ? <AnimatedLine {...props} /> : <Line {...props} />,
+// renderRect = (props) =>
+//   props.useAnimations ? <AnimatedRect {...props} /> : <Rect {...props} />,
+CandlestickChartCandleProps) => {
+  const { close, open, high, low, timestamp } = candle;
   const isPositive = close > open;
   const fill = isPositive ? positiveColor : negativeColor;
   const x = index * width;
   const max = Math.max(open, close);
   const min = Math.min(open, close);
+
+  const [isTooltipVisible, setIsTooltipVisible] = React.useState(false);
 
   const lineProps = React.useMemo(
     () => ({
@@ -142,6 +163,57 @@ export const CandlestickChartCandle = ({
     height: withTiming(getHeight({ maxHeight, value: max - min, domain })),
   }));
 
+  const today = dayjs.unix(timestamp).format("MM/DD");
+
+  const onPressCandleItem = () => {
+    setIsTooltipVisible(!isTooltipVisible);
+  };
+
+  const renderRect = (props) =>
+    props.useAnimations ? (
+      <AnimatedRect
+        {...props}
+        onPressIn={onPressCandleItem}
+        onPressOut={onPressCandleItem}
+      />
+    ) : (
+      <Rect {...props} />
+    );
+
+  const renderLine = (props) =>
+    props.useAnimations ? (
+      <AnimatedLine
+        {...props}
+        onPressIn={onPressCandleItem}
+        onPressOut={onPressCandleItem}
+      />
+    ) : (
+      <Line {...props} />
+    );
+
+  const theme = useTheme();
+  const tooltipWidth = 60;
+  const YPosition = getY({ maxHeight, value: max, domain });
+  const tooltipYPos = YPosition > 25 ? YPosition - 35 : YPosition + 35;
+  const tooltipLeft =
+    x > 20
+      ? x + margin + (width - margin * 2) / 2 - tooltipWidth / 2
+      : x + margin + (width - margin * 2) / 2 - 10;
+
+  const tooltipLineY1 = tooltipYPos + 10;
+  const tooltipLineY2 =
+    (getY({ maxHeight, value: max, domain }) +
+      getY({ maxHeight, value: min, domain })) /
+    2;
+
+  // stroke: lineColor,
+  // strokeWidth: 1,
+  // direction: isPositive ? "positive" : "negative",
+  // x1: x + width / 2,
+  // y1: getY({ maxHeight, value: low, domain }),
+  // x2: x + width / 2,
+  // y2: getY({ maxHeight, value: high, domain }),
+
   return (
     <>
       {renderLine({
@@ -150,11 +222,69 @@ export const CandlestickChartCandle = ({
         ...(useAnimations ? { animatedProps: animatedLineProps } : {}),
         stroke: lineColor,
       })}
+
       {renderRect({
         ...rectProps,
         useAnimations,
         ...(useAnimations ? { animatedProps: animatedRectProps } : {}),
       })}
+
+      {isTooltipVisible && (
+        <>
+          <Animated.View
+            entering={FadeIn.duration(300)}
+            exiting={FadeOut.duration(150)}
+            style={{
+              position: "absolute",
+              top: tooltipYPos,
+              left: tooltipLeft,
+              paddingVertical: 7,
+              borderRadius: 5,
+              zIndex: 100,
+              backgroundColor: "black",
+              width: tooltipWidth,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              borderWidth: theme.name === "gray" ? 0 : 1,
+              borderColor: theme.name === "gray" ? "trans rent" : "white",
+            }}
+          >
+            <Shadow distance={5}>
+              <TooltipText>{today}</TooltipText>
+            </Shadow>
+          </Animated.View>
+          <Line
+            stroke="black"
+            strokeDasharray="2, 2"
+            x1={x + width / 2}
+            x2={x + width / 2}
+            y1={tooltipLineY1}
+            y2={tooltipLineY2}
+          />
+          <Circle
+            cx={x + width / 2}
+            cy={tooltipLineY2}
+            r={3}
+            fill={theme.text}
+          ></Circle>
+
+          {/* <Rect
+            x={x + margin}
+            y={getY({ maxHeight, value: max, domain })}
+            width={30}
+            height={20}
+            // fill={"black"}
+          ></Rect>
+          <Text
+            x={x + margin}
+            y={getY({ maxHeight, value: max, domain }) + 20}
+            fill={"white"}
+          >
+            {today}
+          </Text> */}
+        </>
+      )}
     </>
   );
 };

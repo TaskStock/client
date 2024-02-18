@@ -5,6 +5,7 @@ import { CandlestickChartDimensionsContext } from "./Chart";
 import { CandlestickChartCandle, CandlestickChartCandleProps } from "./Candle";
 import { useCandlestickChart } from "./useCandlestickChart";
 import { interpolate } from "react-native-reanimated";
+import { Pressable } from "react-native";
 
 type CandlestickChartCandlesProps = SvgProps & {
   width?: number;
