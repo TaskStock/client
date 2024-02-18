@@ -26,17 +26,29 @@ import TutorialBox from "../TutorialBox";
 import BottomDrawer from "./BottomDrawer";
 import { setStep1 } from "../../../store/modules/tutorial";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
+import { setCurrentDateString } from "../../../store/modules/calendar";
+import { IsoString } from "../../../@types/calendar";
 
 export const DateContainer = styled.View`
   padding: ${spacing.small}px ${spacing.gutter}px 0;
 `;
+
+const TodayBtn = styled.Pressable`
+  border-radius: 15px;
+  padding: 1px 8px;
+  border-width: 1px;
+  border-color: ${({ theme }) => theme.text};
+`;
+
 const TodoContainer = () => {
   const theme = useTheme();
   const dispatch = useAppDispatch();
   const { currentDateString } = useAppSelect((state) => state.calendar);
   const { projects, selectedProjectId } = useProject();
 
-  const headerDate = dayjs(currentDateString).format("MM월 DD일");
+  const currentDate = dayjs(currentDateString);
+
+  const headerDate = currentDate.format("MM월 DD일");
 
   const { DEFAULT_HEIGHT, OPEN_STATE } = useContext(ComponentHeightContext);
 
@@ -46,6 +58,22 @@ const TodoContainer = () => {
   const { showTutorial, step1, step3 } = useAppSelect(
     (state) => state.tutorial
   );
+
+  const onPressToday = () => {
+    // currentDate에서 연도와 월, 일을 오늘날짜와 똑같이 맞춰준다.
+
+    const today = dayjs();
+
+    dispatch(
+      setCurrentDateString(
+        currentDate
+          .set("year", today.get("year"))
+          .set("month", today.get("month"))
+          .set("date", today.get("date"))
+          .toISOString() as IsoString
+      )
+    );
+  };
 
   if (defaultValue !== 0 && openState !== 0) {
     return (
@@ -72,7 +100,10 @@ const TodoContainer = () => {
                 {headerDate}
               </Text>
             </Pressable>
-            <View>
+            <FlexBox alignItems="center" gap={spacing.padding + spacing.small}>
+              <TodayBtn onPress={onPressToday}>
+                <Text size="xs">오늘</Text>
+              </TodayBtn>
               {showTutorial && step1 ? (
                 <TutorialBox
                   style={{
@@ -82,7 +113,6 @@ const TodoContainer = () => {
                   type={1}
                 />
               ) : null}
-
               <Icons
                 type="entypo"
                 name="circle-with-plus"
@@ -102,7 +132,7 @@ const TodoContainer = () => {
                 style={{ zIndex: 1000 }}
                 hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
               />
-            </View>
+            </FlexBox>
           </FlexBox>
           {showTutorial && step3 ? (
             <TutorialBox
@@ -126,6 +156,7 @@ const TodoContainer = () => {
         <View
           style={{
             flex: 1,
+            marginTop: spacing.small,
           }}
         >
           <DraggableTodoList selectedProjectId={selectedProjectId} />
