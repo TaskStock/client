@@ -340,6 +340,7 @@ export default function MarketMainScreen() {
               >
                 <ScrollView
                   horizontal
+                  showsHorizontalScrollIndicator={false}
                   contentContainerStyle={{
                     columnGap: spacing.padding + spacing.small,
                     paddingTop: 3,

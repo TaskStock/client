@@ -19,7 +19,7 @@ export interface IAlarmData {
   info: any;
   is_read: boolean;
   notice_id: number;
-  type: "sns" | "general" | "admin";
+  type: "sns" | "general" | "admin" | "badge";
 }
 
 const AlarmScreen = () => {
@@ -39,7 +39,7 @@ const AlarmScreen = () => {
         accessToken,
       });
       setAlarmDatas(res.noticeList);
-      // console.log("알림 목록: ", res.noticeList);
+      console.log("알림 목록: ", res.noticeList);
     } catch (e) {
       console.log(e);
     }
