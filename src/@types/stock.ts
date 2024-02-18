@@ -15,6 +15,11 @@ export interface StockItem extends Stock {
   user_id: number;
 }
 
+export interface Challengers {
+  user_id: number;
+  user_name: string;
+  image: string;
+}
 export interface StockDetail {
   stockitem: {
     name: string;
@@ -43,4 +48,5 @@ export interface StockDetail {
     s_saturday: number;
     s_sunday: number;
   };
+  userlist: Challengers[];
 }

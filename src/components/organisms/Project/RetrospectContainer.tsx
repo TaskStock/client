@@ -170,41 +170,28 @@ export default function RetrospectContainer({
             setIsProjectFilterOpen(false);
           }}
         >
-          <ScrollView
-            style={{
-              position: "absolute",
-              bottom: 30,
-              left: 0,
-              right: 0,
-              paddingHorizontal: spacing.small,
-              paddingBottom: spacing.small,
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <View style={{ left: -5 }}>
+          <View>
+            <TextWithRadio
+              value={"전체"}
+              id={null}
+              selectedId={selectedTempId}
+              onPressRadio={() => {
+                setSelectedTempId(null);
+              }}
+            ></TextWithRadio>
+            {projects.map((project) => (
               <TextWithRadio
-                value={"전체"}
-                id={null}
+                key={project.project_id + "project"}
+                id={project.project_id}
                 selectedId={selectedTempId}
+                value={project.name}
                 onPressRadio={() => {
-                  setSelectedTempId(null);
+                  setSelectedTempId(project.project_id);
                 }}
               ></TextWithRadio>
-              {projects.map((project) => (
-                <TextWithRadio
-                  key={project.project_id + "project"}
-                  id={project.project_id}
-                  selectedId={selectedTempId}
-                  value={project.name}
-                  onPressRadio={() => {
-                    setSelectedTempId(project.project_id);
-                  }}
-                ></TextWithRadio>
-              ))}
-            </View>
-          </ScrollView>
+            ))}
+          </View>
+
           <Margin margin={spacing.offset}></Margin>
           <FlexBox
             justifyContent="flex-end"

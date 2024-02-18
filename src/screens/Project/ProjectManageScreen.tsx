@@ -1,5 +1,5 @@
-import { View } from "react-native";
-import React from "react";
+import { Pressable, TouchableOpacity, View } from "react-native";
+import React, { useState } from "react";
 import PageHeader from "../../components/molecules/PageHeader";
 import Section from "../../components/molecules/Section";
 import ContentLayout from "../../components/atoms/ContentLayout";
@@ -15,6 +15,17 @@ import { useProjectForm } from "../../hooks/useProjectForm";
 import Text from "../../components/atoms/Text";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { ProjectStackParamList } from "../../navigators/ProjectStack";
+import Icons, { IconsPic } from "../../components/atoms/Icons";
+import EmojiSelector, { Categories } from "react-native-emoji-selector";
+
+const THEME_CONSTANTS = {
+  dark: {
+    addEmoji: require("../../../assets/icons/addEmoji-dark.png"),
+  },
+  gray: {
+    addEmoji: require("../../../assets/icons/addEmoji-light.png"),
+  },
+};
 
 const ProjectSection = ({
   headerText,
@@ -87,15 +98,70 @@ export default function ProjectManageScreen() {
     onRemove();
     navigation.goBack();
   };
+  const [isEmojiSelectorOpen, setIsEmojiSelectorOpen] = useState(false);
+  const [emoji, setEmoji] = useState("");
+  const AddEmoji = () => {
+    return (
+      <>
+        <TouchableOpacity
+          onPress={() => setIsEmojiSelectorOpen((prev) => !prev)}
+          style={{
+            position: "absolute",
+            right: 5,
+            bottom: 5,
+            backgroundColor: emoji ? "black" : "transparent",
+            justifyContent: "center",
+            alignItems: "center",
+            padding: 5,
+            width: 40,
+            height: 40,
+            borderRadius: 40,
+          }}
+        >
+          {emoji !== "" ? (
+            <Text size="xl">{emoji}</Text>
+          ) : (
+            <IconsPic source={THEME_CONSTANTS[theme.name].addEmoji} size={35} />
+          )}
+        </TouchableOpacity>
+      </>
+    );
+  };
+
+  const EmojiSelectorBox = () => (
+    <View
+      style={{
+        position: "absolute",
+        width: "100%",
+        height: "50%",
+        backgroundColor: "white",
+        zIndex: 100,
+        bottom: 0,
+      }}
+    >
+      <EmojiSelector
+        category={Categories.all}
+        onEmojiSelected={(emoji) => setEmoji(emoji)}
+        placeholder={"검색"}
+        columns={10}
+        showHistory={false}
+        showTabs={false}
+        showSectionTitles={false}
+      />
+    </View>
+  );
 
   return (
-    <View
+    <Pressable
       style={{
         flex: 1,
         backgroundColor: theme.box,
       }}
+      onPress={() => setIsEmojiSelectorOpen(false)}
     >
       <PageHeader />
+      {isEmojiSelectorOpen && <EmojiSelectorBox />}
+
       <ContentLayout>
         <FlexBox direction="column" gap={spacing.gutter} alignItems="stretch">
           <ProjectSection headerText="프로젝트 이름">
@@ -106,7 +172,9 @@ export default function ProjectManageScreen() {
               placeholder="프로젝트 이름을 입력하세요"
               maxLength={25}
             ></TextInputWithBorder>
+            <AddEmoji />
           </ProjectSection>
+
           <ProjectSection headerText="공개설정">
             <FlexBox direction="row" gap={spacing.padding}>
               {PUBLIC_TYPE.map((item) => (
@@ -143,9 +211,7 @@ export default function ProjectManageScreen() {
                     <Text
                       size="sm"
                       color={
-                        form.finished === item.value
-                          ? theme.textReverse
-                          : theme.text
+                        form.finished === item.value ? "white" : theme.text
                       }
                     >
                       {item.name}
@@ -174,6 +240,6 @@ export default function ProjectManageScreen() {
           )}
         </FlexBox>
       </ContentLayout>
-    </View>
+    </Pressable>
   );
 }

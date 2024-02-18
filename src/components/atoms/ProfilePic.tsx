@@ -7,7 +7,7 @@ const ProfilePic = ({
   size = 55,
 }: {
   image: string;
-  strategy: string;
+  strategy?: string;
   size?: number;
 }) => {
   // const SERVER_URL = getAPIHost();
@@ -24,14 +24,14 @@ const ProfilePic = ({
     <>
       {image ? (
         <Image
-          style={{ width: size, height: size, borderRadius: 50 }}
+          style={{ width: size, height: size, borderRadius: size }}
           source={{
             uri: image,
           }}
         />
       ) : (
         <Image
-          style={{ width: size, height: size, borderRadius: 50 }}
+          style={{ width: size, height: size, borderRadius: size }}
           source={require("../../../assets/images/default_profile.png")}
         />
       )}

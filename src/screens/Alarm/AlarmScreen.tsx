@@ -39,7 +39,7 @@ const AlarmScreen = () => {
         accessToken,
       });
       setAlarmDatas(res.noticeList);
-      console.log("알림 목록: ", res.noticeList);
+      // console.log("알림 목록: ", res.noticeList);
     } catch (e) {
       console.log(e);
     }

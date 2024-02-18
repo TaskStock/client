@@ -158,6 +158,7 @@ export const marketApi = createApi({
       onQueryStarted: async (arg, { dispatch, queryFulfilled }) => {
         try {
           const response = await queryFulfilled;
+          console.log(response);
         } catch (error) {
           console.log("Error", error);
           showErrorToast(
