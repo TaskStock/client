@@ -143,12 +143,20 @@ const retrospectSlice = createSlice({
       Object.assign(state.allRetrospectQueries, action.payload);
     },
     addAllRetrospectListItem(state, action: { payload: Retrospect[] }) {
+      if (state.allRetrospectQueries.offset === 0) {
+        state.allRetrospectQueries.list = [];
+      }
+
       state.allRetrospectQueries.list = [
         ...state.allRetrospectQueries.list,
         ...action.payload,
       ];
     },
     addProjectRetrospectListItem(state, action: { payload: Retrospect[] }) {
+      if (state.projectRetrospectQueries.offset === 0) {
+        state.projectRetrospectQueries.list = [];
+      }
+
       state.projectRetrospectQueries.list = [
         ...state.projectRetrospectQueries.list,
         ...action.payload,

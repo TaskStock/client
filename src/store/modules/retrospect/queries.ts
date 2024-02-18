@@ -1,12 +1,6 @@
 import { EndpointBuilder } from "@reduxjs/toolkit/query";
-import { Retrospect } from "../../../@types/retrospect";
 import { DateStringYYYYMM } from "../../../@types/calendar";
-import {
-  addAllRetrospectListItem,
-  addProjectRetrospectListItem,
-  setAllRetrospectQueries,
-  setProjectRetrospectQueries,
-} from "./retrospect";
+import { Retrospect } from "../../../@types/retrospect";
 import { showErrorToast } from "../../../utils/showToast";
 
 type Builder = EndpointBuilder<
@@ -52,12 +46,6 @@ export const getAllRetrospectQuery = (builder: Builder) =>
     onQueryStarted: async ({ offset }, { dispatch, queryFulfilled }) => {
       try {
         const result = await queryFulfilled;
-        if (offset === 0)
-          dispatch(
-            setAllRetrospectQueries({
-              list: [],
-            })
-          );
       } catch (error) {
         console.log(error);
         showErrorToast("회고 목록을 불러오는데 실패했어요.");
@@ -86,13 +74,6 @@ export const getAllProjectRetrospectQuery = (builder: Builder) =>
     providesTags: ["projectRetrospect"],
     onQueryStarted: async ({ offset }, { dispatch, queryFulfilled }) => {
       try {
-        if (offset === 0)
-          dispatch(
-            setProjectRetrospectQueries({
-              list: [],
-            })
-          );
-
         const result = await queryFulfilled;
       } catch (error) {
         console.log(error);
