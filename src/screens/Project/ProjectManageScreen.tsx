@@ -85,6 +85,7 @@ export default function ProjectManageScreen() {
     onChangeProjectName,
     onChangeProjectPublic,
     onChangeProjectProgress,
+    onChangeProjectEmoji,
     onSubmit,
     onRemove,
   } = useProjectForm();
@@ -109,7 +110,8 @@ export default function ProjectManageScreen() {
             position: "absolute",
             right: 5,
             bottom: 5,
-            backgroundColor: emoji ? "black" : "transparent",
+            // backgroundColor: emoji ? "black" : "transparent",
+            backgroundColor: "transparent",
             justifyContent: "center",
             alignItems: "center",
             padding: 5,
@@ -128,28 +130,37 @@ export default function ProjectManageScreen() {
     );
   };
 
-  const EmojiSelectorBox = () => (
-    <View
-      style={{
-        position: "absolute",
-        width: "100%",
-        height: "50%",
-        backgroundColor: "white",
-        zIndex: 100,
-        bottom: 0,
-      }}
-    >
-      <EmojiSelector
-        category={Categories.all}
-        onEmojiSelected={(emoji) => setEmoji(emoji)}
-        placeholder={"검색"}
-        columns={10}
-        showHistory={false}
-        showTabs={false}
-        showSectionTitles={false}
-      />
-    </View>
-  );
+  const EmojiSelectorBox = () => {
+    const onEmojiSelected = (emoji: string) => {
+      setEmoji(emoji);
+      onChangeProjectEmoji(emoji);
+
+      setIsEmojiSelectorOpen(false);
+    };
+
+    return (
+      <View
+        style={{
+          position: "absolute",
+          width: "100%",
+          height: "50%",
+          backgroundColor: "white",
+          zIndex: 100,
+          bottom: 0,
+        }}
+      >
+        <EmojiSelector
+          category={Categories.all}
+          onEmojiSelected={onEmojiSelected}
+          placeholder={"검색"}
+          columns={10}
+          showHistory={false}
+          showTabs={false}
+          showSectionTitles={false}
+        />
+      </View>
+    );
+  };
 
   return (
     <Pressable

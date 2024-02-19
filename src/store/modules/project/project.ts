@@ -59,6 +59,7 @@ const projectSlice = createSlice({
     resetProjectForm(state) {
       state.projectForm = {
         project_id: undefined,
+        project_emoji: undefined,
         name: "",
         public_range: "all",
         finished: false,
@@ -85,6 +86,7 @@ const projectSlice = createSlice({
           name: string;
           public_range: publicType;
           finished: boolean;
+          project_emoji?: string;
         };
       }
     ) {
@@ -93,6 +95,7 @@ const projectSlice = createSlice({
         name: action.payload.name,
         public_range: action.payload.public_range,
         finished: action.payload.finished,
+        project_emoji: action.payload.project_emoji,
       });
     },
   },

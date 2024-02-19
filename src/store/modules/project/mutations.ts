@@ -41,6 +41,7 @@ export const addProjectMutation = (builder: MutationBuilder) =>
     {
       name: string;
       public_range: publicType;
+      project_emoji?: string;
     }
   >({
     query: (body) => ({
@@ -49,6 +50,7 @@ export const addProjectMutation = (builder: MutationBuilder) =>
       body: {
         name: body.name,
         public_range: body.public_range,
+        project_emoji: body.project_emoji,
       },
     }),
     invalidatesTags: ["Project"],
@@ -117,6 +119,7 @@ export const updateProjectMutation = (builder: MutationBuilder) =>
     },
     {
       project_id: number;
+      project_emoji?: string;
       name: string;
       public_range: publicType;
       finished: boolean;
@@ -130,6 +133,7 @@ export const updateProjectMutation = (builder: MutationBuilder) =>
         name: body.name,
         public_range: body.public_range,
         finished: body.finished,
+        project_emoji: body.project_emoji,
       },
     }),
     invalidatesTags: ["Project"],

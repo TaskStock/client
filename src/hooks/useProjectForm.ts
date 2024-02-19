@@ -5,6 +5,8 @@ import {
   useDeleteProjectMutation,
   useUpdateProjectMutation,
 } from "../store/modules/project/project";
+import { useGetAllTodosQuery } from "../store/modules/todo/todo";
+import { useGetAllTodoArgs } from "./useGetAllTodoArgs";
 
 export const useProjectForm = () => {
   const form = useAppSelect((state) => state.project.projectForm);
@@ -43,6 +45,15 @@ export const useProjectForm = () => {
     );
   };
 
+  const onChangeProjectEmoji = (value) => {
+    dispatch(
+      setProjectForm({
+        name: "project_emoji",
+        value: value,
+      })
+    );
+  };
+
   const onSubmit = () => {
     console.log(form.project_id);
 
@@ -61,9 +72,12 @@ export const useProjectForm = () => {
     }
   };
 
+  const { date } = useGetAllTodoArgs();
+
   const onRemove = () => {
     deleteProject({
       project_id: form.project_id!,
+      todo_query_arg: date,
     });
   };
 
@@ -73,6 +87,7 @@ export const useProjectForm = () => {
     onChangeProjectPublic,
     onChangeProjectName,
     onChangeProjectProgress,
+    onChangeProjectEmoji,
     onSubmit,
     onRemove,
   };

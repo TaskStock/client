@@ -40,7 +40,7 @@ export const ProjectBox = styled.Pressable<{ isFinished: boolean }>`
   border-color: ${({ theme }) => theme.projectItemBorder};
 `;
 
-export const BoxIcon = styled.View`
+export const BoxIcon = styled.View<{ hasImoji?: boolean }>`
   width: ${useResponsiveFontSize(45)}px;
   height: ${useResponsiveFontSize(45)}px;
   border-radius: ${useResponsiveFontSize(45)}px;
@@ -48,6 +48,21 @@ export const BoxIcon = styled.View`
   display: flex;
   justify-content: center;
   align-items: center;
+  padding-left: ${({ hasImoji }) => (hasImoji ? 1 : 0)}px;
+  padding-top: ${({ hasImoji }) => (hasImoji ? 2 : 0)}px;
+`;
+
+const ImojiBox = styled.View`
+  width: ${useResponsiveFontSize(45)}px;
+  height: ${useResponsiveFontSize(45)}px;
+  border-radius: ${useResponsiveFontSize(45)}px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-left: 1px;
+  padding-top: 2px;
+  border-width: 1px;
+  border-color: ${({ theme }) => theme.textDimmer};
 `;
 
 export const Separator = styled.View`
@@ -103,6 +118,7 @@ export function ProjectItem({
         name: item.name,
         public_range: item.public_range,
         finished: item.finished,
+        project_emoji: item.project_emoji,
       })
     );
     setIsModalOpen(false);
@@ -177,9 +193,15 @@ export function ProjectItem({
               }}
               alignItems="center"
             >
-              <BoxIcon>
-                <WithLocalSvg asset={ProjectIcon} />
-              </BoxIcon>
+              {item.project_emoji ? (
+                <BoxIcon hasImoji>
+                  <Text size="xl">😀</Text>
+                </BoxIcon>
+              ) : (
+                <BoxIcon>
+                  <WithLocalSvg asset={ProjectIcon} />
+                </BoxIcon>
+              )}
               <View
                 style={{
                   flex: 1,
@@ -289,9 +311,15 @@ export function ProjectItem({
               }}
               alignItems="center"
             >
-              <BoxIcon>
-                <WithLocalSvg asset={ProjectIcon} />
-              </BoxIcon>
+              {item.project_emoji ? (
+                <BoxIcon hasImoji>
+                  <Text size="xl">😀</Text>
+                </BoxIcon>
+              ) : (
+                <BoxIcon>
+                  <WithLocalSvg asset={ProjectIcon} />
+                </BoxIcon>
+              )}
               <View
                 style={{
                   flex: 1,
