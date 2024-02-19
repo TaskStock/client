@@ -50,7 +50,7 @@ export default function App() {
 
     setTimeout(() => {
       SplashScreen.hide();
-    }, 3000);
+    }, 1000);
   }, [isLoggedIn]);
 
   // useEffect(() => {

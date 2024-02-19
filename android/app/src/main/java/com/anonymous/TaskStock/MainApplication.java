@@ -25,6 +25,7 @@ import expo.modules.ReactNativeHostWrapper;
 import io.invertase.firebase.app.ReactNativeFirebaseAppPackage;
 import io.invertase.firebase.messaging.ReactNativeFirebaseMessagingPackage;
 import java.util.List;
+import org.devio.rn.splashscreen.SplashScreenReactPackage;
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -44,6 +45,8 @@ public class MainApplication extends Application implements ReactApplication {
         // Packages that cannot be autolinked yet can be added manually here, for example:
         // packages.add(new MyReactNativePackage());
         //  packages.add(new ReactNativeFirebaseAppPackage());
+
+        // packages.add(new SplashScreenReactPackage());
         return packages;
       }
 
