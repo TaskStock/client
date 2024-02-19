@@ -166,30 +166,18 @@ CandlestickChartCandleProps) => {
   const today = dayjs.unix(timestamp).format("MM/DD");
 
   const onPressCandleItem = () => {
+    if (max == min) {
+      return;
+    }
+
     setIsTooltipVisible(!isTooltipVisible);
   };
 
   const renderRect = (props) =>
-    props.useAnimations ? (
-      <AnimatedRect
-        {...props}
-        onPressIn={onPressCandleItem}
-        onPressOut={onPressCandleItem}
-      />
-    ) : (
-      <Rect {...props} />
-    );
+    props.useAnimations ? <AnimatedRect {...props} /> : <Rect {...props} />;
 
   const renderLine = (props) =>
-    props.useAnimations ? (
-      <AnimatedLine
-        {...props}
-        onPressIn={onPressCandleItem}
-        onPressOut={onPressCandleItem}
-      />
-    ) : (
-      <Line {...props} />
-    );
+    props.useAnimations ? <AnimatedLine {...props} /> : <Line {...props} />;
 
   const theme = useTheme();
   const tooltipWidth = 60;
@@ -216,6 +204,16 @@ CandlestickChartCandleProps) => {
 
   return (
     <>
+      <Rect
+        x={x}
+        y={0}
+        width={width}
+        height={maxHeight}
+        fill={"transparent"}
+        onPressIn={onPressCandleItem}
+        onPressOut={onPressCandleItem}
+      ></Rect>
+
       {renderLine({
         ...lineProps,
         useAnimations,
