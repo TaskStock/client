@@ -238,6 +238,12 @@ const AlarmBox = ({ item }: { item: IAlarmData }) => {
     handleOnPress = () => {
       navigation.navigate("AlarmDetail", { detail, title, subText });
     };
+  } else if (alarmItem.type === "badge") {
+    // type === 'badge' 이면 클릭 시 뱃지 상세페이지로 이동
+    console.log(alarmItem);
+    handleOnPress = () => {
+      navigation.navigate("MainTab", { screen: "Ranking" });
+    };
   } else {
     // type === 'sns' or 'general' 이면 클릭 시 target_id의 상세페이지로 이동
     handleOnPress = () => {

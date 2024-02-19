@@ -158,7 +158,12 @@ export default function DraggableTodoList({
   if (isLoading) {
     return (
       <ListContainer>
-        <View style={{ paddingHorizontal: spacing.gutter }}>
+        <View
+          style={{
+            paddingHorizontal: spacing.gutter,
+            paddingVertical: spacing.padding,
+          }}
+        >
           <SkeletonTodoItem />
           <SkeletonTodoItem />
         </View>
@@ -193,7 +198,7 @@ export default function DraggableTodoList({
           direction="column"
           alignItems="center"
           gap={spacing.padding}
-          styles={{ paddingTop: spacing.padding }}
+          styles={{ paddingTop: spacing.gutter }}
         >
           <Text size="md" color={theme.textDim}>
             오늘은 할 일이 없어요.

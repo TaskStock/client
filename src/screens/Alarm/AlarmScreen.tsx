@@ -19,7 +19,7 @@ export interface IAlarmData {
   info: any;
   is_read: boolean;
   notice_id: number;
-  type: "sns" | "general" | "admin";
+  type: "sns" | "general" | "admin" | "badge";
 }
 
 const AlarmScreen = () => {

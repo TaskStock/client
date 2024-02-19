@@ -146,7 +146,7 @@ const BadgeScreen = ({ navigation, route }) => {
       <Text size="sm" color={"white"}>
         옆으로 넘겨 더 다양한 뱃지를 확인해보세요!
       </Text>
-      <Share onPress={() => {}} />
+      {/* <Share onPress={() => {}} /> */}
       <Margin margin={80} />
     </Container>
   );

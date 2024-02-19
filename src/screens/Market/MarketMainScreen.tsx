@@ -13,6 +13,7 @@ import Margin from "../../components/atoms/Margin";
 import Text from "../../components/atoms/Text";
 import { MarketSection } from "../../components/molecules/Section";
 import {
+  EmptyStockItem,
   StockItem,
   StockItemSecond,
 } from "../../components/organisms/Market/StockItem";
@@ -233,31 +234,43 @@ export default function MarketMainScreen() {
                   style={{
                     flexGrow: 0,
                   }}
+                  showsHorizontalScrollIndicator={false}
                 >
                   {section1Data ? (
-                    section1Data.map((item) => {
-                      let value = (item.success_count / item.take_count) * 100;
-
-                      let successRate = value ? value : 0;
-
-                      return (
-                        <View key={item.stockitem_id}>
-                          <StockItem
-                            id={item.stockitem_id}
-                            name={item.name}
-                            percent={successRate}
-                            price={item.level * upValue}
-                            onPress={() => {
-                              onPressStockItem(item.stockitem_id);
-                            }}
-                          ></StockItem>
+                    section1Data.length === 0 ? (
+                      [1, 2, 3].map((id) => (
+                        <View key={"section1skel" + id}>
+                          {/* <EmptyStockItem /> */}
+                          <EmptyStockItem />
                         </View>
-                      );
-                    })
+                      ))
+                    ) : (
+                      section1Data.map((item) => {
+                        let value =
+                          (item.success_count / item.take_count) * 100;
+
+                        let successRate = value ? value : 0;
+
+                        return (
+                          <View key={item.stockitem_id}>
+                            <StockItem
+                              id={item.stockitem_id}
+                              name={item.name}
+                              percent={successRate}
+                              price={item.level * upValue}
+                              onPress={() => {
+                                onPressStockItem(item.stockitem_id);
+                              }}
+                            ></StockItem>
+                          </View>
+                        );
+                      })
+                    )
                   ) : (
                     <>
                       {[1, 2, 3].map((id) => (
                         <View key={"section1skel" + id}>
+                          {/* <EmptyStockItem /> */}
                           <CustomSkeleton>
                             <View
                               style={{
@@ -327,6 +340,7 @@ export default function MarketMainScreen() {
               >
                 <ScrollView
                   horizontal
+                  showsHorizontalScrollIndicator={false}
                   contentContainerStyle={{
                     columnGap: spacing.padding + spacing.small,
                     paddingTop: 3,

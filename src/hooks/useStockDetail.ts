@@ -8,6 +8,7 @@ export const useStockDetail = (stockId: number) => {
 
   const info = data?.stockitem;
   const stat = data?.statistics;
+  const userList = data?.userlist;
 
   let mySuccessRate = info
     ? isNaN(Math.round((info.my_success_count / info.my_take_count) * 100))
@@ -30,6 +31,7 @@ export const useStockDetail = (stockId: number) => {
   return {
     info,
     stat,
+    userList,
     isLoading,
     isError,
     average,

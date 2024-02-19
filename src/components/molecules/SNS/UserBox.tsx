@@ -63,7 +63,6 @@ const UserBox = ({
       alignItems="center"
       styles={{
         paddingVertical: spacing.padding,
-        paddingHorizontal: useResponsiveFontSize(15),
       }}
     >
       <Container

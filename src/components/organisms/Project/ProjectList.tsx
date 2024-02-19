@@ -2,11 +2,13 @@ import { NavigationProp, useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import { FlatList, Pressable, View } from "react-native";
 import OutsidePressHandler from "react-native-outside-press";
+import { Portal } from "react-native-portalize";
 import { WithLocalSvg } from "react-native-svg";
 import styled, { useTheme } from "styled-components/native";
 import ProjectIcon from "../../../../assets/icons/Chart_white.svg";
 import { Project } from "../../../@types/project";
 import { spacing } from "../../../constants/spacing";
+import { useGetAllTodoArgs } from "../../../hooks/useGetAllTodoArgs";
 import { ProjectStackParamList } from "../../../navigators/ProjectStack";
 import {
   useAppDispatch,
@@ -26,12 +28,10 @@ import { ModalBtn, ModalContainer } from "../../atoms/FloatModal";
 import Icons from "../../atoms/Icons";
 import LoadingSpinner from "../../atoms/LoadingSpinner";
 import Margin from "../../atoms/Margin";
-import RoundItemBtn from "../../atoms/RoundItemBtn";
 import Text from "../../atoms/Text";
 import CenterModal from "../../molecules/CenterModal";
-import { useGetAllTodoArgs } from "../../../hooks/useGetAllTodoArgs";
 
-const ProjectBox = styled.Pressable<{ isFinished: boolean }>`
+export const ProjectBox = styled.Pressable<{ isFinished: boolean }>`
   border-radius: ${useResponsiveFontSize(15)}px;
   background-color: ${(props) =>
     props.isFinished ? props.theme.background : props.theme.box};
@@ -40,7 +40,7 @@ const ProjectBox = styled.Pressable<{ isFinished: boolean }>`
   border-color: ${({ theme }) => theme.projectItemBorder};
 `;
 
-const BoxIcon = styled.View`
+export const BoxIcon = styled.View`
   width: ${useResponsiveFontSize(45)}px;
   height: ${useResponsiveFontSize(45)}px;
   border-radius: ${useResponsiveFontSize(45)}px;
@@ -50,6 +50,11 @@ const BoxIcon = styled.View`
   align-items: center;
 `;
 
+export const Separator = styled.View`
+  width: 0.3px;
+  height: 100%;
+  background-color: ${({ theme }) => theme.textDim};
+`;
 const MoreBtn = styled.View`
   position: absolute;
   right: 0;
@@ -61,7 +66,13 @@ const MoreBtn = styled.View`
   align-items: center;
 `;
 
-function ProjectItem({ item, zIndex }: { item: Project; zIndex?: number }) {
+export function ProjectItem({
+  item,
+  zIndex,
+}: {
+  item: Project;
+  zIndex?: number;
+}) {
   const navigation = useNavigation<NavigationProp<ProjectStackParamList>>();
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -75,11 +86,6 @@ function ProjectItem({ item, zIndex }: { item: Project; zIndex?: number }) {
   const currentUserId = useAppSelect((state) => state.user.user.user_id);
 
   const theme = useTheme();
-
-  const modalPosition = {
-    top: 20,
-    right: 10,
-  };
 
   const publicText =
     item.public_range === "all"
@@ -99,6 +105,7 @@ function ProjectItem({ item, zIndex }: { item: Project; zIndex?: number }) {
         finished: item.finished,
       })
     );
+    setIsModalOpen(false);
     navigation.navigate("ProjectStackWithoutTab", { screen: "ProjectManage" });
   };
 
@@ -139,11 +146,13 @@ function ProjectItem({ item, zIndex }: { item: Project; zIndex?: number }) {
     setIsDeleteModalOpen(true);
   };
 
-  const onPressMoreDot = () => {
+  const [modalLocation, setModalLocation] = useState({ x: 0, y: 0 });
+  const onPressMoreDot = (event) => {
     if (item.user_id !== currentUserId) {
       return;
     }
-
+    const { pageX, pageY } = event.nativeEvent;
+    setModalLocation({ x: pageX, y: pageY });
     setIsModalOpen(!isModalOpen);
   };
 
@@ -152,7 +161,7 @@ function ProjectItem({ item, zIndex }: { item: Project; zIndex?: number }) {
       style={{
         flex: 1,
         paddingHorizontal: spacing.gutter,
-        zIndex: zIndexOfModal,
+        // zIndex: zIndexOfModal,
       }}
     >
       {!item.finished ? (
@@ -201,25 +210,13 @@ function ProjectItem({ item, zIndex }: { item: Project; zIndex?: number }) {
                         {item.todo_count + ""}개의 할일
                       </Text>
 
-                      <View
-                        style={{
-                          width: 1,
-                          height: "100%",
-                          backgroundColor: theme.textDim,
-                        }}
-                      />
+                      <Separator />
 
                       <Text size="xs" color={theme.textDim}>
                         {item.retrospect_count + ""}
                         개의 회고
                       </Text>
-                      <View
-                        style={{
-                          width: 1,
-                          height: "100%",
-                          backgroundColor: theme.textDim,
-                        }}
-                      />
+                      <Separator />
 
                       <Text size="xs" color={theme.textDim}>
                         {publicText}
@@ -237,56 +234,46 @@ function ProjectItem({ item, zIndex }: { item: Project; zIndex?: number }) {
                     />
                   </View>
                 </FlexBox>
-
-                {/* {currentUserId == item.user_id && (
-                  <MoreBtn>
-                    <Text size="sm">프로젝트 더보기</Text>
-                    <Icons
-                      type="entypo"
-                      name="chevron-thin-right"
-                      size={15}
-                      color={theme.text}
-                    />
-                  </MoreBtn>
-                )} */}
               </View>
             </FlexBox>
           </ProjectBox>
           {isModalOpen && (
-            <OutsidePressHandler
-              onOutsidePress={() => {
-                setIsModalOpen(false);
-              }}
-              style={{
-                position: "absolute",
-                top: 0,
-                right: 0,
-              }}
-            >
-              <ModalContainer
-                position={{
-                  top: modalPosition.top,
-                  right: modalPosition.right,
+            <Portal>
+              <OutsidePressHandler
+                onOutsidePress={() => {
+                  setIsModalOpen(false);
+                }}
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  right: 0,
                 }}
               >
-                <ModalBtn isSelected onPress={onPressProjectManageBtn}>
-                  <Text
-                    size="sm"
-                    color={getThemeElement(theme).reverseButtonText}
-                  >
-                    프로젝트 관리
-                  </Text>
-                </ModalBtn>
-                {!item.finished && (
-                  <ModalBtn onPress={onPressProjectCompleteBtn}>
-                    <Text size="sm">완료로 이동</Text>
+                <ModalContainer
+                  position={{
+                    top: modalLocation.y - 50,
+                    right: 80,
+                  }}
+                >
+                  <ModalBtn isSelected onPress={onPressProjectManageBtn}>
+                    <Text
+                      size="sm"
+                      color={getThemeElement(theme).reverseButtonText}
+                    >
+                      프로젝트 관리
+                    </Text>
                   </ModalBtn>
-                )}
-                <ModalBtn onPress={onPressProjectDeleteBtn}>
-                  <Text size="sm">삭제하기</Text>
-                </ModalBtn>
-              </ModalContainer>
-            </OutsidePressHandler>
+                  {!item.finished && (
+                    <ModalBtn onPress={onPressProjectCompleteBtn}>
+                      <Text size="sm">완료로 이동</Text>
+                    </ModalBtn>
+                  )}
+                  <ModalBtn onPress={onPressProjectDeleteBtn}>
+                    <Text size="sm">삭제하기</Text>
+                  </ModalBtn>
+                </ModalContainer>
+              </OutsidePressHandler>
+            </Portal>
           )}
         </ShadowForProject>
       ) : (
@@ -331,25 +318,13 @@ function ProjectItem({ item, zIndex }: { item: Project; zIndex?: number }) {
 
                     <FlexBox gap={spacing.padding}>
                       <Text size="xs">{item.todo_count + ""}개의 할일</Text>
-                      <View
-                        style={{
-                          width: 1,
-                          height: "100%",
-                          backgroundColor: theme.textDim,
-                        }}
-                      />
+                      <Separator />
 
                       <Text size="xs">
                         {item.retrospect_count + ""}
                         개의 회고
                       </Text>
-                      <View
-                        style={{
-                          width: 1,
-                          height: "100%",
-                          backgroundColor: theme.textDim,
-                        }}
-                      />
+                      <Separator />
 
                       <Text size="xs">{publicText}</Text>
                     </FlexBox>
@@ -369,40 +344,42 @@ function ProjectItem({ item, zIndex }: { item: Project; zIndex?: number }) {
             </FlexBox>
           </ProjectBox>
           {isModalOpen && (
-            <OutsidePressHandler
-              onOutsidePress={() => {
-                setIsModalOpen(false);
-              }}
-              style={{
-                position: "absolute",
-                top: 0,
-                right: 0,
-              }}
-            >
-              <ModalContainer
-                position={{
-                  top: modalPosition.top,
-                  right: modalPosition.right,
+            <Portal>
+              <OutsidePressHandler
+                onOutsidePress={() => {
+                  setIsModalOpen(false);
+                }}
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  right: 0,
                 }}
               >
-                <ModalBtn isSelected onPress={onPressProjectManageBtn}>
-                  <Text
-                    size="sm"
-                    color={getThemeElement(theme).reverseButtonText}
-                  >
-                    프로젝트 관리
-                  </Text>
-                </ModalBtn>
-                {!item.finished && (
-                  <ModalBtn onPress={onPressProjectCompleteBtn}>
-                    <Text size="sm">완료로 이동</Text>
+                <ModalContainer
+                  position={{
+                    top: modalLocation.y - 50,
+                    right: 80,
+                  }}
+                >
+                  <ModalBtn isSelected onPress={onPressProjectManageBtn}>
+                    <Text
+                      size="sm"
+                      color={getThemeElement(theme).reverseButtonText}
+                    >
+                      프로젝트 관리
+                    </Text>
                   </ModalBtn>
-                )}
-                <ModalBtn onPress={onPressProjectDeleteBtn}>
-                  <Text size="sm">삭제하기</Text>
-                </ModalBtn>
-              </ModalContainer>
-            </OutsidePressHandler>
+                  {!item.finished && (
+                    <ModalBtn onPress={onPressProjectCompleteBtn}>
+                      <Text size="sm">완료로 이동</Text>
+                    </ModalBtn>
+                  )}
+                  <ModalBtn onPress={onPressProjectDeleteBtn}>
+                    <Text size="sm">삭제하기</Text>
+                  </ModalBtn>
+                </ModalContainer>
+              </OutsidePressHandler>
+            </Portal>
           )}
         </View>
       )}

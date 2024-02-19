@@ -8,12 +8,11 @@ import useHeight from "../../hooks/useHeight";
 import { useAppDispatch, useAppSelect } from "../../store/configureStore.hooks";
 import { getFriendsThunk } from "../../store/modules/getFriends";
 import createBadgeDispatcher from "../../utils/badgeUtils/badge";
-import { showSuccessToast } from "../../utils/showToast";
 
 const Container = styled.View`
   flex: 1;
-  padding-left: ${spacing.offset}px;
-  padding-right: ${spacing.offset}px;
+  padding-left: ${spacing.gutter}px;
+  padding-right: ${spacing.gutter}px;
   background-color: ${({ theme }) => theme.background};
 `;
 

@@ -15,7 +15,6 @@ import CenterModal from "../../molecules/CenterModal";
 import { SearchBar } from "../../molecules/SearchBar";
 import { TextWithIcon } from "../../molecules/TextWithIcon";
 import TextWithRadio from "../../molecules/TextWithRadioBtn";
-import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import RetrospectList from "./RetrospectList";
 
 export default function RetrospectContainer({
@@ -66,13 +65,14 @@ export default function RetrospectContainer({
 
   return (
     <>
-      <ContentLayout>
+      <ContentLayout noVerticalPadding>
         <FlexBox
           direction="column"
           alignItems="stretch"
           gap={spacing.padding + spacing.small}
           styles={{
             flex: 1,
+            paddingTop: spacing.padding,
           }}
         >
           <SearchBar
@@ -146,7 +146,7 @@ export default function RetrospectContainer({
                 left: 0,
                 right: 0,
                 paddingHorizontal: spacing.small,
-                paddingBottom: spacing.small,
+                paddingBottom: spacing.gutter,
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
@@ -170,34 +170,28 @@ export default function RetrospectContainer({
             setIsProjectFilterOpen(false);
           }}
         >
-          <ScrollView
-            style={{
-              height: useResponsiveFontSize(200),
-              minWidth: 250,
-            }}
-          >
-            <View style={{ left: -5 }}>
+          <View>
+            <TextWithRadio
+              value={"전체"}
+              id={null}
+              selectedId={selectedTempId}
+              onPressRadio={() => {
+                setSelectedTempId(null);
+              }}
+            ></TextWithRadio>
+            {projects.map((project) => (
               <TextWithRadio
-                value={"전체"}
-                id={null}
+                key={project.project_id + "project"}
+                id={project.project_id}
                 selectedId={selectedTempId}
+                value={project.name}
                 onPressRadio={() => {
-                  setSelectedTempId(null);
+                  setSelectedTempId(project.project_id);
                 }}
               ></TextWithRadio>
-              {projects.map((project) => (
-                <TextWithRadio
-                  key={project.project_id + "project"}
-                  id={project.project_id}
-                  selectedId={selectedTempId}
-                  value={project.name}
-                  onPressRadio={() => {
-                    setSelectedTempId(project.project_id);
-                  }}
-                ></TextWithRadio>
-              ))}
-            </View>
-          </ScrollView>
+            ))}
+          </View>
+
           <Margin margin={spacing.offset}></Margin>
           <FlexBox
             justifyContent="flex-end"
