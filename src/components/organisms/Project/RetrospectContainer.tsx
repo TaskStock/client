@@ -72,7 +72,7 @@ export default function RetrospectContainer({
           gap={spacing.padding + spacing.small}
           styles={{
             flex: 1,
-            paddingTop: spacing.padding,
+            paddingTop: spacing.offset,
           }}
         >
           <SearchBar
@@ -170,51 +170,62 @@ export default function RetrospectContainer({
             setIsProjectFilterOpen(false);
           }}
         >
-          <View>
-            <TextWithRadio
-              value={"전체"}
-              id={null}
-              selectedId={selectedTempId}
-              onPressRadio={() => {
-                setSelectedTempId(null);
-              }}
-            ></TextWithRadio>
-            {projects.map((project) => (
-              <TextWithRadio
-                key={project.project_id + "project"}
-                id={project.project_id}
-                selectedId={selectedTempId}
-                value={project.name}
-                onPressRadio={() => {
-                  setSelectedTempId(project.project_id);
-                }}
-              ></TextWithRadio>
-            ))}
-          </View>
-
-          <Margin margin={spacing.offset}></Margin>
-          <FlexBox
-            justifyContent="flex-end"
-            styles={{
-              paddingHorizontal: spacing.offset,
+          <View
+            style={{
+              width: "100%",
+              paddingVertical: 40,
+              paddingHorizontal: 40,
+              // borderWidth: 1,
+              // borderColor: theme.name == "gray" ? "transparent" : theme.text,
+              // borderRadius: 20,
             }}
           >
-            <Pressable
-              onPress={() => {
-                setIsProjectFilterOpen(false);
-
-                if (!selectedTempId) {
-                  onPressSelectedProjectFilter?.();
-                } else {
-                  onPressProjectItem(selectedTempId);
-                }
+            <FlexBox
+              direction="column"
+              gap={spacing.small}
+              styles={{
+                paddingRight: 100,
               }}
             >
-              <Text weight={"medium"} size="md" color={theme.text}>
-                확인
-              </Text>
-            </Pressable>
-          </FlexBox>
+              <TextWithRadio
+                value={"전체"}
+                id={null}
+                selectedId={selectedTempId}
+                onPressRadio={() => {
+                  setSelectedTempId(null);
+                }}
+              ></TextWithRadio>
+              {projects.map((project) => (
+                <TextWithRadio
+                  key={project.project_id + "project"}
+                  id={project.project_id}
+                  selectedId={selectedTempId}
+                  value={project.name}
+                  onPressRadio={() => {
+                    setSelectedTempId(project.project_id);
+                  }}
+                ></TextWithRadio>
+              ))}
+            </FlexBox>
+            <Margin margin={spacing.offset}></Margin>
+            <FlexBox justifyContent="flex-end" styles={{}}>
+              <Pressable
+                onPress={() => {
+                  setIsProjectFilterOpen(false);
+
+                  if (!selectedTempId) {
+                    onPressSelectedProjectFilter?.();
+                  } else {
+                    onPressProjectItem(selectedTempId);
+                  }
+                }}
+              >
+                <Text weight={"medium"} size="md" color={theme.text}>
+                  확인
+                </Text>
+              </Pressable>
+            </FlexBox>
+          </View>
         </CenterModal>
       )}
     </>

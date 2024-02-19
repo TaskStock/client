@@ -7,7 +7,7 @@ export const _IOS_API_HOST = `${LOCAL_API_HOST_IOS}`;
 // const _IOS_API_HOST = "http://127.0.0.1:8000/";
 // const _ANDROID_API_HOST = "http://10.0.2.2:8000/";
 
-console.log(LOCAL_API_HOST_ANDROID, LOCAL_API_HOST_IOS);
+// console.log(LOCAL_API_HOST_ANDROID, LOCAL_API_HOST_IOS);
 
 export const getAPIHost = (): string => {
   // console.log(LOCAL_API_HOST_ANDROID);

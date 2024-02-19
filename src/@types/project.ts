@@ -6,7 +6,7 @@ export interface Project {
   todo_count: number;
   retrospect_count: number;
   finished: boolean;
-  project_emoji?: string;
+  emoji?: string;
 }
 
 export type publicType = "all" | "follow" | "none";

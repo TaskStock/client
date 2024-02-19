@@ -50,13 +50,14 @@ export const addProjectMutation = (builder: MutationBuilder) =>
       body: {
         name: body.name,
         public_range: body.public_range,
-        project_emoji: body.project_emoji,
+        emoji: body.project_emoji,
       },
     }),
     invalidatesTags: ["Project"],
     onQueryStarted: async (arg, { dispatch, queryFulfilled }) => {
       try {
         await queryFulfilled;
+        console.log(arg.project_emoji);
       } catch (error) {
         console.log("Error", error);
         showErrorToast("잠시후에 다시 시도해주세요.");
@@ -133,13 +134,14 @@ export const updateProjectMutation = (builder: MutationBuilder) =>
         name: body.name,
         public_range: body.public_range,
         finished: body.finished,
-        project_emoji: body.project_emoji,
+        emoji: body.project_emoji,
       },
     }),
     invalidatesTags: ["Project"],
     onQueryStarted: async (arg, { dispatch, queryFulfilled }) => {
       try {
         await queryFulfilled;
+        console.log(arg.project_emoji);
       } catch (error) {
         console.log("Error", error);
         showErrorToast("잠시후에 다시 시도해주세요.");

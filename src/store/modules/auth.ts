@@ -41,6 +41,8 @@ export const checkTokenExistence = createAsyncThunk(
       const strategy = await getData("strategy");
       const deviceId = await getData("deviceId");
 
+      console.log("access", accessToken);
+
       if (accessToken && accessExp && refreshExp) {
         return {
           accessToken,

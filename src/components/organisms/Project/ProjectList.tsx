@@ -92,8 +92,6 @@ export function ProjectItem({
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
-  const zIndexOfModal = zIndex ? zIndex * 1000 : 1000;
-
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [deleteProject] = useDeleteProjectMutation();
   const [updateProject] = useUpdateProjectMutation();
@@ -118,7 +116,7 @@ export function ProjectItem({
         name: item.name,
         public_range: item.public_range,
         finished: item.finished,
-        project_emoji: item.project_emoji,
+        project_emoji: item.emoji,
       })
     );
     setIsModalOpen(false);
@@ -193,9 +191,9 @@ export function ProjectItem({
               }}
               alignItems="center"
             >
-              {item.project_emoji ? (
+              {item.emoji ? (
                 <BoxIcon hasImoji>
-                  <Text size="xl">😀</Text>
+                  <Text size="xl">{item.emoji}</Text>
                 </BoxIcon>
               ) : (
                 <BoxIcon>
@@ -311,9 +309,9 @@ export function ProjectItem({
               }}
               alignItems="center"
             >
-              {item.project_emoji ? (
+              {item.emoji ? (
                 <BoxIcon hasImoji>
-                  <Text size="xl">😀</Text>
+                  <Text size="xl">{item.emoji}</Text>
                 </BoxIcon>
               ) : (
                 <BoxIcon>
@@ -417,8 +415,16 @@ export function ProjectItem({
             setIsDeleteModalOpen(false);
           }}
         >
-          <FlexBox direction="column" alignItems="center" gap={spacing.gutter}>
-            <Text size="sm" weight="medium">
+          <FlexBox
+            direction="column"
+            alignItems="center"
+            gap={spacing.gutter}
+            styles={{
+              paddingHorizontal: 40,
+              paddingVertical: 40,
+            }}
+          >
+            <Text size="md" weight="medium">
               해당 프로젝트를 삭제하시겠습니까?
             </Text>
             <View

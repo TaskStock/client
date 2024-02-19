@@ -4,6 +4,7 @@ import Text from "../atoms/Text";
 import { Pressable } from "react-native";
 import { RadioButton } from "react-native-radio-buttons-group";
 import { useTheme } from "styled-components/native";
+import { spacing } from "../../constants/spacing";
 
 export default function TextWithRadio({
   id,
@@ -20,7 +21,7 @@ export default function TextWithRadio({
 
   return (
     <Pressable onPress={onPressRadio}>
-      <FlexBox alignItems="center" styles={{ paddingRight: 130 }}>
+      <FlexBox alignItems="center" gap={spacing.small}>
         <RadioButton
           selected={selectedId === id}
           id={id + ""}
