@@ -7,6 +7,7 @@ import WishListScreen from "../screens/Market/WishListScreen";
 import WishRegisterScreen from "../screens/Market/WishRegisterScreen";
 import StockChallengersDetailScreen from "../screens/Market/StockChallengersDetailScreen";
 import { Challengers } from "../@types/stock";
+import UserDetailScreen from "../screens/SNS/UserDetailScreen";
 
 export type MarketStackParamList = {
   MarketMainScreen: undefined;
@@ -21,6 +22,9 @@ export type MarketStackParamList = {
   };
   WishListScreen: undefined;
   WishRegisterScreen: undefined;
+  UserDetail: {
+    userId: number;
+  };
 };
 
 const NativeStack = createNativeStackNavigator<MarketStackParamList>();
@@ -46,6 +50,7 @@ const MarketStack = () => (
       name="WishRegisterScreen"
       component={WishRegisterScreen}
     />
+    <NativeStack.Screen name="UserDetail" component={UserDetailScreen} />
   </NativeStack.Navigator>
 );
 

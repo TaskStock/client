@@ -1,5 +1,5 @@
-import { Pressable, TouchableOpacity, View } from "react-native";
-import React, { useState } from "react";
+import { Keyboard, Pressable, TouchableOpacity, View } from "react-native";
+import React, { useEffect, useState } from "react";
 import PageHeader from "../../components/molecules/PageHeader";
 import Section from "../../components/molecules/Section";
 import ContentLayout from "../../components/atoms/ContentLayout";
@@ -101,6 +101,11 @@ export default function ProjectManageScreen() {
   };
   const [isEmojiSelectorOpen, setIsEmojiSelectorOpen] = useState(false);
   const [emoji, setEmoji] = useState("");
+
+  useEffect(() => {
+    Keyboard.dismiss();
+  }, [isEmojiSelectorOpen]);
+
   const AddEmoji = () => {
     return (
       <>
@@ -168,7 +173,10 @@ export default function ProjectManageScreen() {
         flex: 1,
         backgroundColor: theme.box,
       }}
-      onPress={() => setIsEmojiSelectorOpen(false)}
+      onPress={() => {
+        setIsEmojiSelectorOpen(false);
+        Keyboard.dismiss();
+      }}
     >
       <PageHeader />
       {isEmojiSelectorOpen && <EmojiSelectorBox />}
@@ -182,6 +190,7 @@ export default function ProjectManageScreen() {
               onChangeText={onChangeProjectName}
               placeholder="프로젝트 이름을 입력하세요"
               maxLength={25}
+              onFocus={() => setIsEmojiSelectorOpen(false)}
             ></TextInputWithBorder>
             <AddEmoji />
           </ProjectSection>
