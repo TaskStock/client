@@ -57,7 +57,7 @@ const StockChallengers = ({
           )}
         </FlexBox>
         <FlexBox alignItems="center" gap={8}>
-          <Text size="sm">{count}명 실천중</Text>
+          <Text size="sm">{count.toString()}명 실천중</Text>
           <Icons
             type="entypo"
             name="chevron-thin-right"
