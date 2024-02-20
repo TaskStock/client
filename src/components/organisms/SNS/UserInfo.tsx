@@ -22,6 +22,7 @@ import ProfilePic from "../../atoms/ProfilePic";
 import Text from "../../atoms/Text";
 import BadgesPreview from "../../molecules/SNS/BadgesPreview";
 import ZoomPicModal from "./ZoomPicModal";
+import { getUserFollowerThunk } from "../../../store/modules/getFriends";
 
 const Container = styled.View`
   padding: ${spacing.padding}px ${spacing.gutter}px ${spacing.offset}px;
@@ -63,6 +64,17 @@ const UserInfo = () => {
         break;
     }
   };
+
+  const onPressUserFollowing = () => {
+    dispatch(getUserFollowerThunk(data.user_id));
+
+    navigation.navigate("UserFollowing", {
+      userId: data.user_id,
+      src: data.image,
+      username: data.user_name,
+    });
+  };
+
   const { width: clientWidth } = Dimensions.get("window");
 
   const [picZoomModal, setPicZoomModal] = useState(false);
@@ -110,15 +122,7 @@ const UserInfo = () => {
             iconType={"entypo"}
             color={theme.text}
           />
-          <Pressable
-            onPress={() =>
-              navigation.navigate("UserFollowing", {
-                userId: data.user_id,
-                src: data.image,
-                username: data.user_name,
-              })
-            }
-          >
+          <Pressable onPress={onPressUserFollowing}>
             <Info
               text={`${data.follower_count} 팔로워 · ${data.following_count} 팔로잉`}
               iconName={"person-outline"}

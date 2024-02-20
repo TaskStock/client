@@ -16,6 +16,7 @@ import { spacing } from "../../constants/spacing";
 import { IFriend } from "../../store/modules/getFriends";
 import styled, { useTheme } from "styled-components/native";
 import { buttonRender } from "../../utils/UserUtils/buttonRender";
+import { useAppSelect } from "../../store/configureStore.hooks";
 
 const TabContent = styled.View`
   flex: 1;
@@ -38,12 +39,9 @@ export default function UserFollowingScreen({
 
   const theme = useTheme();
 
-  const { data } = useGetFriendFollowerListQuery({
-    userId,
-  });
-
-  const followingList = data?.followingList;
-  const followerList = data?.followerList;
+  const { followerList, followingList } = useAppSelect(
+    (state) => state.friends.targetUser
+  );
 
   const { index, onChangeIndex, renderScene, routes } = useTab({
     routeMap: [
