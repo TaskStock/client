@@ -1,6 +1,6 @@
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
-import { FlatList, Pressable, View } from "react-native";
+import { FlatList, Platform, Pressable, View } from "react-native";
 import OutsidePressHandler from "react-native-outside-press";
 import { Portal } from "react-native-portalize";
 import { WithLocalSvg } from "react-native-svg";
@@ -48,8 +48,10 @@ export const BoxIcon = styled.View<{ hasImoji?: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-left: ${({ hasImoji }) => (hasImoji ? 1 : 0)}px;
-  padding-top: ${({ hasImoji }) => (hasImoji ? 2 : 0)}px;
+  padding-left: ${({ hasImoji }) =>
+    Platform.OS == "android" ? 0.2 : hasImoji ? 1 : 0}px;
+  padding-top: ${({ hasImoji }) =>
+    Platform.OS == "android" ? -1 : hasImoji ? 1 : 0}px;
 `;
 
 const ImojiBox = styled.View`

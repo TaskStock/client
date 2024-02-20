@@ -38,8 +38,6 @@ export default function UserFollowingScreen({
 
   const theme = useTheme();
 
-  console.log(src);
-
   const { data } = useGetFriendFollowerListQuery({
     userId,
   });
