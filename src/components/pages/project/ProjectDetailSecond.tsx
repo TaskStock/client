@@ -7,8 +7,6 @@ import { resetRetrospectForm } from "../../../store/modules/retrospect/retrospec
 import RetrospectContainer from "../../organisms/Project/RetrospectContainer";
 
 const ProjectDetailSecond = memo(({ projectId }: { projectId: number }) => {
-  console.log("detailsecond rerendered", projectId);
-
   const navigation = useNavigation<NavigationProp<ProjectStackParamList>>();
 
   const dispatch = useAppDispatch();

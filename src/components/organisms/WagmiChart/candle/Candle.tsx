@@ -163,7 +163,7 @@ CandlestickChartCandleProps) => {
     height: withTiming(getHeight({ maxHeight, value: max - min, domain })),
   }));
 
-  const today = dayjs.unix(timestamp).format("MM/DD");
+  const today = dayjs.unix(timestamp).subtract(1, "days").format("MM/DD");
 
   const onPressCandleItem = () => {
     if (max == min) {
@@ -174,10 +174,26 @@ CandlestickChartCandleProps) => {
   };
 
   const renderRect = (props) =>
-    props.useAnimations ? <AnimatedRect {...props} /> : <Rect {...props} />;
+    props.useAnimations ? (
+      <AnimatedRect
+        onPressIn={onPressCandleItem}
+        onPressOut={onPressCandleItem}
+        {...props}
+      />
+    ) : (
+      <Rect {...props} />
+    );
 
   const renderLine = (props) =>
-    props.useAnimations ? <AnimatedLine {...props} /> : <Line {...props} />;
+    props.useAnimations ? (
+      <AnimatedLine
+        onPressIn={onPressCandleItem}
+        onPressOut={onPressCandleItem}
+        {...props}
+      />
+    ) : (
+      <Line {...props} />
+    );
 
   const theme = useTheme();
   const tooltipWidth = 60;

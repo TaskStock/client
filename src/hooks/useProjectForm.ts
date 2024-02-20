@@ -55,7 +55,7 @@ export const useProjectForm = () => {
   };
 
   const onSubmit = () => {
-    console.log(form.project_id);
+    console.log(form);
 
     if (isEditMode) {
       updateProject({
@@ -63,11 +63,13 @@ export const useProjectForm = () => {
         name: form.name,
         public_range: form.public_range,
         finished: form.finished,
+        project_emoji: form.project_emoji,
       });
     } else {
       addProject({
         name: form.name,
         public_range: form.public_range,
+        project_emoji: form.project_emoji,
       });
     }
   };

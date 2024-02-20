@@ -17,6 +17,7 @@ import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { ProjectStackParamList } from "../../navigators/ProjectStack";
 import Icons, { IconsPic } from "../../components/atoms/Icons";
 import EmojiSelector, { Categories } from "react-native-emoji-selector";
+import { BoxIcon } from "../../components/organisms/Project/ProjectList";
 
 const THEME_CONSTANTS = {
   dark: {
@@ -126,7 +127,9 @@ export default function ProjectManageScreen() {
           }}
         >
           {emoji !== "" ? (
-            <Text size="xl">{emoji}</Text>
+            <BoxIcon hasImoji>
+              <Text size="xl">{emoji}</Text>
+            </BoxIcon>
           ) : (
             <IconsPic source={THEME_CONSTANTS[theme.name].addEmoji} size={35} />
           )}
@@ -192,7 +195,22 @@ export default function ProjectManageScreen() {
               maxLength={25}
               onFocus={() => setIsEmojiSelectorOpen(false)}
             ></TextInputWithBorder>
-            <AddEmoji />
+            {form.project_emoji ? (
+              <Pressable
+                style={{
+                  position: "absolute",
+                  right: 5,
+                  bottom: 5,
+                }}
+                onPress={() => setIsEmojiSelectorOpen((prev) => !prev)}
+              >
+                <BoxIcon hasImoji>
+                  <Text size="xl">{form.project_emoji}</Text>
+                </BoxIcon>
+              </Pressable>
+            ) : (
+              <AddEmoji />
+            )}
           </ProjectSection>
 
           <ProjectSection headerText="공개설정">

@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
-import { Dimensions, TouchableOpacity, View } from "react-native";
+import { Dimensions, Pressable, TouchableOpacity, View } from "react-native";
 import styled, { useTheme } from "styled-components/native";
 import { spacing } from "../../../constants/spacing";
 import {
@@ -22,6 +22,7 @@ import ProfilePic from "../../atoms/ProfilePic";
 import Text from "../../atoms/Text";
 import BadgesPreview from "../../molecules/SNS/BadgesPreview";
 import ZoomPicModal from "./ZoomPicModal";
+import { getUserFollowerThunk } from "../../../store/modules/getFriends";
 
 const Container = styled.View`
   padding: ${spacing.padding}px ${spacing.gutter}px ${spacing.offset}px;
@@ -44,6 +45,8 @@ const UserInfo = () => {
   const dispatch = useAppDispatch();
   const { targetUser: data, badges } = useAppSelect((state) => state.friends);
 
+  const current_user_id = useAppSelect((state) => state.user.user.user_id);
+
   const navigation = useNavigation() as any;
   const handleFollow = () => {
     switch (data.button) {
@@ -61,6 +64,17 @@ const UserInfo = () => {
         break;
     }
   };
+
+  const onPressUserFollowing = () => {
+    dispatch(getUserFollowerThunk(data.user_id));
+
+    navigation.navigate("UserFollowing", {
+      userId: data.user_id,
+      src: data.image,
+      username: data.user_name,
+    });
+  };
+
   const { width: clientWidth } = Dimensions.get("window");
 
   const [picZoomModal, setPicZoomModal] = useState(false);
@@ -108,12 +122,14 @@ const UserInfo = () => {
             iconType={"entypo"}
             color={theme.text}
           />
-          <Info
-            text={`${data.follower_count} 팔로워 · ${data.following_count} 팔로잉`}
-            iconName={"person-outline"}
-            iconType={"materialIcons"}
-            color={theme.text}
-          />
+          <Pressable onPress={onPressUserFollowing}>
+            <Info
+              text={`${data.follower_count} 팔로워 · ${data.following_count} 팔로잉`}
+              iconName={"person-outline"}
+              iconType={"materialIcons"}
+              color={theme.text}
+            />
+          </Pressable>
           {badges.length > 0 && (
             <BadgesPreview
               badges={badges}
@@ -121,7 +137,9 @@ const UserInfo = () => {
             />
           )}
         </FlexBox>
-        <FollowBtn onPress={handleFollow} text={data.button} />
+        {current_user_id !== data.user_id && (
+          <FollowBtn onPress={handleFollow} text={data.button} />
+        )}
       </FlexBox>
     </Container>
   );

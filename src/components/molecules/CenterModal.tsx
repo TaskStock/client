@@ -1,4 +1,4 @@
-import { View, Text, Modal, Platform } from "react-native";
+import { Modal } from "react-native";
 import React from "react";
 import styled, { css } from "styled-components/native";
 import OutsidePressHandler from "react-native-outside-press";
@@ -11,24 +11,8 @@ const ModalBox = styled.View`
   width: 80%;
   background-color: ${({ theme }) => theme.box};
   border-radius: 20px;
-  padding: ${spacing.gutter}px ${useResponsiveFontSize(20)}px;
   border-width: ${({ theme }) => (theme.name == "dark" ? 1 : 0)}px;
   border-color: ${({ theme }) => theme.background};
-
-  ${({ theme }) => css`
-    ${Platform.OS === "ios" &&
-    css`
-      shadow-color: rgba(0, 0, 0, 0.25);
-      shadow-offset: 0px 4px;
-      shadow-opacity: 0.25;
-      shadow-radius: 20px;
-    `}
-
-    ${Platform.OS === "android" &&
-    css`
-      elevation: 5;
-    `}
-  `}
 `;
 
 const ModalOverlay = styled.Pressable`
@@ -37,7 +21,6 @@ const ModalOverlay = styled.Pressable`
   display: flex;
   justify-content: center;
   align-items: center;
-  /* background-color: rgba(0, 0, 0, 0.3); */
 `;
 
 export default function CenterModal({
@@ -51,9 +34,7 @@ export default function CenterModal({
     <Modal
       transparent
       style={{
-        width: "100%",
-        height: "100%",
-        backgroundColor: "rgba(0,0,0,0.5)",
+        margin: 0,
       }}
       animationType="fade"
     >
@@ -62,7 +43,10 @@ export default function CenterModal({
           distance={20}
           startColor={palette.shadow}
           offset={[0, 0]}
-          style={{ borderRadius: 20 }}
+          style={{
+            borderRadius: 20,
+            width: "100%",
+          }}
         >
           <ModalBox
             onStartShouldSetResponder={(event) => true}

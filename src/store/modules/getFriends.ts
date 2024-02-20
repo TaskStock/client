@@ -34,6 +34,8 @@ export interface IFriend {
   follower_count?: number;
   following_count?: number;
   button: "팔로우" | "팔로잉" | "맞팔로우" | "요청됨" | "수락";
+  followerList?: IFriend[];
+  followingList?: IFriend[];
 }
 
 interface initialState {
@@ -68,6 +70,8 @@ const initialFriendState: initialState = {
     follower_count: 0,
     following_count: 0,
     button: "팔로우",
+    followerList: [],
+    followingList: [],
   },
   badges: [],
   loading: false,
@@ -94,10 +98,26 @@ export const getFriendsApi = createApi({
         };
       },
     }),
+    getFriendFollowerList: builder.query<
+      {
+        result: string;
+        followerList: IFriend[];
+        followingList: IFriend[];
+      },
+      { userId: number }
+    >({
+      query: (body) => {
+        return {
+          url: `ssns/${body.userId}/list`,
+          method: "GET",
+        };
+      },
+    }),
   }),
 });
 
-export const { useGetFriendInfoQuery } = getFriendsApi;
+export const { useGetFriendInfoQuery, useGetFriendFollowerListQuery } =
+  getFriendsApi;
 
 export const getFriendsThunk = createAsyncThunk(
   "sns/getFriendsThunk",
@@ -161,6 +181,29 @@ export const getTargetUserThunk = createAsyncThunk(
       }
     } catch (error) {
       console.log("검색 실패: ", error);
+      rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const getUserFollowerThunk = createAsyncThunk(
+  "sns/getUserFollowerThunk",
+  async (userId: number, { rejectWithValue, getState, dispatch }) => {
+    await dispatch(checkAndRenewTokens());
+    const rootState = getState() as TRootState;
+    const { accessToken } = rootState.auth;
+    try {
+      const response = await client.get(`sns/${userId}/list`, { accessToken });
+
+      const { result, followerList, followingList } = response;
+
+      if (result === "success") {
+        return { followerList, followingList };
+      } else {
+        return rejectWithValue(result);
+      }
+    } catch (error) {
+      console.log("팔로워 리스트 조회 실패 ", error);
       rejectWithValue(error.response.data);
     }
   }
@@ -315,7 +358,7 @@ const friendSlice = createSlice({
     builder.addCase(followThunk.rejected, (state, action) => {
       state.loading = false;
       state.error = "Rejected: 팔로우 실패";
-      console.log("Rejected: 팔로우 실패");
+      console.log("Rejected: 팔로우 실패", action.error.message);
     });
     builder.addCase(followThunk.fulfilled, (state, action) => {
       state.loading = false;
@@ -327,6 +370,18 @@ const friendSlice = createSlice({
             updateFriendStatus_follow(friend, followingId)
           )
       );
+
+      if (state.targetUser.followerList) {
+        state.targetUser.followerList.forEach((friend) =>
+          updateFriendStatus_follow(friend, followingId)
+        );
+      }
+
+      if (state.targetUser.followingList) {
+        state.targetUser.followingList.forEach((friend) =>
+          updateFriendStatus_follow(friend, followingId)
+        );
+      }
 
       // targetUser 수정
       state.targetUser.private
@@ -366,6 +421,19 @@ const friendSlice = createSlice({
             updateFriendStatus_unfollow(friend, action.payload)
           )
       );
+
+      if (state.targetUser.followerList) {
+        state.targetUser.followerList.forEach((friend) =>
+          updateFriendStatus_unfollow(friend, action.payload)
+        );
+      }
+
+      if (state.targetUser.followingList) {
+        state.targetUser.followingList.forEach((friend) =>
+          updateFriendStatus_unfollow(friend, action.payload)
+        );
+      }
+
       // targetUser 수정
       state.targetUser.isFollowingYou = false;
       state.targetUser.button = buttonRender(
@@ -410,6 +478,39 @@ const friendSlice = createSlice({
             }
           })
       );
+
+      if (state.targetUser.followerList) {
+        state.targetUser.followerList.forEach((friend) => {
+          if (friend.user_id === action.payload) {
+            friend.pending = false;
+            friend.isFollowingYou = false;
+
+            friend.button = buttonRender(
+              friend.pending,
+              friend.private,
+              friend.isFollowingMe,
+              friend.isFollowingYou
+            );
+          }
+        });
+      }
+
+      if (state.targetUser.followingList) {
+        state.targetUser.followingList.forEach((friend) => {
+          if (friend.user_id === action.payload) {
+            friend.pending = false;
+            friend.isFollowingYou = false;
+
+            friend.button = buttonRender(
+              friend.pending,
+              friend.private,
+              friend.isFollowingMe,
+              friend.isFollowingYou
+            );
+          }
+        });
+      }
+
       console.log("요청 취소 성공");
     });
     builder.addCase(getTargetUserThunk.pending, (state, action) => {
@@ -432,6 +533,22 @@ const friendSlice = createSlice({
         action.payload.isFollowingYou
       );
       console.log("타켓 유저 정보 가져오기 성공");
+    });
+    builder.addCase(getUserFollowerThunk.pending, (state, action) => {
+      state.loading = true;
+      console.log("getUserFollowerThunk pending");
+    });
+    builder.addCase(getUserFollowerThunk.rejected, (state, action) => {
+      state.loading = false;
+      state.error = "Rejected: 팔로워 리스트 가져오기 실패";
+      console.log("Rejected: 팔로워 리스트 가져오기 실패");
+    });
+    builder.addCase(getUserFollowerThunk.fulfilled, (state, action) => {
+      state.loading = false;
+      state.targetUser.followerList = action.payload?.followerList || [];
+      state.targetUser.followingList = action.payload?.followingList || [];
+      state.error = null;
+      console.log("팔로워 리스트 가져오기 성공");
     });
   },
 });

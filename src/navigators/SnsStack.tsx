@@ -6,6 +6,7 @@ import SearchScreen from "../screens/SNS/SearchScreen";
 import UserDetailScreen from "../screens/SNS/UserDetailScreen";
 import BadgeScreen from "../screens/SNS/BadgeScreen";
 import BadgeAllScreen from "../screens/SNS/BadgeAllScreen";
+import UserFollowingScreen from "../screens/SNS/UserFollowingScreen";
 
 export type SnsStackParamList = {
   Ranking: undefined;
@@ -16,6 +17,11 @@ export type SnsStackParamList = {
   };
   Badge: undefined;
   BadgeAll: undefined;
+  UserFollowing: {
+    userId: number;
+    src: string;
+    username: string;
+  };
 };
 
 const NativeStack = createNativeStackNavigator<SnsStackParamList>();
@@ -38,6 +44,10 @@ const SnsStack = () => {
         options={{
           presentation: "modal",
         }}
+      />
+      <NativeStack.Screen
+        name="UserFollowing"
+        component={UserFollowingScreen}
       />
     </NativeStack.Navigator>
   );

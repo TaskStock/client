@@ -5,7 +5,10 @@ import { useTheme } from "styled-components";
 import styled from "styled-components/native";
 import { spacing } from "../../../constants/spacing";
 import { SnsStackParamList } from "../../../navigators/SnsStack";
-import { useAppDispatch } from "../../../store/configureStore.hooks";
+import {
+  useAppDispatch,
+  useAppSelect,
+} from "../../../store/configureStore.hooks";
 import {
   cancelRequestThunk,
   followThunk,
@@ -42,6 +45,8 @@ const UserBox = ({
     useNavigation<NativeStackNavigationProp<SnsStackParamList>>();
   const dispatch = useAppDispatch();
 
+  const current_user_id = useAppSelect((state) => state.user.user.user_id);
+
   const handleFollow = () => {
     switch (button) {
       case "팔로우":
@@ -67,7 +72,6 @@ const UserBox = ({
     >
       <Container
         onPress={() => {
-          console.log("userId", userId);
           navigation.navigate("SnsStack", {
             screen: "UserDetail",
             params: { userId: userId },
@@ -94,7 +98,9 @@ const UserBox = ({
           </Text>
         </View>
       </Container>
-      <FollowBtn onPress={handleFollow} text={button} />
+      {current_user_id !== userId && (
+        <FollowBtn onPress={handleFollow} text={button} />
+      )}
     </FlexBox>
   );
 };
