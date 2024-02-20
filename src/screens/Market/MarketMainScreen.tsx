@@ -240,7 +240,6 @@ export default function MarketMainScreen() {
                     section1Data.length === 0 ? (
                       [1, 2, 3].map((id) => (
                         <View key={"section1skel" + id}>
-                          {/* <EmptyStockItem /> */}
                           <EmptyStockItem />
                         </View>
                       ))
