@@ -92,7 +92,7 @@ const EditProfileScreen = ({ navigation }) => {
 
   const handleSaveText = () => {
     const trimmedUserName = data.user_name.trimEnd();
-    const trimmedIntroduce = data.introduce.trimEnd();
+    const trimmedIntroduce = data.introduce ? data.introduce.trimEnd() : "";
 
     if (
       trimmedUserName !== myInfo.user_name ||

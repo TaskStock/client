@@ -126,6 +126,10 @@ export default function StockDetailScreen({
   // userList 5명 이상이면 5명까지만 보여주기
   const userListPreview = userList?.slice(0, 5);
 
+  console.log(info);
+  console.log(userList);
+  console.log(userListPreview);
+
   return (
     <View style={{ flex: 1, backgroundColor: theme.background }}>
       <PageHeader />
@@ -230,7 +234,9 @@ export default function StockDetailScreen({
           </>
         )}
         <Margin margin={spacing.offset} />
-        {info?.take_count && userListPreview && userList && (
+        {info?.take_count &&
+        userListPreview?.length > 0 &&
+        userList?.length > 0 ? (
           <StockChallengers
             count={info.take_count}
             userListPreview={userListPreview}
@@ -242,7 +248,7 @@ export default function StockDetailScreen({
               })
             }
           />
-        )}
+        ) : null}
 
         <Divider color={theme.textDimmer} marginVertical={20} />
         <FlexBox direction="column" alignItems="stretch" gap={spacing.padding}>
