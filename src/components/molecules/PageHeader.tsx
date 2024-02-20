@@ -18,6 +18,11 @@ const Container = styled.View<{ notchTop: number }>`
   align-items: center;
   flex-direction: row;
 `;
+
+const Container2 = styled(Container)`
+  justify-content: flex-start;
+`;
+
 const Blank = styled.View`
   width: ${useResponsiveFontSize(35)}px;
   height: ${useResponsiveFontSize(35)}px;
@@ -75,6 +80,34 @@ const PageHeader = ({
       )}
       {headerRight ? headerRight : <Blank />}
     </Container>
+  );
+};
+
+export const PageHeaderForUserDetail = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
+  const theme = useTheme();
+  const headerLeftColor = theme.text;
+  const { NOTCH_TOP } = useHeight();
+
+  const navigation = useNavigation();
+
+  return (
+    <Container2 notchTop={NOTCH_TOP}>
+      <Icons
+        type="feather"
+        name="chevron-left"
+        size={35}
+        color={headerLeftColor}
+        onPress={() => {
+          navigation.goBack();
+        }}
+        hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+      />
+      {children}
+    </Container2>
   );
 };
 

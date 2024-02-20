@@ -94,10 +94,26 @@ export const getFriendsApi = createApi({
         };
       },
     }),
+    getFriendFollowerList: builder.query<
+      {
+        result: string;
+        followerList: IFriend[];
+        followingList: IFriend[];
+      },
+      { userId: number }
+    >({
+      query: (body) => {
+        return {
+          url: `ssns/${body.userId}/list`,
+          method: "GET",
+        };
+      },
+    }),
   }),
 });
 
-export const { useGetFriendInfoQuery } = getFriendsApi;
+export const { useGetFriendInfoQuery, useGetFriendFollowerListQuery } =
+  getFriendsApi;
 
 export const getFriendsThunk = createAsyncThunk(
   "sns/getFriendsThunk",

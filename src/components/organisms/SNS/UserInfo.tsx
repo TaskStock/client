@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
-import { Dimensions, TouchableOpacity, View } from "react-native";
+import { Dimensions, Pressable, TouchableOpacity, View } from "react-native";
 import styled, { useTheme } from "styled-components/native";
 import { spacing } from "../../../constants/spacing";
 import {
@@ -43,6 +43,8 @@ const UserInfo = () => {
   const theme = useTheme();
   const dispatch = useAppDispatch();
   const { targetUser: data, badges } = useAppSelect((state) => state.friends);
+
+  const current_user_id = useAppSelect((state) => state.user.user.user_id);
 
   const navigation = useNavigation() as any;
   const handleFollow = () => {
@@ -108,12 +110,22 @@ const UserInfo = () => {
             iconType={"entypo"}
             color={theme.text}
           />
-          <Info
-            text={`${data.follower_count} 팔로워 · ${data.following_count} 팔로잉`}
-            iconName={"person-outline"}
-            iconType={"materialIcons"}
-            color={theme.text}
-          />
+          <Pressable
+            onPress={() =>
+              navigation.navigate("UserFollowing", {
+                userId: data.user_id,
+                src: data.image,
+                username: data.user_name,
+              })
+            }
+          >
+            <Info
+              text={`${data.follower_count} 팔로워 · ${data.following_count} 팔로잉`}
+              iconName={"person-outline"}
+              iconType={"materialIcons"}
+              color={theme.text}
+            />
+          </Pressable>
           {badges.length > 0 && (
             <BadgesPreview
               badges={badges}
@@ -121,7 +133,9 @@ const UserInfo = () => {
             />
           )}
         </FlexBox>
-        <FollowBtn onPress={handleFollow} text={data.button} />
+        {current_user_id !== data.user_id && (
+          <FollowBtn onPress={handleFollow} text={data.button} />
+        )}
       </FlexBox>
     </Container>
   );

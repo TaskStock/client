@@ -1,16 +1,14 @@
-import { TouchableOpacity, View } from "react-native";
 import React from "react";
-import FlexBox from "../../atoms/FlexBox";
-import Text from "../../atoms/Text";
-import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
-import styled from "styled-components/native";
-import Icons from "../../atoms/Icons";
+import { TouchableOpacity } from "react-native";
 import { useTheme } from "styled-components";
-import { spacing } from "../../../constants/spacing";
-import user from "../../../store/modules/user";
+import styled from "styled-components/native";
 import { Challengers } from "../../../@types/stock";
-import { Image } from "react-native";
+import { spacing } from "../../../constants/spacing";
+import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
+import FlexBox from "../../atoms/FlexBox";
+import Icons from "../../atoms/Icons";
 import ProfilePic from "../../atoms/ProfilePic";
+import Text from "../../atoms/Text";
 
 const CircleContainer = styled.View`
   width: ${useResponsiveFontSize(27)}px;
@@ -33,6 +31,7 @@ const StockChallengers = ({
   onPress: () => void;
 }) => {
   const theme = useTheme();
+
   return (
     <TouchableOpacity onPress={onPress}>
       <FlexBox alignItems="center" justifyContent="space-between">
