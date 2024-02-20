@@ -1,5 +1,5 @@
 import React from "react";
-import { ScrollView, View } from "react-native";
+import { ScrollView, View, Image } from "react-native";
 import { useTheme } from "styled-components";
 import styled from "styled-components/native";
 import FlexBox from "../../components/atoms/FlexBox";
@@ -41,8 +41,13 @@ const PinnedDetail = () => (
       <WordBreakKeepAllText text="❗️ 놓치는 가치가 없도록 꼭 자정 전에 완료 처리를 해주세요 ❗️" />
       <Margin margin={spacing.offset} />
     </View>
-    <ImageContainer></ImageContainer>
-    <Margin margin={useResponsiveFontSize(300)} />
+    <ImageContainer>
+      <Image
+        source={require("../../../assets/images/textLogo-white.png")}
+        style={{ width: "100%", height: "100%", resizeMode: "contain" }}
+      />
+    </ImageContainer>
+    <Margin margin={useResponsiveFontSize(200)} />
   </FlexBox>
 );
 

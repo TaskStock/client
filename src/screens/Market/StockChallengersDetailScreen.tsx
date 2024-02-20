@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, Pressable, ScrollView, View } from "react-native";
+import { Image, ScrollView, TouchableOpacity, View } from "react-native";
 import { useTheme } from "styled-components";
 import styled from "styled-components/native";
 import FlexBox from "../../components/atoms/FlexBox";
@@ -8,12 +8,12 @@ import PageHeader from "../../components/molecules/PageHeader";
 import { spacing } from "../../constants/spacing";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
 import ProfilePic from "../../components/atoms/ProfilePic";
-import { useNavigation } from "@react-navigation/native";
+import { useAppSelect } from "../../store/configureStore.hooks";
 
 const CircleContainer = styled.View`
-  width: ${useResponsiveFontSize(30)}px;
-  height: ${useResponsiveFontSize(30)}px;
-  border-radius: ${useResponsiveFontSize(30)}px;
+  width: ${useResponsiveFontSize(39)}px;
+  height: ${useResponsiveFontSize(39)}px;
+  border-radius: ${useResponsiveFontSize(39)}px;
   background-color: ${({ theme }) => theme.text};
   justify-content: center;
   align-items: center;
@@ -28,13 +28,12 @@ const Container = styled.View`
   flex: 1;
 `;
 
-const StockChallengersDetailScreen = ({ route }) => {
+const StockChallengersDetailScreen = ({ route, navigation }) => {
   const { userList, count, name } = route.params;
+  const { user_id } = useAppSelect((state) => state.user.user);
   const theme = useTheme();
 
   const now = new Date();
-
-  const navigation = useNavigation();
 
   const year = now.getFullYear();
   const month = now.getMonth() + 1;
@@ -45,7 +44,7 @@ const StockChallengersDetailScreen = ({ route }) => {
 
   const today = `${year}.${formattedMonth}.${formattedDay}`;
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, backgroundColor: theme.background }}>
       <PageHeader />
       <Container>
         <Text size="lg">{count}명 실천중🔥</Text>
@@ -67,21 +66,21 @@ const StockChallengersDetailScreen = ({ route }) => {
             styles={{ flexWrap: "wrap" }}
           >
             {userList.map((user) => (
-              <CircleContainer key={user.user_id}>
-                <Pressable
-                  onPress={() => {
-                    navigation.navigate("SnsStack", {
-                      screen: "UserDetail",
-                      params: { userId: user.user_id },
-                    });
-                  }}
-                >
+              <TouchableOpacity
+                key={user.user_id}
+                onPress={() =>
+                  user_id !== user.user_id &&
+                  navigation.navigate("UserDetail", { userId: user.user_id })
+                }
+                disabled={user_id === user.user_id}
+              >
+                <CircleContainer>
                   <ProfilePic
                     image={user.image}
-                    size={useResponsiveFontSize(27)}
+                    size={useResponsiveFontSize(35)}
                   />
-                </Pressable>
-              </CircleContainer>
+                </CircleContainer>
+              </TouchableOpacity>
             ))}
           </FlexBox>
         </ScrollView>

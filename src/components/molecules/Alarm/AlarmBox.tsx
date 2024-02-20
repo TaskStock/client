@@ -60,6 +60,11 @@ const Icon = ({ theme, type }) => {
     iconName = "emoji-people";
     iconColor = theme.text;
     iconSize = useResponsiveFontSize(40);
+  } else if (type === "badge") {
+    iconType = "material";
+    iconName = "police-badge-outline";
+    iconColor = theme.text;
+    iconSize = useResponsiveFontSize(40);
   }
   return (
     <IconContainer>
