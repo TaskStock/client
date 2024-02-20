@@ -29,6 +29,7 @@ export const checkFirstTime = async () => {
   }
   return false;
 };
+
 export const tutorialSlice = createSlice({
   name: "tutorial",
   initialState,
