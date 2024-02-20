@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, ScrollView, View } from "react-native";
+import { Image, Pressable, ScrollView, View } from "react-native";
 import { useTheme } from "styled-components";
 import styled from "styled-components/native";
 import FlexBox from "../../components/atoms/FlexBox";
@@ -8,6 +8,7 @@ import PageHeader from "../../components/molecules/PageHeader";
 import { spacing } from "../../constants/spacing";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
 import ProfilePic from "../../components/atoms/ProfilePic";
+import { useNavigation } from "@react-navigation/native";
 
 const CircleContainer = styled.View`
   width: ${useResponsiveFontSize(30)}px;
@@ -32,6 +33,8 @@ const StockChallengersDetailScreen = ({ route }) => {
   const theme = useTheme();
 
   const now = new Date();
+
+  const navigation = useNavigation();
 
   const year = now.getFullYear();
   const month = now.getMonth() + 1;
@@ -65,10 +68,19 @@ const StockChallengersDetailScreen = ({ route }) => {
           >
             {userList.map((user) => (
               <CircleContainer key={user.user_id}>
-                <ProfilePic
-                  image={user.image}
-                  size={useResponsiveFontSize(27)}
-                />
+                <Pressable
+                  onPress={() => {
+                    navigation.navigate("SnsStack", {
+                      screen: "UserDetail",
+                      params: { userId: user.user_id },
+                    });
+                  }}
+                >
+                  <ProfilePic
+                    image={user.image}
+                    size={useResponsiveFontSize(27)}
+                  />
+                </Pressable>
               </CircleContainer>
             ))}
           </FlexBox>
