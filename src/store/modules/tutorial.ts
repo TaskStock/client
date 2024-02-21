@@ -49,6 +49,7 @@ export const checkFirstTime = async () => {
   }
   return false;
 };
+
 export const checkProjectFirstTime = async () => {
   const firstTime = await getData("projectFirstTime");
 
@@ -67,6 +68,7 @@ export const checkMarketFirstTime = async () => {
   }
   return false;
 };
+
 export const tutorialSlice = createSlice({
   name: "tutorial",
   initialState,

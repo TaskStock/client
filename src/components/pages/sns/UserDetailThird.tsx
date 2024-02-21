@@ -33,11 +33,6 @@ export default function SnsDetailThird({
         flex: 1,
       }}
     >
-      {/* <ProjectList
-        projects={projects.data}
-        isLoading={projects.isLoading}
-        isError={projects.isError}
-      ></ProjectList> */}
       {filteredData?.length === 0 ? (
         <FlexBox
           justifyContent="center"
