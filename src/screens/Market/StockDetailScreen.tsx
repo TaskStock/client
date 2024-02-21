@@ -128,6 +128,7 @@ export default function StockDetailScreen({
 
     await analytics().logEvent("add_stock", {
       stockitem_id: route.params.stockId,
+      stockName: info.name,
     });
   };
 

@@ -18,6 +18,7 @@ import { ProjectStackParamList } from "../../navigators/ProjectStack";
 import Icons, { IconsPic } from "../../components/atoms/Icons";
 import EmojiSelector, { Categories } from "react-native-emoji-selector";
 import { BoxIcon } from "../../components/organisms/Project/ProjectList";
+import analytics from "@react-native-firebase/analytics";
 
 const THEME_CONSTANTS = {
   dark: {
@@ -91,9 +92,12 @@ export default function ProjectManageScreen() {
     onRemove,
   } = useProjectForm();
 
-  const onPressSubmitBtn = () => {
+  const onPressSubmitBtn = async () => {
     onSubmit();
+
     navigation.goBack();
+
+    await analytics().logEvent("add_project");
   };
 
   const onPressDeleteBtn = () => {
