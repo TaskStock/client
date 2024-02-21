@@ -1,21 +1,29 @@
-import React from "react";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
+import React, { useEffect } from "react";
+import { Pressable } from "react-native";
+import { Portal } from "react-native-portalize";
 import {
   NavigationState,
   SceneRendererProps,
   TabView,
 } from "react-native-tab-view";
-import TabHeader from "../../components/molecules/TabHeader";
-import PageMainHeader from "../../components/molecules/PageMainHeader";
-import { useTab } from "../../hooks/useTab";
-import Icons from "../../components/atoms/Icons";
 import { useTheme } from "styled-components/native";
-import { NavigationProp, useNavigation } from "@react-navigation/native";
-import { ProjectStackParamList } from "../../navigators/ProjectStack";
-import { useAppDispatch } from "../../store/configureStore.hooks";
-import { resetProjectForm } from "../../store/modules/project/project";
-import ProjectScreenSecond from "../../components/pages/project/ProjectScreenSecond";
+import Icons from "../../components/atoms/Icons";
+import PageMainHeader from "../../components/molecules/PageMainHeader";
+import TabHeader from "../../components/molecules/TabHeader";
+import TutorialBox from "../../components/molecules/TutorialBox";
 import ProjectScreenFirst from "../../components/pages/project/ProjectScreenFirst";
-import { View } from "react-native";
+import ProjectScreenSecond from "../../components/pages/project/ProjectScreenSecond";
+import { useTab } from "../../hooks/useTab";
+import { ProjectStackParamList } from "../../navigators/ProjectStack";
+import { useAppDispatch, useAppSelect } from "../../store/configureStore.hooks";
+import { resetProjectForm } from "../../store/modules/project/project";
+import {
+  checkProjectFirstTime,
+  setProjectTutorial,
+  setStep6,
+} from "../../store/modules/tutorial";
+import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
 
 const sceneMap = {
   first: ProjectScreenFirst,
@@ -28,6 +36,19 @@ const routeMap = [
 ];
 
 const ProjectScreen = () => {
+  const showTutorialIfFirst = async () => {
+    const first = await checkProjectFirstTime();
+    if (first) {
+      dispatch(setProjectTutorial(true));
+    }
+  };
+  useEffect(() => {
+    showTutorialIfFirst();
+  }, []);
+  const { showProjectTutorial, step6, step7 } = useAppSelect(
+    (state) => state.tutorial
+  );
+
   const { index, onChangeIndex, renderScene, routes } = useTab({
     routeMap,
     sceneMap,
@@ -51,13 +72,52 @@ const ProjectScreen = () => {
   const dispatch = useAppDispatch();
 
   return (
-    <View
+    <Pressable
       style={{
         flex: 1,
         backgroundColor: theme.background,
       }}
+      onPress={() => {
+        if (showProjectTutorial && step6) {
+          dispatch(setStep6(false));
+        }
+      }}
     >
       <PageMainHeader title="프로젝트">
+        {showProjectTutorial && step6 ? (
+          <Portal>
+            <Pressable
+              onPress={() => {
+                dispatch(setStep6(false));
+              }}
+              style={{
+                top: useResponsiveFontSize(95),
+                left: useResponsiveFontSize(80),
+              }}
+            >
+              <TutorialBox
+                type={6}
+                ratio={0.7}
+                style={{
+                  height: 600,
+                }}
+              />
+            </Pressable>
+          </Portal>
+        ) : null}
+        {showProjectTutorial && step7 ? (
+          <Portal>
+            <TutorialBox
+              type={7}
+              ratio={0.7}
+              style={{
+                top: useResponsiveFontSize(95),
+                right: useResponsiveFontSize(60),
+              }}
+            />
+          </Portal>
+        ) : null}
+
         <Icons
           type="entypo"
           name="circle-with-plus"
@@ -69,6 +129,7 @@ const ProjectScreen = () => {
             navigation.navigate("ProjectStackWithoutTab", {
               screen: "ProjectManage",
             });
+            dispatch(setProjectTutorial(false));
           }}
         />
       </PageMainHeader>
@@ -80,7 +141,7 @@ const ProjectScreen = () => {
         onSwipeEnd={() => {}}
         swipeEnabled={false}
       ></TabView>
-    </View>
+    </Pressable>
   );
 };
 
