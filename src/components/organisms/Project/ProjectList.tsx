@@ -478,6 +478,9 @@ export default function ProjectList({
   isError: boolean;
 }) {
   const theme = useTheme();
+  const { showProjectTutorial, step6, step7 } = useAppSelect(
+    (state) => state.tutorial
+  );
   if (!projects || isLoading || isError) {
     return (
       <>
@@ -486,6 +489,9 @@ export default function ProjectList({
     );
   }
 
+  if (showProjectTutorial && step6) {
+    return null;
+  }
   if (projects.length === 0) {
     return (
       <View
