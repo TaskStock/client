@@ -65,10 +65,14 @@ const TutorialBox = ({
       break;
     // project
     case 6:
-      imageSource = require("../../../assets/images/tutorials/project-1.png");
+      theme === "dark"
+        ? (imageSource = require("../../../assets/images/tutorials/project-1-dark.png"))
+        : (imageSource = require("../../../assets/images/tutorials/project-1.png"));
       break;
     case 7:
-      imageSource = require("../../../assets/images/tutorials/project-2.png");
+      theme === "dark"
+        ? (imageSource = require("../../../assets/images/tutorials/project-2-dark.png"))
+        : (imageSource = require("../../../assets/images/tutorials/project-2.png"));
       break;
     // market
     case 8:

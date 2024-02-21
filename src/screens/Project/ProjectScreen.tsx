@@ -85,37 +85,33 @@ const ProjectScreen = () => {
     >
       <PageMainHeader title="프로젝트">
         {showProjectTutorial && step6 ? (
-          <Portal>
-            <Pressable
-              onPress={() => {
-                dispatch(setStep6(false));
-              }}
-              style={{
-                top: useResponsiveFontSize(95),
-                left: useResponsiveFontSize(80),
-              }}
-            >
-              <TutorialBox
-                type={6}
-                ratio={0.7}
-                style={{
-                  height: 600,
-                }}
-              />
-            </Pressable>
-          </Portal>
-        ) : null}
-        {showProjectTutorial && step7 ? (
-          <Portal>
+          <Pressable
+            onPress={() => {
+              dispatch(setStep6(false));
+            }}
+            style={{
+              top: useResponsiveFontSize(-5),
+              left: useResponsiveFontSize(-150),
+            }}
+          >
             <TutorialBox
-              type={7}
+              type={6}
               ratio={0.7}
               style={{
-                top: useResponsiveFontSize(95),
-                right: useResponsiveFontSize(60),
+                height: 600,
               }}
             />
-          </Portal>
+          </Pressable>
+        ) : null}
+        {showProjectTutorial && step7 ? (
+          <TutorialBox
+            type={7}
+            ratio={0.7}
+            style={{
+              top: useResponsiveFontSize(95),
+              right: useResponsiveFontSize(60),
+            }}
+          />
         ) : null}
 
         <Icons
@@ -133,6 +129,7 @@ const ProjectScreen = () => {
           }}
         />
       </PageMainHeader>
+
       <TabView
         navigationState={{ index, routes }}
         renderScene={renderScene}
