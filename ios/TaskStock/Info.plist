@@ -52,6 +52,7 @@
 	<array>
 		<string>kakaokompassauth</string>
 		<string>storykompassauth</string>
+		<string>kakao$(KAKAO_AUTH_NATIVE_KEY)</string>
 		<string>kakaolink</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
