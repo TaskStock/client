@@ -22,6 +22,7 @@ import { checkAndRenewTokens } from "./src/utils/authUtils/tokenUtils";
 import SplashScreen from "react-native-splash-screen";
 import { removeData } from "./src/utils/asyncStorage";
 import { Host } from "react-native-portalize";
+import analytics from "@react-native-firebase/analytics";
 
 const THEME = {
   dark: {
@@ -39,6 +40,8 @@ export const navigationRef = createNavigationContainerRef();
 export default function App() {
   const theme = useAppSelect((state) => state.theme.value);
   const dispatch = useAppDispatch();
+
+  const routeNameRef = React.useRef<string | undefined>();
 
   const { isLoggedIn } = useAppSelect((state) => state.auth);
 
@@ -78,7 +81,39 @@ export default function App() {
       <SafeAreaProvider>
         <EventProvider>
           <Host>
-            <NavigationContainer ref={navigationRef}>
+            <NavigationContainer
+              ref={navigationRef}
+              onReady={() => {
+                routeNameRef.current = navigationRef.getCurrentRoute()?.name;
+              }}
+              onStateChange={async () => {
+                const previousRouteName = routeNameRef.current;
+                const currentRoute = navigationRef.getCurrentRoute();
+                const currentRouteName = currentRoute?.name;
+
+                const currentScreenName = `${
+                  currentRoute?.name
+                }_${Object.values(currentRoute?.params || {}).join("/")}`;
+
+                const trackScreenView = (routeName: string | undefined) => {
+                  if (routeName) {
+                    analytics().logScreenView({
+                      screen_name: routeName,
+                      screen_class: routeName,
+                    });
+                    console.log("Analytics", currentScreenName);
+                  }
+                  // Your implementation of analytics goes here!
+                };
+
+                if (previousRouteName !== currentRouteName) {
+                  routeNameRef.current = currentRouteName;
+
+                  // Replace the line below to add the tracker from a mobile analytics SDK
+                  await trackScreenView(currentRouteName);
+                }
+              }}
+            >
               <GestureHandlerRootView style={{ flex: 1 }}>
                 <Root isLoggedIn={isLoggedIn} />
               </GestureHandlerRootView>
