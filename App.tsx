@@ -57,6 +57,8 @@ export default function App() {
 
   // useEffect(() => {
   //   removeData("firstTime");
+  //   removeData("projectFirstTime");
+  //   removeData("marketFirstTime");
   // }, []);
   // useEffect(() => {
   //   removeData("accessToken");
