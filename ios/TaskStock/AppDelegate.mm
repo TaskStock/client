@@ -22,10 +22,9 @@
     [FIRApp configure];
   }
 
-  // [RNSplashScreen show];  // here
-  
+  BOOL ret = [super application:application didFinishLaunchingWithOptions:launchOptions]; if (ret == YES) { [RNSplashScreen show];  } return ret;
+
   // return YES;
-  return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
 
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
