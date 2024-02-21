@@ -1,13 +1,14 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { client } from "../../services/api";
-import { TRootState } from "../../store/configureStore";
+
 import { checkAndRenewTokens } from "../authUtils/tokenUtils";
+import { RT } from "../../store/configureStore";
 
 export const toggleStateThunk = createAsyncThunk(
   "pushNoti/toggleState",
   async (isPushOn: boolean, { getState, rejectWithValue, dispatch }) => {
     await dispatch(checkAndRenewTokens());
-    const { auth, pushNoti } = getState() as TRootState;
+    const { auth, pushNoti } = getState() as RT;
 
     try {
       if (pushNoti.isPushOn === isPushOn) return isPushOn;
