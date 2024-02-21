@@ -1,22 +1,19 @@
-import { FlatList, View } from "react-native";
 import React from "react";
-import { useGetFriendFollowerListQuery } from "../../store/modules/getFriends";
-import PageHeader, {
-  PageHeaderForUserDetail,
-} from "../../components/molecules/PageHeader";
-import TabHeader from "../../components/molecules/TabHeader";
-import { useTab } from "../../hooks/useTab";
+import { FlatList, View } from "react-native";
 import { TabView } from "react-native-tab-view";
-import Text from "../../components/atoms/Text";
-import ProfilePic from "../../components/atoms/ProfilePic";
+import styled, { useTheme } from "styled-components/native";
 import FlexBox from "../../components/atoms/FlexBox";
 import Margin from "../../components/atoms/Margin";
+import ProfilePic from "../../components/atoms/ProfilePic";
+import Text from "../../components/atoms/Text";
+import { PageHeaderForUserDetail } from "../../components/molecules/PageHeader";
 import UserBox from "../../components/molecules/SNS/UserBox";
+import TabHeader from "../../components/molecules/TabHeader";
 import { spacing } from "../../constants/spacing";
-import { IFriend } from "../../store/modules/getFriends";
-import styled, { useTheme } from "styled-components/native";
-import { buttonRender } from "../../utils/UserUtils/buttonRender";
+import { useTab } from "../../hooks/useTab";
 import { useAppSelect } from "../../store/configureStore.hooks";
+import { IFriend } from "../../store/modules/getFriends";
+import { buttonRender } from "../../utils/UserUtils/buttonRender";
 
 const TabContent = styled.View`
   flex: 1;
@@ -45,8 +42,8 @@ export default function UserFollowingScreen({
 
   const { index, onChangeIndex, renderScene, routes } = useTab({
     routeMap: [
-      { key: "following", title: "팔로잉" },
       { key: "follower", title: "팔로워" },
+      { key: "following", title: "팔로잉" },
     ],
     sceneMap: {
       following: () => {
@@ -166,6 +163,7 @@ export default function UserFollowingScreen({
     <View
       style={{
         flex: 1,
+        backgroundColor: theme.background,
       }}
     >
       <PageHeaderForUserDetail>

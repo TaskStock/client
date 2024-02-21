@@ -26,6 +26,7 @@ const HomeScreen = ({ navigation }) => {
     const backHandler = BackHandler.addEventListener(
       "hardwareBackPress",
       () => {
+        BackHandler.exitApp();
         // true를 반환하여 뒤로 가기(기본동작) 막기
         return true;
       }
