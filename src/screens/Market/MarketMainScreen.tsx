@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import React from "react";
+import React, { useEffect } from "react";
 import { Image, Pressable, ScrollView, View } from "react-native";
 import styled, { useTheme } from "styled-components/native";
 import MarketBannerImage from "../../../assets/images/marketTabBanner.png";
@@ -22,8 +22,16 @@ import { spacing } from "../../constants/spacing";
 import { upValue } from "../../constants/value";
 import { MarketStackParamList } from "../../navigators/MarketStack";
 import { useGetCategorizedStocksQuery } from "../../store/modules/market/market";
-import { useAppSelect } from "../../store/configureStore.hooks";
+import { useAppDispatch, useAppSelect } from "../../store/configureStore.hooks";
 import { ShadowForStockItem } from "../../components/atoms/CustomShadow";
+import {
+  checkMarketFirstTime,
+  setMarketTutorial,
+  setStep8,
+  setStep9,
+} from "../../store/modules/tutorial";
+import { Portal } from "react-native-portalize";
+import TutorialBox from "../../components/molecules/TutorialBox";
 
 const MainRectangle = styled.View`
   width: 100%;
@@ -93,12 +101,27 @@ const StockItem1Skeleton = styled.View`
 `;
 
 export default function MarketMainScreen() {
+  const dispatch = useAppDispatch();
+  const showTutorialIfFirst = async () => {
+    const first = await checkMarketFirstTime();
+    if (first) {
+      dispatch(setMarketTutorial(true));
+    }
+  };
+  useEffect(() => {
+    showTutorialIfFirst();
+  }, []);
+  const { showMarketTutorial, step8, step9 } = useAppSelect(
+    (state) => state.tutorial
+  );
+
   const theme = useTheme();
   const navigation =
     useNavigation<NativeStackNavigationProp<MarketStackParamList>>();
 
   const onPressCheckStockList = () => {
     navigation.navigate("MarketStack", { screen: "MarketListScreen" });
+    dispatch(setStep9(false));
   };
 
   const onPressStockItem = (id: number) => {
@@ -140,6 +163,21 @@ export default function MarketMainScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor: theme.background }}>
+      {showMarketTutorial && step8 ? (
+        <Portal>
+          <Pressable
+            style={{
+              justifyContent: "center",
+              alignItems: "center",
+              flex: 1,
+            }}
+            onPress={() => dispatch(setStep8(false))}
+          >
+            <TutorialBox type={8} />
+          </Pressable>
+        </Portal>
+      ) : null}
+
       <ScrollView
         style={{
           flex: 1,
@@ -176,6 +214,17 @@ export default function MarketMainScreen() {
         <View>
           <FloatTitle>
             <InnerFloat>
+              {showMarketTutorial && step9 ? (
+                <TutorialBox
+                  type={9}
+                  ratio={0.7}
+                  style={{
+                    bottom: "20%",
+                    left: 30,
+                  }}
+                />
+              ) : null}
+
               <ShadowForStockItem>
                 <Pressable onPress={onPressCheckStockList}>
                   <ContentItemBox>

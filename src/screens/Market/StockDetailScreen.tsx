@@ -1,7 +1,7 @@
 import analytics from "@react-native-firebase/analytics";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React from "react";
-import { Dimensions, ScrollView, View } from "react-native";
+import { Dimensions, Pressable, ScrollView, View } from "react-native";
 import { useTheme } from "styled-components/native";
 import { IsoString } from "../../@types/calendar";
 import { BlackBtnForProject, GrayBtn } from "../../components/atoms/Buttons";
@@ -25,6 +25,10 @@ import { MarketStackParamList } from "../../navigators/MarketStack";
 import { useGetStockSuccessRateQuery } from "../../store/modules/market/market";
 import { useAddTodoMutation } from "../../store/modules/todo/todo";
 import StockChallengers from "../../components/organisms/Market/StockChallengers";
+import { useAppDispatch, useAppSelect } from "../../store/configureStore.hooks";
+import TutorialBox from "../../components/molecules/TutorialBox";
+import { Portal } from "react-native-portalize";
+import { setMarketTutorial } from "../../store/modules/tutorial";
 
 type StockDetailScreenProps = NativeStackScreenProps<
   MarketStackParamList,
@@ -49,6 +53,10 @@ export default function StockDetailScreen({
   navigation,
   route,
 }: StockDetailScreenProps) {
+  const dispatch = useAppDispatch();
+  const { showMarketTutorial, step11 } = useAppSelect(
+    (state) => state.tutorial
+  );
   const graphHeight = Dimensions.get("screen").height * 0.3;
 
   if (route.params.stockId === undefined) {
@@ -126,14 +134,24 @@ export default function StockDetailScreen({
   // userList 5명 이상이면 5명까지만 보여주기
   const userListPreview = userList?.slice(0, 5);
 
-  console.log(info);
-  console.log(userList);
-  console.log(userListPreview);
-
   return (
     <View style={{ flex: 1, backgroundColor: theme.background }}>
       <PageHeader />
       {/* <ContentLayout noVerticalPadding> */}
+      {showMarketTutorial && step11 ? (
+        <Portal>
+          <Pressable
+            onPress={() => dispatch(setMarketTutorial(false))}
+            style={{
+              top: "30%",
+              left: "15%",
+            }}
+          >
+            <TutorialBox type={11} />
+          </Pressable>
+        </Portal>
+      ) : null}
+
       <ScrollView
         contentContainerStyle={{
           paddingTop: spacing.padding,

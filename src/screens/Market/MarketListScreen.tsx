@@ -23,6 +23,10 @@ import {
   ShadowForStockItem,
   ShadowForStockItem2,
 } from "../../components/atoms/CustomShadow";
+import { useAppDispatch, useAppSelect } from "../../store/configureStore.hooks";
+import TutorialBox from "../../components/molecules/TutorialBox";
+import { Portal } from "react-native-portalize";
+import { setStep10 } from "../../store/modules/tutorial";
 
 const PageHeaderBox = styled.View`
   height: ${useResponsiveFontSize(300)}px;
@@ -99,6 +103,11 @@ const MarketListItem = ({
 };
 
 export default function MarketListScreen() {
+  const dispatch = useAppDispatch();
+  const { showMarketTutorial, step10 } = useAppSelect(
+    (state) => state.tutorial
+  );
+
   const navigation =
     useNavigation<NativeStackNavigationProp<MarketStackParamList>>();
 
@@ -124,6 +133,7 @@ export default function MarketListScreen() {
   };
 
   const onPressWishListButton = () => {
+    dispatch(setStep10(false));
     navigation.navigate("WishListScreen");
   };
 
@@ -142,6 +152,12 @@ export default function MarketListScreen() {
           theme.name === "gray" ? isPageHeaderColorReverse : false
         }
       />
+      {showMarketTutorial && step10 ? (
+        <Portal>
+          <TutorialBox type={10} style={{ top: 130, left: 50 }} />
+        </Portal>
+      ) : null}
+
       <ScrollView
         style={{ flex: 1, backgroundColor: theme.background }}
         contentContainerStyle={{ paddingBottom: 100 }}
@@ -222,7 +238,10 @@ export default function MarketListScreen() {
                           name={item.name}
                           participants={item.take_count}
                           price={item.level * upValue}
-                          onPress={() => onPressListItem(item.stockitem_id)}
+                          onPress={() => {
+                            dispatch(setStep10(false));
+                            onPressListItem(item.stockitem_id);
+                          }}
                         />
                         <Margin
                           margin={spacing.padding + spacing.small}
@@ -238,7 +257,10 @@ export default function MarketListScreen() {
                         name={item.name}
                         participants={item.take_count}
                         price={item.level * upValue}
-                        onPress={() => onPressListItem(item.stockitem_id)}
+                        onPress={() => {
+                          dispatch(setStep10(false));
+                          onPressListItem(item.stockitem_id);
+                        }}
                       />
                     </View>
                   );

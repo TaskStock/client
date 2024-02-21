@@ -63,6 +63,26 @@ const TutorialBox = ({
     case 5:
       imageSource = require("../../../assets/images/tutorials/tutorial-5.png");
       break;
+    // project
+    case 6:
+      imageSource = require("../../../assets/images/tutorials/project-1.png");
+      break;
+    case 7:
+      imageSource = require("../../../assets/images/tutorials/project-2.png");
+      break;
+    // market
+    case 8:
+      imageSource = require("../../../assets/images/tutorials/market-1.png");
+      break;
+    case 9:
+      imageSource = require("../../../assets/images/tutorials/market-2.png");
+      break;
+    case 10:
+      imageSource = require("../../../assets/images/tutorials/market-3.png");
+      break;
+    case 11:
+      imageSource = require("../../../assets/images/tutorials/market-4.png");
+      break;
   }
   if (type === 2) {
     return (
