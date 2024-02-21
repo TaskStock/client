@@ -18,7 +18,7 @@ const imagePermissionCheck = async () => {
   try {
     const granted = await PermissionsAndroid.request(permission, {
       title: "갤러리 접근 권한",
-      message: "TASKSTOCK이 사진 저장소에 접근하려고 합니다.",
+      message: "TaskStock이 사진 저장소에 접근하려고 합니다.",
       buttonNegative: "취소",
       buttonPositive: "허용",
     });

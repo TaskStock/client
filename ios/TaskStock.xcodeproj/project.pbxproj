@@ -356,7 +356,7 @@
 					"FB_SONARKIT_ENABLED=1",
 				);
 				INFOPLIST_FILE = TaskStock/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = TASKSTOCK;
+				INFOPLIST_KEY_CFBundleDisplayName = TaskStock;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -388,7 +388,7 @@
 				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = BTGB376XB7;
 				INFOPLIST_FILE = TaskStock/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = TASKSTOCK;
+				INFOPLIST_KEY_CFBundleDisplayName = TaskStock;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
