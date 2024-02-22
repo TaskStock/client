@@ -12,6 +12,7 @@ import Text from "../../atoms/Text";
 import {
   BoxIcon,
   ProjectBox,
+  ProjectItem,
   Separator,
 } from "../../organisms/Project/ProjectList";
 
@@ -24,6 +25,8 @@ export default function SnsDetailThird({
     isError: boolean;
   };
 }) {
+  console.log(projects.data, "projects.data");
+
   const theme = useTheme();
   const filteredData = projects.data?.filter((project) => !project.finished);
   return (
@@ -50,80 +53,16 @@ export default function SnsDetailThird({
       ) : (
         <ScrollView
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingTop: spacing.padding }}
+          contentContainerStyle={{
+            paddingTop: spacing.offset,
+            gap: useResponsiveFontSize(20),
+          }}
         >
           {filteredData?.map((item, index) => (
-            <View
-              key={item.project_id}
-              style={{
-                paddingHorizontal: spacing.gutter,
-                marginBottom: 18,
-              }}
-            >
-              <ShadowForProject radius={useResponsiveFontSize(15)}>
-                <ProjectBox isFinished={item.finished}>
-                  <FlexBox gap={spacing.padding} alignItems="center">
-                    <BoxIcon>
-                      <WithLocalSvg asset={ProjectIcon} />
-                    </BoxIcon>
-                    <View
-                      style={{
-                        flex: 1,
-                        marginLeft: useResponsiveFontSize(5),
-                      }}
-                    >
-                      <FlexBox
-                        justifyContent="space-between"
-                        styles={{
-                          flex: 1,
-                        }}
-                        alignItems="center"
-                      >
-                        <FlexBox
-                          direction="column"
-                          gap={spacing.padding}
-                          styles={{
-                            flex: 1,
-                          }}
-                          justifyContent="center"
-                        >
-                          <Text size="lg" weight="bold">
-                            {item.name}
-                          </Text>
-
-                          <FlexBox gap={spacing.padding}>
-                            <Text size="xs" color={theme.textDim}>
-                              {item.todo_count + ""}개의 할일
-                            </Text>
-
-                            <Separator />
-
-                            <Text size="xs" color={theme.textDim}>
-                              {item.retrospect_count + ""}
-                              개의 회고
-                            </Text>
-                            <Separator />
-
-                            <Text size="xs" color={theme.textDim}>
-                              {item.public_range === "all"
-                                ? "전체 공개"
-                                : item.public_range === "follow"
-                                ? "팔로워"
-                                : "비공개"}
-                            </Text>
-                          </FlexBox>
-                        </FlexBox>
-                      </FlexBox>
-                    </View>
-                  </FlexBox>
-                </ProjectBox>
-              </ShadowForProject>
-            </View>
+            <ProjectItem item={item} />
           ))}
         </ScrollView>
       )}
     </View>
-
-    // </ContentLayout>
   );
 }
