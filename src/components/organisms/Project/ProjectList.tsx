@@ -229,19 +229,9 @@ export function ProjectItem({
 
                     <FlexBox gap={spacing.padding}>
                       <Text size="xs" color={theme.textDim}>
-                        {item.todo_count + ""}개의 할일
-                      </Text>
-
-                      <Separator />
-
-                      <Text size="xs" color={theme.textDim}>
+                        {item.todo_count + ""}개의 할일 |{" "}
                         {item.retrospect_count + ""}
-                        개의 회고
-                      </Text>
-                      <Separator />
-
-                      <Text size="xs" color={theme.textDim}>
-                        {publicText}
+                        개의 회고 | {publicText}
                       </Text>
                     </FlexBox>
                   </FlexBox>
@@ -345,16 +335,11 @@ export function ProjectItem({
                     </Text>
 
                     <FlexBox gap={spacing.padding}>
-                      <Text size="xs">{item.todo_count + ""}개의 할일</Text>
-                      <Separator />
-
                       <Text size="xs">
+                        {item.todo_count + ""}개의 할일 |{" "}
                         {item.retrospect_count + ""}
-                        개의 회고
+                        개의 회고 | {publicText}
                       </Text>
-                      <Separator />
-
-                      <Text size="xs">{publicText}</Text>
                     </FlexBox>
                   </FlexBox>
                   <View>

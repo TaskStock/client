@@ -59,7 +59,7 @@ export default function SnsDetailThird({
           }}
         >
           {filteredData?.map((item, index) => (
-            <ProjectItem item={item} />
+            <ProjectItem item={item} key={item.project_id} />
           ))}
         </ScrollView>
       )}
