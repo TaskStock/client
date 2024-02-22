@@ -6,7 +6,7 @@ import Menu from "../../components/molecules/Settings/Menu";
 import { palette } from "../../constants/colors";
 import { spacing } from "../../constants/spacing";
 import { useAppDispatch, useAppSelect } from "../../store/configureStore.hooks";
-import { setFcmToken } from "../../store/modules/pushNoti";
+import { setFcmToken, setIsPushOn } from "../../store/modules/pushNoti";
 import { fcmService } from "../../utils/PushNotification/push.fcm";
 import { checkStorage } from "../../utils/asyncStorage";
 import { logout } from "../../utils/authUtils/signInUtils";
@@ -59,7 +59,6 @@ const SettingsHomeScreen = ({ navigation }) => {
 
   // 푸시알림
   const { isPushOn } = useAppSelect((state) => state.pushNoti);
-  const [isEnabled, setIsEnabled] = useState<boolean>(isPushOn);
 
   const onRegister = (tk) => {
     if (tk) dispatch(setFcmToken(tk));
@@ -68,10 +67,6 @@ const SettingsHomeScreen = ({ navigation }) => {
   const toggleSwitch = () => {
     fcmService.togglePushNotifications(!isPushOn, onRegister, dispatch);
   };
-
-  useEffect(() => {
-    setIsEnabled(isPushOn);
-  }, [isPushOn]);
 
   return (
     <>
@@ -85,7 +80,11 @@ const SettingsHomeScreen = ({ navigation }) => {
         <Menu
           text="푸시알림 켜기"
           icon={{ type: "material", name: "bell" }}
-          toggle={{ isEnabled, setIsEnabled, toggleSwitch }}
+          toggle={{
+            isEnabled: isPushOn,
+            setIsEnabled: () => dispatch(setIsPushOn(isPushOn)),
+            toggleSwitch,
+          }}
         />
         <Menu
           text="테마 변경"

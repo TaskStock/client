@@ -1,7 +1,7 @@
 import messaging from "@react-native-firebase/messaging";
-import { Platform } from "react-native";
+import { Alert, Linking, Platform } from "react-native";
 import { toggleStateThunk } from "./pushNotiThunk";
-import { setAllowed } from "../../store/modules/pushNoti";
+import { setAllowed, setIsPushOn } from "../../store/modules/pushNoti";
 
 class FCMService {
   register = (onRegister, onNotification, onOpenNotification, dispatch) => {
@@ -30,7 +30,7 @@ class FCMService {
         } else {
           console.log(Platform.OS, "disabled 들어옴");
           this.requestPermission(onRegister);
-          dispatch(setAllowed(true));
+          dispatch(setAllowed(false));
           dispatch(toggleStateThunk(false));
         }
       })
@@ -168,9 +168,48 @@ class FCMService {
   // 푸시 알림 토글
   togglePushNotifications = (isPushOn, onRegister, dispatch) => {
     if (isPushOn) {
-      // 푸시 알림 on
-      this.checkPermission(onRegister, dispatch);
-      dispatch(toggleStateThunk(true));
+      messaging()
+        .hasPermission()
+        .then((enabled) => {
+          if (enabled) {
+            // 알림 권한이 이미 허용된 경우
+            this.checkPermission(onRegister, dispatch);
+            dispatch(toggleStateThunk(true));
+          } else {
+            // 알림 권한이 허용되지 않은 경우, 설정으로 안내하는 알림 창 띄우기
+            Alert.alert(
+              "알림 권한 필요",
+              "이 기능을 사용하기 위해선 알림 권한이 필요합니다. 설정에서 알림을 허용해주세요.",
+              [
+                {
+                  text: "나중에",
+                  onPress: () => {
+                    console.log("알림 권한 설정 거부");
+                    dispatch(setIsPushOn(false));
+                  },
+                  style: "cancel",
+                },
+                {
+                  text: "설정으로 이동",
+                  onPress: () => {
+                    // 알림 권한 요청
+                    this.requestPermission(onRegister);
+                    dispatch(setIsPushOn(false)); // 권한이 거부된 상태에서 상태 업데이트
+                    if (Platform.OS === "android") {
+                      Linking.openSettings();
+                    } else {
+                      Linking.openURL("app-settings:");
+                    }
+                  },
+                },
+              ],
+              { cancelable: false }
+            );
+          }
+        })
+        .catch((error) => {
+          console.error("알림 권한 확인 실패", error);
+        });
     } else {
       // 푸시 알림 off
       dispatch(toggleStateThunk(false));
