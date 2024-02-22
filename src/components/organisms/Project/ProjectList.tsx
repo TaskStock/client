@@ -235,16 +235,18 @@ export function ProjectItem({
                       </Text>
                     </FlexBox>
                   </FlexBox>
-                  <View>
-                    <Icons
-                      type="feather"
-                      name="more-horizontal"
-                      size={useResponsiveFontSize(20)}
-                      onPress={onPressMoreDot}
-                      color={theme.text}
-                      hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-                    />
-                  </View>
+                  {item.user_id === currentUserId ? (
+                    <View>
+                      <Icons
+                        type="feather"
+                        name="more-horizontal"
+                        size={useResponsiveFontSize(20)}
+                        onPress={onPressMoreDot}
+                        color={theme.text}
+                        hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                      />
+                    </View>
+                  ) : null}
                 </FlexBox>
               </View>
             </FlexBox>
