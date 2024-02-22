@@ -105,7 +105,7 @@ android {
         applicationId 'com.anonymous.TaskStock'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 5
+        versionCode 6
         versionName "1.0.6"
 
         buildConfigField("boolean", "REACT_NATIVE_UNSTABLE_USE_RUNTIME_SCHEDULER_ALWAYS", (findProperty("reactNative.unstable_useRuntimeSchedulerAlways") ?: true).toString())
@@ -123,16 +123,16 @@ android {
             keyPassword 'android'
         }
         release {
-            if (project.hasProperty('MYAPP_UPLOAD_STORE_FILE')) {
-                storeFile file(MYAPP_UPLOAD_STORE_FILE)
-                storePassword MYAPP_UPLOAD_STORE_PASSWORD
-                keyAlias MYAPP_UPLOAD_KEY_ALIAS
-                keyPassword MYAPP_UPLOAD_KEY_PASSWORD
-            }
-        //    keyAlias keystoreProperties['MYAPP_UPLOAD_KEY_ALIAS']
-        //     keyPassword keystoreProperties['MYAPP_UPLOAD_KEY_PASSWORD']
-        //     storeFile file(keystoreProperties['MYAPP_UPLOAD_STORE_FILE'])
-        //     storePassword keystoreProperties['MYAPP_UPLOAD_STORE_PASSWORD']
+            // if (project.hasProperty('MYAPP_UPLOAD_STORE_FILE')) {
+            //     storeFile file(MYAPP_UPLOAD_STORE_FILE)
+            //     storePassword MYAPP_UPLOAD_STORE_PASSWORD
+            //     keyAlias MYAPP_UPLOAD_KEY_ALIAS
+            //     keyPassword MYAPP_UPLOAD_KEY_PASSWORD
+            // }
+           keyAlias keystoreProperties['MYAPP_UPLOAD_KEY_ALIAS']
+            keyPassword keystoreProperties['MYAPP_UPLOAD_KEY_PASSWORD']
+            storeFile file(keystoreProperties['MYAPP_UPLOAD_STORE_FILE'])
+            storePassword keystoreProperties['MYAPP_UPLOAD_STORE_PASSWORD']
         }
     }
     buildTypes {
