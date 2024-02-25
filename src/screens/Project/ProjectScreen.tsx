@@ -1,5 +1,9 @@
-import { NavigationProp, useNavigation } from "@react-navigation/native";
-import React, { useEffect } from "react";
+import {
+  NavigationProp,
+  useFocusEffect,
+  useNavigation,
+} from "@react-navigation/native";
+import React, { useCallback, useEffect, useState } from "react";
 import { Pressable } from "react-native";
 import { Portal } from "react-native-portalize";
 import {
@@ -24,6 +28,7 @@ import {
   setStep6,
 } from "../../store/modules/tutorial";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
+import useHeight from "../../hooks/useHeight";
 
 const sceneMap = {
   first: ProjectScreenFirst,
@@ -70,6 +75,18 @@ const ProjectScreen = () => {
   const navigation = useNavigation<NavigationProp<ProjectStackParamList>>();
 
   const dispatch = useAppDispatch();
+  const { NOTCH_TOP } = useHeight();
+
+  const [focused, setFocused] = useState(false);
+  useFocusEffect(
+    useCallback(() => {
+      setFocused(true);
+
+      return () => {
+        setFocused(false);
+      };
+    }, [])
+  );
 
   return (
     <Pressable
@@ -84,34 +101,38 @@ const ProjectScreen = () => {
       }}
     >
       <PageMainHeader title="프로젝트">
-        {showProjectTutorial && step6 ? (
-          <Pressable
-            onPress={() => {
-              dispatch(setStep6(false));
-            }}
-            style={{
-              top: useResponsiveFontSize(-5),
-              left: useResponsiveFontSize(-150),
-            }}
-          >
+        {showProjectTutorial && step6 && focused ? (
+          <Portal>
+            <Pressable
+              onPress={() => {
+                dispatch(setStep6(false));
+              }}
+              style={{
+                top: useResponsiveFontSize(95),
+                left: useResponsiveFontSize(95),
+              }}
+            >
+              <TutorialBox
+                type={6}
+                ratio={0.7}
+                style={{
+                  height: 600,
+                }}
+              />
+            </Pressable>
+          </Portal>
+        ) : null}
+        {showProjectTutorial && step7 && focused ? (
+          <Portal>
             <TutorialBox
-              type={6}
+              type={7}
               ratio={0.7}
               style={{
-                height: 600,
+                top: useResponsiveFontSize(NOTCH_TOP + 40),
+                right: useResponsiveFontSize(60),
               }}
             />
-          </Pressable>
-        ) : null}
-        {showProjectTutorial && step7 ? (
-          <TutorialBox
-            type={7}
-            ratio={0.7}
-            style={{
-              top: useResponsiveFontSize(95),
-              right: useResponsiveFontSize(60),
-            }}
-          />
+          </Portal>
         ) : null}
 
         <Icons

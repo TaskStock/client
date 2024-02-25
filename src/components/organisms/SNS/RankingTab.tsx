@@ -9,6 +9,7 @@ import FlexBox from "../../atoms/FlexBox";
 import Icons from "../../atoms/Icons";
 import Text from "../../atoms/Text";
 import UserBox from "../../molecules/SNS/UserBox";
+import { palette } from "../../../constants/colors";
 
 const Filter = ({ onPress, iconColor }) => (
   <TouchableOpacity onPress={onPress} style={{ marginTop: spacing.padding }}>
@@ -51,12 +52,17 @@ const RankingTab = ({ data }) => {
         )}
         contentContainerStyle={{
           paddingVertical: spacing.padding,
-          flex: 1,
+          paddingBottom: 100,
         }}
         keyExtractor={(item) => item.user_id.toString()}
         refreshControl={
-          <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
+          <RefreshControl
+            refreshing={isRefreshing}
+            onRefresh={onRefresh}
+            tintColor={palette.red}
+          />
         }
+        showsVerticalScrollIndicator={false}
       />
     </>
   );
