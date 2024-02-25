@@ -105,8 +105,8 @@ android {
         applicationId 'com.anonymous.TaskStock'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 6
-        versionName "1.0.6"
+        versionCode 7
+        versionName "1.0.7"
 
         buildConfigField("boolean", "REACT_NATIVE_UNSTABLE_USE_RUNTIME_SCHEDULER_ALWAYS", (findProperty("reactNative.unstable_useRuntimeSchedulerAlways") ?: true).toString())
         // buildConfigField "String", "kakao_auth_native_key", "\"${kakaoAuthNativeKey}\"" // Java/Kotlin 코드에서 사용하는 상수를 생성
