@@ -22,6 +22,8 @@ import { useGetAllTodoArgs } from "../../../hooks/useGetAllTodoArgs";
 import { useGetValuesArg } from "../../../hooks/useGetValuesArg";
 import { setStep3 } from "../../../store/modules/tutorial";
 import { showErrorToast } from "../../../utils/showToast";
+import Margin from "../../atoms/Margin";
+import { ScrollView } from "react-native-gesture-handler";
 
 const THEME_CONSTANTS = {
   dark: {
@@ -288,7 +290,7 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
             }}
           />
           <RNText
-            numberOfLines={1}
+            // numberOfLines={1}
             ellipsizeMode="tail"
             style={{
               color: styledTheme.text,
@@ -299,6 +301,7 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
             {todo.content}
           </RNText>
         </FlexBox>
+        <Margin direction="horizontal" margin={10} />
         <FlexBox gap={10} alignItems="center">
           {toggle ? (
             <Text size="md" color={styledTheme.high}>
