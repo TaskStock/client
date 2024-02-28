@@ -133,7 +133,7 @@ export const addTodoMutation = (builder: TodoApiBuilder) =>
         updateCalendarItemTodoCountValue({ date: body.add_date, value: 1 })
       );
 
-      if (body.form.project_id !== null)
+      if (body.form.project_id !== null) {
         patchUpdateProjectTodoCount = dispatch(
           projectApi.util.updateQueryData(
             "getAllProjects",
@@ -149,6 +149,8 @@ export const addTodoMutation = (builder: TodoApiBuilder) =>
             }
           )
         );
+      } else {
+      }
 
       try {
         const result = await queryFulfilled;

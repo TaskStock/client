@@ -29,6 +29,9 @@ import {
 } from "../../store/modules/tutorial";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
 import useHeight from "../../hooks/useHeight";
+import { useProject } from "../../hooks/useProject";
+import ContentLayout from "../../components/atoms/ContentLayout";
+import ProjectList from "../../components/organisms/Project/ProjectList";
 
 const sceneMap = {
   first: ProjectScreenFirst,
@@ -76,6 +79,8 @@ const ProjectScreen = () => {
 
   const dispatch = useAppDispatch();
   const { NOTCH_TOP } = useHeight();
+
+  const { projects, isError, isLoading } = useProject();
 
   const [focused, setFocused] = useState(false);
   useFocusEffect(
@@ -150,15 +155,13 @@ const ProjectScreen = () => {
           }}
         />
       </PageMainHeader>
-
-      <TabView
-        navigationState={{ index, routes }}
-        renderScene={renderScene}
-        onIndexChange={onChangeIndex}
-        renderTabBar={(props) => renderTabBar(props)}
-        onSwipeEnd={() => {}}
-        swipeEnabled={false}
-      ></TabView>
+      <ContentLayout noHorizontalPadding noVerticalPadding>
+        <ProjectList
+          projects={projects}
+          isLoading={isLoading}
+          isError={isError}
+        ></ProjectList>
+      </ContentLayout>
     </Pressable>
   );
 };
