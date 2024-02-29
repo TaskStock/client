@@ -68,10 +68,13 @@ const UserInfo = () => {
   const onPressUserFollowing = () => {
     dispatch(getUserFollowerThunk(data.user_id));
 
-    navigation.navigate("UserFollowing", {
-      userId: data.user_id,
-      src: data.image,
-      username: data.user_name,
+    navigation.navigate("SnsStack", {
+      screen: "UserFollowing",
+      params: {
+        userId: data.user_id,
+        src: data.image,
+        username: data.user_name,
+      },
     });
   };
 
