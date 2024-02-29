@@ -145,6 +145,7 @@ export function ProjectItem({
       name: item.name,
       public_range: item.public_range,
       finished: true,
+      project_emoji: item.emoji,
     });
   };
 

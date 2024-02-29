@@ -86,4 +86,5 @@ yarn-error.*
 
 *.keystore. 
 **/GoogleService-Info.plist
+*.xcconfig
 

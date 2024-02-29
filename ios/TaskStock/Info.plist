@@ -36,7 +36,7 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>com.googleusercontent.apps.339467766513-g9dopueckrdbudq9rahh2ctaqm68u94h</string>
-				<string>kakao$(KAKAO_AUTH_NATIVE_KEY)</string>
+				<string>kakao$(KAKAO_APP_KEY)</string>
 			</array>
 		</dict>
 	</array>
@@ -45,7 +45,7 @@
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>KAKAO_APP_KEY</key>
-	<string>$(KAKAO_AUTH_NATIVE_KEY)</string>
+	<string>$(KAKAO_APP_KEY)</string>
 	<key>LSApplicationCategoryType</key>
 	<string></string>
 	<key>LSApplicationQueriesSchemes</key>

@@ -22,7 +22,7 @@ import PrivateLockIcon from "../../atoms/PrivateLockIcon";
 import ProfilePic from "../../atoms/ProfilePic";
 import Text from "../../atoms/Text";
 
-const Container = styled.TouchableOpacity`
+const Container = styled.Pressable`
   flex-direction: row;
   align-items: center;
   flex: 1;
