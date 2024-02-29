@@ -157,7 +157,6 @@ export default function MarketListScreen() {
           <TutorialBox type={10} style={{ top: 130, left: 50 }} />
         </Portal>
       ) : null}
-
       <ScrollView
         style={{ flex: 1, backgroundColor: theme.background }}
         contentContainerStyle={{ paddingBottom: 100 }}
@@ -194,8 +193,8 @@ export default function MarketListScreen() {
             <Text size="md"># 실천 종목 리스트</Text>
           </PageInnerBox>
         </PageHeaderBox>
-        <Margin margin={spacing.small}></Margin>
-        <ContentLayout>
+        <ContentLayout noVerticalPadding>
+          <Margin margin={spacing.offset}></Margin>
           <SearchBar2
             text={searchText}
             onChangeText={(text) => setSearchText(text)}
@@ -276,7 +275,7 @@ export default function MarketListScreen() {
               )
             ) : (
               <>
-                {[1, 2, 3].map((id) => (
+                {[1, 2, 3, 4, 5, 6].map((id) => (
                   <CustomSkeleton key={"marketListskel" + id}>
                     <View
                       style={{
