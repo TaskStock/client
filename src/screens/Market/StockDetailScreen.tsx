@@ -123,6 +123,8 @@ export default function StockDetailScreen({
       },
     });
 
+    await new Promise((resolve) => setTimeout(resolve, 500));
+
     refetch();
     refetchStockDetail();
 
