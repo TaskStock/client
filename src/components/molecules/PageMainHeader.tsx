@@ -8,7 +8,7 @@ import FlexBox from "../atoms/FlexBox";
 
 const Container = styled.View<{ notchTop: number }>`
   padding: ${(props) => props.notchTop + spacing.offset}px ${spacing.gutter}px
-    ${spacing.offset}px;
+    ${spacing.small}px;
   justify-content: space-between;
   align-items: center;
   flex-direction: row;

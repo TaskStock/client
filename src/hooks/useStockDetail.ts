@@ -16,10 +16,10 @@ export const useStockDetail = (stockId: number) => {
       : Math.round((info.my_success_count / info.my_take_count) * 100)
     : 0;
 
-  let totalSuccessRate = info
-    ? isNaN(Math.round((info.success_count / info.take_count) * 100))
+  let totalSuccessRate = stat
+    ? isNaN(Math.round((stat.total_success_count / stat.total_count) * 100))
       ? 0
-      : Math.round((info.success_count / info.take_count) * 100)
+      : Math.round((stat.total_success_count / stat.total_count) * 100)
     : 0;
 
   let diffRate = mySuccessRate - totalSuccessRate;
