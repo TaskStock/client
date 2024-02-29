@@ -2,9 +2,12 @@ import { useContext } from "react";
 import { useCurrentDate } from "../../../hooks/useCurrentDate";
 import { ComponentHeightContext } from "../../../utils/ComponentHeightContext";
 import useTodos from "../../../hooks/useTodos";
-import { Dimensions, View } from "react-native";
+import { Dimensions, Pressable, View } from "react-native";
 import { useResizeLayoutOnFocus } from "../../../hooks/useResizeLayoutOnFocus";
-import { useGetMonthlyRetrospectQuery } from "../../../store/modules/retrospect/retrospect";
+import {
+  editRetrospectForm,
+  useGetMonthlyRetrospectQuery,
+} from "../../../store/modules/retrospect/retrospect";
 import { DateStringYYYYMM } from "../../../@types/calendar";
 import { checkIsSameLocalDay } from "../../../utils/checkIsSameLocalDay";
 import ContentLayout from "../../atoms/ContentLayout";
@@ -21,6 +24,8 @@ import TodoItem from "../../molecules/Home/TodoItem";
 import styled from "styled-components/native";
 import useUser from "../../../hooks/useUser";
 import { useTheme } from "styled-components";
+import { useNavigation } from "@react-navigation/native";
+import { useAppDispatch } from "../../../store/configureStore.hooks";
 
 const ProjectBox = styled.View`
   padding: ${spacing.padding}px;
@@ -47,6 +52,8 @@ function ProjectSection({
 
 function ProjectDetailFirst({ projectId }: { projectId: number }) {
   const theme = useTheme();
+  const navigation = useNavigation();
+  const dispatch = useAppDispatch();
   const { currentDate, currentDateString, subtract1Month, add1Month } =
     useCurrentDate();
   const onPressLeft = subtract1Month;
@@ -143,38 +150,42 @@ function ProjectDetailFirst({ projectId }: { projectId: number }) {
               )}
             </ProjectSection>
             <ProjectSection title="회고">
-              {
-                isLoading ? (
-                  <Text size="md">loading...</Text>
-                ) : isError ? (
-                  <Text size="md">회고를 불러오는중 에러가 발생했습니다.</Text>
-                ) : (
-                  <Text
-                    size="md"
-                    color={
-                      currentProjectRetrospects && currentProjectRetrospects[0]
-                        ? theme.text
-                        : theme.textDim
-                    }
-                  >
-                    {currentProjectRetrospects && currentProjectRetrospects[0]
-                      ? currentProjectRetrospects[0].content.length > 10
-                        ? currentProjectRetrospects[0].content.slice(0, 10) +
-                          "..."
-                        : currentProjectRetrospects[0].content
-                      : "회고가 없습니다."}
+              {isLoading ? (
+                <Text size="md">loading...</Text>
+              ) : isError ? (
+                <Text size="md">회고를 불러오는중 에러가 발생했습니다.</Text>
+              ) : currentProjectRetrospects && currentProjectRetrospects[0] ? (
+                <Pressable
+                  onPress={() => {
+                    dispatch(
+                      editRetrospectForm({
+                        retrospect_id:
+                          currentProjectRetrospects[0].retrospect_id,
+                        project_id: currentProjectRetrospects[0].project_id,
+                        content: currentProjectRetrospects[0].content,
+                        date: currentProjectRetrospects[0].created_date.slice(
+                          0,
+                          10
+                        ) as DateString,
+                      })
+                    );
+                    navigation.navigate("ProjectStackWithoutTab", {
+                      screen: "RetrospectWrite",
+                    });
+                  }}
+                >
+                  <Text size="md" color={theme.text}>
+                    {currentProjectRetrospects[0].content.length > 10
+                      ? currentProjectRetrospects[0].content.slice(0, 10) +
+                        "..."
+                      : currentProjectRetrospects[0].content}
                   </Text>
-                )
-                //   currentProjectRetrospects &&
-                //   currentProjectRetrospects[0] &&
-                //   currentProjectRetrospects[0].content.length > 10 && (
-                //   <Text size="md">{currentProjectRetrospects[0].content.slice(0, 10)}...</Text>
-                //   ) : (
-                //     <Text size="md">{currentProjectRetrospects[0].content}</Text>
-                //   )
-
-                // )}
-              }
+                </Pressable>
+              ) : (
+                <Text size="md" color={theme.textDim}>
+                  회고가 없습니다.
+                </Text>
+              )}
             </ProjectSection>
           </FlexBox>
         </DateContainer>
