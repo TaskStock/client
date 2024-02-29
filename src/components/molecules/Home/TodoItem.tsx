@@ -121,8 +121,6 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
   const MeasurePositionTriggerRef = React.useRef(false);
   const itemRef = React.useRef<View | null>(null);
 
-  const [toggle, setToggle] = useState(todo.check);
-
   const theme = useAppSelect((state) => state.theme.value);
   const todoDrawerPosition = useAppSelect(
     (state) => state.todo.todoDrawerPosition
@@ -160,7 +158,6 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
   const { showTutorial, step3 } = useAppSelect((state) => state.tutorial);
 
   const toggleTodoCheck = useCallback(() => {
-    setToggle(!toggle);
     if (showTutorial && step3) {
       dispatch(setStep3(false));
     }
@@ -185,7 +182,6 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
     getAllTodoQueryArg.date,
     startDate,
     endDate,
-    toggle,
     ishomeDrawerOpen,
   ]);
 
@@ -284,7 +280,7 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
         >
           <TodoCheckBox
             theme={theme}
-            isChecked={toggle}
+            isChecked={todo.check}
             onPress={() => {
               toggleTodoCheck();
             }}
@@ -303,7 +299,7 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
         </FlexBox>
         <Margin direction="horizontal" margin={10} />
         <FlexBox gap={10} alignItems="center">
-          {toggle ? (
+          {todo.check ? (
             <Text size="md" color={styledTheme.high}>
               +{numberWithCommas(todo.level * 1000)}원
             </Text>

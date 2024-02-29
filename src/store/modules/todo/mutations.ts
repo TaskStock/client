@@ -379,6 +379,7 @@ export const toggleTodoMutation = (builder: TodoApiBuilder) =>
       );
 
       let patchUpdateGraphValue;
+      let patchToggleTodoCheck;
 
       // 오늘 날짜라면, 토글해서 check 했을때, 그래프값에도 반영해준다.
       if (checkIsWithInCurrentCalcDay(body.todo_date)) {
@@ -442,6 +443,7 @@ export const toggleTodoMutation = (builder: TodoApiBuilder) =>
         console.log(error);
         patchResult.undo();
         if (patchUpdateGraphValue) patchUpdateGraphValue.undo();
+        if (patchToggleTodoCheck) patchToggleTodoCheck.undo();
       }
     },
   });
