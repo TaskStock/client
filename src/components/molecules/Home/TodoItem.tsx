@@ -288,12 +288,13 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
             }}
           />
           <RNText
-            numberOfLines={1}
-            ellipsizeMode="tail"
+            // numberOfLines={1}
+            // ellipsizeMode="tail"
             style={{
               color: styledTheme.text,
               flex: 1,
               fontSize: useResponsiveFontSize(17),
+              paddingRight: 10,
             }}
           >
             {todo.content}
