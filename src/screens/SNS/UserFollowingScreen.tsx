@@ -87,7 +87,6 @@ export default function UserFollowingScreen({
                 }}
                 contentContainerStyle={{
                   paddingVertical: spacing.padding,
-                  flex: 1,
                 }}
                 keyExtractor={(item) => item.user_id.toString()}
                 // refreshControl={
@@ -142,7 +141,6 @@ export default function UserFollowingScreen({
                 }}
                 contentContainerStyle={{
                   paddingVertical: spacing.padding,
-                  flex: 1,
                 }}
                 keyExtractor={(item) => item.user_id.toString()}
                 // refreshControl={
