@@ -1,14 +1,14 @@
-import React, { useCallback, useEffect, useRef } from "react";
-import { Platform, Pressable, ScrollView, TextInput, View } from "react-native";
+import React, { useRef } from "react";
+import { Platform, Pressable, TextInput, View } from "react-native";
+import OutsidePressHandler from "react-native-outside-press";
 import { useDispatch } from "react-redux";
 import styled, { useTheme } from "styled-components/native";
+import { Project } from "../../../@types/project";
 import { useProject } from "../../../hooks/useProject";
 import { useAppSelect } from "../../../store/configureStore.hooks";
 import { setAddTodoForm } from "../../../store/modules/todo/todo";
 import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import Icons from "../../atoms/Icons";
-import { Project } from "../../../@types/project";
-import OutsidePressHandler from "react-native-outside-press";
 
 const ProjectItemContainer = styled.View<{ height?: number }>`
   flex: 1;

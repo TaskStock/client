@@ -16,6 +16,7 @@
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
 		DF0A994A2B66ACFF0060FFF5 /* SwiftBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF0A99492B66ACFF0060FFF5 /* SwiftBridge.swift */; };
 		DF0A99522B6D2EB20060FFF5 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DF0A99512B6D2EB20060FFF5 /* GoogleService-Info.plist */; };
+		DF2B0E452B90A16100A58214 /* Release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = DF2B0E442B90A16100A58214 /* Release.xcconfig */; };
 		F9F3312CC46D56E374368899 /* Pods_TaskStock.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5050298BE073501CC30AD43B /* Pods_TaskStock.framework */; };
 /* End PBXBuildFile section */
 
@@ -34,6 +35,7 @@
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
 		DF0A99492B66ACFF0060FFF5 /* SwiftBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftBridge.swift; sourceTree = "<group>"; };
 		DF0A99512B6D2EB20060FFF5 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Desktop/TASKSTOCK/ios 배포/firebase/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		DF2B0E442B90A16100A58214 /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		FAC715A2D49A985799AEE119 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-TaskStock/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -86,6 +88,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				DF2B0E442B90A16100A58214 /* Release.xcconfig */,
 				13B07FAE1A68108700A75B9A /* TaskStock */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				83CBBA001A601CBA00E9B192 /* Products */,
@@ -206,6 +209,7 @@
 				DF0A99522B6D2EB20060FFF5 /* GoogleService-Info.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */,
+				DF2B0E452B90A16100A58214 /* Release.xcconfig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -357,6 +361,7 @@
 				);
 				INFOPLIST_FILE = TaskStock/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = TaskStock;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -393,6 +398,7 @@
 				DEVELOPMENT_TEAM = BTGB376XB7;
 				INFOPLIST_FILE = TaskStock/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = TaskStock;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.productivity";
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -496,6 +502,7 @@
 		};
 		83CBBA211A601CBA00E9B192 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = DF2B0E442B90A16100A58214 /* Release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
