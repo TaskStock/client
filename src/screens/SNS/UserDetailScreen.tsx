@@ -266,7 +266,7 @@ const UserDetailScreen = ({ route, navigation }: UserDetailScreenProps) => {
                       pointerEvents: "none",
                     }}
                   >
-                    <TodoItem todo={todo} />
+                    <TodoItem todo={todo} mine={false} />
                   </View>
                 ))
               ) : (
