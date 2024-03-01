@@ -94,7 +94,7 @@ const BottomDrawer = ({
       style={{
         height: screenHeight - BOTTOM_TAB,
         top: closedState,
-
+        paddingBottom: openState,
         transform: [{ translateY: drawerPositionY }],
       }}
     >

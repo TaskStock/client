@@ -217,7 +217,6 @@ export default function DraggableTodoList({
           onDragEnd={onDragEnd}
           contentContainerStyle={{
             paddingVertical: spacing.padding,
-            height: "100%",
           }}
         ></DraggableFlatList>
       )}
