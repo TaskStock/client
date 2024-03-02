@@ -18,7 +18,7 @@ const GraphBox = styled(ContentItemBoxContainer)`
 `;
 
 export default function StockDetailGraphSection({
-  successRate: { mySuccessRate, averageSuccessRate },
+  successRate: { mySuccessRate, averageSuccessRate, myTakeCount },
   weekdaySuccessCount: {
     monday,
     tuesday,
@@ -33,6 +33,7 @@ export default function StockDetailGraphSection({
   successRate: {
     mySuccessRate: number;
     averageSuccessRate: number;
+    myTakeCount: number;
   };
   weekdaySuccessCount: {
     monday: number;
@@ -140,7 +141,11 @@ export default function StockDetailGraphSection({
     }
   };
 
-  const maxDay = data2.find((point) => point.y === data2Max)?.x;
+  // const maxDay = data2.find((point) => point.y === data2Max)?.x;
+
+  const maxDays = data2
+    .filter((point) => point.y === data2Max)
+    .map((point) => point.x);
 
   const data1NoData = data.every((point) => point.y === 0);
   const data2NoData = data2.every((point) => point.y === 0);
@@ -148,45 +153,56 @@ export default function StockDetailGraphSection({
   return (
     <>
       {!data1NoData ? (
-        diffRate !== 0 ? (
-          <>
-            <FlexBox
-              direction="column"
-              alignItems="stretch"
-              gap={spacing.small}
-            >
-              <Text size="xl" weight="regular">
-                <Text size="xl" weight="bold">
-                  {username}님
+        myTakeCount > 0 ? (
+          diffRate !== 0 ? (
+            <>
+              <FlexBox
+                direction="column"
+                alignItems="stretch"
+                gap={spacing.small}
+              >
+                <Text size="xl" weight="regular">
+                  <Text size="xl" weight="bold">
+                    {username}님
+                  </Text>
+                  은 평균보다 달성률이{" "}
+                  <Text size="xl" weight="bold">
+                    {Math.abs(diffRate)}%
+                  </Text>
+                  {diffRate > 0 ? " 높아요. 👏" : " 낮아요. 😥"}
                 </Text>
-                은 평균보다 달성률이{" "}
-                <Text size="xl" weight="bold">
-                  {Math.abs(diffRate)}%
+              </FlexBox>
+            </>
+          ) : (
+            <>
+              <FlexBox
+                direction="column"
+                alignItems="stretch"
+                gap={spacing.small}
+              >
+                <Text size="xl" weight="regular">
+                  <Text size="xl" weight="bold">
+                    {username}님
+                  </Text>
+                  은 평균과 달성률이
                 </Text>
-                {diffRate > 0 ? " 높아요. 👏" : " 낮아요. 😥"}
-              </Text>
-            </FlexBox>
-          </>
+                <Text size="xl" weight="regular">
+                  <Text size="xl" weight="bold">
+                    같아요. 🤔
+                  </Text>
+                </Text>
+              </FlexBox>
+            </>
+          )
         ) : (
-          <>
-            <FlexBox
-              direction="column"
-              alignItems="stretch"
-              gap={spacing.small}
-            >
-              <Text size="xl" weight="regular">
-                <Text size="xl" weight="bold">
-                  {username}님
-                </Text>
-                은 평균과 달성률이
+          <FlexBox direction="column" alignItems="stretch" gap={spacing.small}>
+            <Text size="xl" weight="regular">
+              <Text size="xl" weight="bold">
+                {username}님
               </Text>
-              <Text size="xl" weight="regular">
-                <Text size="xl" weight="bold">
-                  같아요. 🤔
-                </Text>
-              </Text>
-            </FlexBox>
-          </>
+              은 아직 첫 투자를 하지 않았어요.
+            </Text>
+          </FlexBox>
         )
       ) : (
         <Text size="xl" weight="regular">
@@ -216,7 +232,7 @@ export default function StockDetailGraphSection({
           <FlexBox direction="column" alignItems="stretch" gap={spacing.small}>
             <Text size="xl" weight="regular">
               <Text size="xl" weight="bold">
-                {maxDay}요일
+                {maxDays.join(",")}요일
               </Text>
               에 사람들이
             </Text>

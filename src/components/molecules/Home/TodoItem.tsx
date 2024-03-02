@@ -251,10 +251,10 @@ const TodoItem = ({ todo, mine = true }: { todo: Todo; mine?: boolean }) => {
   ]);
 
   const onPressDot = () => {
-    if (todo.stockitem_id) {
-      showErrorToast("종목으로 가져온 투두는 수정할 수 없어요.");
-      return;
-    }
+    // if (todo.stockitem_id) {
+    //   showErrorToast("종목으로 가져온 투두는 수정할 수 없어요.");
+    //   return;
+    // }
 
     if (!MeasurePositionTriggerRef.current) {
       MeasurePositionTriggerRef.current = true;
@@ -286,8 +286,6 @@ const TodoItem = ({ todo, mine = true }: { todo: Todo; mine?: boolean }) => {
             }}
           />
           <RNText
-            // numberOfLines={1}
-            // ellipsizeMode="tail"
             style={{
               color: styledTheme.text,
               flex: 1,
@@ -331,24 +329,34 @@ const TodoItem = ({ todo, mine = true }: { todo: Todo; mine?: boolean }) => {
                   left: modalPosition.x,
                 }}
               >
-                <TodoModalItem isSelected={true} onPress={onPressEditTodo}>
-                  <Text
-                    size="md"
-                    color={
-                      styledTheme.name == "gray"
-                        ? styledTheme.textReverse
-                        : styledTheme.text
-                    }
-                  >
-                    수정하기
-                  </Text>
-                </TodoModalItem>
+                {!todo.stockitem_id && (
+                  <TodoModalItem isSelected={true} onPress={onPressEditTodo}>
+                    <Text
+                      size="md"
+                      color={
+                        styledTheme.name == "gray"
+                          ? styledTheme.textReverse
+                          : styledTheme.text
+                      }
+                    >
+                      수정하기
+                    </Text>
+                  </TodoModalItem>
+                )}
+
                 {!todo.check && checkIsWithInCurrentCalcDay(todo.date) && (
                   <TodoModalItem
-                    isSelected={false}
+                    isSelected={todo.stockitem_id ? true : false}
                     onPress={onPressChangeToNextDayTodo}
                   >
-                    <Text size="md" color={styledTheme.text}>
+                    <Text
+                      size="md"
+                      color={
+                        todo.stockitem_id
+                          ? styledTheme.textReverse
+                          : styledTheme.text
+                      }
+                    >
                       내일하기
                     </Text>
                   </TodoModalItem>
