@@ -48,7 +48,7 @@ export const getAllRetrospectQuery = (builder: Builder) =>
         const result = await queryFulfilled;
       } catch (error) {
         console.log(error);
-        showErrorToast("회고 목록을 불러오는데 실패했어요.");
+        showErrorToast("기록 목록을 불러오는데 실패했어요.");
       }
     },
   });
@@ -77,7 +77,7 @@ export const getAllProjectRetrospectQuery = (builder: Builder) =>
         const result = await queryFulfilled;
       } catch (error) {
         console.log(error);
-        showErrorToast("회고 목록을 불러오는데 실패했어요.");
+        showErrorToast("기록 목록을 불러오는데 실패했어요.");
       }
     },
   });

@@ -149,7 +149,7 @@ export default function RetrospectList({
           })
         ) : (
           <Text size="md" color={theme.textDim}>
-            회고가 없습니다.
+            기록이 없습니다.
           </Text>
         )}
       </FlexBox>

@@ -88,9 +88,11 @@ const MyInfo = () => {
             </Text>
             <PrivateLockIcon isPrivate={isPrivate} />
           </FlexBox>
-          <Text size="sm" color={theme.textDim}>
-            {introduce}
-          </Text>
+          {introduce && (
+            <Text size="sm" color={theme.textDim}>
+              {introduce}
+            </Text>
+          )}
         </View>
       </FlexBox>
       <FlexBox

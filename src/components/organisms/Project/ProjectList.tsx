@@ -232,7 +232,7 @@ export function ProjectItem({
                       <Text size="xs" color={theme.textDim}>
                         {item.todo_count + ""}개의 할일 |{" "}
                         {item.retrospect_count + ""}
-                        개의 회고 | {publicText}
+                        개의 기록 | {publicText}
                       </Text>
                     </FlexBox>
                   </FlexBox>
@@ -341,7 +341,7 @@ export function ProjectItem({
                       <Text size="xs">
                         {item.todo_count + ""}개의 할일 |{" "}
                         {item.retrospect_count + ""}
-                        개의 회고 | {publicText}
+                        개의 기록 | {publicText}
                       </Text>
                     </FlexBox>
                   </FlexBox>

@@ -108,9 +108,11 @@ const UserInfo = () => {
             </Text>
             <PrivateLockIcon isPrivate={data.private} />
           </FlexBox>
-          <Text size="sm" color={theme.textDim}>
-            {data.introduce ? data.introduce : ""}
-          </Text>
+          {data.introduce && (
+            <Text size="sm" color={theme.textDim}>
+              {data.introduce}
+            </Text>
+          )}
         </View>
       </FlexBox>
       <FlexBox alignItems="flex-end" justifyContent="space-between">

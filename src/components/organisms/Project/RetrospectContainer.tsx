@@ -157,7 +157,7 @@ export default function RetrospectContainer({
                   size="md"
                   color={theme.name == "gray" ? theme.textReverse : theme.text}
                 >
-                  회고 작성하기
+                  기록하기
                 </Text>
               </RoundItemBtn>
             </View>

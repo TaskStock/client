@@ -1,14 +1,10 @@
-import { View, FlatList, TouchableOpacity, Linking } from "react-native";
 import React from "react";
-import PageHeader from "../../components/molecules/PageHeader";
-import { ossLicenseData } from "../../../public/data/ossLicense";
-import Text from "../../components/atoms/Text";
-import { spacing } from "../../constants/spacing";
-import Margin from "../../components/atoms/Margin";
+import { FlatList, View } from "react-native";
 import { useTheme } from "styled-components";
-import FlexBox from "../../components/atoms/FlexBox";
-import { palette } from "../../constants/colors";
+import { ossLicenseData } from "../../../public/data/ossLicense";
+import PageHeader from "../../components/molecules/PageHeader";
 import Menu from "../../components/molecules/Settings/Menu";
+import { spacing } from "../../constants/spacing";
 
 const OssLicenseScreen = ({ navigation }) => {
   const theme = useTheme();

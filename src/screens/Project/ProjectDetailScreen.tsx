@@ -19,7 +19,7 @@ const routeMap = [
   },
   {
     key: "second",
-    title: "회고",
+    title: "기록",
   },
 ];
 
