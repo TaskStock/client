@@ -1,14 +1,13 @@
-import { View } from "react-native";
+import dayjs from "dayjs";
 import React from "react";
 import styled, { useTheme } from "styled-components/native";
-import dayjs from "dayjs";
+import { spacing } from "../../../constants/spacing";
+import useUser from "../../../hooks/useUser";
 import { ContentItemBoxContainer } from "../../atoms/ContentItemBox";
-import MarketAverageGraph from "./MarketAverageGraph";
+import FlexBox from "../../atoms/FlexBox";
 import Margin from "../../atoms/Margin";
 import Text from "../../atoms/Text";
-import { spacing } from "../../../constants/spacing";
-import FlexBox from "../../atoms/FlexBox";
-import useUser from "../../../hooks/useUser";
+import MarketAverageGraph from "./MarketAverageGraph";
 
 const GraphBox = styled(ContentItemBoxContainer)`
   width: 100%;
@@ -162,7 +161,7 @@ export default function StockDetailGraphSection({
                 </Text>
                 은 평균보다 달성률이{" "}
                 <Text size="xl" weight="bold">
-                  {diffRate}%
+                  {Math.abs(diffRate)}%
                 </Text>
                 {diffRate > 0 ? " 높아요. 👏" : " 낮아요. 😥"}
               </Text>

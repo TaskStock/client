@@ -136,7 +136,12 @@ const UserInfo = () => {
           {badges.length > 0 && (
             <BadgesPreview
               badges={badges}
-              onPress={() => navigation.navigate("Badge", { type: "friend" })}
+              onPress={() =>
+                navigation.navigate("SnsStack", {
+                  screen: "Badge",
+                  params: { type: "friend" },
+                })
+              }
             />
           )}
         </FlexBox>
