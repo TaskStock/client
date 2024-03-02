@@ -40,7 +40,7 @@ const sceneMap = {
 
 const routeMap = [
   { key: "first", title: "프로젝트" },
-  { key: "second", title: "회고" },
+  { key: "second", title: "기록" },
 ];
 
 const ProjectScreen = () => {

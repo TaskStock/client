@@ -1,14 +1,13 @@
-import { View } from "react-native";
+import dayjs from "dayjs";
 import React from "react";
 import styled, { useTheme } from "styled-components/native";
-import dayjs from "dayjs";
+import { spacing } from "../../../constants/spacing";
+import useUser from "../../../hooks/useUser";
 import { ContentItemBoxContainer } from "../../atoms/ContentItemBox";
-import MarketAverageGraph from "./MarketAverageGraph";
+import FlexBox from "../../atoms/FlexBox";
 import Margin from "../../atoms/Margin";
 import Text from "../../atoms/Text";
-import { spacing } from "../../../constants/spacing";
-import FlexBox from "../../atoms/FlexBox";
-import useUser from "../../../hooks/useUser";
+import MarketAverageGraph from "./MarketAverageGraph";
 
 const GraphBox = styled(ContentItemBoxContainer)`
   width: 100%;

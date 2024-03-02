@@ -108,9 +108,11 @@ const UserInfo = () => {
             </Text>
             <PrivateLockIcon isPrivate={data.private} />
           </FlexBox>
-          <Text size="sm" color={theme.textDim}>
-            {data.introduce ? data.introduce : ""}
-          </Text>
+          {data.introduce && (
+            <Text size="sm" color={theme.textDim}>
+              {data.introduce}
+            </Text>
+          )}
         </View>
       </FlexBox>
       <FlexBox alignItems="flex-end" justifyContent="space-between">
@@ -136,7 +138,12 @@ const UserInfo = () => {
           {badges.length > 0 && (
             <BadgesPreview
               badges={badges}
-              onPress={() => navigation.navigate("Badge", { type: "friend" })}
+              onPress={() =>
+                navigation.navigate("SnsStack", {
+                  screen: "Badge",
+                  params: { type: "friend" },
+                })
+              }
             />
           )}
         </FlexBox>

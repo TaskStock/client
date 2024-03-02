@@ -59,7 +59,7 @@ export default function RetrospectWriteScreen() {
 
   const onPressSave = () => {
     if (retrospectForm.content === "") {
-      showErrorToast("회고 내용을 입력해주세요");
+      showErrorToast("내용을 입력해주세요");
       return;
     }
 
@@ -92,16 +92,16 @@ export default function RetrospectWriteScreen() {
       <ScrollView style={{ flex: 1 }}>
         <ContentLayout>
           <FlexBox direction="column" gap={spacing.offset} alignItems="stretch">
-            <NormalSection headerText="회고 날짜">
+            <NormalSection headerText="기록 날짜">
               <TextInputWithBorder
                 value={retrospectDateFormat}
               ></TextInputWithBorder>
             </NormalSection>
-            <NormalSection headerText="회고 내용">
+            <NormalSection headerText="내용">
               <TextAreaInput
                 numberOfLines={15}
                 minHeight={useResponsiveFontSize(260)}
-                placeholder="회고 내용을 입력해주세요"
+                placeholder="내용을 입력해주세요"
                 value={retrospectForm.content}
                 onChangeText={onChangeRetrospectContent}
               ></TextAreaInput>

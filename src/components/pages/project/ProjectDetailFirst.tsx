@@ -149,11 +149,11 @@ function ProjectDetailFirst({ projectId }: { projectId: number }) {
                 </Text>
               )}
             </ProjectSection>
-            <ProjectSection title="회고">
+            <ProjectSection title="기록">
               {isLoading ? (
                 <Text size="md">loading...</Text>
               ) : isError ? (
-                <Text size="md">회고를 불러오는중 에러가 발생했습니다.</Text>
+                <Text size="md">기록을 불러오는중 에러가 발생했습니다.</Text>
               ) : currentProjectRetrospects && currentProjectRetrospects[0] ? (
                 <Pressable
                   onPress={() => {
@@ -183,7 +183,7 @@ function ProjectDetailFirst({ projectId }: { projectId: number }) {
                 </Pressable>
               ) : (
                 <Text size="md" color={theme.textDim}>
-                  회고가 없습니다.
+                  기록이 없습니다.
                 </Text>
               )}
             </ProjectSection>

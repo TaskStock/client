@@ -205,5 +205,6 @@ const ModalContainer = styled.View`
 `;
 const SelectImage = styled.TouchableOpacity`
   padding: ${spacing.offset}px ${spacing.gutter * 2}px;
+  align-items: center;
 `;
 export default EditProfileScreen;

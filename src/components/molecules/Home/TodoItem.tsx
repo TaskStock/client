@@ -114,7 +114,7 @@ const TodoCheckBox = memo(
   }
 );
 
-const TodoItem = ({ todo }: { todo: Todo }) => {
+const TodoItem = ({ todo, mine = true }: { todo: Todo; mine?: boolean }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 });
   const didMountRef = React.useRef(false);
@@ -305,14 +305,16 @@ const TodoItem = ({ todo }: { todo: Todo }) => {
           ) : (
             <Text size="md">{numberWithCommas(todo.level * 1000)}원</Text>
           )}
-          <Icons
-            type="material"
-            name="dots-horizontal"
-            size={24}
-            color={styledTheme.textDimmer}
-            onPress={onPressDot}
-            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-          />
+          {mine && (
+            <Icons
+              type="material"
+              name="dots-horizontal"
+              size={24}
+              color={styledTheme.textDimmer}
+              onPress={onPressDot}
+              hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            />
+          )}
         </FlexBox>
         {isModalOpen && (
           <Modal transparent={true}>
