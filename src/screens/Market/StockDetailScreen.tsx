@@ -290,13 +290,15 @@ export default function StockDetailScreen({
                   </Text>{" "}
                   실천했어요.
                 </Text>
-                <Text size="md" weight="regular">
-                  ❤️{"  "}이 종목은 매주{" "}
-                  <Text size="md" weight="bold">
-                    {maxWeekday}
+                {maxWeekday.length != 0 && (
+                  <Text size="md" weight="regular">
+                    ❤️{"  "}이 종목은 매주{" "}
+                    <Text size="md" weight="bold">
+                      {maxWeekday.join(",")}요일
+                    </Text>
+                    에 인기가 많아요.
                   </Text>
-                  에 인기가 많아요.
-                </Text>
+                )}
               </>
             ) : (
               <>
@@ -324,6 +326,7 @@ export default function StockDetailScreen({
             successRate={{
               mySuccessRate: mySuccessRate,
               averageSuccessRate: totalSuccessRate,
+              myTakeCount: info?.my_take_count || 0,
             }}
             weekdaySuccessCount={{
               monday: stat?.s_monday || 0,
