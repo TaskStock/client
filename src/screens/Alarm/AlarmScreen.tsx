@@ -1,12 +1,13 @@
 import { useRefresh } from "@react-native-community/hooks";
 import React, { useEffect, useState } from "react";
-import { FlatList, RefreshControl } from "react-native";
+import { FlatList, RefreshControl, View } from "react-native";
 import styled from "styled-components/native";
 import AlarmBox from "../../components/molecules/Alarm/AlarmBox";
 import PinnedAlarmBox from "../../components/molecules/Alarm/PinnedAlarmBox";
 import PageHeader from "../../components/molecules/PageHeader";
 import { useClient } from "../../hooks/useClient";
 import { useAppDispatch, useAppSelect } from "../../store/configureStore.hooks";
+import LoadingSpinner from "../../components/atoms/LoadingSpinner";
 
 const Container = styled.View`
   flex: 1;
@@ -55,9 +56,32 @@ const AlarmScreen = () => {
         renderItem={({ item }) => <AlarmBox item={item} />}
         keyExtractor={(item) => item.notice_id.toString()}
         refreshControl={
-          <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
+          <RefreshControl
+            refreshing={isRefreshing}
+            onRefresh={onRefresh}
+            tintColor="transparent"
+            colors={["transparent"]}
+            style={{ backgroundColor: "transparent" }}
+          />
         }
-        ListHeaderComponent={<PinnedAlarmBox />}
+        ListHeaderComponent={
+          <>
+            <View
+              style={{
+                position: "absolute",
+                width: "100%",
+                height: 60,
+                alignItems: "center",
+                justifyContent: "center",
+                top: -60,
+              }}
+            >
+              <LoadingSpinner />
+            </View>
+
+            <PinnedAlarmBox />
+          </>
+        }
       />
     </Container>
   );
