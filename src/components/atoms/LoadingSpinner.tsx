@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { Animated, Easing } from "react-native";
+import { Animated, Easing, RefreshControl, View } from "react-native";
 import styled from "styled-components/native";
 import { grayTheme } from "../../constants/colors";
 
@@ -105,3 +105,27 @@ const LoadingSpinner = ({
 };
 
 export default LoadingSpinner;
+
+export const CustomRefreshControl = ({ refreshing, onRefresh }) => (
+  <RefreshControl
+    refreshing={refreshing}
+    onRefresh={onRefresh}
+    tintColor="transparent"
+    colors={["transparent"]}
+    style={{ backgroundColor: "transparent" }}
+  />
+);
+export const RefreshSpinner = () => (
+  <View
+    style={{
+      position: "absolute",
+      width: "100%",
+      height: 60,
+      alignItems: "center",
+      justifyContent: "center",
+      top: -60,
+    }}
+  >
+    <LoadingSpinner />
+  </View>
+);

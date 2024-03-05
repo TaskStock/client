@@ -1,12 +1,15 @@
 import React, { useState } from "react";
-import { FlatList, RefreshControl, TouchableOpacity, View } from "react-native";
+import { FlatList, TouchableOpacity } from "react-native";
 import { useTheme } from "styled-components";
 import { spacing } from "../../../constants/spacing";
 import { useAppDispatch } from "../../../store/configureStore.hooks";
 import { IFriend, getFriendsThunk } from "../../../store/modules/getFriends";
 import FlexBox from "../../atoms/FlexBox";
 import Icons from "../../atoms/Icons";
-import LoadingSpinner from "../../atoms/LoadingSpinner";
+import {
+  CustomRefreshControl,
+  RefreshSpinner,
+} from "../../atoms/LoadingSpinner";
 import Text from "../../atoms/Text";
 import UserBox from "../../molecules/SNS/UserBox";
 
@@ -63,29 +66,13 @@ const RankingTab = ({ data }) => {
         }}
         keyExtractor={(item) => item.user_id.toString()}
         refreshControl={
-          <RefreshControl
+          <CustomRefreshControl
             refreshing={isRefreshing}
             onRefresh={onRefresh}
-            tintColor="transparent"
-            colors={["transparent"]}
-            style={{ backgroundColor: "transparent" }}
           />
         }
         showsVerticalScrollIndicator={false}
-        ListHeaderComponent={
-          <View
-            style={{
-              position: "absolute",
-              width: "100%",
-              height: 60,
-              alignItems: "center",
-              justifyContent: "center",
-              top: -60,
-            }}
-          >
-            <LoadingSpinner />
-          </View>
-        }
+        ListHeaderComponent={<RefreshSpinner />}
       />
     </>
   );
