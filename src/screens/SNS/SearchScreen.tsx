@@ -81,7 +81,6 @@ const SearchScreen = () => {
   const [searchText, setSearchText] = useState("");
   const { accessToken } = useAppSelect((state) => state.auth);
   const { searchList } = useAppSelect((state) => state.friends);
-  let data;
 
   const { isRefreshing, onRefresh } = useRefresh(() =>
     dispatch(searchThunk(searchText))
