@@ -1,13 +1,13 @@
 import PushNotificationIOS from "@react-native-community/push-notification-ios";
 import { useEffect } from "react";
-import { Alert, Platform } from "react-native";
+import { PermissionsAndroid, Platform } from "react-native";
 import PushNotification from "react-native-push-notification";
 import { useAppDispatch, useAppSelect } from "../store/configureStore.hooks";
-import { setFcmToken } from "../store/modules/pushNoti";
+import { setFcmToken, setIsPushOn } from "../store/modules/pushNoti";
 import { fcmService } from "../utils/PushNotification/push.fcm";
 import { localNotificationService } from "../utils/PushNotification/push.noti";
-import { useClient } from "./useClient";
 import { navigate } from "../utils/navigation";
+import { useClient } from "./useClient";
 
 export default function usePushNotification() {
   const { accessToken } = useAppSelect((state) => state.auth);
@@ -15,6 +15,42 @@ export default function usePushNotification() {
   const { userInfoLoaded } = useAppSelect((state) => state.user);
   const dispatch = useAppDispatch();
   const client = useClient(dispatch);
+
+  // AOS 권한 요청
+  const requestNotificationPermission = async () => {
+    if (Platform.OS === "android") {
+      try {
+        PermissionsAndroid.check("android.permission.POST_NOTIFICATIONS").then(
+          async (response) => {
+            console.log("response=====", response);
+            // if (response) {
+            //   dispatch(setIsPushOn(true));
+            // }
+            if (!response) {
+              const granted = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
+                {
+                  title: "앱 알림 권한 요청",
+                  message: "앱에서 푸시 알림을 받으려면 권한을 허용해주세요.",
+                  buttonPositive: "확인",
+                }
+              );
+              console.log("granted=====", granted);
+              if (granted === "granted") {
+                dispatch(setIsPushOn(true));
+              }
+            }
+          }
+        );
+      } catch (err) {
+        console.warn(err);
+      }
+    }
+  };
+
+  useEffect(() => {
+    requestNotificationPermission();
+  }, []);
 
   const sendTokenToServer = async (fcmToken, isPushOn) => {
     if (accessToken === "") return;

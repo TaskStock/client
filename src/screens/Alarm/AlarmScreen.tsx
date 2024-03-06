@@ -1,9 +1,12 @@
 import { useRefresh } from "@react-native-community/hooks";
 import React, { useEffect, useState } from "react";
-import { FlatList, RefreshControl } from "react-native";
+import { FlatList } from "react-native";
 import styled from "styled-components/native";
+import {
+  CustomRefreshControl,
+  RefreshSpinner,
+} from "../../components/atoms/LoadingSpinner";
 import AlarmBox from "../../components/molecules/Alarm/AlarmBox";
-import PinnedAlarmBox from "../../components/molecules/Alarm/PinnedAlarmBox";
 import PageHeader from "../../components/molecules/PageHeader";
 import { useClient } from "../../hooks/useClient";
 import { useAppDispatch, useAppSelect } from "../../store/configureStore.hooks";
@@ -55,9 +58,12 @@ const AlarmScreen = () => {
         renderItem={({ item }) => <AlarmBox item={item} />}
         keyExtractor={(item) => item.notice_id.toString()}
         refreshControl={
-          <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
+          <CustomRefreshControl
+            refreshing={isRefreshing}
+            onRefresh={onRefresh}
+          />
         }
-        ListHeaderComponent={<PinnedAlarmBox />}
+        ListHeaderComponent={<RefreshSpinner />}
       />
     </Container>
   );

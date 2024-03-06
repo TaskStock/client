@@ -1,15 +1,17 @@
-import { useRefresh } from "@react-native-community/hooks";
-import React from "react";
-import { FlatList, RefreshControl, TouchableOpacity } from "react-native";
+import React, { useState } from "react";
+import { FlatList, TouchableOpacity } from "react-native";
 import { useTheme } from "styled-components";
 import { spacing } from "../../../constants/spacing";
 import { useAppDispatch } from "../../../store/configureStore.hooks";
 import { IFriend, getFriendsThunk } from "../../../store/modules/getFriends";
 import FlexBox from "../../atoms/FlexBox";
 import Icons from "../../atoms/Icons";
+import {
+  CustomRefreshControl,
+  RefreshSpinner,
+} from "../../atoms/LoadingSpinner";
 import Text from "../../atoms/Text";
 import UserBox from "../../molecules/SNS/UserBox";
-import { palette } from "../../../constants/colors";
 
 const Filter = ({ onPress, iconColor }) => (
   <TouchableOpacity onPress={onPress} style={{ marginTop: spacing.padding }}>
@@ -27,9 +29,17 @@ const Filter = ({ onPress, iconColor }) => (
 
 const RankingTab = ({ data }) => {
   const dispatch = useAppDispatch();
-  const { isRefreshing, onRefresh } = useRefresh(() =>
-    dispatch(getFriendsThunk())
-  );
+
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const onRefresh = async () => {
+    setIsRefreshing(true);
+    setTimeout(() => {
+      dispatch(getFriendsThunk());
+      setIsRefreshing(false);
+    }, 1000);
+  };
+
   const theme = useTheme();
   return (
     <>
@@ -56,13 +66,13 @@ const RankingTab = ({ data }) => {
         }}
         keyExtractor={(item) => item.user_id.toString()}
         refreshControl={
-          <RefreshControl
+          <CustomRefreshControl
             refreshing={isRefreshing}
             onRefresh={onRefresh}
-            tintColor={palette.red}
           />
         }
         showsVerticalScrollIndicator={false}
+        ListHeaderComponent={<RefreshSpinner />}
       />
     </>
   );

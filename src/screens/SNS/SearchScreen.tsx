@@ -1,11 +1,14 @@
 import { useRefresh } from "@react-native-community/hooks";
 import React, { useEffect, useState } from "react";
 import { FlatList } from "react-native";
-import { RefreshControl } from "react-native-gesture-handler";
 import { useTheme } from "styled-components";
 import styled from "styled-components/native";
 import FlexBox from "../../components/atoms/FlexBox";
 import Icons from "../../components/atoms/Icons";
+import {
+  CustomRefreshControl,
+  RefreshSpinner,
+} from "../../components/atoms/LoadingSpinner";
 import Text from "../../components/atoms/Text";
 import PageHeader from "../../components/molecules/PageHeader";
 import UserBox from "../../components/molecules/SNS/UserBox";
@@ -78,7 +81,6 @@ const SearchScreen = () => {
   const [searchText, setSearchText] = useState("");
   const { accessToken } = useAppSelect((state) => state.auth);
   const { searchList } = useAppSelect((state) => state.friends);
-  let data;
 
   const { isRefreshing, onRefresh } = useRefresh(() =>
     dispatch(searchThunk(searchText))
@@ -145,8 +147,12 @@ const SearchScreen = () => {
           ListEmptyComponent={NoData}
           keyExtractor={(item) => item.user_id.toString()}
           refreshControl={
-            <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
+            <CustomRefreshControl
+              refreshing={isRefreshing}
+              onRefresh={onRefresh}
+            />
           }
+          ListHeaderComponent={<RefreshSpinner />}
         />
       </ResultContainer>
     </Container>
