@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { PermissionsAndroid, Platform } from "react-native";
 import PushNotification from "react-native-push-notification";
 import { useAppDispatch, useAppSelect } from "../store/configureStore.hooks";
-import { setFcmToken } from "../store/modules/pushNoti";
+import { setFcmToken, setIsPushOn } from "../store/modules/pushNoti";
 import { fcmService } from "../utils/PushNotification/push.fcm";
 import { localNotificationService } from "../utils/PushNotification/push.noti";
 import { navigate } from "../utils/navigation";
@@ -21,12 +21,13 @@ export default function usePushNotification() {
     if (Platform.OS === "android") {
       try {
         PermissionsAndroid.check("android.permission.POST_NOTIFICATIONS").then(
-          (response) => {
-            if (response) {
-              // 키기
-            }
+          async (response) => {
+            console.log("response=====", response);
+            // if (response) {
+            //   dispatch(setIsPushOn(true));
+            // }
             if (!response) {
-              const granted = PermissionsAndroid.request(
+              const granted = await PermissionsAndroid.request(
                 PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
                 {
                   title: "앱 알림 권한 요청",
@@ -35,6 +36,9 @@ export default function usePushNotification() {
                 }
               );
               console.log("granted=====", granted);
+              if (granted === "granted") {
+                dispatch(setIsPushOn(true));
+              }
             }
           }
         );
