@@ -24,6 +24,7 @@ import { setStep3 } from "../../../store/modules/tutorial";
 import { showErrorToast } from "../../../utils/showToast";
 import Margin from "../../atoms/Margin";
 import { ScrollView } from "react-native-gesture-handler";
+import { useProject } from "../../../hooks/useProject";
 
 const THEME_CONSTANTS = {
   dark: {
@@ -264,6 +265,8 @@ const TodoItem = ({ todo, mine = true }: { todo: Todo; mine?: boolean }) => {
     }
   };
 
+  const { findProjectRangeById } = useProject();
+
   return (
     <View ref={itemRef} collapsable={false} style={{}}>
       <FlexBox
@@ -295,6 +298,15 @@ const TodoItem = ({ todo, mine = true }: { todo: Todo; mine?: boolean }) => {
           >
             {todo.content}
           </RNText>
+          {todo.project_id ? (
+            findProjectRangeById(todo?.project_id) === "none" ? (
+              <Icons
+                type="materialIcons"
+                name="lock-outline"
+                color={styledTheme.textDimmer}
+              />
+            ) : null
+          ) : null}
         </FlexBox>
         <Margin direction="horizontal" margin={10} />
         <FlexBox gap={10} alignItems="center">

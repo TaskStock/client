@@ -62,6 +62,7 @@ export default function UserFollowingScreen({
             ) : (
               <FlatList<IFriend>
                 data={followingList}
+                showsVerticalScrollIndicator={false}
                 renderItem={({ item }) => {
                   const button = buttonRender(
                     item.pending,
@@ -116,6 +117,7 @@ export default function UserFollowingScreen({
             ) : (
               <FlatList<IFriend>
                 data={followerList}
+                showsVerticalScrollIndicator={false}
                 renderItem={({ item }) => {
                   const button = buttonRender(
                     item.pending,
