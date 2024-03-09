@@ -1,7 +1,7 @@
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import _ from "lodash";
 import React, { useRef } from "react";
-import { ScrollView, View } from "react-native";
+import { ScrollView } from "react-native";
 import styled, { useTheme } from "styled-components/native";
 import { DateString } from "../../../@types/calendar";
 import { Retrospect } from "../../../@types/retrospect";
@@ -15,7 +15,6 @@ import FlexBox from "../../atoms/FlexBox";
 import LoadingSpinner from "../../atoms/LoadingSpinner";
 import Margin from "../../atoms/Margin";
 import Text from "../../atoms/Text";
-import { ShadowForRetrospect } from "../../atoms/CustomShadow";
 
 const Box = styled.Pressable`
   background-color: ${({ theme }) => theme.box};
@@ -115,6 +114,10 @@ export default function RetrospectList({
         paddingHorizontal: 3,
         paddingTop: 3,
       }}
+      contentContainerStyle={{
+        paddingBottom: 100,
+      }}
+      showsVerticalScrollIndicator={false}
     >
       <FlexBox
         gap={spacing.offset}
