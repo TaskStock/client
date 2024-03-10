@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Alert } from "react-native";
 import styled from "styled-components/native";
 import PageHeader from "../../components/molecules/PageHeader";
@@ -8,7 +8,6 @@ import { spacing } from "../../constants/spacing";
 import { useAppDispatch, useAppSelect } from "../../store/configureStore.hooks";
 import { setFcmToken, setIsPushOn } from "../../store/modules/pushNoti";
 import { fcmService } from "../../utils/PushNotification/push.fcm";
-import { checkStorage } from "../../utils/asyncStorage";
 import { logout } from "../../utils/authUtils/signInUtils";
 import { resetNavigation } from "../../utils/resetNavigation";
 

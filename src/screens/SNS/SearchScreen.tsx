@@ -1,6 +1,6 @@
 import { useRefresh } from "@react-native-community/hooks";
 import React, { useEffect, useState } from "react";
-import { FlatList } from "react-native";
+import { FlatList, View } from "react-native";
 import { useTheme } from "styled-components";
 import styled from "styled-components/native";
 import FlexBox from "../../components/atoms/FlexBox";
@@ -16,6 +16,7 @@ import { spacing } from "../../constants/spacing";
 import { useAppDispatch, useAppSelect } from "../../store/configureStore.hooks";
 import { searchThunk } from "../../store/modules/getFriends";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
+import BannerAds from "../../components/molecules/BannerAds";
 
 const Container = styled.View`
   flex: 1;
@@ -155,6 +156,7 @@ const SearchScreen = () => {
           ListHeaderComponent={<RefreshSpinner />}
         />
       </ResultContainer>
+      <BannerAds />
     </Container>
   );
 };

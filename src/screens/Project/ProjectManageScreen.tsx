@@ -19,6 +19,7 @@ import Icons, { IconsPic } from "../../components/atoms/Icons";
 import EmojiSelector, { Categories } from "react-native-emoji-selector";
 import { BoxIcon } from "../../components/organisms/Project/ProjectList";
 import analytics from "@react-native-firebase/analytics";
+import BannerAds from "../../components/molecules/BannerAds";
 
 const THEME_CONSTANTS = {
   dark: {
@@ -297,6 +298,7 @@ export default function ProjectManageScreen() {
           )}
         </FlexBox>
       </ContentLayout>
+      <BannerAds />
     </Pressable>
   );
 }
