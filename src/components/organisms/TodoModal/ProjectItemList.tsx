@@ -148,25 +148,27 @@ export default function ProjectItemList({}: // scrollViewRef,
           없음
         </ProjectItemText>
       </ProjectItemComponent>
-      {projectList.map((project, index) => {
-        const isSelected = project.project_id === addTodoForm.project_id;
+      {projectList
+        .filter((project) => project.finished === false)
+        .map((project, index) => {
+          const isSelected = project.project_id === addTodoForm.project_id;
 
-        const onPress = () => {
-          onPressProjectItem(project)();
-        };
+          const onPress = () => {
+            onPressProjectItem(project)();
+          };
 
-        return (
-          <ProjectItemComponent
-            key={index + project.name}
-            isSelected={isSelected}
-            onPress={onPress}
-          >
-            <ProjectItemText isSelected={isSelected}>
-              {project.name}
-            </ProjectItemText>
-          </ProjectItemComponent>
-        );
-      })}
+          return (
+            <ProjectItemComponent
+              key={index + project.name}
+              isSelected={isSelected}
+              onPress={onPress}
+            >
+              <ProjectItemText isSelected={isSelected}>
+                {project.name}
+              </ProjectItemText>
+            </ProjectItemComponent>
+          );
+        })}
       {isAddProject && (
         <ProjectItemComponent>
           <OutsidePressHandler onOutsidePress={fetchAddProject}>
