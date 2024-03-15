@@ -366,7 +366,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = TaskStock/TaskStock.entitlements;
-				CURRENT_PROJECT_VERSION = 202403061;
+				CURRENT_PROJECT_VERSION = 202403151;
 				DEVELOPMENT_TEAM = BTGB376XB7;
 				ENABLE_BITCODE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -381,7 +381,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.4;
+				MARKETING_VERSION = 1.1.5;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -408,7 +408,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = TaskStock/TaskStock.entitlements;
-				CURRENT_PROJECT_VERSION = 202403061;
+				CURRENT_PROJECT_VERSION = 202403151;
 				DEVELOPMENT_TEAM = BTGB376XB7;
 				INFOPLIST_FILE = TaskStock/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = TaskStock;
@@ -418,7 +418,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.1.4;
+				MARKETING_VERSION = 1.1.5;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
