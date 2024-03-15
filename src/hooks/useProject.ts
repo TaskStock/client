@@ -19,6 +19,13 @@ export const useProject = () => {
     return project?.name;
   };
 
+  const findProjectRangeById = (project_id: number) => {
+    const project = projects.find(
+      (project) => project.project_id === project_id
+    );
+    return project?.public_range;
+  };
+
   const [isAddProject, setIsAddProject] = React.useState(false);
   const [newProjectInput, setNewProjectInput] = React.useState("");
 
@@ -44,6 +51,7 @@ export const useProject = () => {
     isAddProject,
     setIsAddProject,
     findProjectNameById,
+    findProjectRangeById,
     newProjectInput,
     setNewProjectInput,
     onChangeNewProjectName,

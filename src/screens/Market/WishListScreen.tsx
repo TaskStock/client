@@ -94,13 +94,18 @@ export default function WishListScreen() {
       </View>
       <Margin margin={spacing.offset} />
       <TabHeader onPressTab={onPressTab} props={tabHeaderProps} />
-      <ContentLayout>
+      <ContentLayout noVerticalPadding>
         <ScrollView
           onScroll={handleScroll}
           style={{
             flex: 1,
           }}
+          contentContainerStyle={{
+            paddingTop: spacing.padding,
+            paddingBottom: 100,
+          }}
           scrollEventThrottle={30}
+          showsVerticalScrollIndicator={false}
         >
           <FlexBox
             direction="column"

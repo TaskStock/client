@@ -224,9 +224,18 @@ export function ProjectItem({
                     }}
                     justifyContent="center"
                   >
-                    <Text size="lg" weight="bold">
-                      {item.name}
-                    </Text>
+                    <FlexBox alignItems="center" gap={spacing.padding}>
+                      <Text size="lg" weight="bold">
+                        {item.name}
+                      </Text>
+                      {item.public_range === "none" && (
+                        <Icons
+                          type="materialIcons"
+                          name="lock-outline"
+                          color={theme.textDim}
+                        />
+                      )}
+                    </FlexBox>
 
                     <FlexBox gap={spacing.padding}>
                       <Text size="xs" color={theme.textDim}>
@@ -333,9 +342,18 @@ export function ProjectItem({
                       flex: 1,
                     }}
                   >
-                    <Text size="lg" weight="bold">
-                      {item.name}
-                    </Text>
+                    <FlexBox alignItems="center" gap={spacing.padding}>
+                      <Text size="lg" weight="bold">
+                        {item.name}
+                      </Text>
+                      {item.public_range === "none" && (
+                        <Icons
+                          type="materialIcons"
+                          name="lock-outline"
+                          color={theme.textDim}
+                        />
+                      )}
+                    </FlexBox>
 
                     <FlexBox gap={spacing.padding}>
                       <Text size="xs">

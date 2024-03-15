@@ -159,7 +159,10 @@ const TodoContainer = () => {
             marginTop: spacing.small,
           }}
         >
-          <DraggableTodoList selectedProjectId={selectedProjectId} />
+          <DraggableTodoList
+            selectedProjectId={selectedProjectId}
+            projects={projects}
+          />
         </View>
       </BottomDrawer>
     );

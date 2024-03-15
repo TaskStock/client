@@ -88,3 +88,4 @@ yarn-error.*
 **/GoogleService-Info.plist
 *.xcconfig
 
+app.json

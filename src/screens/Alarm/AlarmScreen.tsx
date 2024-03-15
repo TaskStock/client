@@ -10,6 +10,7 @@ import AlarmBox from "../../components/molecules/Alarm/AlarmBox";
 import PageHeader from "../../components/molecules/PageHeader";
 import { useClient } from "../../hooks/useClient";
 import { useAppDispatch, useAppSelect } from "../../store/configureStore.hooks";
+import PinnedAlarmBox from "../../components/molecules/Alarm/PinnedAlarmBox";
 
 const Container = styled.View`
   flex: 1;
@@ -63,7 +64,12 @@ const AlarmScreen = () => {
             onRefresh={onRefresh}
           />
         }
-        ListHeaderComponent={<RefreshSpinner />}
+        ListHeaderComponent={
+          <>
+            <RefreshSpinner />
+            <PinnedAlarmBox />
+          </>
+        }
       />
     </Container>
   );

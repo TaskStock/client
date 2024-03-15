@@ -19,6 +19,7 @@ import Icons, { IconsPic } from "../../components/atoms/Icons";
 import EmojiSelector, { Categories } from "react-native-emoji-selector";
 import { BoxIcon } from "../../components/organisms/Project/ProjectList";
 import analytics from "@react-native-firebase/analytics";
+import BannerAds from "../../components/molecules/BannerAds";
 
 const THEME_CONSTANTS = {
   dark: {
@@ -242,15 +243,15 @@ export default function ProjectManageScreen() {
             </FlexBox>
             <View style={{ paddingTop: spacing.padding }}>
               {form.public_range === "all" ? (
-                <Text size="sm" color={theme.textDim}>
+                <Text size="xs" color={theme.textDimmer}>
                   전체공개로 설정된 프로젝트의 할 일은 모든 사용자에게 공개돼요.
                 </Text>
               ) : form.public_range === "follow" ? (
-                <Text size="sm" color={theme.textDim}>
+                <Text size="xs" color={theme.textDimmer}>
                   팔로워로 설정된 프로젝트의 할 일은 팔로워에게만 공개돼요.
                 </Text>
               ) : (
-                <Text size="sm" color={theme.textDim}>
+                <Text size="xs" color={theme.textDimmer}>
                   비공개로 설정된 프로젝트의 할 일은 나만 볼 수 있어요.
                 </Text>
               )}
@@ -297,6 +298,7 @@ export default function ProjectManageScreen() {
           )}
         </FlexBox>
       </ContentLayout>
+      <BannerAds />
     </Pressable>
   );
 }

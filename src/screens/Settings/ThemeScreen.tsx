@@ -9,6 +9,7 @@ import useHeight from "../../hooks/useHeight";
 import { useAppDispatch, useAppSelect } from "../../store/configureStore.hooks";
 import { pickTheme } from "../../store/modules/theme";
 import { darkTheme, grayTheme } from "../../constants/colors";
+import BannerAds from "../../components/molecules/BannerAds";
 
 const TempTheme = {
   dark: {
@@ -148,20 +149,23 @@ const ThemeScreen = ({ navigation }) => {
         <SaveBtn onPress={handleSave} />
       </HeaderContainer>
 
-      <Container>
-        <SelectBox
-          type="dark"
-          selected={selectedTheme === "dark"}
-          selectedTheme={selectedTheme}
-          setSelectedTheme={setSelectedTheme}
-        />
-        <SelectBox
-          type="gray"
-          selected={selectedTheme === "gray"}
-          selectedTheme={selectedTheme}
-          setSelectedTheme={setSelectedTheme}
-        />
-      </Container>
+      <View style={{ flex: 1 }}>
+        <Container>
+          <SelectBox
+            type="dark"
+            selected={selectedTheme === "dark"}
+            selectedTheme={selectedTheme}
+            setSelectedTheme={setSelectedTheme}
+          />
+          <SelectBox
+            type="gray"
+            selected={selectedTheme === "gray"}
+            selectedTheme={selectedTheme}
+            setSelectedTheme={setSelectedTheme}
+          />
+        </Container>
+      </View>
+      <BannerAds />
     </View>
   );
 };

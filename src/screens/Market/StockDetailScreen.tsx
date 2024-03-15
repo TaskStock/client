@@ -142,17 +142,11 @@ export default function StockDetailScreen({
       <PageHeader />
       {/* <ContentLayout noVerticalPadding> */}
       {showMarketTutorial && step11 ? (
-        <Portal>
-          <Pressable
-            onPress={() => dispatch(setMarketTutorial(false))}
-            style={{
-              top: "30%",
-              left: "15%",
-            }}
-          >
-            <TutorialBox type={11} />
-          </Pressable>
-        </Portal>
+        <TutorialBox
+          type={11}
+          onPress={() => dispatch(setMarketTutorial(false))}
+          style={{ zIndex: 100, top: "20%", left: "15%" }}
+        />
       ) : null}
 
       <ScrollView

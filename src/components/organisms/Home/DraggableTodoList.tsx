@@ -18,6 +18,7 @@ import FlexBox from "../../atoms/FlexBox";
 import Margin from "../../atoms/Margin";
 import Text from "../../atoms/Text";
 import TodoItem from "../../molecules/Home/TodoItem";
+import Icons from "../../atoms/Icons";
 
 const SkeletonTodoItem = () => {
   const theme = useTheme();
@@ -51,8 +52,10 @@ export const ListContainer = ({ children }) => {
 
 export default function DraggableTodoList({
   selectedProjectId,
+  projects,
 }: {
   selectedProjectId: number | null;
+  projects?: any;
 }) {
   const [changeTodoOrder, result] = useChangeOrderTodoMutation();
   const theme = useTheme();
@@ -125,7 +128,7 @@ export default function DraggableTodoList({
       return;
     }
 
-    console.log("changedTodos", changedTodos);
+    // console.log("changedTodos", changedTodos);
 
     changeTodoOrder({
       selectedProjectId: selectedProjectId,
@@ -142,6 +145,7 @@ export default function DraggableTodoList({
     if (selectedProjectId !== null && item.project_id !== selectedProjectId) {
       return null;
     }
+    // console.log(item);
 
     return (
       <ScaleDecorator>
