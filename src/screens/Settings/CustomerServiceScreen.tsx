@@ -122,7 +122,7 @@ const CustomerServiceScreen = ({ navigation }) => {
           </Text>
           <Margin margin={spacing.offset} />
           <TextAreaInput
-            numberOfLines={50}
+            numberOfLines={Platform.OS === "ios" ? 50 : 10}
             minHeight={useResponsiveFontSize(300)}
             placeholder="내용을 입력해주세요"
             value={content}

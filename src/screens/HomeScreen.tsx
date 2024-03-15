@@ -11,6 +11,7 @@ import usePushNotification from "../hooks/usePushNotification";
 import { useAppDispatch, useAppSelect } from "../store/configureStore.hooks";
 import { checkFirstTime, setTutorial } from "../store/modules/tutorial";
 import { getUserInfoThunk } from "../utils/UserUtils/getUserInfoThunk";
+import { initializeAdMob } from "../utils/AdMob/initializeAdMob";
 
 const Container = styled.View`
   background-color: ${({ theme }) => theme.background};
@@ -47,6 +48,7 @@ const HomeScreen = ({ navigation }) => {
   useEffect(() => {
     dispatch(getUserInfoThunk());
     showTutorialIfFirst();
+    initializeAdMob();
   }, []);
 
   usePushNotification();

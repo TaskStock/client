@@ -1,14 +1,9 @@
 import dayjs from "dayjs";
 import React, { useEffect, useState } from "react";
-import {
-  KeyboardAvoidingView,
-  Platform,
-  Pressable,
-  ScrollView,
-  View,
-} from "react-native";
+import { Platform, Pressable, ScrollView, View } from "react-native";
 import styled, { useTheme } from "styled-components/native";
 import { IsoString } from "../../../@types/calendar";
+import { palette } from "../../../constants/colors";
 import { spacing } from "../../../constants/spacing";
 import useTodos from "../../../hooks/useTodos";
 import useValue from "../../../hooks/useValue";
@@ -23,18 +18,16 @@ import {
   useAddTodoMutation,
   useEditTodoMutation,
 } from "../../../store/modules/todo/todo";
+import { setStep2 } from "../../../store/modules/tutorial";
+import { showErrorToast } from "../../../utils/showToast";
+import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
 import Icons from "../../atoms/Icons";
+import Margin from "../../atoms/Margin";
 import Text from "../../atoms/Text";
 import Section from "../../molecules/Section";
 import TutorialBox from "../../molecules/TutorialBox";
 import ProjectItemList from "./ProjectItemList";
 import ValueSlider from "./ValueSlider";
-import { removeData } from "../../../utils/asyncStorage";
-import { setStep2, setStep3 } from "../../../store/modules/tutorial";
-import Margin from "../../atoms/Margin";
-import { showErrorToast } from "../../../utils/showToast";
-import useResponsiveFontSize from "../../../utils/useResponsiveFontSize";
-import { palette } from "../../../constants/colors";
 
 const AddTodoOverlay = styled.Pressable`
   position: absolute;

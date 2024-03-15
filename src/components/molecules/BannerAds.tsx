@@ -1,11 +1,12 @@
 import { ADMOB_ANDROID_BANNER, ADMOB_IOS_BANNER } from "@env";
 import React from "react";
-import { Platform } from "react-native";
+import { Platform, View } from "react-native";
 import {
   BannerAd,
   BannerAdSize,
   TestIds,
 } from "react-native-google-mobile-ads";
+import useHeight from "../../hooks/useHeight";
 
 const unitID =
   Platform.select({
@@ -14,11 +15,14 @@ const unitID =
   }) || "";
 
 function BannerAds() {
+  const { NOTCH_BOTTOM } = useHeight();
   return (
-    <BannerAd
-      unitId={TestIds.ADAPTIVE_BANNER} // 계정 확인 후 unitID로 변경
-      size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
-    />
+    <View style={{ paddingBottom: NOTCH_BOTTOM }}>
+      <BannerAd
+        unitId={unitID} // 테스트할 때 TestIDs로 변경
+        size={BannerAdSize.ANCHORED_ADAPTIVE_BANNER}
+      />
+    </View>
   );
 }
 
