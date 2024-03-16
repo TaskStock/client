@@ -1,6 +1,6 @@
 import { useRefresh } from "@react-native-community/hooks";
 import React, { useEffect, useState } from "react";
-import { FlatList } from "react-native";
+import { BackHandler, FlatList } from "react-native";
 import styled from "styled-components/native";
 import {
   CustomRefreshControl,
@@ -11,6 +11,7 @@ import PageHeader from "../../components/molecules/PageHeader";
 import { useClient } from "../../hooks/useClient";
 import { useAppDispatch, useAppSelect } from "../../store/configureStore.hooks";
 import PinnedAlarmBox from "../../components/molecules/Alarm/PinnedAlarmBox";
+import useCustomBackHandler from "../../hooks/useCustomBackHander";
 
 const Container = styled.View`
   flex: 1;
@@ -26,7 +27,7 @@ export interface IAlarmData {
   type: "sns" | "general" | "admin" | "badge";
 }
 
-const AlarmScreen = () => {
+const AlarmScreen = ({}) => {
   const dispatch = useAppDispatch();
   const { isRefreshing, onRefresh } = useRefresh(() => getData());
   const { accessToken } = useAppSelect((state) => state.auth);
