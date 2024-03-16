@@ -4,7 +4,7 @@ import {
   useNavigation,
 } from "@react-navigation/native";
 import React, { useCallback, useEffect, useState } from "react";
-import { Pressable } from "react-native";
+import { Pressable, View } from "react-native";
 import { Portal } from "react-native-portalize";
 import {
   NavigationState,
@@ -109,12 +109,9 @@ const ProjectScreen = () => {
         {showProjectTutorial && step6 && focused ? (
           <Portal>
             <Pressable
+              style={{ width: "100%", height: "100%" }}
               onPress={() => {
                 dispatch(setStep6(false));
-              }}
-              style={{
-                top: useResponsiveFontSize(95),
-                left: useResponsiveFontSize(95),
               }}
             >
               <TutorialBox
@@ -122,6 +119,8 @@ const ProjectScreen = () => {
                 ratio={0.7}
                 style={{
                   height: 600,
+                  top: 40,
+                  left: 65,
                 }}
               />
             </Pressable>
