@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { BackHandler, Modal, TouchableOpacity } from "react-native";
+import { Alert, BackHandler, Modal, TouchableOpacity } from "react-native";
 import styled from "styled-components/native";
 import HeaderTop from "../components/molecules/Home/HeaderTop";
 import TodoContainer from "../components/molecules/Home/TodoContainer";
@@ -12,6 +12,7 @@ import { useAppDispatch, useAppSelect } from "../store/configureStore.hooks";
 import { checkFirstTime, setTutorial } from "../store/modules/tutorial";
 import { getUserInfoThunk } from "../utils/UserUtils/getUserInfoThunk";
 import { initializeAdMob } from "../utils/AdMob/initializeAdMob";
+import useCustomBackHandler from "../hooks/useCustomBackHander";
 
 const Container = styled.View`
   background-color: ${({ theme }) => theme.background};
@@ -23,19 +24,22 @@ const HomeScreen = ({ navigation }) => {
   const dispatch = useAppDispatch();
 
   // 뒤로가기 막기 AOS
-  useEffect(() => {
-    const backHandler = BackHandler.addEventListener(
-      "hardwareBackPress",
-      () => {
-        BackHandler.exitApp();
-        // true를 반환하여 뒤로 가기(기본동작) 막기
-        return true;
-      }
-    );
+  const handleBackPress = () => {
+    if (navigation.isFocused()) {
+      Alert.alert("앱 종료", "앱을 종료하시겠습니까?", [
+        {
+          text: "취소",
+          onPress: () => null,
+        },
+        { text: "확인", onPress: () => BackHandler.exitApp() },
+      ]);
+      return true;
+    } else {
+      return false;
+    }
+  };
 
-    // 컴포넌트가 언마운트될 때 리스너 제거
-    return () => backHandler.remove();
-  }, []);
+  useCustomBackHandler(handleBackPress);
 
   // tutorial
   const showTutorialIfFirst = async () => {
