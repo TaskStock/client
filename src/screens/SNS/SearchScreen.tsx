@@ -1,6 +1,6 @@
 import { useRefresh } from "@react-native-community/hooks";
 import React, { useEffect, useState } from "react";
-import { FlatList, View } from "react-native";
+import { FlatList, Platform, RefreshControl, View } from "react-native";
 import { useTheme } from "styled-components";
 import styled from "styled-components/native";
 import FlexBox from "../../components/atoms/FlexBox";
@@ -148,10 +148,14 @@ const SearchScreen = () => {
           ListEmptyComponent={NoData}
           keyExtractor={(item) => item.user_id.toString()}
           refreshControl={
-            <CustomRefreshControl
-              refreshing={isRefreshing}
-              onRefresh={onRefresh}
-            />
+            Platform.OS === "ios" ? (
+              <CustomRefreshControl
+                refreshing={isRefreshing}
+                onRefresh={onRefresh}
+              />
+            ) : (
+              <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
+            )
           }
           ListHeaderComponent={<RefreshSpinner />}
         />
