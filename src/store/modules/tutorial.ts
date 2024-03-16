@@ -105,7 +105,6 @@ export const tutorialSlice = createSlice({
     setStep6: (state, action) => {
       state.step6 = action.payload;
       if (action.payload === false) state.step7 = true;
-      console.log("step6: ", state.step6);
     },
     // market tutorial
     setMarketTutorial: (state, action) => {

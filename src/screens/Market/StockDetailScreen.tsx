@@ -145,7 +145,6 @@ export default function StockDetailScreen({
         <Pressable
           onPress={() => {
             dispatch(setMarketTutorial(false));
-            console.log("pressed");
           }}
           style={{
             width: "100%",

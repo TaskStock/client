@@ -1,20 +1,20 @@
 import React, { useState } from "react";
-import { Alert, KeyboardAvoidingView, Platform } from "react-native";
+import { KeyboardAvoidingView, Platform } from "react-native";
+import { Shadow } from "react-native-shadow-2";
+import Toast from "react-native-toast-message";
 import styled from "styled-components/native";
 import { BlackBtn } from "../../components/atoms/Buttons";
+import FlexBox from "../../components/atoms/FlexBox";
 import Margin from "../../components/atoms/Margin";
 import Text from "../../components/atoms/Text";
 import { TextAreaInput } from "../../components/atoms/TextInput";
 import PageHeader from "../../components/molecules/PageHeader";
+import { palette } from "../../constants/colors";
 import { spacing } from "../../constants/spacing";
+import { useClient } from "../../hooks/useClient";
+import { TRootState } from "../../store/configureStore";
 import { useAppDispatch, useAppSelect } from "../../store/configureStore.hooks";
 import useResponsiveFontSize from "../../utils/useResponsiveFontSize";
-import { Shadow } from "react-native-shadow-2";
-import { palette } from "../../constants/colors";
-import FlexBox from "../../components/atoms/FlexBox";
-import { useClient } from "../../hooks/useClient";
-import Toast from "react-native-toast-message";
-import { TRootState } from "../../store/configureStore";
 
 const Container = styled.ScrollView`
   padding: ${spacing.offset}px;

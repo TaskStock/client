@@ -112,7 +112,6 @@ const ProjectScreen = () => {
               style={{ width: "100%", height: "100%" }}
               onPress={() => {
                 dispatch(setStep6(false));
-                console.log("pressed");
               }}
             >
               <TutorialBox
