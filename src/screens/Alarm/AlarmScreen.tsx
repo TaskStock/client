@@ -1,6 +1,6 @@
 import { useRefresh } from "@react-native-community/hooks";
 import React, { useEffect, useState } from "react";
-import { BackHandler, FlatList } from "react-native";
+import { BackHandler, FlatList, Platform, RefreshControl } from "react-native";
 import styled from "styled-components/native";
 import {
   CustomRefreshControl,
@@ -60,10 +60,14 @@ const AlarmScreen = ({}) => {
         renderItem={({ item }) => <AlarmBox item={item} />}
         keyExtractor={(item) => item.notice_id.toString()}
         refreshControl={
-          <CustomRefreshControl
-            refreshing={isRefreshing}
-            onRefresh={onRefresh}
-          />
+          Platform.OS === "ios" ? (
+            <CustomRefreshControl
+              refreshing={isRefreshing}
+              onRefresh={onRefresh}
+            />
+          ) : (
+            <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
+          )
         }
         ListHeaderComponent={
           <>

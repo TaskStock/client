@@ -1,5 +1,10 @@
 import React, { useState } from "react";
-import { FlatList, TouchableOpacity } from "react-native";
+import {
+  FlatList,
+  Platform,
+  RefreshControl,
+  TouchableOpacity,
+} from "react-native";
 import { useTheme } from "styled-components";
 import { spacing } from "../../../constants/spacing";
 import { useAppDispatch } from "../../../store/configureStore.hooks";
@@ -66,10 +71,14 @@ const RankingTab = ({ data }) => {
         }}
         keyExtractor={(item) => item.user_id.toString()}
         refreshControl={
-          <CustomRefreshControl
-            refreshing={isRefreshing}
-            onRefresh={onRefresh}
-          />
+          Platform.OS === "ios" ? (
+            <CustomRefreshControl
+              refreshing={isRefreshing}
+              onRefresh={onRefresh}
+            />
+          ) : (
+            <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
+          )
         }
         showsVerticalScrollIndicator={false}
         ListHeaderComponent={<RefreshSpinner />}
